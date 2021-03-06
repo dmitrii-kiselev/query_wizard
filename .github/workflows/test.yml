@@ -1,0 +1,59 @@
+name: Test all packages of Query Wizard and check coverage with Codecov
+
+on:
+  pull_request:
+    paths:
+      - 'android/**'
+      - 'ios/**'
+      - 'lib/**'
+      - 'linux/**'
+      - 'macos/**'
+      - '!test/**'
+      - 'web/**'
+      - 'windows/**'
+      - '.metadata'
+      - 'pubspec*'
+  push:
+    branches:
+      - main
+      - '!release/**'
+
+jobs:
+  test:
+    # Setup part
+    name: Deploy on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache Flutter dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ matrix.flutter_path }}
+        key: ${{ runner.os }}-flutter
+        restore-keys: |
+          ${{ runner.OS }}-flutter-
+          ${{ runner.OS }}-
+    - name: Use Flutter
+      uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - name: Install dependencies
+      run: flutter pub get
+    # End of setup
+    - name: Test coverage
+      run: flutter test --coverage .
+    - name: Publish code coverage report
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: coverage/lcov.info
+        fail_ci_if_error: true
+        verbose: true

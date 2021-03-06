@@ -1,0 +1,43 @@
+name: Lint all packages of Query Wizard
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+      - '!release/**'
+
+jobs:
+  lint:
+    # Setup part
+    name: Lint on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+    timeout-minutes: 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache Flutter dependencies
+      uses: actions/cache@v2
+      with:
+        path: ${{ matrix.flutter_path }}
+        key: ${{ runner.os }}-flutter
+        restore-keys: |
+          ${{ runner.OS }}-flutter-
+          ${{ runner.OS }}-
+    - name: Use Flutter
+      uses: subosito/flutter-action@v1
+      with:
+        channel: 'stable'
+    - name: Install dependencies
+      run: flutter pub get
+    # End of setup
+    - name: Analyze
+      run: flutter analyze

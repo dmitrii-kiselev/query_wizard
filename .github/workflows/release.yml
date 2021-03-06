@@ -1,0 +1,27 @@
+name: Release Query Wizard packages
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    # Setup part
+    name: Release on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        include:
+          - os: ubuntu-latest
+            flutter_path: /opt/hostedtoolcache/flutter
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2]
+    - name: 'Release'
+      uses: k-paxian/dart-package-publisher@master
+      with:
+        accessToken: ${{ secrets.OAUTH_ACCESS_TOKEN }}
+        refreshToken: ${{ secrets.OAUTH_REFRESH_TOKEN }}
