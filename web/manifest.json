@@ -1,6 +1,6 @@
 {
-    "name": "query_wizard",
-    "short_name": "query_wizard",
+    "name": "Query Wizard",
+    "short_name": "Query Wizard",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
