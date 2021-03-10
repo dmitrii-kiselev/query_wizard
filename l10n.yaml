@@ -1,0 +1,6 @@
+template-arb-file: intl_en.arb
+output-localization-file: query_wizard_localizations.dart
+output-class: QueryWizardLocalizations
+preferred-supported-locales:
+  - en
+use-deferred-loading: false

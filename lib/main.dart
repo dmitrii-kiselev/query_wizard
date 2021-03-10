@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +23,10 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
+      localizationsDelegates: const [
+        ...QueryWizardLocalizations.localizationsDelegates,
+      ],
+      supportedLocales: QueryWizardLocalizations.supportedLocales,
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
