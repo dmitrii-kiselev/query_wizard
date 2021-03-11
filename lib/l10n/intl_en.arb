@@ -1,3 +1,10 @@
 {
-  "title": "Flutter Demo Home Page"
+  "tablesAndFieldsTab": "Tables and fields",
+  "joinsTab": "Joins",
+  "groupTab": "Grouping",
+  "conditionsTab": "Conditions",
+  "moreTab": "More",
+  "unionsAliasesTab": "Unions/Aliases",
+  "orderTab": "Order",
+  "queryBatchTab": "Query batch"
 }
