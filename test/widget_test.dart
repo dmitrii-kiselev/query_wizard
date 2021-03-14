@@ -17,7 +17,7 @@ void main() {
 
     // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsOneWidget);
-    expect(find.text('Tables and fields'), findsNWidgets(2));
+    expect(find.text('Tables and fields'), findsOneWidget);
     expect(find.text('Joins'), findsOneWidget);
     expect(find.text('Grouping'), findsOneWidget);
     expect(find.text('Conditions'), findsOneWidget);
