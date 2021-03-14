@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
+import 'package:query_wizard/tabs/tables_and_fields.dart';
+
 void main() {
   runApp(QueryWizard());
 }
@@ -9,6 +11,7 @@ class QueryWizard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      restorationScopeId: 'rootQueryWizard',
       title: 'Query Wizard',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -98,7 +101,10 @@ class _QueryWizardHomePageState extends State<QueryWizardHomePage>
         children: [
           for (final tab in tabs)
             Center(
-              child: Text(tab),
+              child:
+                  tab == QueryWizardLocalizations.of(context).tablesAndFieldsTab
+                      ? TablesAndFields()
+                      : Text(tab),
             ),
         ],
       ),

@@ -1,5 +1,8 @@
 {
   "tablesAndFieldsTab": "Tables and fields",
+  "database": "Database",
+  "tables": "Tables",
+  "fields": "Fields",
   "joinsTab": "Joins",
   "groupTab": "Grouping",
   "conditionsTab": "Conditions",
