@@ -574,9 +574,9 @@ const RESOURCES = {
 "assets/packages/flutter_localized_locales/data/es_MX.json": "32ef00d44cd97bcb403a83bbb58f0eb7",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
-"index.html": "47a3a2b6c5b69e516a5a2c6ce2d44eae",
-"/": "47a3a2b6c5b69e516a5a2c6ce2d44eae",
-"main.dart.js": "20d35396c5000ae9e1f2dd762c522068",
+"index.html": "7bf2cdfc52f0cd1cd40f8476ac33eb46",
+"/": "7bf2cdfc52f0cd1cd40f8476ac33eb46",
+"main.dart.js": "5f2eb04b39a7e7decfb45b77c6ca16b5",
 "version.json": "69f625846aa15033acc8a4ac3445cef6",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796"
 };
