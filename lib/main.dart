@@ -73,15 +73,24 @@ class _QueryWizardHomePageState extends State<QueryWizardHomePage>
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context);
     final tabs = [
-      QueryWizardLocalizations.of(context).tablesAndFieldsTab,
-      QueryWizardLocalizations.of(context).joinsTab,
-      QueryWizardLocalizations.of(context).groupTab,
-      QueryWizardLocalizations.of(context).conditionsTab,
-      QueryWizardLocalizations.of(context).moreTab,
-      QueryWizardLocalizations.of(context).unionsAliasesTab,
-      QueryWizardLocalizations.of(context).orderTab,
-      QueryWizardLocalizations.of(context).queryBatchTab
+      _QueryWizardTab(localizations.tablesAndFieldsTab,
+          Icons.table_chart_rounded, TablesAndFields()),
+      _QueryWizardTab(localizations.joinsTab, Icons.account_tree_rounded,
+          Text(localizations.joinsTab)),
+      _QueryWizardTab(localizations.groupTab, Icons.group_work_rounded,
+          Text(localizations.groupTab)),
+      _QueryWizardTab(localizations.conditionsTab, Icons.filter_alt_rounded,
+          Text(localizations.conditionsTab)),
+      _QueryWizardTab(localizations.moreTab, Icons.more_horiz_rounded,
+          Text(localizations.moreTab)),
+      _QueryWizardTab(localizations.unionsAliasesTab, Icons.view_list_rounded,
+          Text(localizations.unionsAliasesTab)),
+      _QueryWizardTab(localizations.orderTab, Icons.sort_rounded,
+          Text(localizations.orderTab)),
+      _QueryWizardTab(localizations.queryBatchTab, Icons.batch_prediction,
+          Text(localizations.queryBatchTab)),
     ];
 
     return Scaffold(
@@ -92,7 +101,16 @@ class _QueryWizardHomePageState extends State<QueryWizardHomePage>
           controller: _tabController,
           isScrollable: false,
           tabs: [
-            for (final tab in tabs) Tab(text: tab),
+            for (final tab in tabs)
+              Tab(
+                  key: ValueKey(tab.message),
+                  child: Tooltip(
+                    message: tab.message,
+                    child: Icon(
+                      tab.icon,
+                      color: Colors.white,
+                    ),
+                  )),
           ],
         ),
       ),
@@ -101,13 +119,18 @@ class _QueryWizardHomePageState extends State<QueryWizardHomePage>
         children: [
           for (final tab in tabs)
             Center(
-              child:
-                  tab == QueryWizardLocalizations.of(context).tablesAndFieldsTab
-                      ? TablesAndFields()
-                      : Text(tab),
+              child: tab.widget,
             ),
         ],
       ),
     );
   }
+}
+
+class _QueryWizardTab {
+  String message;
+  IconData icon;
+  Widget widget;
+
+  _QueryWizardTab(this.message, this.icon, this.widget);
 }
