@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:query_wizard/layout/adaptive.dart';
+import 'package:query_wizard/src/layout/adaptive.dart';
 
 class TreeItem extends StatelessWidget {
   const TreeItem({Key key, this.item, this.iconData}) : super(key: key);

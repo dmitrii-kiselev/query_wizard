@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
-import 'package:query_wizard/list_item.dart';
-import 'package:query_wizard/constants.dart';
+import 'package:query_wizard/src/list_item.dart';
+import 'package:query_wizard/src/constants.dart';
 
 const _horizontalDesktopPadding = 81.0;
 

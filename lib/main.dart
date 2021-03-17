@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
-import 'package:query_wizard/tabs/tables_and_fields.dart';
+import 'package:query_wizard/src/tabs/tables_and_fields.dart';
 
 void main() {
   runApp(QueryWizard());
