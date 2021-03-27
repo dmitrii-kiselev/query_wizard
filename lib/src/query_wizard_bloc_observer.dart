@@ -14,7 +14,7 @@ class QueryWizardBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Cubit bloc, Object error, StackTrace stackTrace) {
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     print('onError $error');
     super.onError(bloc, error, stackTrace);
   }
