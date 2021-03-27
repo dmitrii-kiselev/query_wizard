@@ -8,7 +8,7 @@ class DbElement extends Equatable {
   String alias;
   final DbNodeType nodeType;
   DbElement parent;
-  final List<DbElement> elements = List.empty();
+  final List<DbElement> elements = List.empty(growable: true);
 
   DbElement({this.name, this.nodeType});
 

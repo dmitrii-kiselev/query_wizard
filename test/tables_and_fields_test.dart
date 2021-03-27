@@ -1,24 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
-import 'package:query_wizard/src/tabs/tables_and_fields.dart';
+import 'package:query_wizard/src/repositories/repositories.dart';
+import 'package:query_wizard/src/widgets/query_wizard.dart';
 
 void main() {
   testWidgets('Tables and fields initialized', (WidgetTester tester) async {
+    final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
+      queryWizardApiClient: QueryWizardApiClient(),
+    );
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MaterialApp(
-      restorationScopeId: 'rootQueryWizard',
-      title: 'Query Wizard',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      localizationsDelegates: const [
-        ...QueryWizardLocalizations.localizationsDelegates,
-      ],
-      supportedLocales: QueryWizardLocalizations.supportedLocales,
-      home: TablesAndFields(),
-    ));
+    await tester
+        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.pumpAndSettle();
 
     expect(find.text('Database'), findsOneWidget);

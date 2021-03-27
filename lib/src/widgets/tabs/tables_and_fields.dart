@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
-import 'package:query_wizard/src/list_item.dart';
+import 'package:query_wizard/src/blocs/blocs.dart';
 import 'package:query_wizard/src/constants.dart';
+import 'package:query_wizard/src/models/db_element.dart';
+import 'package:query_wizard/src/widgets/tabs/list_item.dart';
 
 const _horizontalDesktopPadding = 81.0;
 
@@ -14,61 +17,56 @@ class TablesAndFields extends StatefulWidget {
 class _TablesAndFieldsState extends State<TablesAndFields> {
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
-    final sources = [
-      'Table 1',
-      'Table 2',
-      'Table 3',
-    ];
-    final tables = [
-      'Table 1',
-      'Table 2',
-      'Table 3',
-    ];
-    final fields = [
-      'Field 1',
-      'Field 2',
-      'Field 3',
-    ];
+    return BlocBuilder<QueryWizardBloc, QueryWizardState>(
+        builder: (context, state) {
+      if (state is QueryWizardLoadSuccess) {
+        final localizations = QueryWizardLocalizations.of(context);
+        final sources = state.dbElements;
+        final tables = state.dbElements;
+        final fields = state.dbElements.first.elements;
 
-    final desktopCategoryItems = <_TreeViewer>[
-      _TreeViewer(
-        header: localizations.database,
-        items: sources,
-        iconData: Icons.table_rows_rounded,
-      ),
-      _TreeViewer(
-        header: localizations.tables,
-        items: tables,
-        iconData: Icons.table_rows_rounded,
-      ),
-      _TreeViewer(
-        header: localizations.fields,
-        items: fields,
-        iconData: Icons.horizontal_rule_rounded,
-      ),
-    ];
+        final desktopCategoryItems = <_TreeViewer>[
+          _TreeViewer(
+            header: localizations.database,
+            items: sources,
+            iconData: Icons.table_rows_rounded,
+          ),
+          _TreeViewer(
+            header: localizations.tables,
+            items: tables,
+            iconData: Icons.table_rows_rounded,
+          ),
+          _TreeViewer(
+            header: localizations.fields,
+            items: fields,
+            iconData: Icons.horizontal_rule_rounded,
+          ),
+        ];
 
-    return ListView(
-      // Makes integration tests possible.
-      key: const ValueKey('HomeListView'),
-      padding: EdgeInsetsDirectional.only(
-        top: firstHeaderDesktopTopPadding,
-      ),
-      children: [
-        Container(
-          height: MediaQuery.of(context).copyWith().size.height / 1.1,
-          padding: const EdgeInsets.symmetric(
-            horizontal: _horizontalDesktopPadding,
+        return ListView(
+          // Makes integration tests possible.
+          key: const ValueKey('HomeListView'),
+          padding: EdgeInsetsDirectional.only(
+            top: firstHeaderDesktopTopPadding,
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: spaceBetween(28, desktopCategoryItems),
-          ),
-        ),
-      ],
-    );
+          children: [
+            Container(
+              height: MediaQuery.of(context).copyWith().size.height / 1.1,
+              padding: const EdgeInsets.symmetric(
+                horizontal: _horizontalDesktopPadding,
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: spaceBetween(28, desktopCategoryItems),
+              ),
+            ),
+          ],
+        );
+      }
+
+      return build(context);
+    });
   }
 
   List<Widget> spaceBetween(double paddingBetween, List<Widget> children) {
@@ -91,7 +89,7 @@ class _TreeViewer extends StatelessWidget {
   });
 
   final String header;
-  final List<String> items;
+  final List<DbElement> items;
   final IconData iconData;
 
   @override
@@ -119,8 +117,10 @@ class _TreeViewer extends StatelessWidget {
                 child: ListView.builder(
                   // Makes integration tests possible.
                   key: ValueKey('${header}DemoList'),
-                  itemBuilder: (context, index) =>
-                      TreeItem(item: items[index], iconData: iconData),
+                  itemBuilder: (context, index) => TreeItem(
+                      key: ValueKey(header),
+                      item: items[index],
+                      iconData: iconData),
                   itemCount: items.length,
                 ),
               ),

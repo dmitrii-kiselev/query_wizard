@@ -8,13 +8,19 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:query_wizard/main.dart';
+import 'package:query_wizard/src/repositories/repositories.dart';
+import 'package:query_wizard/src/widgets/query_wizard.dart';
 
 void main() {
   testWidgets('Query Wizard initialized smoke test',
       (WidgetTester tester) async {
+    final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
+      queryWizardApiClient: QueryWizardApiClient(),
+    );
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(QueryWizard());
+    await tester
+        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
 
     // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsOneWidget);
@@ -29,8 +35,13 @@ void main() {
   });
 
   testWidgets('Tabs changes smoke test', (WidgetTester tester) async {
+    final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
+      queryWizardApiClient: QueryWizardApiClient(),
+    );
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(QueryWizard());
+    await tester
+        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.tap(find.byKey(ValueKey('Joins')));
     await tester.pumpAndSettle();
 

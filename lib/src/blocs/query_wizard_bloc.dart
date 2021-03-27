@@ -7,8 +7,7 @@ import 'package:query_wizard/src/repositories/repositories.dart';
 class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryWizardRepository queryWizardRepository;
 
-  QueryWizardBloc({this.queryWizardRepository})
-      : super(QueryWizardInitial());
+  QueryWizardBloc({this.queryWizardRepository}) : super(QueryWizardInitial());
 
   @override
   Stream<QueryWizardState> mapEventToState(QueryWizardEvent event) async* {
