@@ -126,7 +126,7 @@ class _QueryWizardViewState extends State<QueryWizardView>
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
           builder: (context, state) {
         if (state is QueryWizardInitial) {
-          return Center(child: Text('Please Select a Location'));
+          return Center(child: Text(localizations.queryWizard));
         }
 
         if (state is QueryWizardLoadInProgress) {
@@ -148,7 +148,7 @@ class _QueryWizardViewState extends State<QueryWizardView>
         if (state is QueryWizardLoadFailure) {
           return Center(
             child: Text(
-              'Something went wrong!',
+              localizations.somethingWentWrong,
               style: TextStyle(color: Colors.red),
             ),
           );

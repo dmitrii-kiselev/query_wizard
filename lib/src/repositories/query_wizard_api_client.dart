@@ -30,3 +30,12 @@ class QueryWizardApiClient {
     ];
   }
 }
+
+class FakeQueryWizardApiClient extends QueryWizardApiClient {
+  @override
+  Future<List<DbElement>> getSources() async {
+    return await new Future.delayed(new Duration(milliseconds: 1000), () {
+      throw new Exception();
+    });
+  }
+}

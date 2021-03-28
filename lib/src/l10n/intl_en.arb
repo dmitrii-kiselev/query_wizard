@@ -1,4 +1,6 @@
 {
+  "queryWizard": "Query Wizard",
+  "somethingWentWrong": "Something went wrong!",
   "tablesAndFieldsTab": "Tables and fields",
   "database": "Database",
   "tables": "Tables",

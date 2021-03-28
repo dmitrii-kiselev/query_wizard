@@ -23,7 +23,7 @@ void main() {
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
 
     // Verify that widgets exists.
-    expect(find.text('Query Wizard'), findsOneWidget);
+    expect(find.text('Query Wizard'), findsNWidgets(2));
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
     expect(find.byKey(ValueKey('Grouping')), findsOneWidget);
@@ -32,6 +32,22 @@ void main() {
     expect(find.byKey(ValueKey('Unions/Aliases')), findsOneWidget);
     expect(find.byKey(ValueKey('Order')), findsOneWidget);
     expect(find.byKey(ValueKey('Query batch')), findsOneWidget);
+  });
+
+  testWidgets('Query Wizard not initialized smoke test',
+      (WidgetTester tester) async {
+    final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
+      queryWizardApiClient: FakeQueryWizardApiClient(),
+    );
+
+    // Build our app and trigger a frame.
+    await tester
+        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
+    await tester.pumpAndSettle();
+
+    // Verify that widgets exists.
+    expect(find.text('Query Wizard'), findsOneWidget);
+    expect(find.text('Something went wrong!'), findsOneWidget);
   });
 
   testWidgets('Tabs changes smoke test', (WidgetTester tester) async {
