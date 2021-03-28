@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:query_wizard/src/repositories/repositories.dart';
-import 'package:query_wizard/src/widgets/query_wizard.dart';
+import 'package:query_wizard/repositories.dart';
+import 'package:query_wizard/widgets.dart';
 
 void main() {
   testWidgets('Tables and fields initialized', (WidgetTester tester) async {

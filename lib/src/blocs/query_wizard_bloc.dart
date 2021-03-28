@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 
-import 'package:query_wizard/src/blocs/blocs.dart';
-import 'package:query_wizard/src/models/models.dart';
-import 'package:query_wizard/src/repositories/repositories.dart';
+import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
+import 'package:query_wizard/repositories.dart';
 
 class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryWizardRepository queryWizardRepository;

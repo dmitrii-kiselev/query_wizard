@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:query_wizard/src/query_wizard_bloc_observer.dart';
+import 'package:query_wizard/infrastructure.dart';
 
 var log = [];
 

@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:query_wizard/src/models/models.dart';
+
+import 'package:query_wizard/models.dart';
 
 void main() {
   test('DbElement initialized', () {
