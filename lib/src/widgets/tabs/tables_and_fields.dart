@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
-import 'package:query_wizard/src/blocs/blocs.dart';
-import 'package:query_wizard/src/constants.dart';
-import 'package:query_wizard/src/models/db_element.dart';
-import 'package:query_wizard/src/widgets/tabs/list_item.dart';
+import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
+import 'package:query_wizard/models.dart';
+import 'package:query_wizard/widgets.dart';
 
 const _horizontalDesktopPadding = 81.0;
 

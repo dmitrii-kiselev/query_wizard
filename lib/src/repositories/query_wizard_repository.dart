@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:query_wizard/src/models/models.dart';
-import 'package:query_wizard/src/repositories/query_wizard_api_client.dart';
+import 'package:query_wizard/models.dart';
+import 'package:query_wizard/repositories.dart';
 
 class QueryWizardRepository {
   final QueryWizardApiClient queryWizardApiClient;

@@ -8,8 +8,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:query_wizard/src/repositories/repositories.dart';
-import 'package:query_wizard/src/widgets/query_wizard.dart';
+import 'package:query_wizard/repositories.dart';
+import 'package:query_wizard/widgets.dart';
 
 void main() {
   testWidgets('Query Wizard initialized smoke test',

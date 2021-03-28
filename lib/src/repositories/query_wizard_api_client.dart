@@ -1,4 +1,4 @@
-import 'package:query_wizard/src/models/models.dart';
+import 'package:query_wizard/models.dart';
 
 class QueryWizardApiClient {
   Future<List<DbElement>> getSources() async {

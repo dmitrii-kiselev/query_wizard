@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:query_wizard/src/models/models.dart';
+import 'package:query_wizard/models.dart';
 
 abstract class QueryWizardState extends Equatable {
   const QueryWizardState();
