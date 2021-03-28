@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:query_wizard/layout/adaptive.dart';
+import 'package:query_wizard/src/layout/adaptive.dart';
+import 'package:query_wizard/src/models/models.dart';
 
 class TreeItem extends StatelessWidget {
   const TreeItem({Key key, this.item, this.iconData}) : super(key: key);
 
-  final String item;
+  final DbElement item;
   final IconData iconData;
 
   @override
@@ -38,12 +39,12 @@ class TreeItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item,
+                        item.name,
                         style: textTheme.subtitle1
                             .apply(color: colorScheme.onSurface),
                       ),
                       Text(
-                        item,
+                        item.name,
                         style: textTheme.overline.apply(
                           color: colorScheme.onSurface.withOpacity(0.5),
                         ),
