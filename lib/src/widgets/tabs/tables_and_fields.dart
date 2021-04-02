@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/constants.dart';
@@ -9,12 +10,7 @@ import 'package:query_wizard/widgets.dart';
 
 const _horizontalDesktopPadding = 81.0;
 
-class TablesAndFields extends StatefulWidget {
-  @override
-  _TablesAndFieldsState createState() => _TablesAndFieldsState();
-}
-
-class _TablesAndFieldsState extends State<TablesAndFields> {
+class TablesAndFields extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<QueryWizardBloc, QueryWizardState>(

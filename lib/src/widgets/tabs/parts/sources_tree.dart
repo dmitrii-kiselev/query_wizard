@@ -1,31 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_treeview/tree_view.dart';
+
 import 'package:query_wizard/models.dart';
 
-class SourcesTree extends StatefulWidget {
+class SourcesTree extends HookWidget {
   SourcesTree({Key key, this.dbElements}) : super(key: key);
+
   final List<DbElement> dbElements;
-
-  @override
-  _SourcesTree createState() => _SourcesTree();
-}
-
-class _SourcesTree extends State<SourcesTree> {
-  String _selectedNode;
-  List<Node> _nodes;
-  TreeViewController _treeViewController;
-
-  @override
-  void initState() {
-    _nodes = _prepareNodes(widget.dbElements);
-    _treeViewController = TreeViewController(
-      children: _nodes,
-      selectedKey: _selectedNode,
-    );
-
-    super.initState();
-  }
 
   List<Node> _prepareNodes(List<DbElement> dbElements) {
     final nodes = List<Node>.empty(growable: true);
@@ -51,36 +33,15 @@ class _SourcesTree extends State<SourcesTree> {
     return nodes;
   }
 
-  _expandNode(String key, bool expanded) {
-    String msg = '${expanded ? "Expanded" : "Collapsed"}: $key';
-    debugPrint(msg);
-    Node node = _treeViewController.getNode(key);
-    if (node != null) {
-      List<Node> updated;
-      if (key == 'docs') {
-        updated = _treeViewController.updateNode(
-          key,
-          node.copyWith(
-              expanded: expanded,
-              icon: NodeIcon(
-                codePoint: expanded
-                    ? Icons.folder_open.codePoint
-                    : Icons.folder.codePoint,
-                color: expanded ? "blue600" : "grey700",
-              )),
-        );
-      } else {
-        updated = _treeViewController.updateNode(
-            key, node.copyWith(expanded: expanded));
-      }
-      setState(() {
-        _treeViewController = _treeViewController.copyWith(children: updated);
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final selectedNode = useState<String>(null);
+    final nodes = useState<List<Node>>(_prepareNodes(dbElements));
+    final treeViewController = useState(TreeViewController(
+      children: nodes.value,
+      selectedKey: selectedNode.value,
+    ));
+
     TreeViewTheme _treeViewTheme = TreeViewTheme(
       expanderTheme: ExpanderThemeData(
           type: ExpanderType.caret,
@@ -105,17 +66,29 @@ class _SourcesTree extends State<SourcesTree> {
       colorScheme: Theme.of(context).colorScheme,
     );
 
+    _expandNode(String key, bool expanded) {
+      String msg = '${expanded ? "Expanded" : "Collapsed"}: $key';
+      debugPrint(msg);
+      Node node = treeViewController.value.getNode(key);
+      if (node != null) {
+        List<Node> updated = treeViewController.value
+            .updateNode(key, node.copyWith(expanded: expanded));
+
+        treeViewController.value =
+            treeViewController.value.copyWith(children: updated);
+      }
+    }
+
     return TreeView(
-      controller: _treeViewController,
+      controller: treeViewController.value,
       allowParentSelect: true,
       supportParentDoubleTap: true,
       onExpansionChanged: (key, expanded) => _expandNode(key, expanded),
       onNodeTap: (key) {
         debugPrint('Selected: $key');
-        setState(() {
-          _selectedNode = key;
-          _treeViewController = _treeViewController.copyWith(selectedKey: key);
-        });
+        selectedNode.value = key;
+        treeViewController.value =
+            treeViewController.value.copyWith(selectedKey: key);
       },
       theme: _treeViewTheme,
     );
