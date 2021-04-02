@@ -114,14 +114,9 @@ class _TreeViewer extends StatelessWidget {
                 color: colorScheme.background,
               ),
               Flexible(
-                child: ListView.builder(
-                  // Makes integration tests possible.
+                child: SourcesTree(
                   key: ValueKey('${header}DemoList'),
-                  itemBuilder: (context, index) => TreeItem(
-                      key: ValueKey(header),
-                      item: items[index],
-                      iconData: iconData),
-                  itemCount: items.length,
+                  dbElements: items,
                 ),
               ),
             ],
