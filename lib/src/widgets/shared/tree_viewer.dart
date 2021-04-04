@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:query_wizard/models.dart';
-import 'package:query_wizard/widgets.dart';
 
 class TreeViewer extends StatelessWidget {
-  const TreeViewer({
-    required this.header,
-    required this.items,
-    required this.iconData,
-  });
+  const TreeViewer(
+      {required this.header,
+      required this.items,
+      required this.iconData,
+      required this.child});
 
   final String header;
   final List<DbElement> items;
   final IconData iconData;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,7 @@ class TreeViewer extends StatelessWidget {
                 color: colorScheme.background,
               ),
               Flexible(
-                child: SourcesTree(
-                  key: ValueKey('${header}DemoList'),
-                  dbElements: items,
-                ),
+                child: child,
               ),
             ],
           ),
