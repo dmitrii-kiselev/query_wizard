@@ -666,7 +666,7 @@ class Utilities {
   }
 
   static IconData? getIcon(String value) {
-    final String lowered = value == null ? '' : value.toLowerCase();
+    final String lowered = value.toLowerCase();
     switch (lowered) {
       case 'ac_unit':
         return Icons.ac_unit;

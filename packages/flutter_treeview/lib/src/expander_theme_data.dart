@@ -117,7 +117,7 @@ class ExpanderThemeData {
   ExpanderThemeData resolve(BuildContext context) => this;
 
   /// Whether the properties of this object are non-null.
-  bool get isConcrete => color != null && size != null;
+  bool get isConcrete => color != null;
 
   @override
   bool operator ==(Object other) {

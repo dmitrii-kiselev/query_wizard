@@ -35,7 +35,6 @@ class _TreeNodeState extends State<TreeNode>
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
   static Duration _kExpand = Duration(milliseconds: 200);
-  static double _kIconSize = 28;
 
   late AnimationController _controller;
   late Animation<double> _heightFactor;
@@ -78,7 +77,6 @@ class _TreeNodeState extends State<TreeNode>
 
   void _handleExpand() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     setState(() {
       _isExpanded = !_isExpanded;
       if (_isExpanded) {
@@ -96,7 +94,6 @@ class _TreeNodeState extends State<TreeNode>
 
   void _handleTap() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     if (_treeView.onNodeTap != null) {
       _treeView.onNodeTap!(widget.node.key);
     }
@@ -104,7 +101,6 @@ class _TreeNodeState extends State<TreeNode>
 
   void _handleDoubleTap() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     if (_treeView.onNodeDoubleTap != null) {
       _treeView.onNodeDoubleTap!(widget.node.key);
     }
@@ -112,7 +108,6 @@ class _TreeNodeState extends State<TreeNode>
 
   Widget _buildNodeExpander() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     TreeViewTheme _theme = _treeView.theme;
     return widget.node.isParent
         ? GestureDetector(
@@ -129,7 +124,6 @@ class _TreeNodeState extends State<TreeNode>
 
   Widget _buildNodeIcon() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     TreeViewTheme _theme = _treeView.theme;
     bool isSelected = _treeView.controller.selectedKey != null &&
         _treeView.controller.selectedKey == widget.node.key;
@@ -154,7 +148,6 @@ class _TreeNodeState extends State<TreeNode>
 
   Widget _buildNodeLabel() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     TreeViewTheme _theme = _treeView.theme;
     bool isSelected = _treeView.controller.selectedKey != null &&
         _treeView.controller.selectedKey == widget.node.key;
@@ -198,7 +191,6 @@ class _TreeNodeState extends State<TreeNode>
 
   Widget _buildNodeTitle() {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     TreeViewTheme _theme = _treeView.theme;
     bool isSelected = _treeView.controller.selectedKey != null &&
         _treeView.controller.selectedKey == widget.node.key;
@@ -265,7 +257,6 @@ class _TreeNodeState extends State<TreeNode>
   @override
   Widget build(BuildContext context) {
     TreeView _treeView = TreeView.of(context)!;
-    assert(_treeView != null, 'TreeView must exist in context');
     final bool closed =
         (!_isExpanded || !widget.node.expanded) && _controller.isDismissed;
     final nodeLabel = _buildNodeTitle();
@@ -381,14 +372,11 @@ class _TreeNodeExpanderState extends State<_TreeNodeExpander>
   }
 
   Color? _onColor(Color color) {
-    if (color != null) {
-      if (color.computeLuminance() > 0.6) {
-        return Colors.black;
-      } else {
-        return Colors.white;
-      }
+    if (color.computeLuminance() > 0.6) {
+      return Colors.black;
+    } else {
+      return Colors.white;
     }
-    return null;
   }
 
   @override
