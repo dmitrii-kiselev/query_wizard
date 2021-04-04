@@ -24,7 +24,7 @@ void main() {
         element.props,
         equals([
           element.name,
-          element.alias,
+          '',
           element.nodeType,
           element.parent,
           element.elements

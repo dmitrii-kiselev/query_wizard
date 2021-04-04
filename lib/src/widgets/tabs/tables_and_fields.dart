@@ -23,17 +23,17 @@ class TablesAndFields extends HookWidget {
 
         final desktopCategoryItems = <_TreeViewer>[
           _TreeViewer(
-            header: localizations.database,
+            header: localizations?.database ?? '',
             items: sources,
             iconData: Icons.table_rows_rounded,
           ),
           _TreeViewer(
-            header: localizations.tables,
+            header: localizations?.tables ?? '',
             items: tables,
             iconData: Icons.table_rows_rounded,
           ),
           _TreeViewer(
-            header: localizations.fields,
+            header: localizations?.fields ?? '',
             items: fields,
             iconData: Icons.horizontal_rule_rounded,
           ),
@@ -79,9 +79,9 @@ class TablesAndFields extends HookWidget {
 
 class _TreeViewer extends StatelessWidget {
   const _TreeViewer({
-    this.header,
-    this.items,
-    this.iconData,
+    required this.header,
+    required this.items,
+    required this.iconData,
   });
 
   final String header;
@@ -125,7 +125,7 @@ class _TreeViewer extends StatelessWidget {
 
 class _TreeViewerHeader extends StatelessWidget {
   const _TreeViewerHeader({
-    this.header,
+    required this.header,
   });
 
   final String header;
@@ -149,7 +149,7 @@ class _TreeViewerHeader extends StatelessWidget {
                 header: true,
                 child: Text(
                   header,
-                  style: Theme.of(context).textTheme.headline5.apply(
+                  style: Theme.of(context).textTheme.headline5?.apply(
                         color: colorScheme.onSurface,
                       ),
                   maxLines: 4,

@@ -16,7 +16,7 @@ class QueryWizardLoadInProgress extends QueryWizardState {}
 class QueryWizardLoadSuccess extends QueryWizardState {
   final List<DbElement> dbElements;
 
-  const QueryWizardLoadSuccess({this.dbElements});
+  const QueryWizardLoadSuccess({required this.dbElements});
 
   @override
   List<Object> get props => [dbElements];

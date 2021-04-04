@@ -8,13 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "19.0.0"
-  adaptive_breakpoints:
-    dependency: "direct main"
-    description:
-      name: adaptive_breakpoints
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
   analyzer:
     dependency: transitive
     description:
@@ -140,7 +133,7 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -222,10 +215,10 @@ packages:
   flutter_treeview:
     dependency: "direct main"
     description:
-      name: flutter_treeview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.0+1"
+      path: "packages/flutter_treeview"
+      relative: true
+    source: path
+    version: "0.7.1+1"
   glob:
     dependency: transitive
     description:
@@ -496,7 +489,7 @@ packages:
       name: vm_service
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.0+1"
+    version: "6.2.0"
   watcher:
     dependency: transitive
     description:
