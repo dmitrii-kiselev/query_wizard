@@ -9,7 +9,8 @@ import 'package:query_wizard/widgets.dart';
 class QueryWizard extends StatelessWidget {
   final QueryWizardRepository queryWizardRepository;
 
-  QueryWizard({Key key, this.queryWizardRepository}) : super(key: key);
+  QueryWizard({Key? key, required this.queryWizardRepository})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

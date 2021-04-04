@@ -5,7 +5,7 @@ import 'package:flutter_treeview/tree_view.dart';
 import 'package:query_wizard/models.dart';
 
 class SourcesTree extends HookWidget {
-  SourcesTree({Key key, this.dbElements}) : super(key: key);
+  SourcesTree({Key? key, required this.dbElements}) : super(key: key);
 
   final List<DbElement> dbElements;
 
@@ -35,7 +35,7 @@ class SourcesTree extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final selectedNode = useState<String>(null);
+    final selectedNode = useState<String>('');
     final nodes = useState<List<Node>>(_prepareNodes(dbElements));
     final treeViewController = useState(TreeViewController(
       children: nodes.value,
@@ -69,7 +69,7 @@ class SourcesTree extends HookWidget {
     _expandNode(String key, bool expanded) {
       String msg = '${expanded ? "Expanded" : "Collapsed"}: $key';
       debugPrint(msg);
-      Node node = treeViewController.value.getNode(key);
+      Node? node = treeViewController.value.getNode(key);
       if (node != null) {
         List<Node> updated = treeViewController.value
             .updateNode(key, node.copyWith(expanded: expanded));

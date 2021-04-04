@@ -5,19 +5,25 @@ enum DbNodeType { table, column }
 // ignore: must_be_immutable
 class DbElement extends Equatable {
   final String name;
-  String alias;
+  String? alias;
   final DbNodeType nodeType;
-  DbElement parent;
+  DbElement? parent;
   final List<DbElement> elements = List.empty(growable: true);
 
-  DbElement({this.name, this.nodeType});
+  DbElement({required this.name, required this.nodeType});
 
-  DbElement.withElements({this.name, this.nodeType, List<DbElement> elements}) {
+  DbElement.withElements(
+      {required this.name,
+      required this.nodeType,
+      required List<DbElement> elements}) {
     this.elements.addAll(elements);
   }
 
   DbElement.withElementsAndParent(
-      {this.name, this.nodeType, List<DbElement> elements, DbElement parent}) {
+      {required this.name,
+      required this.nodeType,
+      required List<DbElement> elements,
+      required DbElement parent}) {
     this.elements.addAll(elements);
     this.elements.forEach((element) {
       element.parent = this;
@@ -29,5 +35,6 @@ class DbElement extends Equatable {
   bool get hasElements => elements.isNotEmpty;
 
   @override
-  List<Object> get props => [name, alias, nodeType, parent, elements];
+  List<Object> get props =>
+      [name, alias ?? '', nodeType, parent ?? '', elements];
 }
