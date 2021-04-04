@@ -1,0 +1,73 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_treeview/tree_view.dart';
+
+import 'package:query_wizard/models.dart';
+import 'package:query_wizard/utilities.dart';
+
+class FieldsTree extends HookWidget {
+  FieldsTree({Key? key, required this.dbElements}) : super(key: key);
+
+  final List<DbElement> dbElements;
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedNode = useState<String>('');
+    final nodes = useState<List<Node>>(Utilities.prepareNodes(dbElements));
+    final treeViewController = useState(TreeViewController(
+      children: nodes.value,
+      selectedKey: selectedNode.value,
+    ));
+
+    TreeViewTheme _treeViewTheme = TreeViewTheme(
+      expanderTheme: ExpanderThemeData(
+          type: ExpanderType.caret,
+          modifier: ExpanderModifier.circleFilled,
+          position: ExpanderPosition.start,
+          size: 20,
+          color: Colors.blue),
+      labelStyle: TextStyle(
+        fontSize: 16,
+        letterSpacing: 0.3,
+      ),
+      parentLabelStyle: TextStyle(
+        fontSize: 16,
+        letterSpacing: 0.1,
+        fontWeight: FontWeight.w800,
+        color: Colors.blue.shade700,
+      ),
+      iconTheme: IconThemeData(
+        size: 18,
+        color: Colors.grey.shade800,
+      ),
+      colorScheme: Theme.of(context).colorScheme,
+    );
+
+    _expandNode(String key, bool expanded) {
+      String msg = '${expanded ? "Expanded" : "Collapsed"}: $key';
+      debugPrint(msg);
+      Node? node = treeViewController.value.getNode(key);
+      if (node != null) {
+        List<Node> updated = treeViewController.value
+            .updateNode(key, node.copyWith(expanded: expanded));
+
+        treeViewController.value =
+            treeViewController.value.copyWith(children: updated);
+      }
+    }
+
+    return TreeView(
+      controller: treeViewController.value,
+      allowParentSelect: true,
+      supportParentDoubleTap: true,
+      onExpansionChanged: (key, expanded) => _expandNode(key, expanded),
+      onNodeTap: (key) {
+        debugPrint('Selected: $key');
+        selectedNode.value = key;
+        treeViewController.value =
+            treeViewController.value.copyWith(selectedKey: key);
+      },
+      theme: _treeViewTheme,
+    );
+  }
+}
