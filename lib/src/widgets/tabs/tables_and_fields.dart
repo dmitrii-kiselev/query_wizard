@@ -41,7 +41,7 @@ class TablesAndFields extends HookWidget {
             header: localizations?.fields ?? '',
             items: fields,
             iconData: Icons.horizontal_rule_rounded,
-            child: SourcesTree(
+            child: FieldsTree(
                 key: ValueKey('${localizations?.fields ?? ''}DemoList'),
                 dbElements: fields),
           ),
