@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
