@@ -12,7 +12,7 @@ class SourcesTree extends HookWidget {
   List<Node> _prepareNodes(List<DbElement> dbElements) {
     final nodes = List<Node>.empty(growable: true);
 
-    dbElements.forEach((element) {
+    for (var element in dbElements) {
       var children = List<Node>.empty(growable: true);
       if (element.hasElements) {
         children = _prepareNodes(element.elements);
@@ -28,7 +28,7 @@ class SourcesTree extends HookWidget {
           children: children);
 
       nodes.add(node);
-    });
+    }
 
     return nodes;
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter_treeview/src/tree_node.dart';
 import 'package:flutter_treeview/src/tree_view_theme.dart';
 import 'package:flutter_treeview/src/utilities.dart';

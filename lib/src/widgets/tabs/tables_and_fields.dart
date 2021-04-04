@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/constants.dart';
-import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
 const _horizontalDesktopPadding = 81.0;
@@ -21,18 +20,18 @@ class TablesAndFields extends HookWidget {
         final tables = state.dbElements;
         final fields = state.dbElements.first.elements;
 
-        final desktopCategoryItems = <_TreeViewer>[
-          _TreeViewer(
+        final desktopCategoryItems = <TreeViewer>[
+          TreeViewer(
             header: localizations?.database ?? '',
             items: sources,
             iconData: Icons.table_rows_rounded,
           ),
-          _TreeViewer(
+          TreeViewer(
             header: localizations?.tables ?? '',
             items: tables,
             iconData: Icons.table_rows_rounded,
           ),
-          _TreeViewer(
+          TreeViewer(
             header: localizations?.fields ?? '',
             items: fields,
             iconData: Icons.horizontal_rule_rounded,
@@ -74,92 +73,5 @@ class TablesAndFields extends HookWidget {
         if (index < children.length - 1) SizedBox(width: paddingBetween),
       ],
     ];
-  }
-}
-
-class _TreeViewer extends StatelessWidget {
-  const _TreeViewer({
-    required this.header,
-    required this.items,
-    required this.iconData,
-  });
-
-  final String header;
-  final List<DbElement> items;
-  final IconData iconData;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      borderRadius: BorderRadius.circular(10),
-      clipBehavior: Clip.antiAlias,
-      color: colorScheme.surface,
-      child: Semantics(
-        container: true,
-        child: FocusTraversalGroup(
-          policy: WidgetOrderTraversalPolicy(),
-          child: Column(
-            children: [
-              _TreeViewerHeader(
-                header: header,
-              ),
-              Divider(
-                height: 2,
-                thickness: 2,
-                color: colorScheme.background,
-              ),
-              Flexible(
-                child: SourcesTree(
-                  key: ValueKey('${header}DemoList'),
-                  dbElements: items,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TreeViewerHeader extends StatelessWidget {
-  const _TreeViewerHeader({
-    required this.header,
-  });
-
-  final String header;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return Material(
-      // Makes integration tests possible.
-      key: ValueKey('${header}CategoryHeader'),
-      color: colorScheme.onBackground,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-          ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsetsDirectional.only(start: 8),
-              child: Semantics(
-                header: true,
-                child: Text(
-                  header,
-                  style: Theme.of(context).textTheme.headline5?.apply(
-                        color: colorScheme.onSurface,
-                      ),
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

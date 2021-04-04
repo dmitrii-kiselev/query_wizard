@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:query_wizard/repositories.dart';
@@ -18,11 +18,9 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
 
-    // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsNWidgets(2));
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
@@ -40,12 +38,10 @@ void main() {
       queryWizardApiClient: FakeQueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.pumpAndSettle();
 
-    // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsOneWidget);
     expect(find.text('Something went wrong!'), findsOneWidget);
   });
@@ -55,13 +51,11 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.tap(find.byKey(ValueKey('Joins')));
     await tester.pumpAndSettle();
 
-    // Verify that widgets exists.
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
   });
