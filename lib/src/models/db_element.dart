@@ -25,9 +25,10 @@ class DbElement extends Equatable {
       required List<DbElement> elements,
       required DbElement parent}) {
     this.elements.addAll(elements);
-    this.elements.forEach((element) {
+
+    for (var element in elements) {
       element.parent = this;
-    });
+    }
 
     this.parent = parent;
   }

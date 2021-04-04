@@ -9,7 +9,6 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.pumpAndSettle();

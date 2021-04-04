@@ -18,11 +18,9 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
 
-    // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsNWidgets(2));
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
@@ -40,12 +38,10 @@ void main() {
       queryWizardApiClient: FakeQueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.pumpAndSettle();
 
-    // Verify that widgets exists.
     expect(find.text('Query Wizard'), findsOneWidget);
     expect(find.text('Something went wrong!'), findsOneWidget);
   });
@@ -55,13 +51,11 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    // Build our app and trigger a frame.
     await tester
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.tap(find.byKey(ValueKey('Joins')));
     await tester.pumpAndSettle();
 
-    // Verify that widgets exists.
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
   });
