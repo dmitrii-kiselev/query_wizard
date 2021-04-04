@@ -269,11 +269,11 @@ class TreeViewController {
         _parent = this.getParent(_currentKey);
       }
       TreeViewController _this = this;
-      _ancestors.forEach((String k) {
+      for (var k in _ancestors) {
         Node _node = _this.getNode(k)!;
         Node _updated = _node.copyWith(expanded: true);
         _this = _this.withUpdateNode(k, _updated);
-      });
+      }
       return _this.children;
     }
     return this.children;
@@ -295,11 +295,11 @@ class TreeViewController {
         _parent = this.getParent(_currentKey);
       }
       TreeViewController _this = this;
-      _ancestors.forEach((String k) {
+      for (var k in _ancestors) {
         Node _node = _this.getNode(k)!;
         Node _updated = _node.copyWith(expanded: false);
         _this = _this.withUpdateNode(k, _updated);
-      });
+      }
       return _this.children;
     }
     return this.children;
