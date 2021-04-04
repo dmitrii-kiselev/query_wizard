@@ -25,16 +25,25 @@ class TablesAndFields extends HookWidget {
             header: localizations?.database ?? '',
             items: sources,
             iconData: Icons.table_rows_rounded,
+            child: SourcesTree(
+                key: ValueKey('${localizations?.database ?? ''}DemoList'),
+                dbElements: sources),
           ),
           TreeViewer(
             header: localizations?.tables ?? '',
             items: tables,
             iconData: Icons.table_rows_rounded,
+            child: TablesTree(
+                key: ValueKey('${localizations?.tables ?? ''}DemoList'),
+                dbElements: sources),
           ),
           TreeViewer(
             header: localizations?.fields ?? '',
             items: fields,
             iconData: Icons.horizontal_rule_rounded,
+            child: SourcesTree(
+                key: ValueKey('${localizations?.fields ?? ''}DemoList'),
+                dbElements: fields),
           ),
         ];
 
