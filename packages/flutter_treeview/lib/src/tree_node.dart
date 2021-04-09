@@ -287,7 +287,12 @@ class _TreeNodeState extends State<TreeNode>
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: widget.node.children.map((Node node) {
-                          return TreeNode(node: node);
+                          return Draggable<Node>(
+                            data: node,
+                            dragAnchor: DragAnchor.pointer,
+                            feedback: Text(node.label),
+                            child: TreeNode(node: node),
+                          );
                         }).toList()),
                   ),
           )

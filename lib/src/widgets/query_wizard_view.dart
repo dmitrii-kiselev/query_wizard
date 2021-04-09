@@ -25,7 +25,7 @@ class QueryWizardView extends HookWidget {
       _QueryWizardTab(
           message: localizations?.joinsTab ?? '',
           icon: Icons.account_tree_rounded,
-          widget: Text(localizations?.joinsTab ?? '')),
+          widget: JoinsTab()),
       _QueryWizardTab(
           message: localizations?.groupTab ?? '',
           icon: Icons.group_work_rounded,
