@@ -18,9 +18,9 @@ class QueryWizard extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Join> joins = [
       Join(
-          leftTableAlias: 'Table1',
+          leftTable: 'Table1',
           isLeftAll: false,
-          rightTableAlias: 'Table2',
+          rightTable: 'Table2',
           isRightAll: false,
           condition: Condition(
               leftField: 'Table1.Column1',
@@ -29,9 +29,9 @@ class QueryWizard extends StatelessWidget {
               isCustom: false,
               customCondition: '')),
       Join(
-          leftTableAlias: 'Table1',
+          leftTable: 'Table1',
           isLeftAll: false,
-          rightTableAlias: 'Table2',
+          rightTable: 'Table2',
           isRightAll: false,
           condition: Condition(
               leftField: 'Table1.Column2',
@@ -40,9 +40,9 @@ class QueryWizard extends StatelessWidget {
               isCustom: false,
               customCondition: '')),
       Join(
-          leftTableAlias: 'Table1',
+          leftTable: 'Table1',
           isLeftAll: false,
-          rightTableAlias: 'Table2',
+          rightTable: 'Table2',
           isRightAll: false,
           condition: Condition(
               leftField: 'Table1.Column3',

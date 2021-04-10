@@ -9,7 +9,7 @@ void main() {
     late JoinsTabBloc joinsTabBloc;
 
     setUp(() {
-      joinsTabBloc = JoinsTabBloc(JoinsInitial([]));
+      joinsTabBloc = JoinsTabBloc(JoinsInitial(joins: []));
     });
 
     test('initial state is empty', () {
@@ -25,7 +25,7 @@ void main() {
           bloc.add(event);
         },
         expect: () => [
-              JoinsInitial([Join.empty()]),
+              JoinsInitial(joins: [Join.empty()]),
               JoinsChanged(joins: [Join.empty()])
             ]);
 
@@ -43,9 +43,9 @@ void main() {
           final expectedJoins = [Join.empty().copyWith(isLeftAll: true)];
 
           return [
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins),
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins)
           ];
         });
@@ -64,9 +64,9 @@ void main() {
           final expectedJoins = [Join.empty(), Join.empty()];
 
           return [
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins),
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins)
           ];
         });
@@ -85,9 +85,9 @@ void main() {
           final List<Join> expectedJoins = [];
 
           return [
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins),
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins)
           ];
         });
@@ -108,11 +108,11 @@ void main() {
           final expectedJoins = [Join.empty(), Join.empty()];
 
           return [
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins),
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins),
-            JoinsInitial(expectedJoins),
+            JoinsInitial(joins: expectedJoins),
             JoinsChanged(joins: expectedJoins)
           ];
         });

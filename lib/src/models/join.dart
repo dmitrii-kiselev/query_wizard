@@ -2,49 +2,49 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/src/models/condition.dart';
 
 class Join extends Equatable {
-  final String leftTableAlias;
+  final String leftTable;
   final bool isLeftAll;
-  final String rightTableAlias;
+  final String rightTable;
   final bool isRightAll;
   final Condition condition;
 
   const Join(
-      {required this.leftTableAlias,
+      {required this.leftTable,
       required this.isLeftAll,
-      required this.rightTableAlias,
+      required this.rightTable,
       required this.isRightAll,
       required this.condition});
 
   Join.empty()
-      : leftTableAlias = '',
+      : leftTable = '',
         isLeftAll = false,
-        rightTableAlias = '',
+        rightTable = '',
         isRightAll = false,
         condition = Condition.empty();
 
   @override
   List<Object?> get props =>
-      [leftTableAlias, isLeftAll, rightTableAlias, isRightAll, condition];
+      [leftTable, isLeftAll, rightTable, isRightAll, condition];
 }
 
 extension CopyJoin on Join {
   Join copy() => Join(
-      leftTableAlias: leftTableAlias,
+      leftTable: leftTable,
       isLeftAll: isLeftAll,
-      rightTableAlias: rightTableAlias,
+      rightTable: rightTable,
       isRightAll: isRightAll,
       condition: condition.copy());
 
   Join copyWith(
-          {String? leftTableAlias,
+          {String? leftTable,
           bool? isLeftAll,
-          String? rightTableAlias,
+          String? rightTable,
           bool? isRightAll,
           Condition? condition}) =>
       Join(
-          leftTableAlias: leftTableAlias ?? this.leftTableAlias,
+          leftTable: leftTable ?? this.leftTable,
           isLeftAll: isLeftAll ?? this.isLeftAll,
-          rightTableAlias: rightTableAlias ?? this.rightTableAlias,
+          rightTable: rightTable ?? this.rightTable,
           isRightAll: isRightAll ?? this.isRightAll,
           condition: condition ?? this.condition);
 }

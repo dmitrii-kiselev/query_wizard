@@ -12,7 +12,7 @@ abstract class JoinsTabState extends Equatable {
 }
 
 class JoinsInitial extends JoinsTabState {
-  JoinsInitial(List<Join>? joins) : super(joins: joins ?? []);
+  JoinsInitial({List<Join>? joins}) : super(joins: joins ?? []);
 }
 
 class JoinsChanged extends JoinsTabState {

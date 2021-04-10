@@ -8,7 +8,7 @@ class JoinsTabBloc extends Bloc<JoinsTabEvent, JoinsTabState> {
 
   @override
   Stream<JoinsTabState> mapEventToState(JoinsTabEvent event) async* {
-    yield JoinsInitial(state.joins);
+    yield JoinsInitial(joins: state.joins);
 
     if (event is JoinAdded) {
       state.joins.add(event.join);
@@ -27,9 +27,9 @@ class JoinsTabBloc extends Bloc<JoinsTabEvent, JoinsTabState> {
           customCondition: event.condition?.customCondition ??
               event.join.condition.customCondition);
       final join = Join(
-          leftTableAlias: event.leftTableAlias ?? event.join.leftTableAlias,
+          leftTable: event.leftTable ?? event.join.leftTable,
           isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
-          rightTableAlias: event.rightTableAlias ?? event.join.rightTableAlias,
+          rightTable: event.rightTable ?? event.join.rightTable,
           isRightAll: event.isRightAll ?? event.join.isRightAll,
           condition: event.condition ?? condition);
 

@@ -15,18 +15,18 @@ class JoinAdded extends JoinsTabEvent {
 class JoinEdited extends JoinsTabEvent {
   final int index;
   final Join join;
-  final String? leftTableAlias;
+  final String? leftTable;
   final bool? isLeftAll;
-  final String? rightTableAlias;
+  final String? rightTable;
   final bool? isRightAll;
   final Condition? condition;
 
   JoinEdited(
       {required this.index,
       required this.join,
-      this.leftTableAlias,
+      this.leftTable,
       this.isLeftAll,
-      this.rightTableAlias,
+      this.rightTable,
       this.isRightAll,
       this.condition});
 

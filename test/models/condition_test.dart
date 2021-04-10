@@ -5,9 +5,9 @@ import 'package:query_wizard/models.dart';
 void main() {
   test('Join initialized', () {
     final join = Join(
-        leftTableAlias: '',
+        leftTable: '',
         isLeftAll: false,
-        rightTableAlias: '',
+        rightTable: '',
         isRightAll: false,
         condition: Condition.empty());
 
@@ -15,9 +15,9 @@ void main() {
     expect(
         join.props,
         equals([
-          join.leftTableAlias,
+          join.leftTable,
           join.isLeftAll,
-          join.rightTableAlias,
+          join.rightTable,
           join.isRightAll,
           join.condition
         ]));
@@ -26,9 +26,9 @@ void main() {
   test('Empty join initialized', () {
     final join = Join.empty();
     final expected = Join(
-        leftTableAlias: '',
+        leftTable: '',
         isLeftAll: false,
-        rightTableAlias: '',
+        rightTable: '',
         isRightAll: false,
         condition: Condition.empty());
 

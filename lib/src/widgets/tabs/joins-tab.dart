@@ -97,7 +97,7 @@ List<Widget> _actionButtons(JoinsTabBloc bloc, int index, Join join) {
 List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
   return [
     DropdownButton<String>(
-      value: join.leftTableAlias,
+      value: join.leftTable,
       icon: const Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
@@ -107,8 +107,7 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        final event =
-            JoinEdited(index: index, join: join, leftTableAlias: newValue);
+        final event = JoinEdited(index: index, join: join, leftTable: newValue);
 
         bloc.add(event);
       },
@@ -129,7 +128,7 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
       },
     ),
     DropdownButton<String>(
-      value: join.rightTableAlias,
+      value: join.rightTable,
       icon: const Icon(Icons.arrow_downward),
       iconSize: 24,
       elevation: 16,
@@ -140,7 +139,7 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
       ),
       onChanged: (String? newValue) {
         final event =
-            JoinEdited(index: index, join: join, rightTableAlias: newValue);
+            JoinEdited(index: index, join: join, rightTable: newValue);
 
         bloc.add(event);
       },
@@ -164,12 +163,12 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
 }
 
 List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
-  var test;
+  var widgets;
 
   if (join.condition.isCustom) {
-    test = [Text('Test'), Text('Test')];
+    widgets = [];
   } else {
-    test = [
+    widgets = [
       DropdownButton<String>(
         value: join.condition.leftField,
         icon: const Icon(Icons.arrow_downward),
@@ -287,6 +286,6 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
         bloc.add(event);
       },
     ),
-    ...test
+    ...widgets
   ];
 }
