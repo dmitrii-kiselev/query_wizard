@@ -34,4 +34,17 @@ extension CopyJoin on Join {
       rightTableAlias: rightTableAlias,
       isRightAll: isRightAll,
       condition: condition.copy());
+
+  Join copyWith(
+          {String? leftTableAlias,
+          bool? isLeftAll,
+          String? rightTableAlias,
+          bool? isRightAll,
+          Condition? condition}) =>
+      Join(
+          leftTableAlias: leftTableAlias ?? this.leftTableAlias,
+          isLeftAll: isLeftAll ?? this.isLeftAll,
+          rightTableAlias: rightTableAlias ?? this.rightTableAlias,
+          isRightAll: isRightAll ?? this.isRightAll,
+          condition: condition ?? this.condition);
 }

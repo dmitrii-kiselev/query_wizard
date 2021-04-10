@@ -33,4 +33,17 @@ extension CopyCondition on Condition {
       logicalCompareType: logicalCompareType,
       rightField: rightField,
       customCondition: customCondition);
+
+  Condition copyWith(
+          {bool? isCustom,
+          String? leftField,
+          String? logicalCompareType,
+          String? rightField,
+          String? customCondition}) =>
+      Condition(
+          isCustom: isCustom ?? this.isCustom,
+          leftField: leftField ?? this.leftField,
+          logicalCompareType: logicalCompareType ?? this.logicalCompareType,
+          rightField: rightField ?? this.rightField,
+          customCondition: customCondition ?? this.customCondition);
 }

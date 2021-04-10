@@ -164,6 +164,113 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
 }
 
 List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
+  var test;
+
+  if (join.condition.isCustom) {
+    test = [Text('Test'), Text('Test')];
+  } else {
+    test = [
+      DropdownButton<String>(
+        value: join.condition.leftField,
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String? newValue) {
+          final condition = Condition(
+              isCustom: join.condition.isCustom,
+              leftField: newValue ?? '',
+              logicalCompareType: join.condition.logicalCompareType,
+              rightField: join.condition.rightField,
+              customCondition: join.condition.customCondition);
+          final event =
+              JoinEdited(index: index, join: join, condition: condition);
+
+          bloc.add(event);
+        },
+        items: <String>[
+          '',
+          'Table1.Column1',
+          'Table1.Column2',
+          'Table1.Column3'
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+      DropdownButton<String>(
+        value: join.condition.logicalCompareType,
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String? newValue) {
+          final condition = Condition(
+              isCustom: join.condition.isCustom,
+              leftField: join.condition.leftField,
+              logicalCompareType: newValue ?? '',
+              rightField: join.condition.rightField,
+              customCondition: join.condition.customCondition);
+          final event =
+              JoinEdited(index: index, join: join, condition: condition);
+
+          bloc.add(event);
+        },
+        items: <String>['', '=', '<>', '<', '>', '<=', '>=']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+      DropdownButton<String>(
+        value: join.condition.rightField,
+        icon: const Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: const TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String? newValue) {
+          final condition = Condition(
+              isCustom: join.condition.isCustom,
+              leftField: join.condition.leftField,
+              logicalCompareType: join.condition.logicalCompareType,
+              rightField: newValue ?? '',
+              customCondition: join.condition.customCondition);
+          final event =
+              JoinEdited(index: index, join: join, condition: condition);
+
+          bloc.add(event);
+        },
+        items: <String>[
+          '',
+          'Table2.Column1',
+          'Table2.Column2',
+          'Table2.Column3'
+        ].map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
+    ];
+  }
+
   return [
     Checkbox(
       value: join.condition.isCustom,
@@ -180,95 +287,6 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
         bloc.add(event);
       },
     ),
-    DropdownButton<String>(
-      value: join.condition.leftField,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        final condition = Condition(
-            isCustom: join.condition.isCustom,
-            leftField: newValue ?? '',
-            logicalCompareType: join.condition.logicalCompareType,
-            rightField: join.condition.rightField,
-            customCondition: join.condition.customCondition);
-        final event =
-            JoinEdited(index: index, join: join, condition: condition);
-
-        bloc.add(event);
-      },
-      items: <String>['', 'Table1.Column1', 'Table1.Column2', 'Table1.Column3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
-    DropdownButton<String>(
-      value: join.condition.logicalCompareType,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        final condition = Condition(
-            isCustom: join.condition.isCustom,
-            leftField: join.condition.leftField,
-            logicalCompareType: newValue ?? '',
-            rightField: join.condition.rightField,
-            customCondition: join.condition.customCondition);
-        final event =
-            JoinEdited(index: index, join: join, condition: condition);
-
-        bloc.add(event);
-      },
-      items: <String>['', '=', '<>', '<', '>', '<=', '>=']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
-    DropdownButton<String>(
-      value: join.condition.rightField,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        final condition = Condition(
-            isCustom: join.condition.isCustom,
-            leftField: join.condition.leftField,
-            logicalCompareType: join.condition.logicalCompareType,
-            rightField: newValue ?? '',
-            customCondition: join.condition.customCondition);
-        final event =
-            JoinEdited(index: index, join: join, condition: condition);
-
-        bloc.add(event);
-      },
-      items: <String>['', 'Table2.Column1', 'Table2.Column2', 'Table2.Column3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
+    ...test
   ];
 }
