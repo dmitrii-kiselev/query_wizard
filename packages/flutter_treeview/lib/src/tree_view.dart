@@ -131,7 +131,12 @@ class _TreeViewData extends StatelessWidget {
         physics: physics,
         padding: EdgeInsets.zero,
         children: _controller.children.map((Node node) {
-          return TreeNode(node: node);
+          return Draggable<Node>(
+            data: node,
+            dragAnchor: DragAnchor.pointer,
+            feedback: Text(node.label),
+            child: TreeNode(node: node),
+          );
         }).toList(),
       ),
     );
