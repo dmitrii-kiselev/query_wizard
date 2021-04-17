@@ -7,11 +7,11 @@ class Query extends Equatable {
   final List<DbElement> sources;
   final List<DbElement> tables;
   final List<DbElement> fields;
-  final List<Join> joins;
+  final List<QueryJoin> joins;
   final List<QueryGrouping> groupings;
-  final List<String> aggregates;
-  final List<String> conditions;
-  final List<String> sortings;
+  final List<QueryAggregate> aggregates;
+  final List<QueryCondition> conditions;
+  final List<QuerySorting> sortings;
   final bool isTop;
   final int topCounter;
   final bool isDistinct;

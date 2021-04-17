@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/models.dart';
 
 abstract class JoinsTabState extends Equatable {
-  final List<Join> joins;
+  final List<QueryJoin> joins;
 
   const JoinsTabState({required this.joins});
 
@@ -12,9 +12,9 @@ abstract class JoinsTabState extends Equatable {
 }
 
 class JoinsInitial extends JoinsTabState {
-  JoinsInitial({List<Join>? joins}) : super(joins: joins ?? []);
+  JoinsInitial({List<QueryJoin>? joins}) : super(joins: joins ?? []);
 }
 
 class JoinsChanged extends JoinsTabState {
-  JoinsChanged({required List<Join> joins}) : super(joins: joins);
+  JoinsChanged({required List<QueryJoin> joins}) : super(joins: joins);
 }

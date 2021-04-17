@@ -1,47 +1,47 @@
 import 'package:equatable/equatable.dart';
-import 'package:query_wizard/src/models/condition.dart';
+import 'package:query_wizard/src/models/query_condition.dart';
 
-class Join extends Equatable {
+class QueryJoin extends Equatable {
   final String leftTable;
   final bool isLeftAll;
   final String rightTable;
   final bool isRightAll;
-  final Condition condition;
+  final QueryCondition condition;
 
-  const Join(
+  const QueryJoin(
       {required this.leftTable,
       required this.isLeftAll,
       required this.rightTable,
       required this.isRightAll,
       required this.condition});
 
-  Join.empty()
+  QueryJoin.empty()
       : leftTable = '',
         isLeftAll = false,
         rightTable = '',
         isRightAll = false,
-        condition = Condition.empty();
+        condition = QueryCondition.empty();
 
   @override
   List<Object?> get props =>
       [leftTable, isLeftAll, rightTable, isRightAll, condition];
 }
 
-extension CopyJoin on Join {
-  Join copy() => Join(
+extension CopyJoin on QueryJoin {
+  QueryJoin copy() => QueryJoin(
       leftTable: leftTable,
       isLeftAll: isLeftAll,
       rightTable: rightTable,
       isRightAll: isRightAll,
       condition: condition.copy());
 
-  Join copyWith(
+  QueryJoin copyWith(
           {String? leftTable,
           bool? isLeftAll,
           String? rightTable,
           bool? isRightAll,
-          Condition? condition}) =>
-      Join(
+          QueryCondition? condition}) =>
+      QueryJoin(
           leftTable: leftTable ?? this.leftTable,
           isLeftAll: isLeftAll ?? this.isLeftAll,
           rightTable: rightTable ?? this.rightTable,

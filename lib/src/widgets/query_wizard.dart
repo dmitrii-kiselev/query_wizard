@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/repositories.dart';
-import 'package:query_wizard/src/models/condition.dart';
+import 'package:query_wizard/src/models/query_condition.dart';
 import 'package:query_wizard/widgets.dart';
 
 class QueryWizard extends StatelessWidget {
@@ -16,35 +16,35 @@ class QueryWizard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Join> joins = [
-      Join(
+    final List<QueryJoin> joins = [
+      QueryJoin(
           leftTable: 'Table1',
           isLeftAll: false,
           rightTable: 'Table2',
           isRightAll: false,
-          condition: Condition(
+          condition: QueryCondition(
               leftField: 'Table1.Column1',
               logicalCompareType: '=',
               rightField: 'Table2.Column1',
               isCustom: false,
               customCondition: '')),
-      Join(
+      QueryJoin(
           leftTable: 'Table1',
           isLeftAll: false,
           rightTable: 'Table2',
           isRightAll: false,
-          condition: Condition(
+          condition: QueryCondition(
               leftField: 'Table1.Column2',
               logicalCompareType: '=',
               rightField: 'Table2.Column2',
               isCustom: false,
               customCondition: '')),
-      Join(
+      QueryJoin(
           leftTable: 'Table1',
           isLeftAll: false,
           rightTable: 'Table2',
           isRightAll: false,
-          condition: Condition(
+          condition: QueryCondition(
               leftField: 'Table1.Column3',
               logicalCompareType: '=',
               rightField: 'Table2.Column3',

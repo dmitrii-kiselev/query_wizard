@@ -5,7 +5,7 @@ import 'package:query_wizard/models.dart';
 abstract class JoinsTabEvent extends Equatable {}
 
 class JoinAdded extends JoinsTabEvent {
-  final Join join;
+  final QueryJoin join;
 
   JoinAdded({required this.join});
 
@@ -14,12 +14,12 @@ class JoinAdded extends JoinsTabEvent {
 
 class JoinEdited extends JoinsTabEvent {
   final int index;
-  final Join join;
+  final QueryJoin join;
   final String? leftTable;
   final bool? isLeftAll;
   final String? rightTable;
   final bool? isRightAll;
-  final Condition? condition;
+  final QueryCondition? condition;
 
   JoinEdited(
       {required this.index,
@@ -34,7 +34,7 @@ class JoinEdited extends JoinsTabEvent {
 }
 
 class JoinCopied extends JoinsTabEvent {
-  final Join join;
+  final QueryJoin join;
 
   JoinCopied({required this.join});
 

@@ -19,20 +19,20 @@ void main() {
     blocTest('adds join when JoinAdded is added',
         build: () => joinsTabBloc,
         act: (JoinsTabBloc bloc) {
-          final join = Join.empty();
+          final join = QueryJoin.empty();
           final event = JoinAdded(join: join);
 
           bloc.add(event);
         },
         expect: () => [
-              JoinsInitial(joins: [Join.empty()]),
-              JoinsChanged(joins: [Join.empty()])
+              JoinsInitial(joins: [QueryJoin.empty()]),
+              JoinsChanged(joins: [QueryJoin.empty()])
             ]);
 
     blocTest('changes join when JoinEdited is added',
         build: () => joinsTabBloc,
         act: (JoinsTabBloc bloc) {
-          final join = Join.empty();
+          final join = QueryJoin.empty();
           final joinAdded = JoinAdded(join: join);
           final joinEdited = JoinEdited(index: 0, join: join, isLeftAll: true);
 
@@ -40,7 +40,7 @@ void main() {
           bloc.add(joinEdited);
         },
         expect: () {
-          final expectedJoins = [Join.empty().copyWith(isLeftAll: true)];
+          final expectedJoins = [QueryJoin.empty().copyWith(isLeftAll: true)];
 
           return [
             JoinsInitial(joins: expectedJoins),
@@ -53,7 +53,7 @@ void main() {
     blocTest('copies join when JoinCopied is added',
         build: () => joinsTabBloc,
         act: (JoinsTabBloc bloc) {
-          final join = Join.empty();
+          final join = QueryJoin.empty();
           final joinAdded = JoinAdded(join: join);
           final joinCopied = JoinCopied(join: join);
 
@@ -61,7 +61,7 @@ void main() {
           bloc.add(joinCopied);
         },
         expect: () {
-          final expectedJoins = [Join.empty(), Join.empty()];
+          final expectedJoins = [QueryJoin.empty(), QueryJoin.empty()];
 
           return [
             JoinsInitial(joins: expectedJoins),
@@ -74,7 +74,7 @@ void main() {
     blocTest('removes join when JoinRemoved is added',
         build: () => joinsTabBloc,
         act: (JoinsTabBloc bloc) {
-          final join = Join.empty();
+          final join = QueryJoin.empty();
           final joinAdded = JoinAdded(join: join);
           final joinRemoved = JoinRemoved(index: 0);
 
@@ -82,7 +82,7 @@ void main() {
           bloc.add(joinRemoved);
         },
         expect: () {
-          final List<Join> expectedJoins = [];
+          final List<QueryJoin> expectedJoins = [];
 
           return [
             JoinsInitial(joins: expectedJoins),
@@ -95,9 +95,9 @@ void main() {
     blocTest('changes join order when JoinOrderChanged is added',
         build: () => joinsTabBloc,
         act: (JoinsTabBloc bloc) {
-          final join = Join.empty();
+          final join = QueryJoin.empty();
           final joinAdded1 = JoinAdded(join: join);
-          final joinAdded2 = JoinAdded(join: Join.empty());
+          final joinAdded2 = JoinAdded(join: QueryJoin.empty());
           final joinOrderChanged = JoinOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(joinAdded1);
@@ -105,7 +105,7 @@ void main() {
           bloc.add(joinOrderChanged);
         },
         expect: () {
-          final expectedJoins = [Join.empty(), Join.empty()];
+          final expectedJoins = [QueryJoin.empty(), QueryJoin.empty()];
 
           return [
             JoinsInitial(joins: expectedJoins),

@@ -16,7 +16,7 @@ class JoinsTabBloc extends Bloc<JoinsTabEvent, JoinsTabState> {
     }
 
     if (event is JoinEdited) {
-      final condition = Condition(
+      final condition = QueryCondition(
           isCustom: event.condition?.isCustom ?? event.join.condition.isCustom,
           leftField:
               event.condition?.leftField ?? event.join.condition.leftField,
@@ -26,7 +26,7 @@ class JoinsTabBloc extends Bloc<JoinsTabEvent, JoinsTabState> {
               event.condition?.rightField ?? event.join.condition.rightField,
           customCondition: event.condition?.customCondition ??
               event.join.condition.customCondition);
-      final join = Join(
+      final join = QueryJoin(
           leftTable: event.leftTable ?? event.join.leftTable,
           isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
           rightTable: event.rightTable ?? event.join.rightTable,
@@ -54,7 +54,7 @@ class JoinsTabBloc extends Bloc<JoinsTabEvent, JoinsTabState> {
       if (event.oldIndex < newIndex) {
         newIndex -= 1;
       }
-      final Join item = state.joins.removeAt(event.oldIndex);
+      final QueryJoin item = state.joins.removeAt(event.oldIndex);
       state.joins.insert(newIndex, item);
       yield JoinsChanged(joins: state.joins);
     }

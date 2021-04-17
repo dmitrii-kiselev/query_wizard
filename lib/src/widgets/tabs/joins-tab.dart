@@ -4,7 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
-import 'package:query_wizard/src/models/condition.dart';
+import 'package:query_wizard/src/models/query_condition.dart';
 
 class JoinsTab extends HookWidget {
   @override
@@ -34,7 +34,7 @@ class JoinsTab extends HookWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              final event = JoinAdded(join: Join.empty());
+              final event = JoinAdded(join: QueryJoin.empty());
 
               bloc.add(event);
             },
@@ -51,7 +51,7 @@ class JoinsTab extends HookWidget {
 
 class _JoinItem extends StatelessWidget {
   final JoinsTabBloc bloc;
-  final Join join;
+  final QueryJoin join;
   final int index;
 
   const _JoinItem(
@@ -71,7 +71,7 @@ class _JoinItem extends StatelessWidget {
   }
 }
 
-List<Widget> _actionButtons(JoinsTabBloc bloc, int index, Join join) {
+List<Widget> _actionButtons(JoinsTabBloc bloc, int index, QueryJoin join) {
   return [
     IconButton(
       icon: const Icon(Icons.copy_outlined),
@@ -94,7 +94,7 @@ List<Widget> _actionButtons(JoinsTabBloc bloc, int index, Join join) {
   ];
 }
 
-List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
+List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
   return [
     DropdownButton<String>(
       value: join.leftTable,
@@ -162,7 +162,7 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, Join join) {
   ];
 }
 
-List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
+List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
   var widgets;
 
   if (join.condition.isCustom) {
@@ -180,7 +180,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
           color: Colors.deepPurpleAccent,
         ),
         onChanged: (String? newValue) {
-          final condition = Condition(
+          final condition = QueryCondition(
               isCustom: join.condition.isCustom,
               leftField: newValue ?? '',
               logicalCompareType: join.condition.logicalCompareType,
@@ -214,7 +214,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
           color: Colors.deepPurpleAccent,
         ),
         onChanged: (String? newValue) {
-          final condition = Condition(
+          final condition = QueryCondition(
               isCustom: join.condition.isCustom,
               leftField: join.condition.leftField,
               logicalCompareType: newValue ?? '',
@@ -244,7 +244,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
           color: Colors.deepPurpleAccent,
         ),
         onChanged: (String? newValue) {
-          final condition = Condition(
+          final condition = QueryCondition(
               isCustom: join.condition.isCustom,
               leftField: join.condition.leftField,
               logicalCompareType: join.condition.logicalCompareType,
@@ -274,7 +274,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, Join join) {
     Checkbox(
       value: join.condition.isCustom,
       onChanged: (value) {
-        final condition = Condition(
+        final condition = QueryCondition(
             isCustom: value ?? false,
             leftField: join.condition.leftField,
             logicalCompareType: join.condition.logicalCompareType,
