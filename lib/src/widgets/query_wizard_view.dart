@@ -1,78 +1,55 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
-class QueryWizardView extends HookWidget {
+class QueryWizardView extends StatefulWidget {
   final String title;
 
-  QueryWizardView({Key? key, required this.title}) : super(key: key);
+  const QueryWizardView({Key? key, required this.title}) : super(key: key);
+
+  @override
+  _QueryWizardView createState() => _QueryWizardView();
+}
+
+class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
+  final RestorableInt _selectedQueryButchIndex = RestorableInt(0);
+  final RestorableInt _selectedQueryIndex = RestorableInt(0);
+
+  @override
+  String get restorationId => 'query_wizard_view';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(
+        _selectedQueryButchIndex, 'selected_query_butch_index');
+    registerForRestoration(_selectedQueryIndex, 'selected_query_index');
+  }
+
+  @override
+  void dispose() {
+    _selectedQueryButchIndex.dispose();
+    _selectedQueryIndex.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<QueryWizardBloc>(context).add(SourcesRequested());
+    BlocProvider.of<QueryWizardBloc>(context).add(QuerySchemaRequested(''));
 
-    final tabController = useTabController(initialLength: 8, initialIndex: 0);
+    final joinsTabBloc = BlocProvider.of<QueryJoinsTabBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
-    final tabs = [
-      _QueryWizardTab(
-          message: localizations?.tablesAndFieldsTab ?? '',
-          icon: Icons.table_chart_rounded,
-          widget: TablesAndFields()),
-      _QueryWizardTab(
-          message: localizations?.joinsTab ?? '',
-          icon: Icons.account_tree_rounded,
-          widget: JoinsTab()),
-      _QueryWizardTab(
-          message: localizations?.groupTab ?? '',
-          icon: Icons.group_work_rounded,
-          widget: Text(localizations?.groupTab ?? '')),
-      _QueryWizardTab(
-          message: localizations?.conditionsTab ?? '',
-          icon: Icons.filter_alt_rounded,
-          widget: Text(localizations?.conditionsTab ?? '')),
-      _QueryWizardTab(
-          message: localizations?.moreTab ?? '',
-          icon: Icons.more_horiz_rounded,
-          widget: Text(localizations?.moreTab ?? '')),
-      _QueryWizardTab(
-          message: localizations?.unionsAliasesTab ?? '',
-          icon: Icons.view_list_rounded,
-          widget: Text(localizations?.unionsAliasesTab ?? '')),
-      _QueryWizardTab(
-          message: localizations?.orderTab ?? '',
-          icon: Icons.sort_rounded,
-          widget: Text(localizations?.orderTab ?? '')),
-      _QueryWizardTab(
-          message: localizations?.queryBatchTab ?? '',
-          icon: Icons.batch_prediction,
-          widget: Text(localizations?.queryBatchTab ?? '')),
-    ];
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(title),
-        bottom: TabBar(
-          controller: tabController,
-          isScrollable: false,
-          tabs: [
-            for (final tab in tabs)
-              Tab(
-                  key: ValueKey(tab.message),
-                  child: Tooltip(
-                    message: tab.message,
-                    child: Icon(
-                      tab.icon,
-                      color: Colors.white,
-                    ),
-                  )),
-          ],
-        ),
-      ),
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
           builder: (context, state) {
         if (state is QueryWizardInitial) {
@@ -84,13 +61,49 @@ class QueryWizardView extends HookWidget {
         }
 
         if (state is QueryWizardLoadSuccess) {
-          return TabBarView(
-            controller: tabController,
+          final queryBatches = state.querySchema.queryBatches;
+          final currentQueryButch = queryBatches.first;
+          final currentQuery = currentQueryButch.queries.first;
+
+          joinsTabBloc.add(QueryJoinsInitialized(joins: currentQuery.joins));
+
+          return Row(
             children: [
-              for (final tab in tabs)
-                Center(
-                  child: tab.widget,
+              NavigationRail(
+                selectedIndex: _selectedQueryButchIndex.value,
+                onDestinationSelected: (index) {
+                  setState(() {
+                    _selectedQueryButchIndex.value = index;
+                  });
+                },
+                labelType: NavigationRailLabelType.selected,
+                destinations: [..._queryButches(queryBatches)],
+              ),
+              const VerticalDivider(thickness: 1, width: 1),
+              Expanded(
+                child: Center(
+                  child: Row(
+                    children: [
+                      NavigationRail(
+                        selectedIndex: _selectedQueryIndex.value,
+                        onDestinationSelected: (index) {
+                          setState(() {
+                            _selectedQueryIndex.value = index;
+                          });
+                        },
+                        labelType: NavigationRailLabelType.selected,
+                        destinations: [..._queries(currentQueryButch.queries)],
+                      ),
+                      const VerticalDivider(thickness: 1, width: 1),
+                      Expanded(
+                        child: Center(
+                          child: QueryWizardTabs(title: widget.title),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+              ),
             ],
           );
         }
@@ -110,11 +123,36 @@ class QueryWizardView extends HookWidget {
   }
 }
 
-class _QueryWizardTab {
-  String message;
-  IconData icon;
-  Widget widget;
+List<NavigationRailDestination> _queryButches(List<QueryBatch> queryButches) {
+  return <NavigationRailDestination>[
+    for (int index = 0; index < queryButches.length; index++)
+      NavigationRailDestination(
+        icon: const Icon(
+          Icons.batch_prediction_rounded,
+        ),
+        selectedIcon: const Icon(
+          Icons.batch_prediction_rounded,
+        ),
+        label: Text(
+          queryButches[index].name,
+        ),
+      ),
+  ];
+}
 
-  _QueryWizardTab(
-      {required this.message, required this.icon, required this.widget});
+List<NavigationRailDestination> _queries(List<Query> queries) {
+  return <NavigationRailDestination>[
+    for (int index = 0; index < queries.length; index++)
+      NavigationRailDestination(
+        icon: const Icon(
+          Icons.batch_prediction_rounded,
+        ),
+        selectedIcon: const Icon(
+          Icons.batch_prediction_rounded,
+        ),
+        label: Text(
+          queries[index].name,
+        ),
+      ),
+  ];
 }

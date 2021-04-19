@@ -6,13 +6,14 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/src/models/query_condition.dart';
 
-class JoinsTab extends HookWidget {
+class QueryJoinsTab extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<JoinsTabBloc>(context);
+    final bloc = BlocProvider.of<QueryJoinsTabBloc>(context);
 
-    return BlocBuilder<JoinsTabBloc, JoinsTabState>(builder: (context, state) {
-      if (state is JoinsChanged) {
+    return BlocBuilder<QueryJoinsTabBloc, QueryJoinsTabState>(
+        builder: (context, state) {
+      if (state is QueryJoinsChanged) {
         return Scaffold(
           body: ReorderableListView(
             padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -28,13 +29,13 @@ class JoinsTab extends HookWidget {
             ],
             onReorder: (int oldIndex, int newIndex) {
               final event =
-                  JoinOrderChanged(oldIndex: oldIndex, newIndex: newIndex);
+                  QueryJoinOrderChanged(oldIndex: oldIndex, newIndex: newIndex);
               bloc.add(event);
             },
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              final event = JoinAdded(join: QueryJoin.empty());
+              final event = QueryJoinAdded(join: QueryJoin.empty());
 
               bloc.add(event);
             },
@@ -50,7 +51,7 @@ class JoinsTab extends HookWidget {
 }
 
 class _JoinItem extends StatelessWidget {
-  final JoinsTabBloc bloc;
+  final QueryJoinsTabBloc bloc;
   final QueryJoin join;
   final int index;
 
@@ -71,13 +72,13 @@ class _JoinItem extends StatelessWidget {
   }
 }
 
-List<Widget> _actionButtons(JoinsTabBloc bloc, int index, QueryJoin join) {
+List<Widget> _actionButtons(QueryJoinsTabBloc bloc, int index, QueryJoin join) {
   return [
     IconButton(
       icon: const Icon(Icons.copy_outlined),
       tooltip: 'Copy',
       onPressed: () {
-        final event = JoinCopied(join: join);
+        final event = QueryJoinCopied(join: join);
 
         bloc.add(event);
       },
@@ -86,7 +87,7 @@ List<Widget> _actionButtons(JoinsTabBloc bloc, int index, QueryJoin join) {
       icon: const Icon(Icons.highlight_remove_outlined),
       tooltip: 'Remove',
       onPressed: () {
-        final event = JoinRemoved(index: index);
+        final event = QueryJoinRemoved(index: index);
 
         bloc.add(event);
       },
@@ -94,7 +95,7 @@ List<Widget> _actionButtons(JoinsTabBloc bloc, int index, QueryJoin join) {
   ];
 }
 
-List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
+List<Widget> _joinItem(QueryJoinsTabBloc bloc, int index, QueryJoin join) {
   return [
     DropdownButton<String>(
       value: join.leftTable,
@@ -107,7 +108,8 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
         color: Colors.deepPurpleAccent,
       ),
       onChanged: (String? newValue) {
-        final event = JoinEdited(index: index, join: join, leftTable: newValue);
+        final event =
+            QueryJoinEdited(index: index, join: join, leftTable: newValue);
 
         bloc.add(event);
       },
@@ -122,7 +124,8 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
     Checkbox(
       value: join.isLeftAll,
       onChanged: (value) {
-        final event = JoinEdited(index: index, join: join, isLeftAll: value);
+        final event =
+            QueryJoinEdited(index: index, join: join, isLeftAll: value);
 
         bloc.add(event);
       },
@@ -139,7 +142,7 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
       ),
       onChanged: (String? newValue) {
         final event =
-            JoinEdited(index: index, join: join, rightTable: newValue);
+            QueryJoinEdited(index: index, join: join, rightTable: newValue);
 
         bloc.add(event);
       },
@@ -154,7 +157,8 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
     Checkbox(
       value: join.isRightAll,
       onChanged: (value) {
-        final event = JoinEdited(index: index, join: join, isRightAll: value);
+        final event =
+            QueryJoinEdited(index: index, join: join, isRightAll: value);
 
         bloc.add(event);
       },
@@ -162,7 +166,8 @@ List<Widget> _joinItem(JoinsTabBloc bloc, int index, QueryJoin join) {
   ];
 }
 
-List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
+List<Widget> _joinConditionItem(
+    QueryJoinsTabBloc bloc, int index, QueryJoin join) {
   var widgets;
 
   if (join.condition.isCustom) {
@@ -187,7 +192,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
               rightField: join.condition.rightField,
               customCondition: join.condition.customCondition);
           final event =
-              JoinEdited(index: index, join: join, condition: condition);
+              QueryJoinEdited(index: index, join: join, condition: condition);
 
           bloc.add(event);
         },
@@ -221,7 +226,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
               rightField: join.condition.rightField,
               customCondition: join.condition.customCondition);
           final event =
-              JoinEdited(index: index, join: join, condition: condition);
+              QueryJoinEdited(index: index, join: join, condition: condition);
 
           bloc.add(event);
         },
@@ -251,7 +256,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
               rightField: newValue ?? '',
               customCondition: join.condition.customCondition);
           final event =
-              JoinEdited(index: index, join: join, condition: condition);
+              QueryJoinEdited(index: index, join: join, condition: condition);
 
           bloc.add(event);
         },
@@ -281,7 +286,7 @@ List<Widget> _joinConditionItem(JoinsTabBloc bloc, int index, QueryJoin join) {
             rightField: join.condition.rightField,
             customCondition: join.condition.customCondition);
         final event =
-            JoinEdited(index: index, join: join, condition: condition);
+            QueryJoinEdited(index: index, join: join, condition: condition);
 
         bloc.add(event);
       },

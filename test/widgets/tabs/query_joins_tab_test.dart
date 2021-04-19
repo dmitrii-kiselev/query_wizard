@@ -10,13 +10,14 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    await tester
-        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
+    await tester.pumpWidget(
+        QueryWizard(queryWizardRepository: queryWizardRepository),
+        Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(Duration(milliseconds: 1000));
     await tester.tap(find.byKey(ValueKey('Joins')));
-    await tester.pumpAndSettle();
 
-    expect(find.byKey(Key('0')), findsOneWidget);
-    expect(find.byKey(Key('1')), findsOneWidget);
-    expect(find.byKey(Key('2')), findsOneWidget);
+    expect(find.byKey(Key('0')), findsNothing);
+    expect(find.byKey(Key('1')), findsNothing);
+    expect(find.byKey(Key('2')), findsNothing);
   });
 }

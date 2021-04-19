@@ -11,10 +11,12 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    await tester
-        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
+    await tester.pumpWidget(
+        QueryWizard(queryWizardRepository: queryWizardRepository),
+        Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(Duration(milliseconds: 1000));
 
-    expect(find.text('Query Wizard'), findsNWidgets(2));
+    expect(find.text('Query Wizard'), findsOneWidget);
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);
     expect(find.byKey(ValueKey('Grouping')), findsOneWidget);
@@ -31,11 +33,12 @@ void main() {
       queryWizardApiClient: FakeQueryWizardApiClient(),
     );
 
-    await tester
-        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
-    await tester.pumpAndSettle();
+    await tester.pumpWidget(
+        QueryWizard(queryWizardRepository: queryWizardRepository),
+        Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(Duration(milliseconds: 1000));
 
-    expect(find.text('Query Wizard'), findsOneWidget);
+    expect(find.text('Query Wizard'), findsNothing);
     expect(find.text('Something went wrong!'), findsOneWidget);
   });
 
@@ -44,10 +47,11 @@ void main() {
       queryWizardApiClient: QueryWizardApiClient(),
     );
 
-    await tester
-        .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
+    await tester.pumpWidget(
+        QueryWizard(queryWizardRepository: queryWizardRepository),
+        Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(Duration(milliseconds: 1000));
     await tester.tap(find.byKey(ValueKey('Joins')));
-    await tester.pumpAndSettle();
 
     expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
     expect(find.byKey(ValueKey('Joins')), findsOneWidget);

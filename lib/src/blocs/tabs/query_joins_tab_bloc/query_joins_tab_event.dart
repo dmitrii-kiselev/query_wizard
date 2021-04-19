@@ -2,17 +2,25 @@ import 'package:equatable/equatable.dart';
 
 import 'package:query_wizard/models.dart';
 
-abstract class JoinsTabEvent extends Equatable {}
+abstract class QueryJoinsTabEvent extends Equatable {}
 
-class JoinAdded extends JoinsTabEvent {
+class QueryJoinsInitialized extends QueryJoinsTabEvent {
+  final List<QueryJoin> joins;
+
+  QueryJoinsInitialized({required this.joins});
+
+  List<Object?> get props => [joins];
+}
+
+class QueryJoinAdded extends QueryJoinsTabEvent {
   final QueryJoin join;
 
-  JoinAdded({required this.join});
+  QueryJoinAdded({required this.join});
 
   List<Object?> get props => [join];
 }
 
-class JoinEdited extends JoinsTabEvent {
+class QueryJoinEdited extends QueryJoinsTabEvent {
   final int index;
   final QueryJoin join;
   final String? leftTable;
@@ -21,7 +29,7 @@ class JoinEdited extends JoinsTabEvent {
   final bool? isRightAll;
   final QueryCondition? condition;
 
-  JoinEdited(
+  QueryJoinEdited(
       {required this.index,
       required this.join,
       this.leftTable,
@@ -33,27 +41,27 @@ class JoinEdited extends JoinsTabEvent {
   List<Object?> get props => [join];
 }
 
-class JoinCopied extends JoinsTabEvent {
+class QueryJoinCopied extends QueryJoinsTabEvent {
   final QueryJoin join;
 
-  JoinCopied({required this.join});
+  QueryJoinCopied({required this.join});
 
   List<Object?> get props => [join];
 }
 
-class JoinRemoved extends JoinsTabEvent {
+class QueryJoinRemoved extends QueryJoinsTabEvent {
   final int index;
 
-  JoinRemoved({required this.index});
+  QueryJoinRemoved({required this.index});
 
   List<Object?> get props => [index];
 }
 
-class JoinOrderChanged extends JoinsTabEvent {
+class QueryJoinOrderChanged extends QueryJoinsTabEvent {
   final int oldIndex;
   final int newIndex;
 
-  JoinOrderChanged({required this.oldIndex, required this.newIndex});
+  QueryJoinOrderChanged({required this.oldIndex, required this.newIndex});
 
   @override
   List<Object?> get props => [oldIndex, newIndex];

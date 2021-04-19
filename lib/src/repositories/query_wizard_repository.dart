@@ -11,4 +11,8 @@ class QueryWizardRepository {
   Future<List<DbElement>> getSources() async {
     return await queryWizardApiClient.getSources();
   }
+
+  Future<QuerySchema> parseQuery(String query) async {
+    return await queryWizardApiClient.parseQuery(query);
+  }
 }
