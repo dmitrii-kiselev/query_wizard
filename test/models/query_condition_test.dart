@@ -3,15 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:query_wizard/models.dart';
 
 void main() {
-  test('Join initialized', () {
-    final join = Join(
+  test('QueryJoin initialized', () {
+    final join = QueryJoin(
         leftTable: '',
         isLeftAll: false,
         rightTable: '',
         isRightAll: false,
-        condition: Condition.empty());
+        condition: QueryCondition.empty());
 
-    expect(join, Join.empty());
+    expect(join, QueryJoin.empty());
     expect(
         join.props,
         equals([
@@ -24,13 +24,13 @@ void main() {
   });
 
   test('Empty join initialized', () {
-    final join = Join.empty();
-    final expected = Join(
+    final join = QueryJoin.empty();
+    final expected = QueryJoin(
         leftTable: '',
         isLeftAll: false,
         rightTable: '',
         isRightAll: false,
-        condition: Condition.empty());
+        condition: QueryCondition.empty());
 
     expect(join, expected);
   });

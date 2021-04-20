@@ -1,4 +1,7 @@
 {
+  "add": "Add",
+  "copy": "Copy",
+  "remove": "Remove",
   "queryWizard": "Query Wizard",
   "somethingWentWrong": "Something went wrong!",
   "tablesAndFieldsTab": "Tables and fields",

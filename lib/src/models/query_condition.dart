@@ -1,20 +1,20 @@
 import 'package:equatable/equatable.dart';
 
-class Condition extends Equatable {
+class QueryCondition extends Equatable {
   final bool isCustom;
   final String leftField;
   final String logicalCompareType;
   final String rightField;
   final String customCondition;
 
-  const Condition(
+  const QueryCondition(
       {required this.isCustom,
       required this.leftField,
       required this.logicalCompareType,
       required this.rightField,
       required this.customCondition});
 
-  Condition.empty()
+  QueryCondition.empty()
       : isCustom = false,
         leftField = '',
         logicalCompareType = '',
@@ -26,21 +26,21 @@ class Condition extends Equatable {
       [isCustom, leftField, logicalCompareType, rightField, customCondition];
 }
 
-extension CopyCondition on Condition {
-  Condition copy() => Condition(
+extension CopyQueryCondition on QueryCondition {
+  QueryCondition copy() => QueryCondition(
       isCustom: isCustom,
       leftField: leftField,
       logicalCompareType: logicalCompareType,
       rightField: rightField,
       customCondition: customCondition);
 
-  Condition copyWith(
+  QueryCondition copyWith(
           {bool? isCustom,
           String? leftField,
           String? logicalCompareType,
           String? rightField,
           String? customCondition}) =>
-      Condition(
+      QueryCondition(
           isCustom: isCustom ?? this.isCustom,
           leftField: leftField ?? this.leftField,
           logicalCompareType: logicalCompareType ?? this.logicalCompareType,

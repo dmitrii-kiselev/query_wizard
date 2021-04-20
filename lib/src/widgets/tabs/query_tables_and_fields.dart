@@ -9,12 +9,12 @@ import 'package:query_wizard/widgets.dart';
 
 const _horizontalDesktopPadding = 81.0;
 
-class TablesAndFields extends HookWidget {
+class QueryTablesAndFields extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QueryWizardBloc, QueryWizardState>(
+    return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
         builder: (context, state) {
-      if (state is QueryWizardLoadSuccess) {
+      if (state is QuerySourcesLoadSuccess) {
         final localizations = QueryWizardLocalizations.of(context);
         final sources = state.dbElements;
         final tables = state.dbElements;

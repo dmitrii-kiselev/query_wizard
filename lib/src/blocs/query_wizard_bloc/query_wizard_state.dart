@@ -14,12 +14,12 @@ class QueryWizardInitial extends QueryWizardState {}
 class QueryWizardLoadInProgress extends QueryWizardState {}
 
 class QueryWizardLoadSuccess extends QueryWizardState {
-  final List<DbElement> dbElements;
+  final QuerySchema querySchema;
 
-  const QueryWizardLoadSuccess({required this.dbElements});
+  const QueryWizardLoadSuccess({required this.querySchema});
 
   @override
-  List<Object> get props => [dbElements];
+  List<Object> get props => [querySchema];
 }
 
 class QueryWizardLoadFailure extends QueryWizardState {}

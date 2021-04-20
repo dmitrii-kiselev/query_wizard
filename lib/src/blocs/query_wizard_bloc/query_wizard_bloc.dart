@@ -12,13 +12,13 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
 
   @override
   Stream<QueryWizardState> mapEventToState(QueryWizardEvent event) async* {
-    if (event is SourcesRequested) {
+    if (event is QuerySchemaRequested) {
       yield QueryWizardLoadInProgress();
       try {
-        final List<DbElement> dbElements =
-            await queryWizardRepository.getSources();
+        final QuerySchema querySchema =
+            await queryWizardRepository.parseQuery(event.query);
 
-        yield QueryWizardLoadSuccess(dbElements: dbElements);
+        yield QueryWizardLoadSuccess(querySchema: querySchema);
       } catch (_) {
         yield QueryWizardLoadFailure();
       }

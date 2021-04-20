@@ -23,7 +23,7 @@ void main() {
         DbElement(name: 'Field 2', nodeType: DbNodeType.column),
         DbElement(name: 'Field 3', nodeType: DbNodeType.column),
       ];
-      final event = QueryWizardLoadSuccess(dbElements: columns);
+      final event = QuerySourcesLoadSuccess(dbElements: columns);
 
       expect(event.props, equals([event.dbElements]));
     });
@@ -37,7 +37,7 @@ void main() {
 
   group('QueryWizardState', () {
     test('SourcesRequested initialized', () {
-      final event = SourcesRequested();
+      final event = QuerySourcesRequested();
 
       expect(event.props, equals([]));
     });

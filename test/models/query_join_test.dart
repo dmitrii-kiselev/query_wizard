@@ -3,15 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:query_wizard/models.dart';
 
 void main() {
-  test('Condition initialized', () {
-    final condition = Condition(
+  test('QueryCondition initialized', () {
+    final condition = QueryCondition(
         isCustom: false,
         leftField: '',
         logicalCompareType: '',
         rightField: '',
         customCondition: '');
 
-    expect(condition, Condition.empty());
+    expect(condition, QueryCondition.empty());
     expect(
         condition.props,
         equals([
@@ -23,9 +23,9 @@ void main() {
         ]));
   });
 
-  test('Empty condition initialized', () {
-    final condition = Condition.empty();
-    final expected = Condition(
+  test('Empty QueryCondition initialized', () {
+    final condition = QueryCondition.empty();
+    final expected = QueryCondition(
         isCustom: false,
         leftField: '',
         logicalCompareType: '',
