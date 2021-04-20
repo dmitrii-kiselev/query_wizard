@@ -36,6 +36,10 @@ class QueryWizard extends StatelessWidget {
         BlocProvider(
           create: (context) => QueryJoinsTabBloc(QueryJoinsChanged(joins: [])),
         ),
+        BlocProvider(
+          create: (context) =>
+              QueryBatchTabBloc(QueryBatchesChanged(queryBatches: [])),
+        ),
       ], child: QueryWizardView(title: 'Query Wizard')),
     );
   }

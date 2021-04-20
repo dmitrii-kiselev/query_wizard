@@ -49,7 +49,7 @@ class QueryWizardTabs extends HookWidget {
       _QueryWizardTab(
           message: localizations?.queryBatchTab ?? '',
           icon: Icons.batch_prediction,
-          widget: Text(localizations?.queryBatchTab ?? '')),
+          widget: QueryBatchTab()),
     ];
 
     return Scaffold(

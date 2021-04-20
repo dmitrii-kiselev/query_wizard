@@ -47,6 +47,7 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
     BlocProvider.of<QueryWizardBloc>(context).add(QuerySchemaRequested(''));
 
     final joinsTabBloc = BlocProvider.of<QueryJoinsTabBloc>(context);
+    final queryBatchesTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
     return Scaffold(
@@ -66,6 +67,8 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
           final currentQuery = currentQueryButch.queries.first;
 
           joinsTabBloc.add(QueryJoinsInitialized(joins: currentQuery.joins));
+          queryBatchesTabBloc
+              .add(QueryBatchesInitialized(queryBatches: queryBatches));
 
           return Row(
             children: [
