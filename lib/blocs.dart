@@ -12,3 +12,6 @@ export 'src/blocs/tabs/query_batch_tab_bloc/query_batch_tab_state.dart';
 export 'src/blocs/tabs/query_joins_tab_bloc/query_joins_tab_event.dart';
 export 'src/blocs/tabs/query_joins_tab_bloc/query_joins_tab_state.dart';
 export 'src/blocs/tabs/query_joins_tab_bloc/query_joins_tab_bloc.dart';
+export 'src/blocs/tabs/query_tables_and_fields_tab_bloc/query_tables_and_fields_tab_bloc.dart';
+export 'src/blocs/tabs/query_tables_and_fields_tab_bloc/query_tables_and_fields_tab_event.dart';
+export 'src/blocs/tabs/query_tables_and_fields_tab_bloc/query_tables_and_fields_tab_state.dart';
