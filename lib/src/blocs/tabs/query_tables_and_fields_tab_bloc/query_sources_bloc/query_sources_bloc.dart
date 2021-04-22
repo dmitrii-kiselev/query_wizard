@@ -12,13 +12,22 @@ class QuerySourcesBloc extends Bloc<QuerySourcesEvent, QuerySourcesState> {
 
   @override
   Stream<QuerySourcesState> mapEventToState(QuerySourcesEvent event) async* {
+    yield QuerySourcesInitial(sources: state.sources);
+
+    if (event is QuerySourcesInitialized) {
+      state.sources.clear();
+      state.sources.addAll(event.sources);
+
+      yield QuerySourcesChanged(sources: state.sources);
+    }
+
     if (event is QuerySourcesRequested) {
       yield QuerySourcesLoadInProgress();
       try {
         final List<DbElement> dbElements =
             await queryWizardRepository.getSources();
 
-        yield QuerySourcesLoadSuccess(dbElements: dbElements);
+        yield QuerySourcesLoadSuccess(sources: dbElements);
       } catch (_) {
         yield QuerySourcesLoadFailure();
       }

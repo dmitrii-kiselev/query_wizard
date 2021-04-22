@@ -23,9 +23,9 @@ void main() {
         DbElement(name: 'Field 2', nodeType: DbNodeType.column),
         DbElement(name: 'Field 3', nodeType: DbNodeType.column),
       ];
-      final event = QuerySourcesLoadSuccess(dbElements: columns);
+      final event = QuerySourcesLoadSuccess(sources: columns);
 
-      expect(event.props, equals([event.dbElements]));
+      expect(event.props, equals([event.sources]));
     });
 
     test('QueryWizardLoadFailure initialized', () {
