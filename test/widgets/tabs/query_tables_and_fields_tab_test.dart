@@ -13,6 +13,6 @@ void main() {
         .pumpWidget(QueryWizard(queryWizardRepository: queryWizardRepository));
     await tester.pumpAndSettle();
 
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Database'), findsNWidgets(2));
   });
 }
