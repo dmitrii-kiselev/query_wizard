@@ -21,7 +21,7 @@ class QueryWizardTabs extends HookWidget {
       _QueryWizardTab(
           message: localizations?.tablesAndFieldsTab ?? '',
           icon: Icons.table_chart_rounded,
-          widget: QueryTablesAndFields()),
+          widget: QueryTablesAndFieldsTab()),
       _QueryWizardTab(
           message: localizations?.joinsTab ?? '',
           icon: Icons.account_tree_rounded,

@@ -46,6 +46,11 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
   Widget build(BuildContext context) {
     BlocProvider.of<QueryWizardBloc>(context).add(QuerySchemaRequested(''));
 
+    final tablesAndFieldsTabBloc =
+        BlocProvider.of<QueryTablesAndFieldsTabBloc>(context);
+    final sourcesTabBloc = BlocProvider.of<QuerySourcesBloc>(context);
+    final tablesTabBloc = BlocProvider.of<QueryTablesBloc>(context);
+    final fieldsTabBloc = BlocProvider.of<QueryFieldsBloc>(context);
     final joinsTabBloc = BlocProvider.of<QueryJoinsTabBloc>(context);
     final queryBatchesTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
@@ -65,7 +70,17 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
           final queryBatches = state.querySchema.queryBatches;
           final currentQueryButch = queryBatches.first;
           final currentQuery = currentQueryButch.queries.first;
+          final data = currentQuery.sources.map((s) => s.name).toList();
 
+          tablesAndFieldsTabBloc.add(QueryTablesAndFieldsTabInitialized(
+              sources: currentQuery.sources,
+              tables: currentQuery.tables,
+              fields: currentQuery.fields));
+
+          sourcesTabBloc
+              .add(QuerySourcesInitialized(sources: currentQuery.sources));
+          tablesTabBloc.add(QueryTablesInitialized(tables: data));
+          fieldsTabBloc.add(QueryFieldsInitialized(fields: data));
           joinsTabBloc.add(QueryJoinsInitialized(joins: currentQuery.joins));
           queryBatchesTabBloc
               .add(QueryBatchesInitialized(queryBatches: queryBatches));

@@ -31,7 +31,17 @@ class QueryWizard extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) =>
+              QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial()),
+        ),
+        BlocProvider(
+          create: (context) =>
               QuerySourcesBloc(queryWizardRepository: queryWizardRepository),
+        ),
+        BlocProvider(
+          create: (context) => QueryTablesBloc(QueryTablesInitial(tables: [])),
+        ),
+        BlocProvider(
+          create: (context) => QueryFieldsBloc(QueryFieldsInitial(fields: [])),
         ),
         BlocProvider(
           create: (context) => QueryJoinsTabBloc(QueryJoinsChanged(joins: [])),
