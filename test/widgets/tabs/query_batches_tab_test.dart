@@ -5,7 +5,7 @@ import 'package:query_wizard/repositories.dart';
 import 'package:query_wizard/widgets.dart';
 
 void main() {
-  testWidgets('Query batches tab initialized', (WidgetTester tester) async {
+  testWidgets('Query batch tab initialized', (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
       queryWizardApiClient: QueryWizardApiClient(),
     );
@@ -16,8 +16,8 @@ void main() {
     await tester.pumpAndSettle(Duration(milliseconds: 1000));
     await tester.tap(find.byKey(ValueKey('Query batch')));
 
-    expect(find.text('Query batch 1'), findsOneWidget);
-    expect(find.text('Query batch 2'), findsOneWidget);
-    expect(find.text('Query batch 3'), findsOneWidget);
+    expect(find.byKey(ValueKey('0')), findsNothing);
+    expect(find.byKey(ValueKey('1')), findsNothing);
+    expect(find.byKey(ValueKey('2')), findsNothing);
   });
 }

@@ -16,8 +16,8 @@ void main() {
     await tester.pumpAndSettle(Duration(milliseconds: 1000));
     await tester.tap(find.byKey(ValueKey('Joins')));
 
-    expect(find.byKey(Key('0')), findsNothing);
-    expect(find.byKey(Key('1')), findsNothing);
-    expect(find.byKey(Key('2')), findsNothing);
+    expect(find.byKey(ValueKey('0')), findsNothing);
+    expect(find.byKey(ValueKey('1')), findsNothing);
+    expect(find.byKey(ValueKey('2')), findsNothing);
   });
 }

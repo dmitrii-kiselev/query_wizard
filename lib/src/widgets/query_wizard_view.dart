@@ -1,49 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
-class QueryWizardView extends StatefulWidget {
+class QueryWizardView extends HookWidget {
   final String title;
 
-  const QueryWizardView({Key? key, required this.title}) : super(key: key);
-
-  @override
-  _QueryWizardView createState() => _QueryWizardView();
-}
-
-class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
-  final RestorableInt _selectedQueryButchIndex = RestorableInt(0);
-  final RestorableInt _selectedQueryIndex = RestorableInt(0);
-
-  @override
-  String get restorationId => 'query_wizard_view';
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(
-        _selectedQueryButchIndex, 'selected_query_butch_index');
-    registerForRestoration(_selectedQueryIndex, 'selected_query_index');
-  }
-
-  @override
-  void dispose() {
-    _selectedQueryButchIndex.dispose();
-    _selectedQueryIndex.dispose();
-
-    super.dispose();
-  }
+  QueryWizardView({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _selectedQueryIndex = useState(0);
+
     BlocProvider.of<QueryWizardBloc>(context).add(QuerySchemaRequested(''));
 
     final tablesAndFieldsTabBloc =
@@ -53,7 +25,42 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
     final fieldsTabBloc = BlocProvider.of<QueryFieldsBloc>(context);
     final joinsTabBloc = BlocProvider.of<QueryJoinsTabBloc>(context);
     final queryBatchesTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
+    final tabController = useTabController(initialLength: 8, initialIndex: 0);
     final localizations = QueryWizardLocalizations.of(context);
+    final tabs = [
+      _QueryWizardTab(
+          message: localizations?.tablesAndFieldsTab ?? '',
+          icon: Icons.table_chart_rounded,
+          widget: QueryTablesAndFieldsTab()),
+      _QueryWizardTab(
+          message: localizations?.joinsTab ?? '',
+          icon: Icons.account_tree_rounded,
+          widget: QueryJoinsTab()),
+      _QueryWizardTab(
+          message: localizations?.groupTab ?? '',
+          icon: Icons.group_work_rounded,
+          widget: Text(localizations?.groupTab ?? '')),
+      _QueryWizardTab(
+          message: localizations?.conditionsTab ?? '',
+          icon: Icons.filter_alt_rounded,
+          widget: Text(localizations?.conditionsTab ?? '')),
+      _QueryWizardTab(
+          message: localizations?.moreTab ?? '',
+          icon: Icons.more_horiz_rounded,
+          widget: Text(localizations?.moreTab ?? '')),
+      _QueryWizardTab(
+          message: localizations?.unionsAliasesTab ?? '',
+          icon: Icons.view_list_rounded,
+          widget: Text(localizations?.unionsAliasesTab ?? '')),
+      _QueryWizardTab(
+          message: localizations?.orderTab ?? '',
+          icon: Icons.sort_rounded,
+          widget: Text(localizations?.orderTab ?? '')),
+      _QueryWizardTab(
+          message: localizations?.queryBatchTab ?? '',
+          icon: Icons.batch_prediction,
+          widget: QueryBatchTab()),
+    ];
 
     return Scaffold(
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
@@ -85,44 +92,71 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
           queryBatchesTabBloc
               .add(QueryBatchesInitialized(queryBatches: queryBatches));
 
-          return Row(
+          final drawerHeader = UserAccountsDrawerHeader(
+            accountName: Text(
+              'Query Batches',
+            ),
+            accountEmail: Text(
+              '',
+            ),
+            currentAccountPicture: const CircleAvatar(
+              child: FlutterLogo(size: 42.0),
+            ),
+          );
+          final drawerItems = ListView(
             children: [
-              NavigationRail(
-                selectedIndex: _selectedQueryButchIndex.value,
-                onDestinationSelected: (index) {
-                  setState(() {
-                    _selectedQueryButchIndex.value = index;
-                  });
-                },
-                labelType: NavigationRailLabelType.selected,
-                destinations: [..._queryButches(queryBatches)],
-              ),
-              const VerticalDivider(thickness: 1, width: 1),
-              Expanded(
-                child: Center(
-                  child: Row(
-                    children: [
-                      NavigationRail(
-                        selectedIndex: _selectedQueryIndex.value,
-                        onDestinationSelected: (index) {
-                          setState(() {
-                            _selectedQueryIndex.value = index;
-                          });
-                        },
-                        labelType: NavigationRailLabelType.selected,
-                        destinations: [..._queries(currentQueryButch.queries)],
-                      ),
-                      const VerticalDivider(thickness: 1, width: 1),
-                      Expanded(
-                        child: Center(
-                          child: QueryWizardTabs(title: widget.title),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              drawerHeader,
+              ..._queryBatches(queryBatches),
             ],
+          );
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(
+                title,
+              ),
+              bottom: TabBar(
+                controller: tabController,
+                isScrollable: false,
+                tabs: [
+                  for (final tab in tabs)
+                    Tab(
+                        key: ValueKey(tab.message),
+                        child: Tooltip(
+                          message: tab.message,
+                          child: Icon(
+                            tab.icon,
+                            color: Colors.white,
+                          ),
+                        )),
+                ],
+              ),
+            ),
+            body: Center(
+              child: Row(
+                children: [
+                  NavigationRail(
+                    selectedIndex: _selectedQueryIndex.value,
+                    onDestinationSelected: (index) {
+                      _selectedQueryIndex.value = index;
+                    },
+                    labelType: NavigationRailLabelType.selected,
+                    destinations: [..._queries(currentQueryButch.queries)],
+                  ),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(
+                    child: Center(
+                      child: QueryWizardTabs(
+                          tabController: tabController,
+                          tabs: tabs.map((t) => t.widget).toList()),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            drawer: Drawer(
+              child: drawerItems,
+            ),
           );
         }
 
@@ -141,20 +175,16 @@ class _QueryWizardView extends State<QueryWizardView> with RestorationMixin {
   }
 }
 
-List<NavigationRailDestination> _queryButches(List<QueryBatch> queryButches) {
-  return <NavigationRailDestination>[
-    for (int index = 0; index < queryButches.length; index++)
-      NavigationRailDestination(
-        icon: const Icon(
-          Icons.batch_prediction_rounded,
+List<ListTile> _queryBatches(List<QueryBatch> queryBatches) {
+  return <ListTile>[
+    for (int index = 0; index < queryBatches.length; index++)
+      ListTile(
+        title: Text(
+          queryBatches[index].name,
         ),
-        selectedIcon: const Icon(
-          Icons.batch_prediction_rounded,
-        ),
-        label: Text(
-          queryButches[index].name,
-        ),
-      ),
+        leading: const Icon(Icons.batch_prediction_rounded),
+        onTap: () {},
+      )
   ];
 }
 
@@ -163,14 +193,23 @@ List<NavigationRailDestination> _queries(List<Query> queries) {
     for (int index = 0; index < queries.length; index++)
       NavigationRailDestination(
         icon: const Icon(
-          Icons.batch_prediction_rounded,
+          Icons.query_builder_rounded,
         ),
         selectedIcon: const Icon(
-          Icons.batch_prediction_rounded,
+          Icons.query_builder_rounded,
         ),
         label: Text(
           queries[index].name,
         ),
       ),
   ];
+}
+
+class _QueryWizardTab {
+  String message;
+  IconData icon;
+  Widget widget;
+
+  _QueryWizardTab(
+      {required this.message, required this.icon, required this.widget});
 }
