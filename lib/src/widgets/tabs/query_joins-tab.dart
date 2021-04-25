@@ -20,7 +20,7 @@ class QueryJoinsTab extends HookWidget {
             children: <Widget>[
               for (int index = 0; index < state.joins.length; index++)
                 ListTile(
-                    key: Key('$index'),
+                    key: ValueKey('$index'),
                     title: Container(
                         child: _JoinItem(
                             bloc: bloc,

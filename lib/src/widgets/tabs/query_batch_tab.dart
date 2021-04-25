@@ -22,7 +22,7 @@ class QueryBatchTab extends StatelessWidget {
             children: <Widget>[
               for (int index = 0; index < state.queryBatches.length; index++)
                 ListTile(
-                    key: Key('$index'),
+                    key: ValueKey('$index'),
                     title: Container(
                         child: _QueryBatchItem(
                             bloc: bloc,
