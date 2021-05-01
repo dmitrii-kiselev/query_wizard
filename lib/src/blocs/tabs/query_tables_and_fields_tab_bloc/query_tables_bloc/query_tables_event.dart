@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:query_wizard/models.dart';
 
 abstract class QueryTablesEvent extends Equatable {}
 
 class QueryTablesInitialized extends QueryTablesEvent {
-  final List<String> tables;
+  final List<DbElement> tables;
 
   QueryTablesInitialized({required this.tables});
 
@@ -11,7 +12,7 @@ class QueryTablesInitialized extends QueryTablesEvent {
 }
 
 class QueryTableAdded extends QueryTablesEvent {
-  final String table;
+  final DbElement table;
 
   QueryTableAdded({required this.table});
 
@@ -20,7 +21,7 @@ class QueryTableAdded extends QueryTablesEvent {
 
 class QueryTableEdited extends QueryTablesEvent {
   final int index;
-  final String table;
+  final DbElement table;
 
   QueryTableEdited({
     required this.index,
@@ -31,7 +32,7 @@ class QueryTableEdited extends QueryTablesEvent {
 }
 
 class QueryTableCopied extends QueryTablesEvent {
-  final String table;
+  final DbElement table;
 
   QueryTableCopied({required this.table});
 

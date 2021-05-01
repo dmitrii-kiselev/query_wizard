@@ -4,7 +4,8 @@ import 'package:query_wizard/blocs.dart';
 
 class QueryTablesAndFieldsTabBloc
     extends Bloc<QueryTablesAndFieldsTabEvent, QueryTablesAndFieldsTabState> {
-  QueryTablesAndFieldsTabBloc(initialState) : super(initialState);
+  QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsTabState initialState)
+      : super(initialState);
 
   @override
   Stream<QueryTablesAndFieldsTabState> mapEventToState(
@@ -13,15 +14,8 @@ class QueryTablesAndFieldsTabBloc
         sources: state.sources, tables: state.tables, fields: state.fields);
 
     if (event is QueryTablesAndFieldsTabInitialized) {
-      state.sources.clear();
-      state.sources.addAll(event.sources);
-      state.tables.clear();
-      state.tables.addAll(event.tables);
-      state.fields.clear();
-      state.fields.addAll(event.fields);
-
       yield QueryTablesAndFieldsTabChanged(
-          sources: state.sources, tables: state.tables, fields: state.fields);
+          sources: event.sources, tables: event.tables, fields: event.fields);
     }
   }
 }

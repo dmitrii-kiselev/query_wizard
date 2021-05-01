@@ -4,17 +4,14 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryBatchTabBloc extends Bloc<QueryBatchTabEvent, QueryBatchTabState> {
-  QueryBatchTabBloc(initialState) : super(initialState);
+  QueryBatchTabBloc(QueryBatchTabState initialState) : super(initialState);
 
   @override
   Stream<QueryBatchTabState> mapEventToState(QueryBatchTabEvent event) async* {
     yield QueryBatchesInitial(queryBatches: state.queryBatches);
 
     if (event is QueryBatchesInitialized) {
-      state.queryBatches.clear();
-      state.queryBatches.addAll(event.queryBatches);
-
-      yield QueryBatchesChanged(queryBatches: state.queryBatches);
+      yield QueryBatchesChanged(queryBatches: event.queryBatches);
     }
 
     if (event is QueryBatchAdded) {

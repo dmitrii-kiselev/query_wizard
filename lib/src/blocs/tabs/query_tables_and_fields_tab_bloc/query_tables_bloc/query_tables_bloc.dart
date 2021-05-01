@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:query_wizard/blocs.dart';
 
 class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
-  QueryTablesBloc(initialState) : super(initialState);
+  QueryTablesBloc(QueryTablesState initialState) : super(initialState);
 
   @override
   Stream<QueryTablesState> mapEventToState(QueryTablesEvent event) async* {
@@ -13,7 +13,7 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
       state.tables.clear();
       state.tables.addAll(event.tables);
 
-      yield QueryTablesChanged(tables: state.tables);
+      yield QueryTablesChanged(tables: event.tables);
     }
 
     if (event is QueryTableAdded) {
@@ -44,7 +44,7 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
         newIndex -= 1;
       }
 
-      final String table = state.tables.removeAt(event.oldIndex);
+      final table = state.tables.removeAt(event.oldIndex);
       state.tables.insert(newIndex, table);
 
       yield QueryTablesChanged(tables: state.tables);

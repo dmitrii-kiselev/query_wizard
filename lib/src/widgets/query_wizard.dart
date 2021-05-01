@@ -17,40 +17,45 @@ class QueryWizard extends StatelessWidget {
     return MaterialApp(
       restorationScopeId: 'rootQueryWizard',
       title: 'Query Wizard',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       localizationsDelegates: const [
         ...QueryWizardLocalizations.localizationsDelegates,
       ],
       supportedLocales: QueryWizardLocalizations.supportedLocales,
-      home: MultiBlocProvider(providers: [
-        BlocProvider(
-          create: (context) =>
-              QueryWizardBloc(queryWizardRepository: queryWizardRepository),
-        ),
-        BlocProvider(
-          create: (context) =>
-              QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              QuerySourcesBloc(queryWizardRepository: queryWizardRepository),
-        ),
-        BlocProvider(
-          create: (context) => QueryTablesBloc(QueryTablesInitial(tables: [])),
-        ),
-        BlocProvider(
-          create: (context) => QueryFieldsBloc(QueryFieldsInitial(fields: [])),
-        ),
-        BlocProvider(
-          create: (context) => QueryJoinsTabBloc(QueryJoinsChanged(joins: [])),
-        ),
-        BlocProvider(
-          create: (context) =>
-              QueryBatchTabBloc(QueryBatchesChanged(queryBatches: [])),
-        ),
-      ], child: QueryWizardView(title: 'Query Wizard')),
+      home: buildBlocs(queryWizardRepository),
     );
   }
+}
+
+Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
+  final sourcesBloc = QuerySourcesBloc(
+      queryWizardRepository: queryWizardRepository,
+      initialState: QuerySourcesInitial());
+  final tablesBloc = QueryTablesBloc(QueryTablesInitial());
+  final fieldsBloc = QueryFieldsBloc(QueryFieldsInitial());
+  final tablesAndFieldsTabBloc =
+      QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial());
+  final joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial());
+  final queriesBloc = QueriesBloc(QueriesInitial());
+  final batchTabBloc = QueryBatchTabBloc(QueryBatchesInitial());
+  final queryWizardBloc = QueryWizardBloc(
+      sourcesBloc: sourcesBloc,
+      tablesBloc: tablesBloc,
+      fieldsBloc: fieldsBloc,
+      tablesAndFieldsTabBloc: tablesAndFieldsTabBloc,
+      joinsTabBloc: joinsTabBloc,
+      queriesBloc: queriesBloc,
+      batchTabBloc: batchTabBloc,
+      queryWizardRepository: queryWizardRepository);
+
+  return MultiBlocProvider(providers: [
+    BlocProvider(create: (context) => queryWizardBloc),
+    BlocProvider(create: (context) => tablesAndFieldsTabBloc),
+    BlocProvider(create: (context) => sourcesBloc),
+    BlocProvider(create: (context) => tablesBloc),
+    BlocProvider(create: (context) => fieldsBloc),
+    BlocProvider(create: (context) => joinsTabBloc),
+    BlocProvider(create: (context) => queriesBloc),
+    BlocProvider(create: (context) => batchTabBloc),
+  ], child: QueryWizardView(title: 'Query Wizard'));
 }

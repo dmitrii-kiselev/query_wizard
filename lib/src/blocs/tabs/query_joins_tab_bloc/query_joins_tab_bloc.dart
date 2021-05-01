@@ -4,17 +4,14 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryJoinsTabBloc extends Bloc<QueryJoinsTabEvent, QueryJoinsTabState> {
-  QueryJoinsTabBloc(initialState) : super(initialState);
+  QueryJoinsTabBloc(QueryJoinsTabState initialState) : super(initialState);
 
   @override
   Stream<QueryJoinsTabState> mapEventToState(QueryJoinsTabEvent event) async* {
     yield QueryJoinsInitial(joins: state.joins);
 
     if (event is QueryJoinsInitialized) {
-      state.joins.clear();
-      state.joins.addAll(event.joins);
-
-      yield QueryJoinsChanged(joins: state.joins);
+      yield QueryJoinsChanged(joins: event.joins);
     }
 
     if (event is QueryJoinAdded) {

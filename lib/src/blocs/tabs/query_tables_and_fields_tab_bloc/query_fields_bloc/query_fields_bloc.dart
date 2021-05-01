@@ -3,17 +3,14 @@ import 'package:bloc/bloc.dart';
 import 'package:query_wizard/blocs.dart';
 
 class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
-  QueryFieldsBloc(initialState) : super(initialState);
+  QueryFieldsBloc(QueryFieldsState initialState) : super(initialState);
 
   @override
   Stream<QueryFieldsState> mapEventToState(QueryFieldsEvent event) async* {
     yield QueryFieldsInitial(fields: state.fields);
 
     if (event is QueryFieldsInitialized) {
-      state.fields.clear();
-      state.fields.addAll(event.fields);
-
-      yield QueryFieldsChanged(fields: state.fields);
+      yield QueryFieldsChanged(fields: event.fields);
     }
 
     if (event is QueryFieldAdded) {
@@ -44,7 +41,7 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
         newIndex -= 1;
       }
 
-      final String field = state.fields.removeAt(event.oldIndex);
+      final field = state.fields.removeAt(event.oldIndex);
       state.fields.insert(newIndex, field);
 
       yield QueryFieldsChanged(fields: state.fields);
