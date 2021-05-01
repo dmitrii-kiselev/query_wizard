@@ -15,16 +15,10 @@ class QueryWizardView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final _selectedQueryIndex = useState(0);
+    final bloc = BlocProvider.of<QueryWizardBloc>(context);
 
-    BlocProvider.of<QueryWizardBloc>(context).add(QuerySchemaRequested(''));
+    bloc.add(QuerySchemaRequested('query'));
 
-    final tablesAndFieldsTabBloc =
-        BlocProvider.of<QueryTablesAndFieldsTabBloc>(context);
-    final sourcesTabBloc = BlocProvider.of<QuerySourcesBloc>(context);
-    final tablesTabBloc = BlocProvider.of<QueryTablesBloc>(context);
-    final fieldsTabBloc = BlocProvider.of<QueryFieldsBloc>(context);
-    final joinsTabBloc = BlocProvider.of<QueryJoinsTabBloc>(context);
-    final queryBatchesTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
     final tabController = useTabController(initialLength: 8, initialIndex: 0);
     final localizations = QueryWizardLocalizations.of(context);
     final tabs = [
@@ -74,47 +68,16 @@ class QueryWizardView extends HookWidget {
         }
 
         if (state is QueryWizardLoadSuccess) {
-          final queryBatches = state.querySchema.queryBatches;
-          final currentQueryButch = queryBatches.first;
-          final currentQuery = currentQueryButch.queries.first;
-          final data = currentQuery.sources.map((s) => s.name).toList();
-
-          tablesAndFieldsTabBloc.add(QueryTablesAndFieldsTabInitialized(
-              sources: currentQuery.sources,
-              tables: currentQuery.tables,
-              fields: currentQuery.fields));
-
-          sourcesTabBloc
-              .add(QuerySourcesInitialized(sources: currentQuery.sources));
-          tablesTabBloc.add(QueryTablesInitialized(tables: data));
-          fieldsTabBloc.add(QueryFieldsInitialized(fields: data));
-          joinsTabBloc.add(QueryJoinsInitialized(joins: currentQuery.joins));
-          queryBatchesTabBloc
-              .add(QueryBatchesInitialized(queryBatches: queryBatches));
-
           final drawerHeader = UserAccountsDrawerHeader(
-            accountName: Text(
-              'Query Batches',
-            ),
-            accountEmail: Text(
-              '',
-            ),
-            currentAccountPicture: const CircleAvatar(
-              child: FlutterLogo(size: 42.0),
-            ),
-          );
-          final drawerItems = ListView(
-            children: [
-              drawerHeader,
-              ..._queryBatches(queryBatches),
-            ],
+            accountName: Text('Query Batches'),
+            accountEmail: Text(''),
+            currentAccountPicture:
+                const CircleAvatar(child: FlutterLogo(size: 42.0)),
           );
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(
-                title,
-              ),
+              title: Text(title),
               bottom: TabBar(
                 controller: tabController,
                 isScrollable: false,
@@ -132,31 +95,53 @@ class QueryWizardView extends HookWidget {
                 ],
               ),
             ),
-            body: Center(
-              child: Row(
-                children: [
-                  NavigationRail(
-                    selectedIndex: _selectedQueryIndex.value,
-                    onDestinationSelected: (index) {
-                      _selectedQueryIndex.value = index;
-                    },
-                    labelType: NavigationRailLabelType.selected,
-                    destinations: [..._queries(currentQueryButch.queries)],
+            body: BlocBuilder<QueriesBloc, QueriesState>(
+                builder: (context, state) {
+              if (state is QueriesChanged) {
+                return Center(
+                  child: Row(
+                    children: [
+                      NavigationRail(
+                        selectedIndex: _selectedQueryIndex.value,
+                        onDestinationSelected: (index) {
+                          _selectedQueryIndex.value = index;
+                          bloc.changeQuery(state.queries[index]);
+                        },
+                        labelType: NavigationRailLabelType.selected,
+                        destinations: [..._queries(state.queries)],
+                      ),
+                      const VerticalDivider(thickness: 1, width: 1),
+                      Expanded(
+                        child: Center(
+                          child: QueryWizardTabs(
+                              tabController: tabController,
+                              tabs: tabs.map((t) => t.widget).toList()),
+                        ),
+                      ),
+                    ],
                   ),
-                  const VerticalDivider(thickness: 1, width: 1),
-                  Expanded(
-                    child: Center(
-                      child: QueryWizardTabs(
-                          tabController: tabController,
-                          tabs: tabs.map((t) => t.widget).toList()),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            drawer: Drawer(
-              child: drawerItems,
-            ),
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            }),
+            drawer: BlocBuilder<QueryBatchTabBloc, QueryBatchTabState>(
+                builder: (context, state) {
+              if (state is QueryBatchesChanged) {
+                final drawerItems = ListView(
+                  children: [
+                    drawerHeader,
+                    ..._queryBatches(state.queryBatches, bloc),
+                  ],
+                );
+
+                return Drawer(
+                  child: drawerItems,
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            }),
           );
         }
 
@@ -169,13 +154,14 @@ class QueryWizardView extends HookWidget {
           );
         }
 
-        return build(context);
+        return Center(child: CircularProgressIndicator());
       }),
     );
   }
 }
 
-List<ListTile> _queryBatches(List<QueryBatch> queryBatches) {
+List<ListTile> _queryBatches(
+    List<QueryBatch> queryBatches, QueryWizardBloc bloc) {
   return <ListTile>[
     for (int index = 0; index < queryBatches.length; index++)
       ListTile(
@@ -183,7 +169,9 @@ List<ListTile> _queryBatches(List<QueryBatch> queryBatches) {
           queryBatches[index].name,
         ),
         leading: const Icon(Icons.batch_prediction_rounded),
-        onTap: () {},
+        onTap: () {
+          bloc.changeQueryBatch(queryBatches[index]);
+        },
       )
   ];
 }

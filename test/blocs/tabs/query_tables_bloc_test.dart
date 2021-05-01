@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
 
 void main() {
   group('QueryTablesBloc', () {
@@ -18,27 +19,36 @@ void main() {
     blocTest('adds table when QueryTableAdded is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          final event = QueryTableAdded(table: 'Table');
+          final event = QueryTableAdded(
+              table: DbElement(name: 'Table', nodeType: DbNodeType.table));
 
           bloc.add(event);
         },
         expect: () => [
-              QueryTablesInitial(tables: ['Table']),
-              QueryTablesChanged(tables: ['Table'])
+              QueryTablesInitial(tables: [
+                DbElement(name: 'Table', nodeType: DbNodeType.table)
+              ]),
+              QueryTablesChanged(tables: [
+                DbElement(name: 'Table', nodeType: DbNodeType.table)
+              ])
             ]);
 
     blocTest('changes table when QueryTableEdited is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          final table = 'Table';
+          final table = DbElement(name: 'Table', nodeType: DbNodeType.table);
           final tableAdded = QueryTableAdded(table: table);
-          final tableEdited = QueryTableEdited(index: 0, table: 'Table New');
+          final tableEdited = QueryTableEdited(
+              index: 0,
+              table: DbElement(name: 'Table New', nodeType: DbNodeType.table));
 
           bloc.add(tableAdded);
           bloc.add(tableEdited);
         },
         expect: () {
-          final expectedTables = ['Table New'];
+          final expectedTables = [
+            DbElement(name: 'Table New', nodeType: DbNodeType.table)
+          ];
 
           return [
             QueryTablesInitial(tables: expectedTables),
@@ -51,7 +61,7 @@ void main() {
     blocTest('copies table when QueryTableCopied is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          final table = 'Table';
+          final table = DbElement(name: 'Table', nodeType: DbNodeType.table);
           final tableAdded = QueryTableAdded(table: table);
           final tableCopied = QueryTableCopied(table: table);
 
@@ -59,7 +69,10 @@ void main() {
           bloc.add(tableCopied);
         },
         expect: () {
-          final expectedTables = ['Table', 'Table'];
+          final expectedTables = [
+            DbElement(name: 'Table', nodeType: DbNodeType.table),
+            DbElement(name: 'Table', nodeType: DbNodeType.table)
+          ];
 
           return [
             QueryTablesInitial(tables: expectedTables),
@@ -72,7 +85,7 @@ void main() {
     blocTest('removes table when QueryTableRemoved is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          final table = 'Table';
+          final table = DbElement(name: 'Table', nodeType: DbNodeType.table);
           final tableAdded = QueryTableAdded(table: table);
           final tableRemoved = QueryTableRemoved(index: 0);
 
@@ -80,7 +93,7 @@ void main() {
           bloc.add(tableRemoved);
         },
         expect: () {
-          final List<String> expectedTables = [];
+          final List<DbElement> expectedTables = [];
 
           return [
             QueryTablesInitial(tables: expectedTables),
@@ -93,9 +106,10 @@ void main() {
     blocTest('changes table order when QueryTableOrderChanged is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          final table = 'Table';
+          final table = DbElement(name: 'Table', nodeType: DbNodeType.table);
           final tableAdded1 = QueryTableAdded(table: table);
-          final tableAdded2 = QueryTableAdded(table: 'Table');
+          final tableAdded2 = QueryTableAdded(
+              table: DbElement(name: 'Table', nodeType: DbNodeType.table));
           final tableOrderChanged =
               QueryTableOrderChanged(newIndex: 0, oldIndex: 1);
 
@@ -104,7 +118,10 @@ void main() {
           bloc.add(tableOrderChanged);
         },
         expect: () {
-          final expectedTables = ['Table', 'Table'];
+          final expectedTables = [
+            DbElement(name: 'Table', nodeType: DbNodeType.table),
+            DbElement(name: 'Table', nodeType: DbNodeType.table)
+          ];
 
           return [
             QueryTablesInitial(tables: expectedTables),

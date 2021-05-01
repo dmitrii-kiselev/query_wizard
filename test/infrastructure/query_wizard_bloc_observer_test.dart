@@ -19,9 +19,9 @@ main() {
     final event = 'event';
     final client = QueryWizardApiClient();
     final repository = QueryWizardRepository(queryWizardApiClient: client);
-    final block = QueryWizardBloc(queryWizardRepository: repository);
+    final bloc = buildQueryWizardBloc(repository);
 
-    observer.onEvent(block, event);
+    observer.onEvent(bloc, event);
 
     expect(log, ['onEvent $event']);
   }));
@@ -30,13 +30,13 @@ main() {
     final observer = QueryWizardBlocObserver();
     final client = QueryWizardApiClient();
     final repository = QueryWizardRepository(queryWizardApiClient: client);
-    final block = QueryWizardBloc(queryWizardRepository: repository);
+    final bloc = buildQueryWizardBloc(repository);
     final state = '';
     final event = 'event';
     final transition = Transition<String, String>(
         currentState: state, event: event, nextState: state);
 
-    observer.onTransition(block, transition);
+    observer.onTransition(bloc, transition);
 
     expect(log, ['onTransition $transition']);
   }));
@@ -46,12 +46,37 @@ main() {
     final error = 'error';
     final client = QueryWizardApiClient();
     final repository = QueryWizardRepository(queryWizardApiClient: client);
-    final block = QueryWizardBloc(queryWizardRepository: repository);
+    final bloc = buildQueryWizardBloc(repository);
 
-    observer.onError(block, error, StackTrace.empty);
+    observer.onError(bloc, error, StackTrace.empty);
 
     expect(log, ['onError $error']);
   }));
+}
+
+QueryWizardBloc buildQueryWizardBloc(
+    QueryWizardRepository queryWizardRepository) {
+  final sourcesBloc = QuerySourcesBloc(
+      queryWizardRepository: queryWizardRepository,
+      initialState: QuerySourcesInitial());
+  final tablesBloc = QueryTablesBloc(QueryTablesInitial());
+  final fieldsBloc = QueryFieldsBloc(QueryFieldsInitial());
+  final tablesAndFieldsTabBloc =
+      QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial());
+  final joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial());
+  final queriesBloc = QueriesBloc(QueriesInitial());
+  final batchTabBloc = QueryBatchTabBloc(QueryBatchesInitial());
+  final queryWizardBloc = QueryWizardBloc(
+      sourcesBloc: sourcesBloc,
+      tablesBloc: tablesBloc,
+      fieldsBloc: fieldsBloc,
+      tablesAndFieldsTabBloc: tablesAndFieldsTabBloc,
+      joinsTabBloc: joinsTabBloc,
+      queriesBloc: queriesBloc,
+      batchTabBloc: batchTabBloc,
+      queryWizardRepository: queryWizardRepository);
+
+  return queryWizardBloc;
 }
 
 void Function() overridePrint(void testFn()) => () {

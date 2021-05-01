@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:query_wizard/models.dart';
 
 abstract class QueryFieldsEvent extends Equatable {}
 
 class QueryFieldsInitialized extends QueryFieldsEvent {
-  final List<String> fields;
+  final List<DbElement> fields;
 
   QueryFieldsInitialized({required this.fields});
 
@@ -11,7 +12,7 @@ class QueryFieldsInitialized extends QueryFieldsEvent {
 }
 
 class QueryFieldAdded extends QueryFieldsEvent {
-  final String field;
+  final DbElement field;
 
   QueryFieldAdded({required this.field});
 
@@ -20,7 +21,7 @@ class QueryFieldAdded extends QueryFieldsEvent {
 
 class QueryFieldEdited extends QueryFieldsEvent {
   final int index;
-  final String field;
+  final DbElement field;
 
   QueryFieldEdited({
     required this.index,
@@ -31,7 +32,7 @@ class QueryFieldEdited extends QueryFieldsEvent {
 }
 
 class QueryFieldCopied extends QueryFieldsEvent {
-  final String field;
+  final DbElement field;
 
   QueryFieldCopied({required this.field});
 

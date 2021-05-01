@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
 
 void main() {
   group('QueryFieldsBloc', () {
@@ -18,27 +19,35 @@ void main() {
     blocTest('adds field when QueryFieldAdded is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final event = QueryFieldAdded(field: 'Field');
+          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
+          final event = QueryFieldAdded(field: field);
 
           bloc.add(event);
         },
         expect: () => [
-              QueryFieldsInitial(fields: ['Field']),
-              QueryFieldsChanged(fields: ['Field'])
+              QueryFieldsInitial(fields: [
+                DbElement(name: 'Field', nodeType: DbNodeType.column)
+              ]),
+              QueryFieldsChanged(fields: [
+                DbElement(name: 'Field', nodeType: DbNodeType.column)
+              ]),
             ]);
 
     blocTest('changes field when QueryFieldEdited is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = 'Field';
+          final field =
+              DbElement(name: 'Field New', nodeType: DbNodeType.column);
           final fieldAdded = QueryFieldAdded(field: field);
-          final fieldEdited = QueryFieldEdited(index: 0, field: 'Field New');
+          final fieldEdited = QueryFieldEdited(index: 0, field: field);
 
           bloc.add(fieldAdded);
           bloc.add(fieldEdited);
         },
         expect: () {
-          final expectedFields = ['Field New'];
+          final expectedFields = [
+            DbElement(name: 'Field New', nodeType: DbNodeType.column)
+          ];
 
           return [
             QueryFieldsInitial(fields: expectedFields),
@@ -51,7 +60,7 @@ void main() {
     blocTest('copies field when QueryFieldCopied is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = 'Field';
+          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
           final fieldAdded = QueryFieldAdded(field: field);
           final fieldCopied = QueryFieldCopied(field: field);
 
@@ -59,7 +68,10 @@ void main() {
           bloc.add(fieldCopied);
         },
         expect: () {
-          final expectedFields = ['Field', 'Field'];
+          final expectedFields = [
+            DbElement(name: 'Field', nodeType: DbNodeType.column),
+            DbElement(name: 'Field', nodeType: DbNodeType.column)
+          ];
 
           return [
             QueryFieldsInitial(fields: expectedFields),
@@ -72,15 +84,15 @@ void main() {
     blocTest('removes field when QueryFieldRemoved is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = 'Field';
-          final fieldAdded = QueryFieldAdded(field: field);
+          final fieldAdded = QueryFieldAdded(
+              field: DbElement(name: 'Field', nodeType: DbNodeType.column));
           final fieldRemoved = QueryFieldRemoved(index: 0);
 
           bloc.add(fieldAdded);
           bloc.add(fieldRemoved);
         },
         expect: () {
-          final List<String> expectedFields = [];
+          final List<DbElement> expectedFields = [];
 
           return [
             QueryFieldsInitial(fields: expectedFields),
@@ -93,9 +105,9 @@ void main() {
     blocTest('changes field order when QueryFieldOrderChanged is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = 'Field';
+          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
           final fieldAdded1 = QueryFieldAdded(field: field);
-          final fieldAdded2 = QueryFieldAdded(field: 'Field');
+          final fieldAdded2 = QueryFieldAdded(field: field);
           final fieldOrderChanged =
               QueryFieldOrderChanged(newIndex: 0, oldIndex: 1);
 
@@ -104,7 +116,10 @@ void main() {
           bloc.add(fieldOrderChanged);
         },
         expect: () {
-          final expectedFields = ['Field', 'Field'];
+          final expectedFields = [
+            DbElement(name: 'Field', nodeType: DbNodeType.column),
+            DbElement(name: 'Field', nodeType: DbNodeType.column)
+          ];
 
           return [
             QueryFieldsInitial(fields: expectedFields),

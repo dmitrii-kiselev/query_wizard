@@ -45,7 +45,7 @@ class QueryJoinsTab extends HookWidget {
         );
       }
 
-      return build(context);
+      return Center(child: CircularProgressIndicator());
     });
   }
 }
