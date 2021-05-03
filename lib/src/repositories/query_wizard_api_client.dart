@@ -33,7 +33,79 @@ class QueryWizardApiClient {
   Future<QuerySchema> parseQuery(String query) async {
     final sources = await getSources();
 
-    final List<QueryJoin> joins = [
+    final List<QueryJoin> joins1 = [
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column1',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column1',
+              isCustom: false,
+              customCondition: '')),
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column2',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column2',
+              isCustom: false,
+              customCondition: '')),
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column3',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column3',
+              isCustom: false,
+              customCondition: '')),
+    ];
+
+    final List<QueryJoin> joins2 = [
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column1',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column1',
+              isCustom: false,
+              customCondition: '')),
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column2',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column2',
+              isCustom: false,
+              customCondition: '')),
+      QueryJoin(
+          leftTable: 'Table1',
+          isLeftAll: false,
+          rightTable: 'Table2',
+          isRightAll: false,
+          condition: QueryCondition(
+              leftField: 'Table1.Column3',
+              logicalCompareType: '=',
+              rightField: 'Table2.Column3',
+              isCustom: false,
+              customCondition: '')),
+    ];
+
+    final List<QueryJoin> joins3 = [
       QueryJoin(
           leftTable: 'Table1',
           isLeftAll: false,
@@ -74,7 +146,7 @@ class QueryWizardApiClient {
         sources: sources,
         tables: sources,
         fields: sources,
-        joins: joins,
+        joins: joins1,
         groupings: [],
         aggregates: [],
         conditions: [],
@@ -88,7 +160,7 @@ class QueryWizardApiClient {
         sources: sources,
         tables: sources,
         fields: sources,
-        joins: joins,
+        joins: joins2,
         groupings: [],
         aggregates: [],
         conditions: [],
@@ -102,7 +174,7 @@ class QueryWizardApiClient {
         sources: sources,
         tables: sources,
         fields: sources,
-        joins: joins,
+        joins: joins3,
         groupings: [],
         aggregates: [],
         conditions: [],

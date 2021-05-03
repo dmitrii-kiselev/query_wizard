@@ -1,46 +1,90 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
-import 'package:query_wizard/src/models/query_condition.dart';
 
-class QueryJoinsTab extends HookWidget {
+class QueryJoinsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final bloc = BlocProvider.of<QueryJoinsTabBloc>(context);
 
     return BlocBuilder<QueryJoinsTabBloc, QueryJoinsTabState>(
         builder: (context, state) {
       if (state is QueryJoinsChanged) {
         return Scaffold(
-          body: ReorderableListView(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            children: <Widget>[
-              for (int index = 0; index < state.joins.length; index++)
-                ListTile(
-                    key: ValueKey('$index'),
-                    title: Container(
-                        child: _JoinItem(
-                            bloc: bloc,
-                            index: index,
-                            join: state.joins.elementAt(index)))),
-            ],
+          body: ReorderableListView.builder(
+            itemCount: state.joins.length,
+            itemBuilder: (context, index) {
+              final join = state.joins[index];
+              return OpenContainer<bool>(
+                key: ValueKey('$index'),
+                transitionType: ContainerTransitionType.fade,
+                openBuilder: (context, openContainer) => _JoinForm(),
+                tappable: false,
+                closedShape: const RoundedRectangleBorder(),
+                closedElevation: 0,
+                closedBuilder: (context, openContainer) {
+                  return Card(
+                    child: ListTile(
+                        leading: Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.copy_outlined),
+                              tooltip: 'Copy',
+                              onPressed: () {
+                                final event = QueryJoinCopied(join: join);
+                                bloc.add(event);
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.highlight_remove_outlined),
+                              tooltip: 'Remove',
+                              onPressed: () {
+                                final event = QueryJoinRemoved(index: index);
+                                bloc.add(event);
+                              },
+                            ),
+                          ],
+                        ),
+                        onTap: openContainer,
+                        title: Text(join.toString())),
+                  );
+                },
+              );
+            },
+            padding: const EdgeInsets.all(8),
             onReorder: (int oldIndex, int newIndex) {
               final event =
                   QueryJoinOrderChanged(oldIndex: oldIndex, newIndex: newIndex);
               bloc.add(event);
             },
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              final event = QueryJoinAdded(join: QueryJoin.empty());
-
-              bloc.add(event);
+          floatingActionButton: OpenContainer(
+            transitionType: ContainerTransitionType.fade,
+            openBuilder: (context, openContainer) => _JoinForm(),
+            closedElevation: 6,
+            closedShape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(56 / 2),
+              ),
+            ),
+            closedColor: colorScheme.primary,
+            closedBuilder: (context, openContainer) {
+              return SizedBox(
+                height: 56,
+                width: 56,
+                child: Center(
+                  child: const Icon(Icons.add),
+                  //tooltip: localizations?.add ?? 'Add',
+                ),
+              );
             },
-            child: const Icon(Icons.add),
-            tooltip: 'Add',
           ),
         );
       }
@@ -50,247 +94,195 @@ class QueryJoinsTab extends HookWidget {
   }
 }
 
-class _JoinItem extends StatelessWidget {
-  final QueryJoinsTabBloc bloc;
-  final QueryJoin join;
-  final int index;
+// ignore: must_be_immutable
+class _JoinForm extends HookWidget {
+  _JoinForm();
 
-  const _JoinItem(
-      {required this.bloc, required this.join, required this.index});
+  final List<DbElement> tables = [
+    DbElement(name: 'Table1', nodeType: DbNodeType.table),
+    DbElement(name: 'Table2', nodeType: DbNodeType.table),
+    DbElement(name: 'Table3', nodeType: DbNodeType.table),
+  ];
+  final List<String> logicalCompareTypes = [
+    '=',
+    '<>',
+    '>',
+  ];
+  final List<DbElement> fields = [
+    DbElement(name: 'Table1.Field1', nodeType: DbNodeType.column),
+    DbElement(name: 'Table1.Field2', nodeType: DbNodeType.column),
+    DbElement(name: 'Table1.Field3', nodeType: DbNodeType.column),
+    DbElement(name: 'Table2.Field1', nodeType: DbNodeType.column),
+    DbElement(name: 'Table2.Field2', nodeType: DbNodeType.column),
+    DbElement(name: 'Table2.Field3', nodeType: DbNodeType.column),
+    DbElement(name: 'Table3.Field1', nodeType: DbNodeType.column),
+    DbElement(name: 'Table3.Field2', nodeType: DbNodeType.column),
+    DbElement(name: 'Table3.Field3', nodeType: DbNodeType.column),
+  ];
+
+  String? leftTable;
+  bool? isLeftAll;
+  String? rightTable;
+  bool? isRightAll;
+  bool? isCustom;
+  String? leftField;
+  String? logicalCompareType;
+  String? rightField;
+  String? customCondition;
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      alignment: WrapAlignment.spaceEvenly,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: [
-        ..._actionButtons(bloc, index, join),
-        ..._joinItem(bloc, index, join),
-        ..._joinConditionItem(bloc, index, join)
-      ],
+    final theme = Theme.of(context);
+
+    final leftTable = useState<DbElement?>(null);
+    final isLeftAll = useState<bool?>(false);
+    final rightTable = useState<DbElement?>(null);
+    final isRightAll = useState<bool?>(false);
+    final isCustom = useState<bool?>(false);
+    final leftField = useState<DbElement?>(null);
+    final logicalCompareType = useState<String?>(null);
+    final rightField = useState<DbElement?>(null);
+    final customCondition = useState<String?>(null);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Join'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(
+              'Save',
+              style: theme.textTheme.bodyText2!.copyWith(
+                color: theme.colorScheme.onPrimary,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  DropdownButtonFormField<DbElement>(
+                    onSaved: (value) => {},
+                    value: leftTable.value,
+                    items: tables.map<DropdownMenuItem<DbElement>>(
+                      (value) {
+                        return DropdownMenuItem(
+                          child: Text(value.name),
+                          value: value,
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) => leftTable.value = value,
+                    decoration: InputDecoration(
+                      labelText: 'Left table',
+                      icon: Icon(Icons.table_rows_rounded),
+                    ),
+                  ),
+                  CheckboxListTile(
+                    value: isLeftAll.value,
+                    onChanged: (value) => isLeftAll.value = value,
+                    title: Text('Left all'),
+                  ),
+                  DropdownButtonFormField<DbElement>(
+                    onSaved: (value) => {},
+                    value: rightTable.value,
+                    items: tables.map<DropdownMenuItem<DbElement>>(
+                      (value) {
+                        return DropdownMenuItem(
+                          child: Text(value.name),
+                          value: value,
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) => rightTable.value = value,
+                    decoration: InputDecoration(
+                      labelText: 'Right table',
+                      icon: Icon(Icons.table_rows_rounded),
+                    ),
+                  ),
+                  CheckboxListTile(
+                    value: isRightAll.value,
+                    onChanged: (value) => isRightAll.value = value,
+                    title: Text('Right all'),
+                  ),
+                  CheckboxListTile(
+                    value: isCustom.value,
+                    onChanged: (value) => isCustom.value = value,
+                    title: Text('Custom'),
+                  ),
+                  DropdownButtonFormField<DbElement>(
+                    onSaved: (value) => {},
+                    value: leftField.value,
+                    items: fields.map<DropdownMenuItem<DbElement>>(
+                      (value) {
+                        return DropdownMenuItem(
+                          child: Text(value.name),
+                          value: value,
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) => leftField.value = value,
+                    decoration: InputDecoration(
+                      labelText: 'Left field',
+                      icon: Icon(Icons.horizontal_rule_rounded),
+                    ),
+                  ),
+                  DropdownButtonFormField<String>(
+                    onSaved: (value) => {},
+                    value: logicalCompareType.value,
+                    items: logicalCompareTypes.map<DropdownMenuItem<String>>(
+                      (value) {
+                        return DropdownMenuItem(
+                          child: Text(value),
+                          value: value,
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) => logicalCompareType.value = value,
+                    decoration: InputDecoration(
+                      labelText: 'Condition',
+                      icon: Icon(Icons.compare_arrows),
+                    ),
+                  ),
+                  DropdownButtonFormField<DbElement>(
+                    onSaved: (value) => {},
+                    value: rightField.value,
+                    items: fields.map<DropdownMenuItem<DbElement>>(
+                      (value) {
+                        return DropdownMenuItem(
+                          child: Text(value.name),
+                          value: value,
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) => rightField.value = value,
+                    decoration: InputDecoration(
+                      labelText: 'Right field',
+                      icon: Icon(Icons.horizontal_rule_rounded),
+                    ),
+                  ),
+                  TextFormField(
+                    onSaved: (value) => customCondition.value = value,
+                    decoration: InputDecoration(
+                        labelText: 'Custom condition',
+                        icon: Icon(Icons.text_fields_rounded)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
-}
-
-List<Widget> _actionButtons(QueryJoinsTabBloc bloc, int index, QueryJoin join) {
-  return [
-    IconButton(
-      icon: const Icon(Icons.copy_outlined),
-      tooltip: 'Copy',
-      onPressed: () {
-        final event = QueryJoinCopied(join: join);
-
-        bloc.add(event);
-      },
-    ),
-    IconButton(
-      icon: const Icon(Icons.highlight_remove_outlined),
-      tooltip: 'Remove',
-      onPressed: () {
-        final event = QueryJoinRemoved(index: index);
-
-        bloc.add(event);
-      },
-    ),
-  ];
-}
-
-List<Widget> _joinItem(QueryJoinsTabBloc bloc, int index, QueryJoin join) {
-  return [
-    DropdownButton<String>(
-      value: join.leftTable,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        final event =
-            QueryJoinEdited(index: index, join: join, leftTable: newValue);
-
-        bloc.add(event);
-      },
-      items: <String>['', 'Table1', 'Table2', 'Table3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
-    Checkbox(
-      value: join.isLeftAll,
-      onChanged: (value) {
-        final event =
-            QueryJoinEdited(index: index, join: join, isLeftAll: value);
-
-        bloc.add(event);
-      },
-    ),
-    DropdownButton<String>(
-      value: join.rightTable,
-      icon: const Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        final event =
-            QueryJoinEdited(index: index, join: join, rightTable: newValue);
-
-        bloc.add(event);
-      },
-      items: <String>['', 'Table1', 'Table2', 'Table3']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-    ),
-    Checkbox(
-      value: join.isRightAll,
-      onChanged: (value) {
-        final event =
-            QueryJoinEdited(index: index, join: join, isRightAll: value);
-
-        bloc.add(event);
-      },
-    ),
-  ];
-}
-
-List<Widget> _joinConditionItem(
-    QueryJoinsTabBloc bloc, int index, QueryJoin join) {
-  var widgets;
-
-  if (join.condition.isCustom) {
-    widgets = [];
-  } else {
-    widgets = [
-      DropdownButton<String>(
-        value: join.condition.leftField,
-        icon: const Icon(Icons.arrow_downward),
-        iconSize: 24,
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 2,
-          color: Colors.deepPurpleAccent,
-        ),
-        onChanged: (String? newValue) {
-          final condition = QueryCondition(
-              isCustom: join.condition.isCustom,
-              leftField: newValue ?? '',
-              logicalCompareType: join.condition.logicalCompareType,
-              rightField: join.condition.rightField,
-              customCondition: join.condition.customCondition);
-          final event =
-              QueryJoinEdited(index: index, join: join, condition: condition);
-
-          bloc.add(event);
-        },
-        items: <String>[
-          '',
-          'Table1.Column1',
-          'Table1.Column2',
-          'Table1.Column3'
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-      DropdownButton<String>(
-        value: join.condition.logicalCompareType,
-        icon: const Icon(Icons.arrow_downward),
-        iconSize: 24,
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 2,
-          color: Colors.deepPurpleAccent,
-        ),
-        onChanged: (String? newValue) {
-          final condition = QueryCondition(
-              isCustom: join.condition.isCustom,
-              leftField: join.condition.leftField,
-              logicalCompareType: newValue ?? '',
-              rightField: join.condition.rightField,
-              customCondition: join.condition.customCondition);
-          final event =
-              QueryJoinEdited(index: index, join: join, condition: condition);
-
-          bloc.add(event);
-        },
-        items: <String>['', '=', '<>', '<', '>', '<=', '>=']
-            .map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-      DropdownButton<String>(
-        value: join.condition.rightField,
-        icon: const Icon(Icons.arrow_downward),
-        iconSize: 24,
-        elevation: 16,
-        style: const TextStyle(color: Colors.deepPurple),
-        underline: Container(
-          height: 2,
-          color: Colors.deepPurpleAccent,
-        ),
-        onChanged: (String? newValue) {
-          final condition = QueryCondition(
-              isCustom: join.condition.isCustom,
-              leftField: join.condition.leftField,
-              logicalCompareType: join.condition.logicalCompareType,
-              rightField: newValue ?? '',
-              customCondition: join.condition.customCondition);
-          final event =
-              QueryJoinEdited(index: index, join: join, condition: condition);
-
-          bloc.add(event);
-        },
-        items: <String>[
-          '',
-          'Table2.Column1',
-          'Table2.Column2',
-          'Table2.Column3'
-        ].map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
-    ];
-  }
-
-  return [
-    Checkbox(
-      value: join.condition.isCustom,
-      onChanged: (value) {
-        final condition = QueryCondition(
-            isCustom: value ?? false,
-            leftField: join.condition.leftField,
-            logicalCompareType: join.condition.logicalCompareType,
-            rightField: join.condition.rightField,
-            customCondition: join.condition.customCondition);
-        final event =
-            QueryJoinEdited(index: index, join: join, condition: condition);
-
-        bloc.add(event);
-      },
-    ),
-    ...widgets
-  ];
 }
