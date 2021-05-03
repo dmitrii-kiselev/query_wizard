@@ -24,6 +24,13 @@ class QueryCondition extends Equatable {
   @override
   List<Object?> get props =>
       [isCustom, leftField, logicalCompareType, rightField, customCondition];
+
+  @override
+  String toString() {
+    return customCondition == ''
+        ? '$leftField $logicalCompareType $rightField'
+        : 'Custom';
+  }
 }
 
 extension CopyQueryCondition on QueryCondition {

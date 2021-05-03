@@ -25,6 +25,11 @@ class QueryJoin extends Equatable {
   @override
   List<Object?> get props =>
       [leftTable, isLeftAll, rightTable, isRightAll, condition];
+
+  @override
+  String toString() {
+    return condition.toString();
+  }
 }
 
 extension CopyJoin on QueryJoin {
