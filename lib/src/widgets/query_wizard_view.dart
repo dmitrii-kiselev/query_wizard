@@ -33,7 +33,9 @@ class QueryWizardView extends HookWidget {
       _QueryWizardTab(
           message: localizations?.groupTab ?? '',
           icon: Icons.group_work_rounded,
-          widget: Text(localizations?.groupTab ?? '')),
+          widget: QueryGroupingsTab(
+            key: ValueKey('GroupingsTab'),
+          )),
       _QueryWizardTab(
           message: localizations?.conditionsTab ?? '',
           icon: Icons.filter_alt_rounded,
