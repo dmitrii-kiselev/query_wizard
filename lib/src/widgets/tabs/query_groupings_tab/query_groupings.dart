@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
+import 'package:query_wizard/blocs.dart';
 
 class QueryGroupings extends HookWidget {
   QueryGroupings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<QueryGroupingsBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context);
     final showBottomSheetCallback = useState<VoidCallback?>(null);
     final selectionListClosed = useState(true);
     final mounted = useIsMounted();
@@ -34,12 +40,50 @@ class QueryGroupings extends HookWidget {
       showBottomSheetCallback.value = _showPersistentBottomSheet;
     }
 
-    return Center(
-      child: ElevatedButton(
-        onPressed: showBottomSheetCallback.value,
-        child: Text('Select'),
-      ),
-    );
+    return BlocBuilder<QueryGroupingsBloc, QueryGroupingsState>(
+        builder: (context, state) {
+      if (state is QueryGroupingsChanged) {
+        return Scaffold(
+          body: ReorderableListView.builder(
+            itemCount: state.groupings.length,
+            itemBuilder: (context, index) {
+              final join = state.groupings[index];
+              return Card(
+                child: ListTile(
+                    leading: Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.highlight_remove_outlined),
+                          tooltip: 'Remove',
+                          onPressed: () {
+                            final event = QueryGroupingRemoved(index: index);
+                            bloc.add(event);
+                          },
+                        ),
+                      ],
+                    ),
+                    title: Text(join.toString())),
+              );
+            },
+            padding: const EdgeInsets.all(8),
+            onReorder: (int oldIndex, int newIndex) {
+              final event = QueryGroupingOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex);
+              bloc.add(event);
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: showBottomSheetCallback.value,
+            child: const Icon(Icons.add),
+            tooltip: localizations?.add ?? 'Add',
+          ),
+        );
+      }
+
+      return Center(child: CircularProgressIndicator());
+    });
   }
 }
 

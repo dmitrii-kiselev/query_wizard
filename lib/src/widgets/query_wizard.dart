@@ -36,6 +36,8 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
   final tablesAndFieldsTabBloc =
       QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial());
   final joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial());
+  final aggregatesTabBloc = QueryAggregatesBloc(QueryAggregatesInitial());
+  final groupingsTabBloc = QueryGroupingsBloc(QueryGroupingsInitial());
   final queriesBloc = QueriesBloc(QueriesInitial());
   final batchTabBloc = QueryBatchTabBloc(QueryBatchesInitial());
   final queryWizardBloc = QueryWizardBloc(
@@ -44,6 +46,8 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
       fieldsBloc: fieldsBloc,
       tablesAndFieldsTabBloc: tablesAndFieldsTabBloc,
       joinsTabBloc: joinsTabBloc,
+      aggregatesBloc: aggregatesTabBloc,
+      groupingsBloc: groupingsTabBloc,
       queriesBloc: queriesBloc,
       batchTabBloc: batchTabBloc,
       queryWizardRepository: queryWizardRepository);
@@ -55,6 +59,8 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
     BlocProvider(create: (context) => tablesBloc),
     BlocProvider(create: (context) => fieldsBloc),
     BlocProvider(create: (context) => joinsTabBloc),
+    BlocProvider(create: (context) => aggregatesTabBloc),
+    BlocProvider(create: (context) => groupingsTabBloc),
     BlocProvider(create: (context) => queriesBloc),
     BlocProvider(create: (context) => batchTabBloc),
   ], child: QueryWizardView(title: 'Query Wizard'));

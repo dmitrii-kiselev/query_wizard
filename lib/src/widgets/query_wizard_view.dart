@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
