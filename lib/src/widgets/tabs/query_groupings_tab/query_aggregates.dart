@@ -12,32 +12,29 @@ class QueryAggregates extends HookWidget {
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
-    final showBottomSheetCallback = useState<VoidCallback?>(null);
-    final selectionListClosed = useState(true);
+    final showSelectionListCallback = useState<VoidCallback?>(null);
     final mounted = useIsMounted();
 
-    void _showPersistentBottomSheet() {
-      showBottomSheetCallback.value = null;
+    void _showFieldSelectionList() {
+      showSelectionListCallback.value = null;
 
       Scaffold.of(context)
           .showBottomSheet<void>(
             (context) {
-              selectionListClosed.value = false;
-              return _SelectionList();
+              return _FieldSelectionList();
             },
             elevation: 25,
           )
           .closed
           .whenComplete(() {
             if (mounted()) {
-              selectionListClosed.value = true;
-              showBottomSheetCallback.value = _showPersistentBottomSheet;
+              showSelectionListCallback.value = _showFieldSelectionList;
             }
           });
     }
 
-    if (selectionListClosed.value) {
-      showBottomSheetCallback.value = _showPersistentBottomSheet;
+    if (showSelectionListCallback.value == null) {
+      showSelectionListCallback.value = _showFieldSelectionList;
     }
 
     return BlocBuilder<QueryAggregatesBloc, QueryAggregatesState>(
@@ -47,8 +44,9 @@ class QueryAggregates extends HookWidget {
           body: ReorderableListView.builder(
             itemCount: state.aggregates.length,
             itemBuilder: (context, index) {
-              final join = state.aggregates[index];
+              final aggregate = state.aggregates[index];
               return Card(
+                key: ValueKey('$index'),
                 child: ListTile(
                     leading: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
@@ -64,7 +62,7 @@ class QueryAggregates extends HookWidget {
                         ),
                       ],
                     ),
-                    title: Text(join.toString())),
+                    title: Text(aggregate.toString())),
               );
             },
             padding: const EdgeInsets.all(8),
@@ -75,7 +73,7 @@ class QueryAggregates extends HookWidget {
             },
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: showBottomSheetCallback.value,
+            onPressed: showSelectionListCallback.value,
             child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
           ),
@@ -87,7 +85,7 @@ class QueryAggregates extends HookWidget {
   }
 }
 
-class _SelectionList extends StatelessWidget {
+class _FieldSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
