@@ -17,8 +17,6 @@ dependencies:
   flutter_bloc: ^7.0.0
   flutter_hooks: ^0.16.0
   flutter_localized_locales: ^2.0.1
-  flutter_treeview:
-      path: ./packages/flutter_treeview
   equatable: ^2.0.0
   intl: ^0.17.0
 
