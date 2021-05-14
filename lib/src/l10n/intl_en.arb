@@ -14,5 +14,7 @@
   "moreTab": "More",
   "unionsAliasesTab": "Unions/Aliases",
   "orderTab": "Order",
-  "queryBatchTab": "Query batch"
+  "queryBatchTab": "Query batch",
+  "groupings": "Groupings",
+  "aggregates": "Aggregates"
 }

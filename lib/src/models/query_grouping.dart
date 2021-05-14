@@ -34,6 +34,11 @@ class QueryGrouping extends Equatable {
 
   @override
   List<Object> get props => [name, type, parent ?? '', elements];
+
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 enum GroupingType { grouping, groupingSet }

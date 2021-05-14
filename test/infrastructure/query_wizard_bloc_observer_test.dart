@@ -64,6 +64,8 @@ QueryWizardBloc buildQueryWizardBloc(
   final tablesAndFieldsTabBloc =
       QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial());
   final joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial());
+  final aggregatesTabBloc = QueryAggregatesBloc(QueryAggregatesInitial());
+  final groupingsTabBloc = QueryGroupingsBloc(QueryGroupingsInitial());
   final queriesBloc = QueriesBloc(QueriesInitial());
   final batchTabBloc = QueryBatchTabBloc(QueryBatchesInitial());
   final queryWizardBloc = QueryWizardBloc(
@@ -72,6 +74,8 @@ QueryWizardBloc buildQueryWizardBloc(
       fieldsBloc: fieldsBloc,
       tablesAndFieldsTabBloc: tablesAndFieldsTabBloc,
       joinsTabBloc: joinsTabBloc,
+      aggregatesBloc: aggregatesTabBloc,
+      groupingsBloc: groupingsTabBloc,
       queriesBloc: queriesBloc,
       batchTabBloc: batchTabBloc,
       queryWizardRepository: queryWizardRepository);

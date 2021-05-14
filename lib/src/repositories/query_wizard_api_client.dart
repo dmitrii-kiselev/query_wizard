@@ -141,14 +141,26 @@ class QueryWizardApiClient {
               customCondition: '')),
     ];
 
+    final groupings1 = [
+      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+    ];
+
+    final aggregates1 = [
+      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+    ];
+
     final query1 = Query(
         name: 'Query 1',
         sources: sources,
         tables: sources,
         fields: sources,
         joins: joins1,
-        groupings: [],
-        aggregates: [],
+        groupings: groupings1,
+        aggregates: aggregates1,
         conditions: [],
         sortings: [],
         isTop: false,

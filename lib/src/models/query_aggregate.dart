@@ -8,4 +8,9 @@ class QueryAggregate extends Equatable {
 
   @override
   List<Object?> get props => [field, function];
+
+  @override
+  String toString() {
+    return '$field $function';
+  }
 }

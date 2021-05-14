@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
@@ -33,7 +33,9 @@ class QueryWizardView extends HookWidget {
       _QueryWizardTab(
           message: localizations?.groupTab ?? '',
           icon: Icons.group_work_rounded,
-          widget: Text(localizations?.groupTab ?? '')),
+          widget: QueryGroupingsTab(
+            key: ValueKey('GroupingsTab'),
+          )),
       _QueryWizardTab(
           message: localizations?.conditionsTab ?? '',
           icon: Icons.filter_alt_rounded,
