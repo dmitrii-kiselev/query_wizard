@@ -8,12 +8,12 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/widgets.dart';
 
 class QueryTablesAndFieldsTab extends HookWidget {
-  final _currentIndex = useState(0);
-
   QueryTablesAndFieldsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _currentIndex = useState(0);
+
     final localizations = QueryWizardLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
