@@ -569,15 +569,15 @@ const RESOURCES = {
 "assets/packages/flutter_localized_locales/data/ca_AD.json": "316556663b11ec3418947eeb984b0346",
 "assets/packages/flutter_localized_locales/data/fr_PF.json": "26d635787910816d372473bd9298db02",
 "assets/AssetManifest.json": "4783c1b2a2bd3f4eefe7977dfc4a1d9c",
-"assets/NOTICES": "e8a36b4534d88cbc3cdfe8dccc7d3e87",
+"assets/NOTICES": "e92b4a90c01299c8a9b45dd66182fed9",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "version.json": "69f625846aa15033acc8a4ac3445cef6",
 "manifest.json": "fac0f2e1e960b529ba9388fae646ccc9",
-"main.dart.js": "dbd7941bbe8bdfe195e4a7fec9ebda56",
-"index.html": "79fbb43b24e6eb4fc7082c83edaee07b",
-"/": "79fbb43b24e6eb4fc7082c83edaee07b"
+"main.dart.js": "9f250d223a34617daeed3632feb289e0",
+"index.html": "86afbe73b531e146e7d4b8819461de43",
+"/": "86afbe73b531e146e7d4b8819461de43"
 };
 
 // The application shell files that are downloaded before a service worker can
