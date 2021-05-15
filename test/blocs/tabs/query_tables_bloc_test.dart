@@ -9,7 +9,8 @@ void main() {
     late QueryTablesBloc tablesTabBloc;
 
     setUp(() {
-      tablesTabBloc = QueryTablesBloc(QueryTablesInitial(tables: []));
+      tablesTabBloc =
+          QueryTablesBloc(initialState: QueryTablesInitial(tables: []));
     });
 
     test('initial state is empty', () {

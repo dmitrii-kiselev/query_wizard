@@ -2,11 +2,6 @@ import 'package:equatable/equatable.dart';
 
 // ignore: must_be_immutable
 class QueryGrouping extends Equatable {
-  final String name;
-  final GroupingType type;
-  QueryGrouping? parent;
-  final List<QueryGrouping> elements = List.empty(growable: true);
-
   QueryGrouping({required this.name, required this.type});
 
   QueryGrouping.withElements(
@@ -29,6 +24,11 @@ class QueryGrouping extends Equatable {
 
     this.parent = parent;
   }
+
+  final String name;
+  final GroupingType type;
+  QueryGrouping? parent;
+  final List<QueryGrouping> elements = List.empty(growable: true);
 
   bool get hasElements => elements.isNotEmpty;
 

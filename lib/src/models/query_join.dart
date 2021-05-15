@@ -2,12 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/src/models/query_condition.dart';
 
 class QueryJoin extends Equatable {
-  final String leftTable;
-  final bool isLeftAll;
-  final String rightTable;
-  final bool isRightAll;
-  final QueryCondition condition;
-
   const QueryJoin(
       {required this.leftTable,
       required this.isLeftAll,
@@ -21,6 +15,12 @@ class QueryJoin extends Equatable {
         rightTable = '',
         isRightAll = false,
         condition = QueryCondition.empty();
+
+  final String leftTable;
+  final bool isLeftAll;
+  final String rightTable;
+  final bool isRightAll;
+  final QueryCondition condition;
 
   @override
   List<Object?> get props =>

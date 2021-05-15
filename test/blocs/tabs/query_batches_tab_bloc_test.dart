@@ -9,8 +9,8 @@ void main() {
     late QueryBatchTabBloc queryBatchesTabBloc;
 
     setUp(() {
-      queryBatchesTabBloc =
-          QueryBatchTabBloc(QueryBatchesInitial(queryBatches: []));
+      queryBatchesTabBloc = QueryBatchTabBloc(
+          initialState: QueryBatchesInitial(queryBatches: []));
     });
 
     test('initial state is empty', () {

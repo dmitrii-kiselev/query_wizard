@@ -4,24 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
-import 'package:query_wizard/models.dart';
 
 class QueryFields extends StatelessWidget {
-  QueryFields({Key? key, required this.fields}) : super(key: key);
-
-  final List<DbElement> fields;
+  const QueryFields({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
+
     return BlocBuilder<QueryFieldsBloc, QueryFieldsState>(
         builder: (context, state) {
       if (state is QueryFieldsChanged) {
         return Scaffold(
           body: ListView.builder(
-            itemCount: fields.length,
+            itemCount: state.fields.length,
             itemBuilder: (context, index) {
-              final table = fields[index];
+              final table = state.fields[index];
               return OpenContainer<bool>(
                 transitionType: ContainerTransitionType.fade,
                 openBuilder: (context, openContainer) => const _DetailsPage(),

@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class QuerySorting extends Equatable {
+  const QuerySorting({required this.field, required this.type});
+
   final String field;
   final QuerySortingType type;
-
-  const QuerySorting({required this.field, required this.type});
 
   @override
   List<Object?> get props => [field, type];

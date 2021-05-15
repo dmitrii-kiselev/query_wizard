@@ -2,24 +2,24 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
-import 'package:query_wizard/models.dart';
 
 class QueryTables extends StatelessWidget {
-  QueryTables({Key? key, required this.tables}) : super(key: key);
-
-  final List<DbElement> tables;
+  const QueryTables({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context);
+
     return BlocBuilder<QueryTablesBloc, QueryTablesState>(
         builder: (context, state) {
       if (state is QueryTablesChanged) {
         return Scaffold(
           body: ListView.builder(
-            itemCount: tables.length,
+            itemCount: state.tables.length,
             itemBuilder: (context, index) {
-              final table = tables[index];
+              final table = state.tables[index];
               return OpenContainer<bool>(
                 transitionType: ContainerTransitionType.fade,
                 openBuilder: (context, openContainer) => const _DetailsPage(),
@@ -43,7 +43,7 @@ class QueryTables extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             child: const Icon(Icons.add),
-            tooltip: 'Add',
+            tooltip: localizations?.add ?? 'Add',
           ),
         );
       }

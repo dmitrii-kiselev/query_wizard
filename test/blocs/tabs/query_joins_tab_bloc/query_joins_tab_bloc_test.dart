@@ -9,7 +9,8 @@ void main() {
     late QueryJoinsTabBloc joinsTabBloc;
 
     setUp(() {
-      joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial(joins: []));
+      joinsTabBloc =
+          QueryJoinsTabBloc(initialState: QueryJoinsInitial(joins: []));
     });
 
     test('initial state is empty', () {

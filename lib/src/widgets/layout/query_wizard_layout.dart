@@ -17,37 +17,37 @@ class QueryWizardLayout extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
     final tabs = [
       _QueryWizardTab(
-          message: localizations?.tablesAndFieldsTab ?? '',
+          message: localizations?.tablesAndFieldsTab ?? 'Tables and fields',
           icon: Icons.table_chart_rounded,
           widget: QueryTablesAndFieldsTab()),
       _QueryWizardTab(
-          message: localizations?.joinsTab ?? '',
+          message: localizations?.joinsTab ?? 'Joins',
           icon: Icons.account_tree_rounded,
           widget: QueryJoinsTab()),
       _QueryWizardTab(
-          message: localizations?.groupTab ?? '',
+          message: localizations?.grouping ?? 'Grouping',
           icon: Icons.group_work_rounded,
           widget: QueryGroupingsTab(
             key: ValueKey('GroupingsTab'),
           )),
       _QueryWizardTab(
-          message: localizations?.conditionsTab ?? '',
+          message: localizations?.conditionsTab ?? 'Conditions',
           icon: Icons.filter_alt_rounded,
-          widget: Text(localizations?.conditionsTab ?? '')),
+          widget: Text(localizations?.conditionsTab ?? 'Conditions')),
       _QueryWizardTab(
-          message: localizations?.moreTab ?? '',
+          message: localizations?.moreTab ?? 'More',
           icon: Icons.more_horiz_rounded,
-          widget: Text(localizations?.moreTab ?? '')),
+          widget: Text(localizations?.moreTab ?? 'More')),
       _QueryWizardTab(
-          message: localizations?.unionsAliasesTab ?? '',
+          message: localizations?.unionsAliasesTab ?? 'Unions/Aliases',
           icon: Icons.view_list_rounded,
-          widget: Text(localizations?.unionsAliasesTab ?? '')),
+          widget: Text(localizations?.unionsAliasesTab ?? 'Unions/Aliases')),
       _QueryWizardTab(
-          message: localizations?.orderTab ?? '',
+          message: localizations?.orderTab ?? 'Order',
           icon: Icons.sort_rounded,
-          widget: Text(localizations?.orderTab ?? '')),
+          widget: Text(localizations?.orderTab ?? 'Order')),
       _QueryWizardTab(
-          message: localizations?.queryBatchTab ?? '',
+          message: localizations?.queryBatchTab ?? 'Query batch',
           icon: Icons.batch_prediction,
           widget: QueryBatchTab()),
     ];
@@ -59,10 +59,6 @@ class QueryWizardLayout extends HookWidget {
     return Scaffold(
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
           builder: (context, state) {
-        if (state is QueryWizardInitial) {
-          return Center(child: Text(localizations?.queryWizard ?? ''));
-        }
-
         if (state is QueryWizardLoadInProgress) {
           return Center(child: CircularProgressIndicator());
         }
@@ -110,7 +106,7 @@ class QueryWizardLayout extends HookWidget {
         if (state is QueryWizardLoadFailure) {
           return Center(
             child: Text(
-              localizations?.somethingWentWrong ?? '',
+              localizations?.somethingWentWrong ?? 'Something went wrong!',
               style: TextStyle(color: Colors.red),
             ),
           );

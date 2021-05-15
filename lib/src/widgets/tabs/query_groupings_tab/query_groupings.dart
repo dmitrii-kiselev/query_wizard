@@ -6,14 +6,14 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 
 class QueryGroupings extends HookWidget {
-  QueryGroupings({Key? key}) : super(key: key);
+  const QueryGroupings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryGroupingsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
     final showSelectionListCallback = useState<VoidCallback?>(null);
     final mounted = useIsMounted();
+    final bloc = BlocProvider.of<QueryGroupingsBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context);
 
     void _showFieldSelectionList() {
       showSelectionListCallback.value = null;
@@ -88,6 +88,8 @@ class QueryGroupings extends HookWidget {
 class _FieldSelectionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context);
+
     return Container(
       height: 500,
       child: Column(
@@ -96,7 +98,7 @@ class _FieldSelectionList extends StatelessWidget {
             height: 70,
             child: Center(
               child: Text(
-                'Header',
+                localizations?.tables ?? 'Tables',
                 textAlign: TextAlign.center,
               ),
             ),
