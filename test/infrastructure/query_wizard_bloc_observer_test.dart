@@ -59,20 +59,19 @@ QueryWizardBloc buildQueryWizardBloc(
   final sourcesBloc = QuerySourcesBloc(
       queryWizardRepository: queryWizardRepository,
       initialState: QuerySourcesInitial());
-  final tablesBloc = QueryTablesBloc(QueryTablesInitial());
-  final fieldsBloc = QueryFieldsBloc(QueryFieldsInitial());
-  final tablesAndFieldsTabBloc =
-      QueryTablesAndFieldsTabBloc(QueryTablesAndFieldsInitial());
-  final joinsTabBloc = QueryJoinsTabBloc(QueryJoinsInitial());
-  final aggregatesTabBloc = QueryAggregatesBloc(QueryAggregatesInitial());
-  final groupingsTabBloc = QueryGroupingsBloc(QueryGroupingsInitial());
-  final queriesBloc = QueriesBloc(QueriesInitial());
-  final batchTabBloc = QueryBatchTabBloc(QueryBatchesInitial());
+
+  final tablesBloc = QueryTablesBloc();
+  final fieldsBloc = QueryFieldsBloc();
+
+  final joinsTabBloc = QueryJoinsTabBloc();
+  final aggregatesTabBloc = QueryAggregatesBloc();
+  final groupingsTabBloc = QueryGroupingsBloc();
+  final queriesBloc = QueriesBloc();
+  final batchTabBloc = QueryBatchTabBloc();
   final queryWizardBloc = QueryWizardBloc(
       sourcesBloc: sourcesBloc,
       tablesBloc: tablesBloc,
       fieldsBloc: fieldsBloc,
-      tablesAndFieldsTabBloc: tablesAndFieldsTabBloc,
       joinsTabBloc: joinsTabBloc,
       aggregatesBloc: aggregatesTabBloc,
       groupingsBloc: groupingsTabBloc,

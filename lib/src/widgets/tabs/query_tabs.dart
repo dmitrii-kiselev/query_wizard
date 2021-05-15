@@ -6,11 +6,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:query_wizard/blocs.dart';
 
 class QueryWizardTabs extends HookWidget {
+  const QueryWizardTabs(
+      {Key? key, required this.tabController, required this.tabs})
+      : super(key: key);
+
   final TabController tabController;
   final List<Widget> tabs;
-
-  QueryWizardTabs({Key? key, required this.tabController, required this.tabs})
-      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +22,15 @@ class QueryWizardTabs extends HookWidget {
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
         builder: (context, state) {
       if (state is QuerySourcesInitial) {
-        return Center(child: Text(localizations?.queryWizard ?? ''));
+        return Center(
+            child: Text(localizations?.queryWizard ?? 'Query Wizard'));
       }
 
       if (state is QuerySourcesLoadInProgress) {
         return Center(child: CircularProgressIndicator());
       }
 
-      if (state is QuerySourcesLoadSuccess) {
+      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
         return TabBarView(
           controller: tabController,
           children: [
@@ -43,7 +45,7 @@ class QueryWizardTabs extends HookWidget {
       if (state is QuerySourcesLoadFailure) {
         return Center(
           child: Text(
-            localizations?.somethingWentWrong ?? '',
+            localizations?.somethingWentWrong ?? 'Something went wrong!',
             style: TextStyle(color: Colors.red),
           ),
         );

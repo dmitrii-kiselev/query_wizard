@@ -4,12 +4,6 @@ enum DbNodeType { table, column }
 
 // ignore: must_be_immutable
 class DbElement extends Equatable {
-  final String name;
-  String? alias;
-  final DbNodeType nodeType;
-  DbElement? parent;
-  final List<DbElement> elements = List.empty(growable: true);
-
   DbElement({required this.name, required this.nodeType});
 
   DbElement.withElements(
@@ -32,6 +26,12 @@ class DbElement extends Equatable {
 
     this.parent = parent;
   }
+
+  final String name;
+  String? alias;
+  final DbNodeType nodeType;
+  DbElement? parent;
+  final List<DbElement> elements = List.empty(growable: true);
 
   bool get hasElements => elements.isNotEmpty;
 

@@ -9,7 +9,8 @@ void main() {
     late QueryFieldsBloc fieldsTabBloc;
 
     setUp(() {
-      fieldsTabBloc = QueryFieldsBloc(QueryFieldsInitial(fields: []));
+      fieldsTabBloc =
+          QueryFieldsBloc(initialState: QueryFieldsInitial(fields: []));
     });
 
     test('initial state is empty', () {

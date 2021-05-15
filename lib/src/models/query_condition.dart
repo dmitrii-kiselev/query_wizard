@@ -1,12 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class QueryCondition extends Equatable {
-  final bool isCustom;
-  final String leftField;
-  final String logicalCompareType;
-  final String rightField;
-  final String customCondition;
-
   const QueryCondition(
       {required this.isCustom,
       required this.leftField,
@@ -14,12 +8,18 @@ class QueryCondition extends Equatable {
       required this.rightField,
       required this.customCondition});
 
-  QueryCondition.empty()
+  const QueryCondition.empty()
       : isCustom = false,
         leftField = '',
         logicalCompareType = '',
         rightField = '',
         customCondition = '';
+
+  final bool isCustom;
+  final String leftField;
+  final String logicalCompareType;
+  final String rightField;
+  final String customCondition;
 
   @override
   List<Object?> get props =>

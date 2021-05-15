@@ -1,8 +1,9 @@
 library widgets;
 
+export 'src/widgets/layout/query_batch_drawer.dart';
+export 'src/widgets/layout/query_navigation_rail.dart';
 export 'src/widgets/query_wizard.dart';
-export 'src/widgets/query_wizard_view.dart';
-export 'src/widgets/shared/tree_viewer.dart';
+export 'src/widgets/layout/query_wizard_layout.dart';
 export 'src/widgets/tabs/query_batch_tab.dart';
 export 'src/widgets/tabs/query_joins-tab.dart';
 export 'src/widgets/tabs/query_tabs.dart';

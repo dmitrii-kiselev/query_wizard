@@ -7,10 +7,12 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryJoinsTab extends StatelessWidget {
+  const QueryJoinsTab({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     final bloc = BlocProvider.of<QueryJoinsTabBloc>(context);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return BlocBuilder<QueryJoinsTabBloc, QueryJoinsTabState>(
         builder: (context, state) {
@@ -81,7 +83,6 @@ class QueryJoinsTab extends StatelessWidget {
                 width: 56,
                 child: Center(
                   child: const Icon(Icons.add),
-                  //tooltip: localizations?.add ?? 'Add',
                 ),
               );
             },

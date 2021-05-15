@@ -2,24 +2,24 @@ import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
-import 'package:query_wizard/models.dart';
 
 class QuerySources extends StatelessWidget {
-  QuerySources({Key? key, required this.sources}) : super(key: key);
-
-  final List<DbElement> sources;
+  const QuerySources({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context);
+
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
         builder: (context, state) {
-      if (state is QuerySourcesLoadSuccess) {
+      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
         return Scaffold(
           body: ListView.builder(
-            itemCount: sources.length,
+            itemCount: state.sources.length,
             itemBuilder: (context, index) {
-              final table = sources[index];
+              final table = state.sources[index];
               return OpenContainer<bool>(
                 transitionType: ContainerTransitionType.fade,
                 openBuilder: (context, openContainer) => const _DetailsPage(),
@@ -43,7 +43,7 @@ class QuerySources extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             child: const Icon(Icons.add),
-            tooltip: 'Add',
+            tooltip: localizations?.add ?? 'Add',
           ),
         );
       }

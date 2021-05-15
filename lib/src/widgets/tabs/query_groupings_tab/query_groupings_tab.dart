@@ -6,7 +6,7 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/widgets.dart';
 
 class QueryGroupingsTab extends HookWidget {
-  QueryGroupingsTab({Key? key}) : super(key: key);
+  const QueryGroupingsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

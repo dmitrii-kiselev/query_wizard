@@ -10,8 +10,8 @@ class QueryBatchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
     final bloc = BlocProvider.of<QueryBatchTabBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryBatchTabBloc, QueryBatchTabState>(
         builder: (context, state) {

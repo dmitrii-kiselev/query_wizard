@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
-import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/widgets.dart';
 
 class QueryTablesAndFieldsTab extends HookWidget {
-  final _currentIndex = useState(0);
-
-  QueryTablesAndFieldsTab({Key? key}) : super(key: key);
+  const QueryTablesAndFieldsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _currentIndex = useState(0);
+
     final localizations = QueryWizardLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+
+    final tabs = [QuerySources(), QueryTables(), QueryFields()];
 
     final bottomNavigationBarItems = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
@@ -34,31 +34,18 @@ class QueryTablesAndFieldsTab extends HookWidget {
     ];
 
     return Scaffold(
-      body: BlocBuilder<QueryTablesAndFieldsTabBloc,
-          QueryTablesAndFieldsTabState>(builder: (context, state) {
-        if (state is QueryTablesAndFieldsTabChanged) {
-          final tabs = [
-            QuerySources(sources: state.sources),
-            QueryTables(tables: state.tables),
-            QueryFields(fields: state.fields)
-          ];
-
-          return Center(
-            child: PageTransitionSwitcher(
-              child: tabs[_currentIndex.value],
-              transitionBuilder: (child, animation, secondaryAnimation) {
-                return FadeThroughTransition(
-                  child: child,
-                  animation: animation,
-                  secondaryAnimation: secondaryAnimation,
-                );
-              },
-            ),
-          );
-        }
-
-        return Center(child: CircularProgressIndicator());
-      }),
+      body: Center(
+        child: PageTransitionSwitcher(
+          child: tabs[_currentIndex.value],
+          transitionBuilder: (child, animation, secondaryAnimation) {
+            return FadeThroughTransition(
+              child: child,
+              animation: animation,
+              secondaryAnimation: secondaryAnimation,
+            );
+          },
+        ),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
         items: bottomNavigationBarItems,
