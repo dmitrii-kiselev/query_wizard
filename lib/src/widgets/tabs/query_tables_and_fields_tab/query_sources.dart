@@ -14,7 +14,7 @@ class QuerySources extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
         builder: (context, state) {
-      if (state is QuerySourcesLoadSuccess) {
+      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
         return Scaffold(
           body: ListView.builder(
             itemCount: sources.length,

@@ -28,7 +28,7 @@ class QueryWizardTabs extends HookWidget {
         return Center(child: CircularProgressIndicator());
       }
 
-      if (state is QuerySourcesLoadSuccess) {
+      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
         return TabBarView(
           controller: tabController,
           children: [

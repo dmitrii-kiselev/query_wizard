@@ -31,7 +31,9 @@ class QueryWizardApiClient {
   }
 
   Future<QuerySchema> parseQuery(String query) async {
-    final sources = await getSources();
+    final sources1 = await getSources();
+    final sources2 = await getSources();
+    final sources3 = await getSources();
 
     final List<QueryJoin> joins1 = [
       QueryJoin(
@@ -147,7 +149,31 @@ class QueryWizardApiClient {
       QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
     ];
 
+    final groupings2 = [
+      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+    ];
+
+    final groupings3 = [
+      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+    ];
+
     final aggregates1 = [
+      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+    ];
+
+    final aggregates2 = [
+      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+    ];
+
+    final aggregates3 = [
       QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
       QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
       QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
@@ -155,9 +181,9 @@ class QueryWizardApiClient {
 
     final query1 = Query(
         name: 'Query 1',
-        sources: sources,
-        tables: sources,
-        fields: sources,
+        sources: sources1,
+        tables: sources1,
+        fields: sources1,
         joins: joins1,
         groupings: groupings1,
         aggregates: aggregates1,
@@ -169,12 +195,12 @@ class QueryWizardApiClient {
 
     final query2 = Query(
         name: 'Query 2',
-        sources: sources,
-        tables: sources,
-        fields: sources,
+        sources: sources2,
+        tables: sources2,
+        fields: sources2,
         joins: joins2,
-        groupings: [],
-        aggregates: [],
+        groupings: groupings2,
+        aggregates: aggregates2,
         conditions: [],
         sortings: [],
         isTop: false,
@@ -183,12 +209,12 @@ class QueryWizardApiClient {
 
     final query3 = Query(
         name: 'Query 3',
-        sources: sources,
-        tables: sources,
-        fields: sources,
+        sources: sources3,
+        tables: sources3,
+        fields: sources3,
         joins: joins3,
-        groupings: [],
-        aggregates: [],
+        groupings: groupings3,
+        aggregates: aggregates3,
         conditions: [],
         sortings: [],
         isTop: false,
@@ -197,19 +223,19 @@ class QueryWizardApiClient {
 
     final batch1 = QueryBatch(
         name: 'Query batch 1',
-        sources: sources,
+        sources: sources1,
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
     final batch2 = QueryBatch(
         name: 'Query batch 2',
-        sources: sources,
+        sources: sources2,
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
     final batch3 = QueryBatch(
         name: 'Query batch 3',
-        sources: sources,
+        sources: sources3,
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
