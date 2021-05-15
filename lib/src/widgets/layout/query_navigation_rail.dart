@@ -6,9 +6,7 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryNavigationRail extends HookWidget {
-  const QueryNavigationRail({Key? key, this.child}) : super(key: key);
-
-  final Widget? child;
+  const QueryNavigationRail({Key? key}) : super(key: key);
 
   List<NavigationRailDestination> _getQueries(List<Query> queries) {
     return <NavigationRailDestination>[
@@ -33,26 +31,14 @@ class QueryNavigationRail extends HookWidget {
 
     return BlocBuilder<QueriesBloc, QueriesState>(builder: (context, state) {
       if (state is QueriesChanged) {
-        return Center(
-          child: Row(
-            children: [
-              NavigationRail(
-                selectedIndex: selectedQueryIndex.value,
-                onDestinationSelected: (index) {
-                  selectedQueryIndex.value = index;
-                  bloc.changeQuery(state.queries[index]);
-                },
-                labelType: NavigationRailLabelType.selected,
-                destinations: _getQueries(state.queries),
-              ),
-              const VerticalDivider(thickness: 1, width: 1),
-              Expanded(
-                child: Center(
-                  child: child,
-                ),
-              ),
-            ],
-          ),
+        return NavigationRail(
+          selectedIndex: selectedQueryIndex.value,
+          onDestinationSelected: (index) {
+            selectedQueryIndex.value = index;
+            bloc.changeQuery(state.queries[index]);
+          },
+          labelType: NavigationRailLabelType.selected,
+          destinations: _getQueries(state.queries),
         );
       }
 

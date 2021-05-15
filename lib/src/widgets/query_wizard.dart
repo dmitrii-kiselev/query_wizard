@@ -63,5 +63,5 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
     BlocProvider(create: (context) => groupingsTabBloc),
     BlocProvider(create: (context) => queriesBloc),
     BlocProvider(create: (context) => batchTabBloc),
-  ], child: QueryWizardView(title: 'Query Wizard'));
+  ], child: QueryWizardLayout(title: 'Query Wizard'));
 }

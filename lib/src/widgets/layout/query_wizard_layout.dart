@@ -6,10 +6,10 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/widgets.dart';
 
-class QueryWizardView extends HookWidget {
+class QueryWizardLayout extends HookWidget {
   final String title;
 
-  QueryWizardView({Key? key, required this.title}) : super(key: key);
+  QueryWizardLayout({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +88,20 @@ class QueryWizardView extends HookWidget {
                 ],
               ),
             ),
-            body: QueryNavigationRail(
-              child: QueryWizardTabs(
-                  tabController: tabController,
-                  tabs: tabs.map((t) => t.widget).toList()),
+            body: Center(
+              child: Row(
+                children: [
+                  QueryNavigationRail(),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(
+                    child: Center(
+                      child: QueryWizardTabs(
+                          tabController: tabController,
+                          tabs: tabs.map((t) => t.widget).toList()),
+                    ),
+                  ),
+                ],
+              ),
             ),
             drawer: QueryBatchDrawer(),
           );
