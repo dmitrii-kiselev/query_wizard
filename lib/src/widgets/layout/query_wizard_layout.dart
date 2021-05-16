@@ -33,7 +33,9 @@ class QueryWizardLayout extends HookWidget {
       _QueryWizardTab(
           message: localizations?.conditionsTab ?? 'Conditions',
           icon: Icons.filter_alt_rounded,
-          widget: Text(localizations?.conditionsTab ?? 'Conditions')),
+          widget: QueryConditionsTab(
+            key: ValueKey('ConditionsTab'),
+          )),
       _QueryWizardTab(
           message: localizations?.moreTab ?? 'More',
           icon: Icons.more_horiz_rounded,

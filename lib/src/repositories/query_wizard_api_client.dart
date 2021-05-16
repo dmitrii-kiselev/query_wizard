@@ -179,6 +179,77 @@ class QueryWizardApiClient {
       QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
     ];
 
+    /*
+    required this.isCustom,
+      required this.leftField,
+      required this.logicalCompareType,
+      required this.rightField,
+      required this.customCondition
+     */
+
+    final conditions1 = [
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table1.Field1',
+          logicalCompareType: '=',
+          rightField: ':Field1',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table1.Field2',
+          logicalCompareType: '=',
+          rightField: ':Field2',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table1.Field3',
+          logicalCompareType: '=',
+          rightField: ':Field3',
+          customCondition: ''),
+    ];
+
+    final conditions2 = [
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table2.Field1',
+          logicalCompareType: '=',
+          rightField: ':Field1',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table2.Field2',
+          logicalCompareType: '=',
+          rightField: ':Field2',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table2.Field3',
+          logicalCompareType: '=',
+          rightField: ':Field3',
+          customCondition: ''),
+    ];
+
+    final conditions3 = [
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table3.Field1',
+          logicalCompareType: '=',
+          rightField: ':Field1',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table3.Field2',
+          logicalCompareType: '=',
+          rightField: ':Field2',
+          customCondition: ''),
+      QueryCondition(
+          isCustom: false,
+          leftField: 'Table3.Field3',
+          logicalCompareType: '=',
+          rightField: ':Field3',
+          customCondition: ''),
+    ];
+
     final query1 = Query(
         name: 'Query 1',
         sources: sources1,
@@ -187,7 +258,7 @@ class QueryWizardApiClient {
         joins: joins1,
         groupings: groupings1,
         aggregates: aggregates1,
-        conditions: [],
+        conditions: conditions1,
         sortings: [],
         isTop: false,
         topCounter: 0,
@@ -201,7 +272,7 @@ class QueryWizardApiClient {
         joins: joins2,
         groupings: groupings2,
         aggregates: aggregates2,
-        conditions: [],
+        conditions: conditions2,
         sortings: [],
         isTop: false,
         topCounter: 0,
@@ -215,7 +286,7 @@ class QueryWizardApiClient {
         joins: joins3,
         groupings: groupings3,
         aggregates: aggregates3,
-        conditions: [],
+        conditions: conditions3,
         sortings: [],
         isTop: false,
         topCounter: 0,

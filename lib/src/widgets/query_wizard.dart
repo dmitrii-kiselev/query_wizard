@@ -36,6 +36,7 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
   final joinsTabBloc = QueryJoinsTabBloc();
   final aggregatesBloc = QueryAggregatesBloc();
   final groupingsBloc = QueryGroupingsBloc();
+  final conditionsTabBloc = QueryConditionsTabBloc();
   final queriesBloc = QueriesBloc();
   final batchTabBloc = QueryBatchTabBloc();
   final queryWizardBloc = QueryWizardBloc(
@@ -45,6 +46,7 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
       joinsTabBloc: joinsTabBloc,
       aggregatesBloc: aggregatesBloc,
       groupingsBloc: groupingsBloc,
+      conditionsTabBloc: conditionsTabBloc,
       queriesBloc: queriesBloc,
       batchTabBloc: batchTabBloc,
       queryWizardRepository: queryWizardRepository);
@@ -57,6 +59,7 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
     BlocProvider(create: (context) => joinsTabBloc),
     BlocProvider(create: (context) => aggregatesBloc),
     BlocProvider(create: (context) => groupingsBloc),
+    BlocProvider(create: (context) => conditionsTabBloc),
     BlocProvider(create: (context) => queriesBloc),
     BlocProvider(create: (context) => batchTabBloc),
   ], child: QueryWizardLayout(title: 'Query Wizard'));

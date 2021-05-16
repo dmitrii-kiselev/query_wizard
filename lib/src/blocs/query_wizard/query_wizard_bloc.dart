@@ -13,6 +13,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
       required this.aggregatesBloc,
       required this.groupingsBloc,
       required this.queriesBloc,
+      required this.conditionsTabBloc,
       required this.batchTabBloc,
       required this.queryWizardRepository,
       QueryWizardState? initialState})
@@ -24,6 +25,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryJoinsTabBloc joinsTabBloc;
   final QueryAggregatesBloc aggregatesBloc;
   final QueryGroupingsBloc groupingsBloc;
+  final QueryConditionsTabBloc conditionsTabBloc;
   final QueriesBloc queriesBloc;
   final QueryBatchTabBloc batchTabBloc;
   final QueryWizardRepository queryWizardRepository;
@@ -67,5 +69,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
         .add(QueryAggregatesInitialized(aggregates: query.aggregates));
 
     groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
+    conditionsTabBloc
+        .add(QueryConditionsInitialized(conditions: query.conditions));
   }
 }
