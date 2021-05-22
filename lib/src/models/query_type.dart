@@ -1,0 +1,1 @@
+enum QueryType { selectQuery, temporaryTable }

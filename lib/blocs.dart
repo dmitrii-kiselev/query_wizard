@@ -19,6 +19,9 @@ export 'src/blocs/tabs/query_groupings_tab/query_groupings/query_groupings_state
 export 'src/blocs/tabs/query_joins_tab/query_joins_tab_event.dart';
 export 'src/blocs/tabs/query_joins_tab/query_joins_tab_state.dart';
 export 'src/blocs/tabs/query_joins_tab/query_joins_tab_bloc.dart';
+export 'src/blocs/tabs/query_more_bloc/query_more_bloc.dart';
+export 'src/blocs/tabs/query_more_bloc/query_more_event.dart';
+export 'src/blocs/tabs/query_more_bloc/query_more_state.dart';
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_fields/query_fields_bloc.dart';
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_fields/query_fields_event.dart';
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_fields/query_fields_state.dart';
