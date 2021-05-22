@@ -1,6 +1,7 @@
 {
   "add": "Add",
   "aggregates": "Aggregates",
+  "aliases": "Aliases",
   "conditionsTab": "Conditions",
   "copy": "Copy",
   "database": "Database",
@@ -16,5 +17,6 @@
   "somethingWentWrong": "Something went wrong!",
   "tables": "Tables",
   "tablesAndFieldsTab": "Tables and fields",
+  "unions": "Unions",
   "unionsAliasesTab": "Unions/Aliases"
 }
