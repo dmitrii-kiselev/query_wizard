@@ -5,7 +5,7 @@ import 'package:query_wizard/models.dart';
 void main() {
   test('Query initialized', () {
     final query = Query(
-        name: '1',
+        name: 'Query',
         sources: [],
         tables: [],
         fields: [],
@@ -18,6 +18,7 @@ void main() {
         topCounter: 0,
         isDistinct: false);
 
+    expect(query, Query.empty());
     expect(
         query.props,
         equals([
@@ -34,5 +35,31 @@ void main() {
           query.topCounter,
           query.isDistinct
         ]));
+  });
+
+  test('Empty query initialized', () {
+    final query = Query.empty();
+    final expected = Query(
+        name: 'Query',
+        sources: [],
+        tables: [],
+        fields: [],
+        joins: [],
+        groupings: [],
+        aggregates: [],
+        conditions: [],
+        sortings: [],
+        isTop: false,
+        topCounter: 0,
+        isDistinct: false);
+
+    expect(query, expected);
+  });
+
+  test('Empty query copied', () {
+    final query = Query.empty();
+    final copiedQuery = query.copy();
+
+    expect(query, copiedQuery);
   });
 }

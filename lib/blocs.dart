@@ -31,6 +31,6 @@ export 'src/blocs/tabs/query_tables_and_fields_tab/query_sources/query_sources_s
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_tables/query_tables_bloc.dart';
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_tables/query_tables_event.dart';
 export 'src/blocs/tabs/query_tables_and_fields_tab/query_tables/query_tables_state.dart';
-export 'src/blocs/tabs/query_unions_aliases_tab/query_unions_aliases_tab_bloc.dart';
-export 'src/blocs/tabs/query_unions_aliases_tab/query_unions_aliases_tab_event.dart';
-export 'src/blocs/tabs/query_unions_aliases_tab/query_unions_aliases_tab_state.dart';
+export 'src/blocs/tabs/query_unions_aliases_tab/query_unions/query_unions_bloc.dart';
+export 'src/blocs/tabs/query_unions_aliases_tab/query_unions/query_unions_event.dart';
+export 'src/blocs/tabs/query_unions_aliases_tab/query_unions/query_unions_state.dart';

@@ -2,45 +2,45 @@ import 'package:equatable/equatable.dart';
 
 import 'package:query_wizard/models.dart';
 
-abstract class QueriesEvent extends Equatable {}
+abstract class QueryUnionsEvent extends Equatable {}
 
-class QueriesInitialized extends QueriesEvent {
-  final List<Query> queries;
-
+class QueriesInitialized extends QueryUnionsEvent {
   QueriesInitialized({required this.queries});
+
+  final List<Query> queries;
 
   List<Object?> get props => [queries];
 }
 
-class QueryAdded extends QueriesEvent {
-  final Query query;
-
+class QueryAdded extends QueryUnionsEvent {
   QueryAdded({required this.query});
+
+  final Query query;
 
   List<Object?> get props => [query];
 }
 
-class QueryCopied extends QueriesEvent {
-  final Query query;
-
+class QueryCopied extends QueryUnionsEvent {
   QueryCopied({required this.query});
+
+  final Query query;
 
   List<Object?> get props => [Query];
 }
 
-class QueryRemoved extends QueriesEvent {
-  final int index;
-
+class QueryRemoved extends QueryUnionsEvent {
   QueryRemoved({required this.index});
+
+  final int index;
 
   List<Object?> get props => [index];
 }
 
-class QueryOrderChanged extends QueriesEvent {
+class QueryOrderChanged extends QueryUnionsEvent {
+  QueryOrderChanged({required this.oldIndex, required this.newIndex});
+
   final int oldIndex;
   final int newIndex;
-
-  QueryOrderChanged({required this.oldIndex, required this.newIndex});
 
   @override
   List<Object?> get props => [oldIndex, newIndex];
