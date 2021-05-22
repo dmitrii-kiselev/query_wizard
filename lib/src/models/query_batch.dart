@@ -27,8 +27,6 @@ class QueryBatch extends Equatable {
   List<Object?> get props => [name, sources, queries, aliases, queryType];
 }
 
-enum QueryType { selectQuery, temporaryTable }
-
 extension CopyQueryBatch on QueryBatch {
   QueryBatch copy() => QueryBatch(
       name: name,
