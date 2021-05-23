@@ -44,8 +44,8 @@ class QueryWizardLayout extends HookWidget {
           )),
       _QueryWizardTab(
           message: localizations?.unionsAliasesTab ?? 'Unions/Aliases',
-          icon: Icons.view_list_rounded,
-          widget: Text(localizations?.unionsAliasesTab ?? 'Unions/Aliases')),
+          icon: Icons.merge_type_rounded,
+          widget: QueryUnionsAliasesTab()),
       _QueryWizardTab(
           message: localizations?.orderTab ?? 'Order',
           icon: Icons.sort_rounded,

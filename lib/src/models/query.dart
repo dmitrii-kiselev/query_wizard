@@ -17,6 +17,20 @@ class Query extends Equatable {
       required this.topCounter,
       required this.isDistinct});
 
+  Query.empty()
+      : name = 'Query',
+        sources = [],
+        tables = [],
+        fields = [],
+        joins = [],
+        groupings = [],
+        aggregates = [],
+        conditions = [],
+        sortings = [],
+        isTop = false,
+        topCounter = 0,
+        isDistinct = false;
+
   final String name;
   final List<DbElement> sources;
   final List<DbElement> tables;

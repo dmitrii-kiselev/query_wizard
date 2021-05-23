@@ -29,8 +29,9 @@ class QueryNavigationRail extends HookWidget {
     final selectedQueryIndex = useState(0);
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
 
-    return BlocBuilder<QueriesBloc, QueriesState>(builder: (context, state) {
-      if (state is QueriesChanged) {
+    return BlocBuilder<QueryUnionsBloc, QueryUnionsState>(
+        builder: (context, state) {
+      if (state is QueryUnionsChanged) {
         return NavigationRail(
           selectedIndex: selectedQueryIndex.value,
           onDestinationSelected: (index) {

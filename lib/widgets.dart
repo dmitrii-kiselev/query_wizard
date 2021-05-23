@@ -16,3 +16,6 @@ export 'src/widgets/tabs/query_tables_and_fields_tab/query_tables_and_fields_tab
 export 'src/widgets/tabs/query_tables_and_fields_tab/query_fields.dart';
 export 'src/widgets/tabs/query_tables_and_fields_tab/query_sources.dart';
 export 'src/widgets/tabs/query_tables_and_fields_tab/query_tables.dart';
+export 'src/widgets/tabs/query_unions_aliases_tab/query_aliases.dart';
+export 'src/widgets/tabs/query_unions_aliases_tab/query_unions.dart';
+export 'src/widgets/tabs/query_unions_aliases_tab/query_unions_aliases_tab.dart';
