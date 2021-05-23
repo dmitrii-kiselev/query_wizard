@@ -68,6 +68,7 @@ QueryWizardBloc buildQueryWizardBloc(
   final groupingsTabBloc = QueryGroupingsBloc();
   final conditionsTabBloc = QueryConditionsTabBloc();
   final queryUnionsBloc = QueryUnionsBloc();
+  final orderTabBloc = QueryOrderTabBloc();
   final batchTabBloc = QueryBatchTabBloc();
   final queryWizardBloc = QueryWizardBloc(
       sourcesBloc: sourcesBloc,
@@ -78,6 +79,7 @@ QueryWizardBloc buildQueryWizardBloc(
       groupingsBloc: groupingsTabBloc,
       conditionsTabBloc: conditionsTabBloc,
       queryUnionsBloc: queryUnionsBloc,
+      orderTabBloc: orderTabBloc,
       batchTabBloc: batchTabBloc,
       queryWizardRepository: queryWizardRepository);
 

@@ -250,6 +250,24 @@ class QueryWizardApiClient {
           customCondition: ''),
     ];
 
+    final sortings1 = [
+      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+    ];
+
+    final sortings2 = [
+      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+    ];
+
+    final sortings3 = [
+      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
+      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+    ];
+
     final query1 = Query(
         name: 'Query 1',
         sources: sources1,
@@ -259,7 +277,7 @@ class QueryWizardApiClient {
         groupings: groupings1,
         aggregates: aggregates1,
         conditions: conditions1,
-        sortings: [],
+        sortings: sortings1,
         isTop: false,
         topCounter: 0,
         isDistinct: false);
@@ -273,7 +291,7 @@ class QueryWizardApiClient {
         groupings: groupings2,
         aggregates: aggregates2,
         conditions: conditions2,
-        sortings: [],
+        sortings: sortings2,
         isTop: false,
         topCounter: 0,
         isDistinct: false);
@@ -287,7 +305,7 @@ class QueryWizardApiClient {
         groupings: groupings3,
         aggregates: aggregates3,
         conditions: conditions3,
-        sortings: [],
+        sortings: sortings3,
         isTop: false,
         topCounter: 0,
         isDistinct: false);

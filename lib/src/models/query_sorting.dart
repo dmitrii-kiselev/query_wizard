@@ -8,6 +8,9 @@ class QuerySorting extends Equatable {
 
   @override
   List<Object?> get props => [field, type];
+
+  @override
+  String toString() => '$field $type';
 }
 
 enum QuerySortingType { ascending, descending }

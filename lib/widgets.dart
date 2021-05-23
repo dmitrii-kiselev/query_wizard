@@ -8,6 +8,7 @@ export 'src/widgets/tabs/query_batch_tab.dart';
 export 'src/widgets/tabs/query_conditions_tab.dart';
 export 'src/widgets/tabs/query_joins-tab.dart';
 export 'src/widgets/tabs/query_more.dart';
+export 'src/widgets/tabs/query_order_tab.dart';
 export 'src/widgets/tabs/query_tabs.dart';
 export 'src/widgets/tabs/query_groupings_tab/query_aggregates.dart';
 export 'src/widgets/tabs/query_groupings_tab/query_groupings.dart';
