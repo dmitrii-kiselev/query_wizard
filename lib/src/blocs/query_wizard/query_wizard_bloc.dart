@@ -15,6 +15,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
       required this.queryUnionsBloc,
       required this.conditionsTabBloc,
       required this.batchTabBloc,
+      required this.orderTabBloc,
       required this.queryWizardRepository,
       QueryWizardState? initialState})
       : super(initialState ?? QueryWizardInitial());
@@ -27,6 +28,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryGroupingsBloc groupingsBloc;
   final QueryConditionsTabBloc conditionsTabBloc;
   final QueryUnionsBloc queryUnionsBloc;
+  final QueryOrderTabBloc orderTabBloc;
   final QueryBatchTabBloc batchTabBloc;
   final QueryWizardRepository queryWizardRepository;
 
@@ -71,5 +73,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
     groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
     conditionsTabBloc
         .add(QueryConditionsInitialized(conditions: query.conditions));
+
+    orderTabBloc.add(QueryOrderTabInitialized(sortings: query.sortings));
   }
 }
