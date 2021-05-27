@@ -17,8 +17,8 @@ main() {
   test('onEvent', overridePrint(() {
     final observer = QueryWizardBlocObserver();
     final event = 'event';
-    final client = QueryWizardApiClient();
-    final repository = QueryWizardRepository(queryWizardApiClient: client);
+    final client = DesignTimeQueryWizardClient();
+    final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
 
     observer.onEvent(bloc, event);
@@ -28,8 +28,8 @@ main() {
 
   test('onTransition', overridePrint(() {
     final observer = QueryWizardBlocObserver();
-    final client = QueryWizardApiClient();
-    final repository = QueryWizardRepository(queryWizardApiClient: client);
+    final client = DesignTimeQueryWizardClient();
+    final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
     final state = '';
     final event = 'event';
@@ -44,8 +44,8 @@ main() {
   test('onError', overridePrint(() {
     final observer = QueryWizardBlocObserver();
     final error = 'error';
-    final client = QueryWizardApiClient();
-    final repository = QueryWizardRepository(queryWizardApiClient: client);
+    final client = DesignTimeQueryWizardClient();
+    final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
 
     observer.onError(bloc, error, StackTrace.empty);

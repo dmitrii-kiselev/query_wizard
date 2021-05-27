@@ -8,7 +8,7 @@ void main() {
   testWidgets('Query Wizard initialized smoke test',
       (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardApiClient: QueryWizardApiClient(),
+      queryWizardClient: DesignTimeQueryWizardClient(),
     );
 
     await tester.pumpWidget(
@@ -30,7 +30,7 @@ void main() {
   testWidgets('Query Wizard not initialized smoke test',
       (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardApiClient: FakeQueryWizardApiClient(),
+      queryWizardClient: FakeQueryWizardApiClient(),
     );
 
     await tester.pumpWidget(
@@ -44,7 +44,7 @@ void main() {
 
   testWidgets('Tabs changes smoke test', (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardApiClient: QueryWizardApiClient(),
+      queryWizardClient: DesignTimeQueryWizardClient(),
     );
 
     await tester.pumpWidget(

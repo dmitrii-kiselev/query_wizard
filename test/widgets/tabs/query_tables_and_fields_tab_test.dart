@@ -6,7 +6,7 @@ import 'package:query_wizard/widgets.dart';
 void main() {
   testWidgets('Tables and fields initialized', (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardApiClient: QueryWizardApiClient(),
+      queryWizardClient: DesignTimeQueryWizardClient(),
     );
 
     await tester

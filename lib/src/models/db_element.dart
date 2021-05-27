@@ -11,6 +11,10 @@ class DbElement extends Equatable {
       required this.nodeType,
       required List<DbElement> elements}) {
     this.elements.addAll(elements);
+
+    for (var element in elements) {
+      element.parent = this;
+    }
   }
 
   DbElement.withElementsAndParent(

@@ -157,7 +157,7 @@ class _JoinForm extends HookWidget {
             },
             child: Text(
               'Save',
-              style: theme.textTheme.bodyText2!.copyWith(
+              style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
             ),

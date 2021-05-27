@@ -2,8 +2,11 @@
   "add": "Add",
   "aggregates": "Aggregates",
   "aliases": "Aliases",
+  "cancel": "Cancel",
+  "changeTableName": "Change table name",
   "conditionsTab": "Conditions",
   "copy": "Copy",
+  "customExpression": "Custom expression",
   "database": "Database",
   "fields": "Fields",
   "grouping": "Grouping",
@@ -13,10 +16,13 @@
   "orderTab": "Order",
   "queryBatchTab": "Query batch",
   "queryWizard": "Query Wizard",
+  "refresh": "Refresh",
   "remove": "Remove",
+  "save": "Save",
   "somethingWentWrong": "Something went wrong!",
   "tables": "Tables",
   "tablesAndFieldsTab": "Tables and fields",
   "unions": "Unions",
-  "unionsAliasesTab": "Unions/Aliases"
+  "unionsAliasesTab": "Unions/Aliases",
+  "subquery": "Subquery"
 }
