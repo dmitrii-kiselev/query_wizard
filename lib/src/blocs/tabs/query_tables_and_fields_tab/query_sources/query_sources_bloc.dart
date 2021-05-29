@@ -16,9 +16,6 @@ class QuerySourcesBloc extends Bloc<QuerySourcesEvent, QuerySourcesState> {
     yield QuerySourcesInitial(sources: state.sources);
 
     if (event is QuerySourcesInitialized) {
-      state.sources.clear();
-      state.sources.addAll(event.sources);
-
       yield QuerySourcesChanged(sources: state.sources);
     }
 

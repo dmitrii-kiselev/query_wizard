@@ -6,7 +6,7 @@ export 'src/widgets/layout/query_wizard_layout.dart';
 export 'src/widgets/shared/sources_tree_view.dart';
 export 'src/widgets/tabs/query_batch_tab.dart';
 export 'src/widgets/tabs/query_conditions_tab.dart';
-export 'src/widgets/tabs/query_joins-tab.dart';
+export 'src/widgets/tabs/query_joins_tab.dart';
 export 'src/widgets/tabs/query_more.dart';
 export 'src/widgets/tabs/query_order_tab.dart';
 export 'src/widgets/tabs/query_tabs.dart';

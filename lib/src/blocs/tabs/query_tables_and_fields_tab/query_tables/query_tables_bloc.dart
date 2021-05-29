@@ -11,9 +11,6 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
     yield QueryTablesInitial(tables: state.tables);
 
     if (event is QueryTablesInitialized) {
-      state.tables.clear();
-      state.tables.addAll(event.tables);
-
       yield QueryTablesChanged(tables: event.tables);
     }
 

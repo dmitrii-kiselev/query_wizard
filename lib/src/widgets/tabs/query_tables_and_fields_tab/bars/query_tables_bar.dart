@@ -80,7 +80,7 @@ class _ChangeTableNameDialog extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
     final table = bloc.state.tables.elementAt(index);
 
-    controller.text = table.name;
+    controller.text = table.alias ?? table.name;
 
     return AlertDialog(
       title: Text(localizations?.changeTableName ?? 'Change Table Name'),
@@ -92,7 +92,8 @@ class _ChangeTableNameDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newTable = DbElement.withElements(
-                name: controller.text,
+                name: table.name,
+                alias: controller.text,
                 nodeType: table.nodeType,
                 elements: table.elements);
             final event = QueryTableEdited(index: index, table: newTable);

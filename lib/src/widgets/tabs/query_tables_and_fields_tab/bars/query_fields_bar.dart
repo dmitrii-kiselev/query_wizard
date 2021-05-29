@@ -36,8 +36,9 @@ class QueryFieldsBar extends StatelessWidget {
                         ));
                   },
                   title: Text(field.name),
-                  subtitle:
-                      field.parent != null ? Text(field.parent!.name) : null,
+                  subtitle: field.parent != null
+                      ? Text(field.parent!.alias ?? field.parent!.name)
+                      : null,
                   trailing: Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     crossAxisAlignment: WrapCrossAlignment.center,
