@@ -4,6 +4,14 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/models.dart';
 
+class ItemValue {
+  const ItemValue({required this.value, required this.checked});
+
+  final DbElement value;
+  final bool checked;
+}
+
+typedef SourcesTreeCallback = Function(ItemValue);
 typedef DbElementCallback = Function(DbElement);
 
 class SourcesTreeView extends StatelessWidget {
@@ -18,8 +26,8 @@ class SourcesTreeView extends StatelessWidget {
   }) : super(key: key);
 
   final List<DbElement> items;
-  final DbElementCallback? onTap;
-  final DbElementCallback? onLongPress;
+  final SourcesTreeCallback? onTap;
+  final SourcesTreeCallback? onLongPress;
   final DbElementCallback? onCopy;
   final DbElementCallback? onEdit;
   final DbElementCallback? onRemove;
@@ -92,8 +100,8 @@ class TreeViewChild extends HookWidget {
 
   final DbElement parent;
   final List<DbElement> children;
-  final DbElementCallback? onTap;
-  final DbElementCallback? onLongPress;
+  final SourcesTreeCallback? onTap;
+  final SourcesTreeCallback? onLongPress;
   final DbElementCallback? onCopy;
   final DbElementCallback? onEdit;
   final DbElementCallback? onRemove;
@@ -111,8 +119,8 @@ class TreeViewChild extends HookWidget {
       children: <Widget>[
         TreeItem(
             item: parent,
-            onTap: (DbElement item) {
-              if (item.nodeType == DbNodeType.table) {
+            onTap: (item) {
+              if (item.value.nodeType == DbNodeType.table) {
                 toggleExpanded();
               }
 
@@ -159,8 +167,8 @@ class TreeItem extends HookWidget {
 
   final DbElement item;
   final VoidCallback? onPressedNext;
-  final DbElementCallback? onTap;
-  final DbElementCallback? onLongPress;
+  final SourcesTreeCallback? onTap;
+  final SourcesTreeCallback? onLongPress;
   final DbElementCallback? onCopy;
   final DbElementCallback? onEdit;
   final DbElementCallback? onRemove;
@@ -238,13 +246,15 @@ class TreeItem extends HookWidget {
           children: actions,
         ),
         onTap: () {
-          this.onTap!(item);
-          selected.value = !selected.value;
+          this.onTap!(ItemValue(value: item, checked: !selected.value));
+          if (!_isRoot()) {
+            selected.value = !selected.value;
+          }
         },
         onLongPress: () {
           if (_isRoot()) {
             if (onLongPress != null) {
-              onLongPress!(item);
+              onLongPress!(ItemValue(value: item, checked: !selected.value));
             }
 
             selected.value = !selected.value;

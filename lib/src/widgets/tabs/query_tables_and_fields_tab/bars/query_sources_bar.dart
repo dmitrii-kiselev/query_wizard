@@ -22,15 +22,15 @@ class QuerySourcesBar extends StatelessWidget {
         return Scaffold(
           body: SourcesTreeView(
               items: state.sources,
-              onTap: (DbElement item) {
-                if (item.nodeType == DbNodeType.column) {
-                  final event = QueryFieldAdded(field: item);
+              onTap: (item) {
+                if (item.value.nodeType == DbNodeType.column && item.checked) {
+                  final event = QueryFieldAdded(field: item.value);
                   fieldsBloc.add(event);
                 }
               },
-              onLongPress: (DbElement item) {
-                if (item.nodeType == DbNodeType.table) {
-                  final event = QueryTableAdded(table: item);
+              onLongPress: (item) {
+                if (item.value.nodeType == DbNodeType.table && item.checked) {
+                  final event = QueryTableAdded(table: item.value);
                   tablesBloc.add(event);
                 }
               }),

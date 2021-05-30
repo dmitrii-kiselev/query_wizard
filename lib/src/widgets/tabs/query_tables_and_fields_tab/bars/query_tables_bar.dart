@@ -22,9 +22,9 @@ class QueryTablesBar extends StatelessWidget {
         return Scaffold(
           body: SourcesTreeView(
             items: state.tables,
-            onTap: (DbElement item) {
-              if (item.nodeType == DbNodeType.column) {
-                final event = QueryFieldAdded(field: item);
+            onTap: (item) {
+              if (item.value.nodeType == DbNodeType.column) {
+                final event = QueryFieldAdded(field: item.value);
                 fieldsBloc.add(event);
               }
             },

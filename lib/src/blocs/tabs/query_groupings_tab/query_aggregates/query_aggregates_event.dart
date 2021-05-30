@@ -22,6 +22,18 @@ class QueryAggregateAdded extends QueryAggregatesEvent {
   List<Object?> get props => [aggregate];
 }
 
+class QueryAggregateEdited extends QueryAggregatesEvent {
+  const QueryAggregateEdited({
+    required this.index,
+    required this.aggregate,
+  });
+
+  final int index;
+  final QueryAggregate aggregate;
+
+  List<Object?> get props => [aggregate];
+}
+
 class QueryAggregateRemoved extends QueryAggregatesEvent {
   const QueryAggregateRemoved({required this.index});
 
