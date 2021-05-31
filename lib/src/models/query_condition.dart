@@ -27,9 +27,7 @@ class QueryCondition extends Equatable {
 
   @override
   String toString() {
-    return customCondition == ''
-        ? '$leftField $logicalCompareType $rightField'
-        : 'Custom';
+    return isCustom ? 'Custom' : '$leftField $logicalCompareType $rightField';
   }
 }
 
