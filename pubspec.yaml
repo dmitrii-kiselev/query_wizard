@@ -14,17 +14,17 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  flutter_bloc: ^7.0.0
+  flutter_bloc: ^7.0.1
   flutter_hooks: ^0.17.0
-  flutter_localized_locales: ^2.0.1
-  equatable: ^2.0.0
+  flutter_localized_locales: ^2.0.2
+  equatable: ^2.0.2
   intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  bloc_test: ^8.0.0
-  mockito: ^5.0.8
+  bloc_test: ^8.0.1
+  mockito: ^5.0.9
 
 flutter:
 
