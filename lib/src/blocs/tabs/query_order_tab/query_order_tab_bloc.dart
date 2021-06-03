@@ -19,6 +19,13 @@ class QueryOrderTabBloc extends Bloc<QueryOrderTabEvent, QueryOrderTabState> {
       yield QuerySortingsChanged(sortings: state.sortings);
     }
 
+    if (event is QuerySortingEdited) {
+      state.sortings.removeAt(event.index);
+      state.sortings.insert(event.index, event.sorting);
+
+      yield QuerySortingsChanged(sortings: state.sortings);
+    }
+
     if (event is QuerySortingRemoved) {
       state.sortings.removeAt(event.index);
       yield QuerySortingsChanged(sortings: state.sortings);

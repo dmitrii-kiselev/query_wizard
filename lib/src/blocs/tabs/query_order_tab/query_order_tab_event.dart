@@ -22,6 +22,18 @@ class QuerySortingAdded extends QueryOrderTabEvent {
   List<Object?> get props => [sorting];
 }
 
+class QuerySortingEdited extends QueryOrderTabEvent {
+  const QuerySortingEdited({
+    required this.index,
+    required this.sorting,
+  });
+
+  final int index;
+  final QuerySorting sorting;
+
+  List<Object?> get props => [sorting];
+}
+
 class QuerySortingRemoved extends QueryOrderTabEvent {
   const QuerySortingRemoved({required this.index});
 
