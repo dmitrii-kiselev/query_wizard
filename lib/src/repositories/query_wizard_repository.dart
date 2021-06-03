@@ -4,15 +4,15 @@ import 'package:query_wizard/models.dart';
 import 'package:query_wizard/repositories.dart';
 
 class QueryWizardRepository {
-  final QueryWizardApiClient queryWizardApiClient;
+  final QueryWizardClient queryWizardClient;
 
-  QueryWizardRepository({required this.queryWizardApiClient});
+  QueryWizardRepository({required this.queryWizardClient});
 
   Future<List<DbElement>> getSources() async {
-    return await queryWizardApiClient.getSources();
+    return await queryWizardClient.getSources();
   }
 
   Future<QuerySchema> parseQuery(String query) async {
-    return await queryWizardApiClient.parseQuery(query);
+    return await queryWizardClient.parseQuery(query);
   }
 }

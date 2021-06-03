@@ -9,7 +9,7 @@ void main() {
   Bloc.observer = QueryWizardBlocObserver();
 
   final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-    queryWizardApiClient: QueryWizardApiClient(),
+    queryWizardClient: DesignTimeQueryWizardClient(),
   );
 
   runApp(QueryWizard(queryWizardRepository: queryWizardRepository));

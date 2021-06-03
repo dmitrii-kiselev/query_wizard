@@ -7,23 +7,23 @@ import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
-class QueryOrderTab extends HookWidget {
-  const QueryOrderTab({Key? key}) : super(key: key);
+class QueryAggregatesBar extends HookWidget {
+  const QueryAggregatesBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryOrderTabBloc>(context);
+    final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
     final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryOrderTabBloc, QueryOrderTabState>(
+    return BlocBuilder<QueryAggregatesBloc, QueryAggregatesState>(
         builder: (context, state) {
-      if (state is QuerySortingsChanged) {
+      if (state is QueryAggregatesChanged) {
         return Scaffold(
           body: ReorderableListView.builder(
-            itemCount: state.sortings.length,
+            itemCount: state.aggregates.length,
             itemBuilder: (context, index) {
-              final grouping = state.sortings[index];
+              final aggregate = state.aggregates[index];
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -33,9 +33,9 @@ class QueryOrderTab extends HookWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: 'Remove',
                           onPressed: () {
-                            final event = QuerySortingRemoved(index: index);
+                            final event = QueryAggregateRemoved(index: index);
                             bloc.add(event);
                           },
                         ),
@@ -46,19 +46,19 @@ class QueryOrderTab extends HookWidget {
                         context,
                         DialogRoute<String>(
                           context: context,
-                          builder: (context) => _ChangeSortingDialog(
+                          builder: (context) => _ChangeAggregateDialog(
                             index: index,
                             bloc: bloc,
                           ),
                         ),
                       );
                     },
-                    title: Text(grouping.toString())),
+                    title: Text(aggregate.toString())),
               );
             },
             padding: const EdgeInsets.all(8),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QuerySortingOrderChanged(
+              final event = QueryAggregateOrderChanged(
                   oldIndex: oldIndex, newIndex: newIndex);
               bloc.add(event);
             },
@@ -72,10 +72,9 @@ class QueryOrderTab extends HookWidget {
                         tables: tables,
                         onSelected: (fields) {
                           fields.forEach((f) {
-                            bloc.add(QuerySortingAdded(
-                                sorting: QuerySorting(
-                                    field: f.name,
-                                    type: QuerySortingType.ascending)));
+                            bloc.add(QueryAggregateAdded(
+                                aggregate: QueryAggregate(
+                                    field: f.name, function: 'Sum')));
                           });
                         }),
                     fullscreenDialog: true,
@@ -92,48 +91,52 @@ class QueryOrderTab extends HookWidget {
   }
 }
 
-class _ChangeSortingDialog extends HookWidget {
-  const _ChangeSortingDialog({required this.index, required this.bloc});
+class _ChangeAggregateDialog extends HookWidget {
+  const _ChangeAggregateDialog({required this.index, required this.bloc});
 
   final int index;
-  final QueryOrderTabBloc bloc;
+  final QueryAggregatesBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
-    final type = useState<QuerySortingType?>(QuerySortingType.ascending);
-    final sorting = bloc.state.sortings.elementAt(index);
-    final List<QuerySortingType> sortingTypes = [
-      QuerySortingType.ascending,
-      QuerySortingType.descending,
+    final function = useState<String?>('Sum');
+    final aggregate = bloc.state.aggregates.elementAt(index);
+    final List<String> functions = [
+      'Sum',
+      'Count Distinct',
+      'Count',
+      'Max',
+      'Min',
+      'Average'
     ];
 
     return AlertDialog(
-      title: Text(localizations?.changeSortingField ?? 'Change sorting field'),
-      content: DropdownButtonFormField<QuerySortingType>(
-        value: type.value,
-        items: sortingTypes.map<DropdownMenuItem<QuerySortingType>>(
+      title: Text(localizations?.changeTableName ?? 'Change aggregate field'),
+      content: DropdownButtonFormField<String>(
+        value: function.value,
+        items: functions.map<DropdownMenuItem<String>>(
           (value) {
             return DropdownMenuItem(
-              child: Text(value.toString()),
+              child: Text(value),
               value: value,
             );
           },
         ).toList(),
-        onChanged: (value) => type.value = value,
+        onChanged: (value) => function.value = value,
         decoration: InputDecoration(
-          labelText: localizations?.sorting ?? 'Sorting',
+          labelText: localizations?.function ?? 'Function',
           icon: Icon(Icons.compare_arrows),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () {
-            final newSorting = QuerySorting(
-                field: sorting.field,
-                type: type.value ?? QuerySortingType.ascending);
+            final newAggregate = QueryAggregate(
+                field: aggregate.field, function: function.value ?? '');
 
-            final event = QuerySortingEdited(index: index, sorting: newSorting);
+            final event =
+                QueryAggregateEdited(index: index, aggregate: newAggregate);
 
             bloc.add(event);
             Navigator.pop(context);

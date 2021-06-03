@@ -32,6 +32,9 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryBatchTabBloc batchTabBloc;
   final QueryWizardRepository queryWizardRepository;
 
+  Query? currentQuery;
+  QueryBatch? currentQueryButch;
+
   @override
   Stream<QueryWizardState> mapEventToState(QueryWizardEvent event) async* {
     if (event is QuerySchemaRequested) {
@@ -57,11 +60,15 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   }
 
   void changeQueryBatch(QueryBatch queryBatch) {
+    currentQueryButch = queryBatch;
     queryUnionsBloc.add(QueriesInitialized(queries: queryBatch.queries));
+
     changeQuery(queryBatch.queries.first);
   }
 
   void changeQuery(Query query) {
+    currentQuery = query;
+
     sourcesBloc.add(QuerySourcesInitialized(sources: query.sources));
     tablesBloc.add(QueryTablesInitialized(tables: query.tables));
     fieldsBloc.add(QueryFieldsInitialized(fields: query.fields));

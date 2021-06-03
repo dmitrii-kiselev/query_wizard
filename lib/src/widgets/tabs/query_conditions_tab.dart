@@ -1,9 +1,10 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
 
 class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
@@ -11,7 +12,8 @@ class QueryConditionsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryConditionsTabBloc>(context);
-    final colorScheme = Theme.of(context).colorScheme;
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
+    final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryConditionsTabBloc, QueryConditionsTabState>(
         builder: (context, state) {
@@ -21,44 +23,42 @@ class QueryConditionsTab extends StatelessWidget {
             itemCount: state.conditions.length,
             itemBuilder: (context, index) {
               final condition = state.conditions[index];
-              return OpenContainer<bool>(
+              return Card(
                 key: ValueKey('$index'),
-                transitionType: ContainerTransitionType.fade,
-                openBuilder: (context, openContainer) => _ConditionForm(),
-                tappable: false,
-                closedShape: const RoundedRectangleBorder(),
-                closedElevation: 0,
-                closedBuilder: (context, openContainer) {
-                  return Card(
-                    child: ListTile(
-                        leading: Wrap(
-                          alignment: WrapAlignment.spaceEvenly,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.copy_outlined),
-                              tooltip: 'Copy',
-                              onPressed: () {
-                                final event =
-                                    QueryConditionCopied(condition: condition);
-                                bloc.add(event);
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.highlight_remove_outlined),
-                              tooltip: 'Remove',
-                              onPressed: () {
-                                final event =
-                                    QueryConditionRemoved(index: index);
-                                bloc.add(event);
-                              },
-                            ),
-                          ],
+                child: ListTile(
+                    leading: Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.copy_outlined),
+                          tooltip: 'Copy',
+                          onPressed: () {
+                            final event =
+                                QueryConditionCopied(condition: condition);
+                            bloc.add(event);
+                          },
                         ),
-                        onTap: openContainer,
-                        title: Text(condition.toString())),
-                  );
-                },
+                        IconButton(
+                          icon: const Icon(Icons.highlight_remove_outlined),
+                          tooltip: 'Remove',
+                          onPressed: () {
+                            final event = QueryConditionRemoved(index: index);
+                            bloc.add(event);
+                          },
+                        ),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (context) => _ConditionPage(
+                                index: index, bloc: bloc, tables: tables),
+                            fullscreenDialog: true,
+                          ));
+                    },
+                    title: Text(condition.toString())),
               );
             },
             padding: const EdgeInsets.all(8),
@@ -68,25 +68,18 @@ class QueryConditionsTab extends StatelessWidget {
               bloc.add(event);
             },
           ),
-          floatingActionButton: OpenContainer(
-            transitionType: ContainerTransitionType.fade,
-            openBuilder: (context, openContainer) => _ConditionForm(),
-            closedElevation: 6,
-            closedShape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(56 / 2),
-              ),
-            ),
-            closedColor: colorScheme.secondary,
-            closedBuilder: (context, openContainer) {
-              return SizedBox(
-                height: 56,
-                width: 56,
-                child: Center(
-                  child: Icon(Icons.add, color: colorScheme.onSecondary),
-                ),
-              );
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) =>
+                        _ConditionPage(bloc: bloc, tables: tables),
+                    fullscreenDialog: true,
+                  ));
             },
+            child: const Icon(Icons.add),
+            tooltip: localizations?.add ?? 'Add',
           ),
         );
       }
@@ -97,55 +90,138 @@ class QueryConditionsTab extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class _ConditionForm extends HookWidget {
-  _ConditionForm();
+class _ConditionPage extends HookWidget {
+  _ConditionPage({this.index, required this.bloc, required this.tables});
 
-  final List<String> logicalCompareTypes = [
-    '=',
-    '<>',
-    '>',
-  ];
-  final List<String> fields = [
-    'Table1.Field1',
-    'Table1.Field2',
-    'Table1.Field3',
-    'Table2.Field1',
-    'Table2.Field2',
-    'Table2.Field3',
-    'Table3.Field1',
-    'Table3.Field2',
-    'Table3.Field3',
-  ];
-
-  bool? isCustom;
-  String? leftField;
-  String? logicalCompareType;
-  String? rightField;
-  String? customCondition;
+  final int? index;
+  final QueryConditionsTabBloc bloc;
+  final List<DbElement> tables;
+  final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
+    final fields = tables.expand((t) => t.elements).toList();
 
+    final customConditionController = useTextEditingController();
     final isCustom = useState<bool?>(false);
-    final leftField = useState<String?>(null);
-    final logicalCompareType = useState<String?>(null);
-    final rightField = useState<String?>(null);
-    final customCondition = useState<String?>(null);
+    final leftField = useState<DbElement?>(null);
+    final logicalCompareType = useState<String?>('=');
+    final rightFieldController = useTextEditingController();
+    final pageInitialized = useState<bool>(false);
+
+    if (index != null && !pageInitialized.value) {
+      final condition = bloc.state.conditions.elementAt(index!);
+
+      isCustom.value = condition.isCustom;
+      leftField.value = fields.firstWhere((f) =>
+          '${f.parent?.alias ?? f.parent?.name}.${f.name}' ==
+          condition.leftField);
+      logicalCompareType.value = condition.logicalCompareType;
+
+      rightFieldController.text = condition.rightField;
+      customConditionController.text = condition.customCondition;
+
+      pageInitialized.value = true;
+    }
+
+    var actions;
+
+    if (isCustom.value ?? false) {
+      actions = [
+        TextFormField(
+          controller: customConditionController,
+          decoration: InputDecoration(
+            labelText: localizations?.customCondition ?? 'Custom condition',
+            icon: Icon(Icons.text_fields_rounded),
+          ),
+          scrollPadding: EdgeInsets.all(20.0),
+          keyboardType: TextInputType.multiline,
+          autofocus: true,
+        ),
+      ];
+    } else {
+      actions = [
+        DropdownButtonFormField<DbElement>(
+          value: leftField.value,
+          items: fields.map<DropdownMenuItem<DbElement>>(
+            (value) {
+              return DropdownMenuItem(
+                child: Text(
+                    '${value.parent?.alias ?? value.parent?.name}.${value.name}'),
+                value: value,
+              );
+            },
+          ).toList(),
+          onChanged: (value) {
+            leftField.value = value;
+            rightFieldController.text = value?.name ?? '';
+          },
+          decoration: InputDecoration(
+            labelText: 'Left field',
+            icon: Icon(Icons.horizontal_rule_rounded),
+          ),
+        ),
+        DropdownButtonFormField<String>(
+          value: logicalCompareType.value,
+          items: logicalCompareTypes.map<DropdownMenuItem<String>>(
+            (value) {
+              return DropdownMenuItem(
+                child: Text(value),
+                value: value,
+              );
+            },
+          ).toList(),
+          onChanged: (value) => logicalCompareType.value = value,
+          decoration: InputDecoration(
+            labelText: 'Condition',
+            icon: Icon(Icons.compare_arrows),
+          ),
+        ),
+        TextFormField(
+          controller: rightFieldController,
+          decoration: InputDecoration(
+              labelText: 'Right field',
+              icon: Icon(Icons.horizontal_rule_rounded)),
+          scrollPadding: EdgeInsets.all(20.0),
+          keyboardType: TextInputType.multiline,
+          autofocus: true,
+        ),
+      ];
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Join'),
+        title: Text(localizations?.condition ?? 'Condition'),
         actions: [
           TextButton(
             onPressed: () {
+              QueryConditionsTabEvent event;
+
+              final condition = QueryCondition(
+                  isCustom: isCustom.value ?? false,
+                  leftField:
+                      '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}.${leftField.value?.name ?? ''}',
+                  logicalCompareType: logicalCompareType.value ?? '',
+                  rightField: rightFieldController.text,
+                  customCondition: customConditionController.text);
+
+              if (this.index == null) {
+                event = QueryConditionAdded(condition: condition);
+              } else {
+                event = QueryConditionEdited(
+                    index: this.index!, condition: condition);
+              }
+
+              bloc.add(event);
               Navigator.pop(context);
             },
             child: Text(
-              'Save',
-              style: theme.textTheme.bodyText2!.copyWith(
+              localizations?.save ?? 'Save',
+              style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
             ),
@@ -162,55 +238,26 @@ class _ConditionForm extends HookWidget {
                 children: <Widget>[
                   CheckboxListTile(
                     value: isCustom.value,
-                    onChanged: (value) => isCustom.value = value,
-                    title: Text('Custom'),
+                    onChanged: (value) {
+                      isCustom.value = value;
+                      if (value ?? false) {
+                        if (leftField.value == null ||
+                            rightFieldController.text == '') {
+                          customConditionController.text = '';
+                          return;
+                        }
+
+                        customConditionController.text =
+                            (leftField.value?.name ?? '') +
+                                ' ' +
+                                (logicalCompareType.value ?? '') +
+                                ' ' +
+                                rightFieldController.text;
+                      }
+                    },
+                    title: Text(localizations?.custom ?? 'Custom'),
                   ),
-                  DropdownButtonFormField<String>(
-                    onSaved: (value) => {},
-                    value: leftField.value,
-                    items: fields.map<DropdownMenuItem<String>>(
-                      (value) {
-                        return DropdownMenuItem(
-                          child: Text(value),
-                          value: value,
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (value) => leftField.value = value,
-                    decoration: InputDecoration(
-                      labelText: 'Left field',
-                      icon: Icon(Icons.horizontal_rule_rounded),
-                    ),
-                  ),
-                  DropdownButtonFormField<String>(
-                    onSaved: (value) => {},
-                    value: logicalCompareType.value,
-                    items: logicalCompareTypes.map<DropdownMenuItem<String>>(
-                      (value) {
-                        return DropdownMenuItem(
-                          child: Text(value),
-                          value: value,
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (value) => logicalCompareType.value = value,
-                    decoration: InputDecoration(
-                      labelText: 'Condition',
-                      icon: Icon(Icons.compare_arrows),
-                    ),
-                  ),
-                  TextFormField(
-                    onSaved: (value) => rightField.value = value,
-                    decoration: InputDecoration(
-                        labelText: 'Right field',
-                        icon: Icon(Icons.horizontal_rule_rounded)),
-                  ),
-                  TextFormField(
-                    onSaved: (value) => customCondition.value = value,
-                    decoration: InputDecoration(
-                        labelText: 'Custom condition',
-                        icon: Icon(Icons.text_fields_rounded)),
-                  ),
+                  ...actions
                 ],
               ),
             ),

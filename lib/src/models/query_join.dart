@@ -28,7 +28,17 @@ class QueryJoin extends Equatable {
 
   @override
   String toString() {
-    return condition.toString();
+    return condition.isCustom
+        ? condition.customCondition
+        : leftTable +
+            '.' +
+            condition.leftField +
+            ' ' +
+            condition.logicalCompareType +
+            ' ' +
+            rightTable +
+            '.' +
+            condition.rightField;
   }
 }
 

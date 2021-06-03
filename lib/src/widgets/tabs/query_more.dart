@@ -1,19 +1,74 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
+import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryMoreTab extends HookWidget {
-  const QueryMoreTab({Key? key}) : super(key: key);
+  QueryMoreTab({Key? key}) : super(key: key);
+
+  final debounce = Debounce(delay: Duration(milliseconds: 500));
 
   @override
   Widget build(BuildContext context) {
-    final isTop = useState<bool?>(false);
-    final topCounter = useState<int?>(null);
-    final isDistinct = useState<bool?>(false);
-    final queryType = useState<QueryType?>(QueryType.selectQuery);
-    final tempTableName = useState<String?>(null);
+    final localizations = QueryWizardLocalizations.of(context);
+    final queryWizardBloc = BlocProvider.of<QueryWizardBloc>(context);
+    final queryUnionsBloc = BlocProvider.of<QueryUnionsBloc>(context);
+    final queryBatchTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
+
+    final currentQuery = queryWizardBloc.currentQuery;
+    final currentQueryButch = queryWizardBloc.currentQueryButch;
+
+    final isTop = useState<bool?>(currentQuery?.isTop);
+    final topCounter = useState<int?>(currentQuery?.topCounter);
+    final isDistinct = useState<bool?>(currentQuery?.isDistinct);
+    final queryType = useState<QueryType?>(currentQueryButch?.queryType);
+    final tempTableName = useState<String?>(currentQueryButch?.name);
+
+    updateCurrentQuery() {
+      final index = queryUnionsBloc.state.queries.indexOf(currentQuery!);
+
+      queryUnionsBloc.state.queries.remove(currentQuery);
+
+      final newQuery = Query(
+          name: currentQuery.name,
+          sources: currentQuery.sources,
+          tables: currentQuery.tables,
+          fields: currentQuery.fields,
+          joins: currentQuery.joins,
+          groupings: currentQuery.groupings,
+          aggregates: currentQuery.aggregates,
+          conditions: currentQuery.conditions,
+          sortings: currentQuery.sortings,
+          isTop: isTop.value ?? false,
+          topCounter: topCounter.value ?? 0,
+          isDistinct: isDistinct.value ?? false);
+
+      queryWizardBloc.currentQuery = newQuery;
+      queryUnionsBloc.state.queries.insert(index, newQuery);
+    }
+
+    updateCurrentQueryBatch() {
+      final index =
+          queryBatchTabBloc.state.queryBatches.indexOf(currentQueryButch!);
+
+      queryBatchTabBloc.state.queryBatches.remove(currentQueryButch);
+
+      final newQueryButch = QueryBatch(
+          name: tempTableName.value ?? '',
+          sources: currentQueryButch.sources,
+          queries: currentQueryButch.queries,
+          aliases: currentQueryButch.aliases,
+          queryType: queryType.value ?? QueryType.selectQuery);
+
+      queryWizardBloc.currentQueryButch = newQueryButch;
+      queryBatchTabBloc.state.queryBatches.insert(index, newQueryButch);
+    }
 
     return ListView(
       children: [
@@ -23,47 +78,91 @@ class QueryMoreTab extends HookWidget {
             children: <Widget>[
               CheckboxListTile(
                 value: isTop.value,
-                onChanged: (value) => isTop.value = value,
-                title: Text('Top'),
+                onChanged: (value) {
+                  isTop.value = value;
+                  updateCurrentQuery();
+                },
+                title: Text(localizations?.top ?? 'Top'),
               ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                onSaved: (value) =>
-                    topCounter.value = value != null ? int.parse(value) : null,
-                decoration: InputDecoration(
-                    counter: Offstage(), labelText: 'Top counter'),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly
-                ],
-                maxLength: 10,
+              Visibility(
+                visible: isTop.value ?? false,
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    if (value is int) {
+                      debounce.call(() {
+                        topCounter.value = int.parse(value);
+                        updateCurrentQuery();
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
+                      counter: Offstage(),
+                      labelText: localizations?.topCounter ?? 'Top counter'),
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.digitsOnly
+                  ],
+                  maxLength: 10,
+                ),
               ),
               CheckboxListTile(
-                title: const Text('Distinct'),
+                title: Text(localizations?.distinct ?? 'Distinct'),
                 value: isDistinct.value,
-                onChanged: (value) => isDistinct.value = value,
+                onChanged: (value) {
+                  isDistinct.value = value;
+                  updateCurrentQuery();
+                },
               ),
               RadioListTile<QueryType>(
-                title: const Text('Select data'),
+                title: Text(localizations?.selectData ?? 'Select data'),
                 value: QueryType.selectQuery,
                 groupValue: queryType.value,
-                onChanged: (value) => queryType.value = value,
+                onChanged: (value) {
+                  queryType.value = value;
+                  updateCurrentQueryBatch();
+                },
               ),
               RadioListTile<QueryType?>(
-                title: const Text('Create temporary table'),
-                value: QueryType.temporaryTable,
-                groupValue: queryType.value,
-                onChanged: (value) => queryType.value = value,
-              ),
-              TextFormField(
-                onSaved: (value) => tempTableName.value = value,
-                decoration: InputDecoration(
-                    labelText: 'Temporary table name',
-                    icon: Icon(Icons.table_rows_rounded)),
+                  title: Text(localizations?.createTemporaryTable ??
+                      'Create temporary table'),
+                  value: QueryType.temporaryTable,
+                  groupValue: queryType.value,
+                  onChanged: (value) {
+                    queryType.value = value;
+                    updateCurrentQueryBatch();
+                  }),
+              Visibility(
+                visible: queryType.value == QueryType.temporaryTable,
+                child: TextFormField(
+                  keyboardType: TextInputType.text,
+                  onChanged: (value) {
+                    debounce.call(() {
+                      tempTableName.value = value;
+                      updateCurrentQueryBatch();
+                    });
+                  },
+                  decoration: InputDecoration(
+                      labelText: localizations?.temporaryTableName ??
+                          'Temporary table name',
+                      icon: Icon(Icons.table_rows_rounded)),
+                ),
               ),
             ],
           ),
         ),
       ],
     );
+  }
+}
+
+class Debounce {
+  final Duration delay;
+  Timer? _timer;
+
+  Debounce({required this.delay});
+
+  call(VoidCallback action) {
+    _timer?.cancel();
+    _timer = Timer(delay, action);
   }
 }

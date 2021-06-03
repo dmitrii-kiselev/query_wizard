@@ -7,7 +7,7 @@ import 'package:query_wizard/widgets.dart';
 void main() {
   testWidgets('Groupings tab initialized', (WidgetTester tester) async {
     final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardApiClient: QueryWizardApiClient(),
+      queryWizardClient: DesignTimeQueryWizardClient(),
     );
 
     await tester.pumpWidget(

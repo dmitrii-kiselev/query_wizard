@@ -87,6 +87,16 @@ class QueryWizardLayout extends HookWidget {
                         )),
                 ],
               ),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.update_rounded,
+                  ),
+                  onPressed: () {
+                    bloc.add(QuerySchemaRequested('query'));
+                  },
+                ),
+              ],
             ),
             body: Center(
               child: Row(

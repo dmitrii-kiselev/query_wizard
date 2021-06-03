@@ -16,9 +16,8 @@ class QueryTablesAndFieldsTab extends HookWidget {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final tabs = [QuerySources(), QueryTables(), QueryFields()];
-
-    final bottomNavigationBarItems = <BottomNavigationBarItem>[
+    final bars = [QuerySourcesBar(), QueryTablesBar(), QueryFieldsBar()];
+    final items = <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: const Icon(Icons.source_rounded),
         label: localizations?.database ?? 'Database',
@@ -36,7 +35,7 @@ class QueryTablesAndFieldsTab extends HookWidget {
     return Scaffold(
       body: Center(
         child: PageTransitionSwitcher(
-          child: tabs[_currentIndex.value],
+          child: bars[_currentIndex.value],
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(
               child: child,
@@ -48,7 +47,7 @@ class QueryTablesAndFieldsTab extends HookWidget {
       ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: true,
-        items: bottomNavigationBarItems,
+        items: items,
         currentIndex: _currentIndex.value,
         type: BottomNavigationBarType.fixed,
         selectedFontSize: textTheme.caption!.fontSize!,

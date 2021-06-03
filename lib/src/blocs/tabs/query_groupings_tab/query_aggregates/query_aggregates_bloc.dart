@@ -22,6 +22,13 @@ class QueryAggregatesBloc
       yield QueryAggregatesChanged(aggregates: state.aggregates);
     }
 
+    if (event is QueryAggregateEdited) {
+      state.aggregates.removeAt(event.index);
+      state.aggregates.insert(event.index, event.aggregate);
+
+      yield QueryAggregatesChanged(aggregates: state.aggregates);
+    }
+
     if (event is QueryAggregateRemoved) {
       state.aggregates.removeAt(event.index);
       yield QueryAggregatesChanged(aggregates: state.aggregates);

@@ -4,38 +4,17 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/models.dart';
+import 'package:query_wizard/widgets.dart';
 
-class QueryGroupings extends HookWidget {
-  const QueryGroupings({Key? key}) : super(key: key);
+class QueryGroupingsBar extends HookWidget {
+  const QueryGroupingsBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final showSelectionListCallback = useState<VoidCallback?>(null);
-    final mounted = useIsMounted();
     final bloc = BlocProvider.of<QueryGroupingsBloc>(context);
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
-
-    void _showFieldSelectionList() {
-      showSelectionListCallback.value = null;
-
-      Scaffold.of(context)
-          .showBottomSheet<void>(
-            (context) {
-              return _FieldSelectionList();
-            },
-            elevation: 25,
-          )
-          .closed
-          .whenComplete(() {
-            if (mounted()) {
-              showSelectionListCallback.value = _showFieldSelectionList;
-            }
-          });
-    }
-
-    if (showSelectionListCallback.value == null) {
-      showSelectionListCallback.value = _showFieldSelectionList;
-    }
 
     return BlocBuilder<QueryGroupingsBloc, QueryGroupingsState>(
         builder: (context, state) {
@@ -73,7 +52,23 @@ class QueryGroupings extends HookWidget {
             },
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: showSelectionListCallback.value,
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (context) => FieldsSelectionPage(
+                        tables: tables,
+                        onSelected: (fields) {
+                          fields.forEach((f) {
+                            bloc.add(QueryGroupingAdded(
+                                grouping: QueryGrouping(
+                                    name: f.name,
+                                    type: GroupingType.grouping)));
+                          });
+                        }),
+                    fullscreenDialog: true,
+                  ));
+            },
             child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
           ),
@@ -82,40 +77,5 @@ class QueryGroupings extends HookWidget {
 
       return Center(child: CircularProgressIndicator());
     });
-  }
-}
-
-class _FieldSelectionList extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
-
-    return Container(
-      height: 500,
-      child: Column(
-        children: [
-          Container(
-            height: 70,
-            child: Center(
-              child: Text(
-                localizations?.tables ?? 'Tables',
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          const Divider(thickness: 1),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 21,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(index.toString()),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

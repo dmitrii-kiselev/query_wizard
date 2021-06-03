@@ -27,15 +27,15 @@ class QueryGroupingsTab extends HookWidget {
       ),
     ];
 
-    final tabs = [
-      QueryGroupings(),
-      QueryAggregates(),
+    final bars = [
+      QueryGroupingsBar(),
+      QueryAggregatesBar(),
     ];
 
     return Scaffold(
       body: Center(
         child: PageTransitionSwitcher(
-          child: tabs[_currentIndex.value],
+          child: bars[_currentIndex.value],
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(
               child: child,
