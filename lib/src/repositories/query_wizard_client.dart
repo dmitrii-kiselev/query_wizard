@@ -240,126 +240,81 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final groupings1 = [
-      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDERS.CUSTOMER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDER_ITEMS.ORDER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'PRODUCT_ID.PRODUCT_ID', type: GroupingType.grouping),
     ];
 
     final groupings2 = [
-      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDERS.CUSTOMER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDER_ITEMS.ORDER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'PRODUCT_ID.PRODUCT_ID', type: GroupingType.grouping),
     ];
 
     final groupings3 = [
-      QueryGrouping(name: 'Table1.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table2.Field1', type: GroupingType.grouping),
-      QueryGrouping(name: 'Table3.Field1', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDERS.CUSTOMER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'ORDER_ITEMS.ORDER_ID', type: GroupingType.grouping),
+      QueryGrouping(name: 'PRODUCT_ID.PRODUCT_ID', type: GroupingType.grouping),
     ];
 
     final aggregates1 = [
-      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final aggregates2 = [
-      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final aggregates3 = [
-      QueryAggregate(field: 'Table1.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table2.Field1', function: 'Ascending'),
-      QueryAggregate(field: 'Table3.Field1', function: 'Ascending'),
+      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final conditions1 = [
       QueryCondition(
           isCustom: false,
-          leftField: 'Table1.Field1',
+          leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
-          rightField: ':Field1',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table1.Field2',
-          logicalCompareType: '=',
-          rightField: ':Field2',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table1.Field3',
-          logicalCompareType: '=',
-          rightField: ':Field3',
+          rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];
 
     final conditions2 = [
       QueryCondition(
           isCustom: false,
-          leftField: 'Table2.Field1',
+          leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
-          rightField: ':Field1',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table2.Field2',
-          logicalCompareType: '=',
-          rightField: ':Field2',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table2.Field3',
-          logicalCompareType: '=',
-          rightField: ':Field3',
+          rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];
 
     final conditions3 = [
       QueryCondition(
           isCustom: false,
-          leftField: 'Table3.Field1',
+          leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
-          rightField: ':Field1',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table3.Field2',
-          logicalCompareType: '=',
-          rightField: ':Field2',
-          customCondition: ''),
-      QueryCondition(
-          isCustom: false,
-          leftField: 'Table3.Field3',
-          logicalCompareType: '=',
-          rightField: ':Field3',
+          rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];
 
     final sortings1 = [
-      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+      QuerySorting(
+          field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
     final sortings2 = [
-      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+      QuerySorting(
+          field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
     final sortings3 = [
-      QuerySorting(field: 'Table1.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table2.Field1', type: QuerySortingType.ascending),
-      QuerySorting(field: 'Table3.Field1', type: QuerySortingType.ascending),
+      QuerySorting(
+          field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
     final query1 = Query(
         name: 'Query 1',
         sources: sources1,
-        tables: [],
+        tables: [...sources1],
         fields: [],
         joins: joins1,
         groupings: groupings1,
@@ -373,7 +328,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     final query2 = Query(
         name: 'Query 2',
         sources: sources2,
-        tables: [],
+        tables: [...sources2],
         fields: [],
         joins: joins2,
         groupings: groupings2,
@@ -387,7 +342,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     final query3 = Query(
         name: 'Query 3',
         sources: sources3,
-        tables: [],
+        tables: [...sources3],
         fields: [],
         joins: joins3,
         groupings: groupings3,
