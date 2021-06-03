@@ -4906,7 +4906,6 @@ collection
 convert
 mime
 shelf_static
-source_gen
 source_map_stack_trace
 stream_channel
 typed_data
@@ -5178,6 +5177,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------------
 crypto
+source_gen
 
 Copyright 2015, the Dart project authors.
 
