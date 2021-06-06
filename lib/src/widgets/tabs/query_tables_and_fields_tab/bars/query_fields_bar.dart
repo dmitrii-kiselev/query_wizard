@@ -55,7 +55,7 @@ class QueryFieldsBar extends StatelessWidget {
                         icon: const Icon(Icons.highlight_remove_outlined),
                         tooltip: localizations?.remove ?? 'Remove',
                         onPressed: () {
-                          final event = QueryFieldRemoved(index: index);
+                          final event = QueryFieldDeleted(index: index);
                           bloc.add(event);
                         },
                       ),
@@ -117,7 +117,7 @@ class _CustomExpressionPage extends HookWidget {
                 if (this.index == null) {
                   event = QueryFieldAdded(field: field);
                 } else {
-                  event = QueryFieldEdited(index: this.index!, field: field);
+                  event = QueryFieldUpdated(index: this.index!, field: field);
                 }
 
                 bloc.add(event);

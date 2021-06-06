@@ -13,7 +13,7 @@ void main() {
         groupings: [],
         aggregates: [],
         conditions: [],
-        sortings: [],
+        orders: [],
         isTop: false,
         topCounter: 0,
         isDistinct: false);
@@ -30,7 +30,7 @@ void main() {
           query.groupings,
           query.aggregates,
           query.conditions,
-          query.sortings,
+          query.orders,
           query.isTop,
           query.topCounter,
           query.isDistinct
@@ -48,7 +48,7 @@ void main() {
         groupings: [],
         aggregates: [],
         conditions: [],
-        sortings: [],
+        orders: [],
         isTop: false,
         topCounter: 0,
         isDistinct: false);

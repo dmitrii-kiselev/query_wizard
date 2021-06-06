@@ -12,18 +12,18 @@ class QueryOrderTab extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryOrderTabBloc>(context);
+    final bloc = BlocProvider.of<QueryOrdersBloc>(context);
     final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryOrderTabBloc, QueryOrderTabState>(
+    return BlocBuilder<QueryOrdersBloc, QueryOrdersState>(
         builder: (context, state) {
-      if (state is QuerySortingsChanged) {
+      if (state is QueryOrdersChanged) {
         return Scaffold(
           body: ReorderableListView.builder(
-            itemCount: state.sortings.length,
+            itemCount: state.orders.length,
             itemBuilder: (context, index) {
-              final grouping = state.sortings[index];
+              final grouping = state.orders[index];
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -35,7 +35,7 @@ class QueryOrderTab extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QuerySortingRemoved(index: index);
+                            final event = QueryOrderDeleted(index: index);
                             bloc.add(event);
                           },
                         ),
@@ -46,7 +46,7 @@ class QueryOrderTab extends HookWidget {
                         context,
                         DialogRoute<String>(
                           context: context,
-                          builder: (context) => _ChangeSortingDialog(
+                          builder: (context) => _ChangeOrderDialog(
                             index: index,
                             bloc: bloc,
                           ),
@@ -58,7 +58,7 @@ class QueryOrderTab extends HookWidget {
             },
             padding: const EdgeInsets.all(8),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QuerySortingOrderChanged(
+              final event = QueryOrderOrderChanged(
                   oldIndex: oldIndex, newIndex: newIndex);
               bloc.add(event);
             },
@@ -72,8 +72,8 @@ class QueryOrderTab extends HookWidget {
                         tables: tables,
                         onSelected: (fields) {
                           fields.forEach((f) {
-                            bloc.add(QuerySortingAdded(
-                                sorting: QuerySorting(
+                            bloc.add(QueryOrderAdded(
+                                order: QueryOrder(
                                     field: f.name,
                                     type: QuerySortingType.ascending)));
                           });
@@ -92,17 +92,17 @@ class QueryOrderTab extends HookWidget {
   }
 }
 
-class _ChangeSortingDialog extends HookWidget {
-  const _ChangeSortingDialog({required this.index, required this.bloc});
+class _ChangeOrderDialog extends HookWidget {
+  const _ChangeOrderDialog({required this.index, required this.bloc});
 
   final int index;
-  final QueryOrderTabBloc bloc;
+  final QueryOrdersBloc bloc;
 
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
     final type = useState<QuerySortingType?>(QuerySortingType.ascending);
-    final sorting = bloc.state.sortings.elementAt(index);
+    final sorting = bloc.state.orders.elementAt(index);
     final List<QuerySortingType> sortingTypes = [
       QuerySortingType.ascending,
       QuerySortingType.descending,
@@ -129,11 +129,11 @@ class _ChangeSortingDialog extends HookWidget {
       actions: [
         TextButton(
           onPressed: () {
-            final newSorting = QuerySorting(
+            final newOrder = QueryOrder(
                 field: sorting.field,
                 type: type.value ?? QuerySortingType.ascending);
 
-            final event = QuerySortingEdited(index: index, sorting: newSorting);
+            final event = QueryOrderUpdated(index: index, order: newOrder);
 
             bloc.add(event);
             Navigator.pop(context);

@@ -10,10 +10,10 @@ class QueryBatchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryBatchTabBloc>(context);
+    final bloc = BlocProvider.of<QueryBatchesBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryBatchTabBloc, QueryBatchTabState>(
+    return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
         builder: (context, state) {
       if (state is QueryBatchesChanged) {
         return Scaffold(
@@ -41,7 +41,7 @@ class QueryBatchTab extends StatelessWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryBatchRemoved(index: index);
+                            final event = QueryBatchDeleted(index: index);
                             bloc.add(event);
                           },
                         ),

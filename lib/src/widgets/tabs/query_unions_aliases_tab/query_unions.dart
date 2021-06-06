@@ -10,12 +10,11 @@ class QueryUnions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryUnionsBloc>(context);
+    final bloc = BlocProvider.of<QueriesBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryUnionsBloc, QueryUnionsState>(
-        builder: (context, state) {
-      if (state is QueryUnionsChanged) {
+    return BlocBuilder<QueriesBloc, QueriesState>(builder: (context, state) {
+      if (state is QueriesChanged) {
         return Scaffold(
           body: ReorderableListView.builder(
             itemCount: state.queries.length,
@@ -40,7 +39,7 @@ class QueryUnions extends StatelessWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryRemoved(index: index);
+                            final event = QueryDeleted(index: index);
                             bloc.add(event);
                           },
                         ),

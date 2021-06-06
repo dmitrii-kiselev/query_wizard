@@ -35,7 +35,7 @@ class QueryGroupingsBar extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: 'Remove',
                           onPressed: () {
-                            final event = QueryGroupingRemoved(index: index);
+                            final event = QueryGroupingDeleted(index: index);
                             bloc.add(event);
                           },
                         ),

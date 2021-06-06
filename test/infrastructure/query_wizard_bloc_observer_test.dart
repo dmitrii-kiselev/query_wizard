@@ -63,24 +63,24 @@ QueryWizardBloc buildQueryWizardBloc(
   final tablesBloc = QueryTablesBloc();
   final fieldsBloc = QueryFieldsBloc();
 
-  final joinsTabBloc = QueryJoinsTabBloc();
-  final aggregatesTabBloc = QueryAggregatesBloc();
-  final groupingsTabBloc = QueryGroupingsBloc();
-  final conditionsTabBloc = QueryConditionsTabBloc();
-  final queryUnionsBloc = QueryUnionsBloc();
-  final orderTabBloc = QueryOrderTabBloc();
-  final batchTabBloc = QueryBatchTabBloc();
+  final joinsBloc = QueryJoinsBloc();
+  final aggregatesBloc = QueryAggregatesBloc();
+  final groupingsBloc = QueryGroupingsBloc();
+  final conditionsBloc = QueryConditionsBloc();
+  final queriesBloc = QueriesBloc();
+  final ordersBloc = QueryOrdersBloc();
+  final batchesBloc = QueryBatchesBloc();
   final queryWizardBloc = QueryWizardBloc(
       sourcesBloc: sourcesBloc,
       tablesBloc: tablesBloc,
       fieldsBloc: fieldsBloc,
-      joinsTabBloc: joinsTabBloc,
-      aggregatesBloc: aggregatesTabBloc,
-      groupingsBloc: groupingsTabBloc,
-      conditionsTabBloc: conditionsTabBloc,
-      queryUnionsBloc: queryUnionsBloc,
-      orderTabBloc: orderTabBloc,
-      batchTabBloc: batchTabBloc,
+      joinsBloc: joinsBloc,
+      aggregatesBloc: aggregatesBloc,
+      groupingsBloc: groupingsBloc,
+      conditionsBloc: conditionsBloc,
+      queriesBloc: queriesBloc,
+      ordersBloc: ordersBloc,
+      batchesBloc: batchesBloc,
       queryWizardRepository: queryWizardRepository);
 
   return queryWizardBloc;

@@ -11,12 +11,12 @@ class QueryJoinsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryJoinsTabBloc>(context);
+    final bloc = BlocProvider.of<QueryJoinsBloc>(context);
     final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final fields = BlocProvider.of<QueryFieldsBloc>(context).state.fields;
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryJoinsTabBloc, QueryJoinsTabState>(
+    return BlocBuilder<QueryJoinsBloc, QueryJoinsState>(
         builder: (context, state) {
       if (state is QueryJoinsChanged) {
         return Scaffold(
@@ -43,7 +43,7 @@ class QueryJoinsTab extends StatelessWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryJoinRemoved(index: index);
+                            final event = QueryJoinDeleted(index: index);
                             bloc.add(event);
                           },
                         ),
@@ -101,7 +101,7 @@ class _JoinPage extends HookWidget {
       required this.fields});
 
   final int? index;
-  final QueryJoinsTabBloc bloc;
+  final QueryJoinsBloc bloc;
   final List<DbElement> tables;
   final List<DbElement> fields;
   final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
@@ -218,7 +218,7 @@ class _JoinPage extends HookWidget {
         actions: [
           TextButton(
             onPressed: () {
-              QueryJoinsTabEvent event;
+              QueryJoinsEvent event;
 
               final condition = QueryCondition(
                   isCustom: isCustom.value ?? false,
@@ -238,7 +238,7 @@ class _JoinPage extends HookWidget {
               if (this.index == null) {
                 event = QueryJoinAdded(join: join);
               } else {
-                event = QueryJoinEdited(index: this.index!, join: join);
+                event = QueryJoinUpdated(index: this.index!, join: join);
               }
 
               bloc.add(event);

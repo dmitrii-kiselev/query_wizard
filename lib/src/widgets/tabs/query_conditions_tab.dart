@@ -11,11 +11,11 @@ class QueryConditionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = BlocProvider.of<QueryConditionsTabBloc>(context);
+    final bloc = BlocProvider.of<QueryConditionsBloc>(context);
     final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryConditionsTabBloc, QueryConditionsTabState>(
+    return BlocBuilder<QueryConditionsBloc, QueryConditionsState>(
         builder: (context, state) {
       if (state is QueryConditionsChanged) {
         return Scaffold(
@@ -43,7 +43,7 @@ class QueryConditionsTab extends StatelessWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: 'Remove',
                           onPressed: () {
-                            final event = QueryConditionRemoved(index: index);
+                            final event = QueryConditionDeleted(index: index);
                             bloc.add(event);
                           },
                         ),
@@ -94,7 +94,7 @@ class _ConditionPage extends HookWidget {
   _ConditionPage({this.index, required this.bloc, required this.tables});
 
   final int? index;
-  final QueryConditionsTabBloc bloc;
+  final QueryConditionsBloc bloc;
   final List<DbElement> tables;
   final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
 
@@ -199,7 +199,7 @@ class _ConditionPage extends HookWidget {
         actions: [
           TextButton(
             onPressed: () {
-              QueryConditionsTabEvent event;
+              QueryConditionsEvent event;
 
               final condition = QueryCondition(
                   isCustom: isCustom.value ?? false,
@@ -212,7 +212,7 @@ class _ConditionPage extends HookWidget {
               if (this.index == null) {
                 event = QueryConditionAdded(condition: condition);
               } else {
-                event = QueryConditionEdited(
+                event = QueryConditionUpdated(
                     index: this.index!, condition: condition);
               }
 

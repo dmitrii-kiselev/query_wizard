@@ -33,24 +33,24 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
 
   final tablesBloc = QueryTablesBloc();
   final fieldsBloc = QueryFieldsBloc();
-  final joinsTabBloc = QueryJoinsTabBloc();
+  final joinsBloc = QueryJoinsBloc();
   final aggregatesBloc = QueryAggregatesBloc();
   final groupingsBloc = QueryGroupingsBloc();
-  final conditionsTabBloc = QueryConditionsTabBloc();
-  final queryUnionsBloc = QueryUnionsBloc();
-  final orderTabBloc = QueryOrderTabBloc();
-  final batchTabBloc = QueryBatchTabBloc();
+  final conditionsBloc = QueryConditionsBloc();
+  final queriesBloc = QueriesBloc();
+  final ordersBloc = QueryOrdersBloc();
+  final batchesBloc = QueryBatchesBloc();
   final queryWizardBloc = QueryWizardBloc(
       sourcesBloc: sourcesBloc,
       tablesBloc: tablesBloc,
       fieldsBloc: fieldsBloc,
-      joinsTabBloc: joinsTabBloc,
+      joinsBloc: joinsBloc,
       aggregatesBloc: aggregatesBloc,
       groupingsBloc: groupingsBloc,
-      conditionsTabBloc: conditionsTabBloc,
-      queryUnionsBloc: queryUnionsBloc,
-      orderTabBloc: orderTabBloc,
-      batchTabBloc: batchTabBloc,
+      conditionsBloc: conditionsBloc,
+      queriesBloc: queriesBloc,
+      ordersBloc: ordersBloc,
+      batchesBloc: batchesBloc,
       queryWizardRepository: queryWizardRepository);
 
   return MultiBlocProvider(providers: [
@@ -58,12 +58,12 @@ Widget buildBlocs(QueryWizardRepository queryWizardRepository) {
     BlocProvider(create: (context) => sourcesBloc),
     BlocProvider(create: (context) => tablesBloc),
     BlocProvider(create: (context) => fieldsBloc),
-    BlocProvider(create: (context) => joinsTabBloc),
+    BlocProvider(create: (context) => joinsBloc),
     BlocProvider(create: (context) => aggregatesBloc),
     BlocProvider(create: (context) => groupingsBloc),
-    BlocProvider(create: (context) => conditionsTabBloc),
-    BlocProvider(create: (context) => queryUnionsBloc),
-    BlocProvider(create: (context) => orderTabBloc),
-    BlocProvider(create: (context) => batchTabBloc),
+    BlocProvider(create: (context) => conditionsBloc),
+    BlocProvider(create: (context) => queriesBloc),
+    BlocProvider(create: (context) => ordersBloc),
+    BlocProvider(create: (context) => batchesBloc),
   ], child: QueryWizardLayout(title: 'Query Wizard'));
 }

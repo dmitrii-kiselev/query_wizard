@@ -27,7 +27,7 @@ class QueryBatchDrawer extends HookWidget {
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
 
-    return BlocBuilder<QueryBatchTabBloc, QueryBatchTabState>(
+    return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
         builder: (context, state) {
       if (state is QueryBatchesChanged) {
         final drawerItems = ListView(

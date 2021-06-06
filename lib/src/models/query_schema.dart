@@ -19,7 +19,7 @@ class QuerySchema extends Equatable {
                     groupings: [],
                     aggregates: [],
                     conditions: [],
-                    sortings: [],
+                    orders: [],
                     isTop: false,
                     topCounter: 0,
                     isDistinct: false)

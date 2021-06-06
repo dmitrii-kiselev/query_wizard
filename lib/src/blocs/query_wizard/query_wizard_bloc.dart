@@ -9,13 +9,13 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
       {required this.sourcesBloc,
       required this.tablesBloc,
       required this.fieldsBloc,
-      required this.joinsTabBloc,
+      required this.joinsBloc,
       required this.aggregatesBloc,
       required this.groupingsBloc,
-      required this.queryUnionsBloc,
-      required this.conditionsTabBloc,
-      required this.batchTabBloc,
-      required this.orderTabBloc,
+      required this.queriesBloc,
+      required this.conditionsBloc,
+      required this.batchesBloc,
+      required this.ordersBloc,
       required this.queryWizardRepository,
       QueryWizardState? initialState})
       : super(initialState ?? QueryWizardInitial());
@@ -23,13 +23,13 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QuerySourcesBloc sourcesBloc;
   final QueryTablesBloc tablesBloc;
   final QueryFieldsBloc fieldsBloc;
-  final QueryJoinsTabBloc joinsTabBloc;
+  final QueryJoinsBloc joinsBloc;
   final QueryAggregatesBloc aggregatesBloc;
   final QueryGroupingsBloc groupingsBloc;
-  final QueryConditionsTabBloc conditionsTabBloc;
-  final QueryUnionsBloc queryUnionsBloc;
-  final QueryOrderTabBloc orderTabBloc;
-  final QueryBatchTabBloc batchTabBloc;
+  final QueryConditionsBloc conditionsBloc;
+  final QueriesBloc queriesBloc;
+  final QueryOrdersBloc ordersBloc;
+  final QueryBatchesBloc batchesBloc;
   final QueryWizardRepository queryWizardRepository;
 
   Query? currentQuery;
@@ -47,7 +47,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
           querySchema = QuerySchema.empty();
         }
 
-        batchTabBloc.add(
+        batchesBloc.add(
             QueryBatchesInitialized(queryBatches: querySchema.queryBatches));
 
         changeQueryBatch(querySchema.queryBatches.first);
@@ -61,7 +61,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
 
   void changeQueryBatch(QueryBatch queryBatch) {
     currentQueryButch = queryBatch;
-    queryUnionsBloc.add(QueriesInitialized(queries: queryBatch.queries));
+    queriesBloc.add(QueriesInitialized(queries: queryBatch.queries));
 
     changeQuery(queryBatch.queries.first);
   }
@@ -72,15 +72,15 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
     sourcesBloc.add(QuerySourcesInitialized(sources: query.sources));
     tablesBloc.add(QueryTablesInitialized(tables: query.tables));
     fieldsBloc.add(QueryFieldsInitialized(fields: query.fields));
-    joinsTabBloc.add(QueryJoinsInitialized(joins: query.joins));
+    joinsBloc.add(QueryJoinsInitialized(joins: query.joins));
 
     aggregatesBloc
         .add(QueryAggregatesInitialized(aggregates: query.aggregates));
 
     groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
-    conditionsTabBloc
+    conditionsBloc
         .add(QueryConditionsInitialized(conditions: query.conditions));
 
-    orderTabBloc.add(QueryOrderTabInitialized(sortings: query.sortings));
+    ordersBloc.add(QueryOrdersInitialized(orders: query.orders));
   }
 }

@@ -10,7 +10,7 @@ class QueryAliases extends StatelessWidget {
   Widget build(BuildContext context) {
     final map = Map<String, Map<String, String?>>();
 
-    final unionsBloc = BlocProvider.of<QueryUnionsBloc>(context);
+    final unionsBloc = BlocProvider.of<QueriesBloc>(context);
     final queries = unionsBloc.state.queries;
 
     final fields = queries.expand((q) => q.fields).toSet();

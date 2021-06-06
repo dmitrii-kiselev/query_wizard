@@ -45,7 +45,7 @@ class QueryTablesBar extends StatelessWidget {
             },
             onRemove: (DbElement table) {
               final tables = tablesBloc.state.tables;
-              final event = QueryTableRemoved(index: tables.indexOf(table));
+              final event = QueryTableDeleted(index: tables.indexOf(table));
 
               tablesBloc.add(event);
             },
@@ -96,7 +96,7 @@ class _ChangeTableNameDialog extends HookWidget {
                 alias: controller.text,
                 nodeType: table.nodeType,
                 elements: table.elements);
-            final event = QueryTableEdited(index: index, table: newTable);
+            final event = QueryTableUpdated(index: index, table: newTable);
 
             bloc.add(event);
             Navigator.pop(context);

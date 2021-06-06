@@ -12,7 +12,7 @@ class Query extends Equatable {
       required this.groupings,
       required this.aggregates,
       required this.conditions,
-      required this.sortings,
+      required this.orders,
       required this.isTop,
       required this.topCounter,
       required this.isDistinct});
@@ -26,7 +26,7 @@ class Query extends Equatable {
         groupings = [],
         aggregates = [],
         conditions = [],
-        sortings = [],
+        orders = [],
         isTop = false,
         topCounter = 0,
         isDistinct = false;
@@ -39,7 +39,7 @@ class Query extends Equatable {
   final List<QueryGrouping> groupings;
   final List<QueryAggregate> aggregates;
   final List<QueryCondition> conditions;
-  final List<QuerySorting> sortings;
+  final List<QueryOrder> orders;
   final bool isTop;
   final int topCounter;
   final bool isDistinct;
@@ -54,7 +54,7 @@ class Query extends Equatable {
         groupings,
         aggregates,
         conditions,
-        sortings,
+        orders,
         isTop,
         topCounter,
         isDistinct
@@ -71,7 +71,7 @@ extension CopyQuery on Query {
       groupings: groupings,
       aggregates: aggregates,
       conditions: conditions,
-      sortings: sortings,
+      orders: orders,
       isTop: isTop,
       topCounter: topCounter,
       isDistinct: isDistinct);
@@ -85,7 +85,7 @@ extension CopyQuery on Query {
           List<QueryGrouping>? groupings,
           List<QueryAggregate>? aggregates,
           List<QueryCondition>? conditions,
-          List<QuerySorting>? sortings,
+          List<QueryOrder>? orders,
           bool? isTop,
           int? topCounter,
           bool? isDistinct}) =>
@@ -98,7 +98,7 @@ extension CopyQuery on Query {
           groupings: groupings ?? this.groupings,
           aggregates: aggregates ?? this.aggregates,
           conditions: conditions ?? this.conditions,
-          sortings: sortings ?? this.sortings,
+          orders: orders ?? this.orders,
           topCounter: topCounter ?? this.topCounter,
           isTop: isTop ?? this.isTop,
           isDistinct: isDistinct ?? this.isDistinct);

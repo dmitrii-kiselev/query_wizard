@@ -296,18 +296,18 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
           customCondition: ''),
     ];
 
-    final sortings1 = [
-      QuerySorting(
+    final orders1 = [
+      QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
-    final sortings2 = [
-      QuerySorting(
+    final orders2 = [
+      QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
-    final sortings3 = [
-      QuerySorting(
+    final orders3 = [
+      QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
@@ -320,7 +320,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         groupings: groupings1,
         aggregates: aggregates1,
         conditions: conditions1,
-        sortings: sortings1,
+        orders: orders1,
         isTop: false,
         topCounter: 0,
         isDistinct: false);
@@ -334,7 +334,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         groupings: groupings2,
         aggregates: aggregates2,
         conditions: conditions2,
-        sortings: sortings2,
+        orders: orders2,
         isTop: false,
         topCounter: 0,
         isDistinct: false);
@@ -348,7 +348,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         groupings: groupings3,
         aggregates: aggregates3,
         conditions: conditions3,
-        sortings: sortings3,
+        orders: orders3,
         isTop: false,
         topCounter: 0,
         isDistinct: false);

@@ -35,7 +35,7 @@ class QueryAggregatesBar extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: 'Remove',
                           onPressed: () {
-                            final event = QueryAggregateRemoved(index: index);
+                            final event = QueryAggregateDeleted(index: index);
                             bloc.add(event);
                           },
                         ),
@@ -136,7 +136,7 @@ class _ChangeAggregateDialog extends HookWidget {
                 field: aggregate.field, function: function.value ?? '');
 
             final event =
-                QueryAggregateEdited(index: index, aggregate: newAggregate);
+                QueryAggregateUpdated(index: index, aggregate: newAggregate);
 
             bloc.add(event);
             Navigator.pop(context);

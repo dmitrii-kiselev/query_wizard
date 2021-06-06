@@ -18,8 +18,8 @@ class QueryMoreTab extends HookWidget {
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
     final queryWizardBloc = BlocProvider.of<QueryWizardBloc>(context);
-    final queryUnionsBloc = BlocProvider.of<QueryUnionsBloc>(context);
-    final queryBatchTabBloc = BlocProvider.of<QueryBatchTabBloc>(context);
+    final queryUnionsBloc = BlocProvider.of<QueriesBloc>(context);
+    final queryBatchTabBloc = BlocProvider.of<QueryBatchesBloc>(context);
 
     final currentQuery = queryWizardBloc.currentQuery;
     final currentQueryButch = queryWizardBloc.currentQueryButch;
@@ -44,7 +44,7 @@ class QueryMoreTab extends HookWidget {
           groupings: currentQuery.groupings,
           aggregates: currentQuery.aggregates,
           conditions: currentQuery.conditions,
-          sortings: currentQuery.sortings,
+          orders: currentQuery.orders,
           isTop: isTop.value ?? false,
           topCounter: topCounter.value ?? 0,
           isDistinct: isDistinct.value ?? false);
