@@ -1,127 +1,127 @@
 import 'package:query_wizard/models.dart';
 
 abstract class QueryWizardClient {
-  Future<List<DbElement>> getSources();
+  Future<List<QueryElement>> getSources();
 
   Future<QuerySchema> parseQuery(String query);
 }
 
 class DesignTimeQueryWizardClient implements QueryWizardClient {
-  Future<List<DbElement>> getSources() async {
+  Future<List<QueryElement>> getSources() async {
     return [
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'CONTACTS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'CONTACT_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'FIRST_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'LAST_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'EMAIL', nodeType: DbNodeType.column),
-            DbElement(name: 'PHONE', nodeType: DbNodeType.column),
-            DbElement(name: 'CUSTOMER_ID', nodeType: DbNodeType.column),
+            QueryElement(name: 'CONTACT_ID', type: QueryElementType.column),
+            QueryElement(name: 'FIRST_NAME', type: QueryElementType.column),
+            QueryElement(name: 'LAST_NAME', type: QueryElementType.column),
+            QueryElement(name: 'EMAIL', type: QueryElementType.column),
+            QueryElement(name: 'PHONE', type: QueryElementType.column),
+            QueryElement(name: 'CUSTOMER_ID', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'COUNTRIES',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'COUNTRY_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'COUNTRY_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'REGION_ID', nodeType: DbNodeType.column),
+            QueryElement(name: 'COUNTRY_ID', type: QueryElementType.column),
+            QueryElement(name: 'COUNTRY_NAME', type: QueryElementType.column),
+            QueryElement(name: 'REGION_ID', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'CUSTOMERS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'CUSTOMER_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'ADDRESS', nodeType: DbNodeType.column),
-            DbElement(name: 'WEBSITE', nodeType: DbNodeType.column),
-            DbElement(name: 'CREDIT_LIMIT', nodeType: DbNodeType.column),
+            QueryElement(name: 'CUSTOMER_ID', type: QueryElementType.column),
+            QueryElement(name: 'NAME', type: QueryElementType.column),
+            QueryElement(name: 'ADDRESS', type: QueryElementType.column),
+            QueryElement(name: 'WEBSITE', type: QueryElementType.column),
+            QueryElement(name: 'CREDIT_LIMIT', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'EMPLOYEES',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'EMPLOYEE_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'FIRST_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'LAST_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'EMAIL', nodeType: DbNodeType.column),
-            DbElement(name: 'PHONE', nodeType: DbNodeType.column),
-            DbElement(name: 'HIRE_DATE', nodeType: DbNodeType.column),
-            DbElement(name: 'MANAGER_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'JOB_TITLE', nodeType: DbNodeType.column),
+            QueryElement(name: 'EMPLOYEE_ID', type: QueryElementType.column),
+            QueryElement(name: 'FIRST_NAME', type: QueryElementType.column),
+            QueryElement(name: 'LAST_NAME', type: QueryElementType.column),
+            QueryElement(name: 'EMAIL', type: QueryElementType.column),
+            QueryElement(name: 'PHONE', type: QueryElementType.column),
+            QueryElement(name: 'HIRE_DATE', type: QueryElementType.column),
+            QueryElement(name: 'MANAGER_ID', type: QueryElementType.column),
+            QueryElement(name: 'JOB_TITLE', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'INVENTORIES',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'PRODUCT_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'WAREHOUSE_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'QUANTITY', nodeType: DbNodeType.column),
+            QueryElement(name: 'PRODUCT_ID', type: QueryElementType.column),
+            QueryElement(name: 'WAREHOUSE_ID', type: QueryElementType.column),
+            QueryElement(name: 'QUANTITY', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'LOCATIONS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'LOCATION_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'ADDRESS', nodeType: DbNodeType.column),
-            DbElement(name: 'POSTAL_CODE', nodeType: DbNodeType.column),
-            DbElement(name: 'CITY', nodeType: DbNodeType.column),
-            DbElement(name: 'STATE', nodeType: DbNodeType.column),
-            DbElement(name: 'COUNTRY_ID', nodeType: DbNodeType.column),
+            QueryElement(name: 'LOCATION_ID', type: QueryElementType.column),
+            QueryElement(name: 'ADDRESS', type: QueryElementType.column),
+            QueryElement(name: 'POSTAL_CODE', type: QueryElementType.column),
+            QueryElement(name: 'CITY', type: QueryElementType.column),
+            QueryElement(name: 'STATE', type: QueryElementType.column),
+            QueryElement(name: 'COUNTRY_ID', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'ORDERS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'ORDER_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'CUSTOMER_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'STATUS', nodeType: DbNodeType.column),
-            DbElement(name: 'SALESMAN_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'ORDER_DATE', nodeType: DbNodeType.column),
+            QueryElement(name: 'ORDER_ID', type: QueryElementType.column),
+            QueryElement(name: 'CUSTOMER_ID', type: QueryElementType.column),
+            QueryElement(name: 'STATUS', type: QueryElementType.column),
+            QueryElement(name: 'SALESMAN_ID', type: QueryElementType.column),
+            QueryElement(name: 'ORDER_DATE', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'ORDER_ITEMS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'ORDER_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'ITEM_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'PRODUCT_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'QUANTITY', nodeType: DbNodeType.column),
-            DbElement(name: 'UNIT_PRICE', nodeType: DbNodeType.column),
+            QueryElement(name: 'ORDER_ID', type: QueryElementType.column),
+            QueryElement(name: 'ITEM_ID', type: QueryElementType.column),
+            QueryElement(name: 'PRODUCT_ID', type: QueryElementType.column),
+            QueryElement(name: 'QUANTITY', type: QueryElementType.column),
+            QueryElement(name: 'UNIT_PRICE', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'PRODUCT_CATEGORIES',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'CATEGORY_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'CATEGORY_NAME', nodeType: DbNodeType.column),
+            QueryElement(name: 'CATEGORY_ID', type: QueryElementType.column),
+            QueryElement(name: 'CATEGORY_NAME', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'PRODUCTS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'PRODUCT_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'PRODUCT_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'DESCRIPTION', nodeType: DbNodeType.column),
-            DbElement(name: 'STANDARD_COST', nodeType: DbNodeType.column),
-            DbElement(name: 'LIST_PRICE', nodeType: DbNodeType.column),
-            DbElement(name: 'CATEGORY_I', nodeType: DbNodeType.column),
+            QueryElement(name: 'PRODUCT_ID', type: QueryElementType.column),
+            QueryElement(name: 'PRODUCT_NAME', type: QueryElementType.column),
+            QueryElement(name: 'DESCRIPTION', type: QueryElementType.column),
+            QueryElement(name: 'STANDARD_COST', type: QueryElementType.column),
+            QueryElement(name: 'LIST_PRICE', type: QueryElementType.column),
+            QueryElement(name: 'CATEGORY_I', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'REGIONS',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'REGION_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'REGION_NAME', nodeType: DbNodeType.column),
+            QueryElement(name: 'REGION_ID', type: QueryElementType.column),
+            QueryElement(name: 'REGION_NAME', type: QueryElementType.column),
           ]),
-      DbElement.withElements(
+      QueryElement.withElements(
           name: 'WAREHOUSES',
-          nodeType: DbNodeType.table,
+          type: QueryElementType.table,
           elements: [
-            DbElement(name: 'WAREHOUSE_ID', nodeType: DbNodeType.column),
-            DbElement(name: 'WAREHOUSE_NAME', nodeType: DbNodeType.column),
-            DbElement(name: 'LOCATION_ID', nodeType: DbNodeType.column),
+            QueryElement(name: 'WAREHOUSE_ID', type: QueryElementType.column),
+            QueryElement(name: 'WAREHOUSE_NAME', type: QueryElementType.column),
+            QueryElement(name: 'LOCATION_ID', type: QueryElementType.column),
           ]),
     ];
   }
@@ -380,7 +380,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
 
 class FakeQueryWizardApiClient extends QueryWizardClient {
   @override
-  Future<List<DbElement>> getSources() async {
+  Future<List<QueryElement>> getSources() async {
     return await new Future.delayed(new Duration(milliseconds: 1000), () {
       throw new Exception();
     });

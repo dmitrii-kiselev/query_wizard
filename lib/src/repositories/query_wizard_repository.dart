@@ -8,7 +8,7 @@ class QueryWizardRepository {
 
   QueryWizardRepository({required this.queryWizardClient});
 
-  Future<List<DbElement>> getSources() async {
+  Future<List<QueryElement>> getSources() async {
     return await queryWizardClient.getSources();
   }
 

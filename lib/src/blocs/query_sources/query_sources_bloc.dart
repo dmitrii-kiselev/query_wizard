@@ -1,4 +1,3 @@
-
 import 'package:bloc/bloc.dart';
 
 import 'package:query_wizard/blocs.dart';
@@ -23,10 +22,10 @@ class QuerySourcesBloc extends Bloc<QuerySourcesEvent, QuerySourcesState> {
     if (event is QuerySourcesRequested) {
       yield QuerySourcesLoadInProgress();
       try {
-        final List<DbElement> dbElements =
-        await queryWizardRepository.getSources();
+        final List<QueryElement> queryElements =
+            await queryWizardRepository.getSources();
 
-        yield QuerySourcesLoadSuccess(sources: dbElements);
+        yield QuerySourcesLoadSuccess(sources: queryElements);
       } catch (_) {
         yield QuerySourcesLoadFailure();
       }

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/models.dart';
 
 abstract class QueryFieldsState extends Equatable {
-  final List<DbElement> fields;
+  final List<QueryElement> fields;
 
   const QueryFieldsState({required this.fields});
 
@@ -11,10 +11,11 @@ abstract class QueryFieldsState extends Equatable {
 }
 
 class QueryFieldsInitial extends QueryFieldsState {
-  QueryFieldsInitial({List<DbElement>? fields}) : super(fields: fields ?? []);
+  QueryFieldsInitial({List<QueryElement>? fields})
+      : super(fields: fields ?? []);
 }
 
 class QueryFieldsChanged extends QueryFieldsState {
-  const QueryFieldsChanged({required List<DbElement> fields})
+  const QueryFieldsChanged({required List<QueryElement> fields})
       : super(fields: fields);
 }

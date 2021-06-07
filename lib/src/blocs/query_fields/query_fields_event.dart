@@ -8,7 +8,7 @@ abstract class QueryFieldsEvent extends Equatable {
 class QueryFieldsInitialized extends QueryFieldsEvent {
   const QueryFieldsInitialized({required this.fields});
 
-  final List<DbElement> fields;
+  final List<QueryElement> fields;
 
   List<Object?> get props => [fields];
 }
@@ -16,7 +16,7 @@ class QueryFieldsInitialized extends QueryFieldsEvent {
 class QueryFieldAdded extends QueryFieldsEvent {
   const QueryFieldAdded({required this.field});
 
-  final DbElement field;
+  final QueryElement field;
 
   List<Object?> get props => [field];
 }
@@ -28,7 +28,7 @@ class QueryFieldUpdated extends QueryFieldsEvent {
   });
 
   final int index;
-  final DbElement field;
+  final QueryElement field;
 
   List<Object?> get props => [field];
 }
@@ -36,7 +36,7 @@ class QueryFieldUpdated extends QueryFieldsEvent {
 class QueryFieldCopied extends QueryFieldsEvent {
   const QueryFieldCopied({required this.field});
 
-  final DbElement field;
+  final QueryElement field;
 
   List<Object?> get props => [field];
 }

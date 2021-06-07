@@ -9,7 +9,7 @@ abstract class QuerySourcesEvent extends Equatable {
 class QuerySourcesInitialized extends QuerySourcesEvent {
   QuerySourcesInitialized({required this.sources});
 
-  final List<DbElement> sources;
+  final List<QueryElement> sources;
 
   List<Object?> get props => [sources];
 }

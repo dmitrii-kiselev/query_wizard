@@ -32,9 +32,9 @@ class Query extends Equatable {
         isDistinct = false;
 
   final String name;
-  final List<DbElement> sources;
-  final List<DbElement> tables;
-  final List<DbElement> fields;
+  final List<QueryElement> sources;
+  final List<QueryElement> tables;
+  final List<QueryElement> fields;
   final List<QueryJoin> joins;
   final List<QueryGrouping> groupings;
   final List<QueryAggregate> aggregates;
@@ -78,9 +78,9 @@ extension CopyQuery on Query {
 
   Query copyWith(
           {String? name,
-          List<DbElement>? sources,
-          List<DbElement>? tables,
-          List<DbElement>? fields,
+          List<QueryElement>? sources,
+          List<QueryElement>? tables,
+          List<QueryElement>? fields,
           List<QueryJoin>? joins,
           List<QueryGrouping>? groupings,
           List<QueryAggregate>? aggregates,

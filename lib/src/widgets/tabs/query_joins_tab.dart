@@ -102,8 +102,8 @@ class _JoinPage extends HookWidget {
 
   final int? index;
   final QueryJoinsBloc bloc;
-  final List<DbElement> tables;
-  final List<DbElement> fields;
+  final List<QueryElement> tables;
+  final List<QueryElement> fields;
   final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
 
   final _formKey = GlobalKey<FormState>();
@@ -114,14 +114,14 @@ class _JoinPage extends HookWidget {
     final theme = Theme.of(context);
 
     final customConditionController = useTextEditingController();
-    final leftTable = useState<DbElement?>(null);
+    final leftTable = useState<QueryElement?>(null);
     final isLeftAll = useState<bool?>(false);
-    final rightTable = useState<DbElement?>(null);
+    final rightTable = useState<QueryElement?>(null);
     final isRightAll = useState<bool?>(false);
     final isCustom = useState<bool?>(false);
-    final leftField = useState<DbElement?>(null);
+    final leftField = useState<QueryElement?>(null);
     final logicalCompareType = useState<String?>('=');
-    final rightField = useState<DbElement?>(null);
+    final rightField = useState<QueryElement?>(null);
     final pageInitialized = useState<bool>(false);
 
     if (index != null && !pageInitialized.value) {
@@ -161,9 +161,9 @@ class _JoinPage extends HookWidget {
       ];
     } else {
       actions = [
-        DropdownButtonFormField<DbElement>(
+        DropdownButtonFormField<QueryElement>(
           value: leftField.value,
-          items: leftTable.value?.elements.map<DropdownMenuItem<DbElement>>(
+          items: leftTable.value?.elements.map<DropdownMenuItem<QueryElement>>(
             (value) {
               return DropdownMenuItem(
                 child: Text(value.name),
@@ -193,9 +193,9 @@ class _JoinPage extends HookWidget {
             icon: Icon(Icons.compare_arrows),
           ),
         ),
-        DropdownButtonFormField<DbElement>(
+        DropdownButtonFormField<QueryElement>(
           value: rightField.value,
-          items: rightTable.value?.elements.map<DropdownMenuItem<DbElement>>(
+          items: rightTable.value?.elements.map<DropdownMenuItem<QueryElement>>(
             (value) {
               return DropdownMenuItem(
                 child: Text(value.name),
@@ -261,11 +261,11 @@ class _JoinPage extends HookWidget {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  DropdownButtonFormField<DbElement>(
+                  DropdownButtonFormField<QueryElement>(
                     value: leftTable.value,
                     items: tables
                         .where((t) => t != rightTable.value)
-                        .map<DropdownMenuItem<DbElement>>(
+                        .map<DropdownMenuItem<QueryElement>>(
                       (value) {
                         return DropdownMenuItem(
                           child: Text(value.alias ?? value.name),
@@ -282,11 +282,11 @@ class _JoinPage extends HookWidget {
                       icon: Icon(Icons.table_rows_rounded),
                     ),
                   ),
-                  DropdownButtonFormField<DbElement>(
+                  DropdownButtonFormField<QueryElement>(
                     value: rightTable.value,
                     items: tables
                         .where((t) => t != leftTable.value)
-                        .map<DropdownMenuItem<DbElement>>(
+                        .map<DropdownMenuItem<QueryElement>>(
                       (value) {
                         return DropdownMenuItem(
                           child: Text(value.alias ?? value.name),

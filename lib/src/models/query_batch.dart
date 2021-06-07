@@ -18,7 +18,7 @@ class QueryBatch extends Equatable {
         queryType = QueryType.selectQuery;
 
   final String name;
-  final List<DbElement> sources;
+  final List<QueryElement> sources;
   final List<Query> queries;
   final Map<String, Map<String, String>> aliases;
   final QueryType queryType;
@@ -37,7 +37,7 @@ extension CopyQueryBatch on QueryBatch {
 
   QueryBatch copyWith(
           {String? name,
-          List<DbElement>? sources,
+          List<QueryElement>? sources,
           List<Query>? queries,
           Map<String, Map<String, String>>? aliases,
           QueryType? queryType}) =>

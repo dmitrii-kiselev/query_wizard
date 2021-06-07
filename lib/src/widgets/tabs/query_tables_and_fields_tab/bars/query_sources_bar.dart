@@ -23,13 +23,14 @@ class QuerySourcesBar extends StatelessWidget {
           body: SourcesTreeView(
               items: state.sources,
               onTap: (item) {
-                if (item.value.nodeType == DbNodeType.column && item.checked) {
+                if (item.value.type == QueryElementType.column &&
+                    item.checked) {
                   final event = QueryFieldAdded(field: item.value);
                   fieldsBloc.add(event);
                 }
               },
               onLongPress: (item) {
-                if (item.value.nodeType == DbNodeType.table && item.checked) {
+                if (item.value.type == QueryElementType.table && item.checked) {
                   final event = QueryTableAdded(table: item.value);
                   tablesBloc.add(event);
                 }

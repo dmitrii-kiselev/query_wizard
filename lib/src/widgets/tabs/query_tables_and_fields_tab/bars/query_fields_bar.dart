@@ -111,8 +111,8 @@ class _CustomExpressionPage extends HookWidget {
               onPressed: () {
                 QueryFieldsEvent event;
 
-                final field = DbElement(
-                    name: controller.text, nodeType: DbNodeType.column);
+                final field = QueryElement(
+                    name: controller.text, type: QueryElementType.column);
 
                 if (this.index == null) {
                   event = QueryFieldAdded(field: field);

@@ -8,7 +8,7 @@ abstract class QueryTablesEvent extends Equatable {
 class QueryTablesInitialized extends QueryTablesEvent {
   const QueryTablesInitialized({required this.tables});
 
-  final List<DbElement> tables;
+  final List<QueryElement> tables;
 
   List<Object?> get props => [tables];
 }
@@ -16,7 +16,7 @@ class QueryTablesInitialized extends QueryTablesEvent {
 class QueryTableAdded extends QueryTablesEvent {
   const QueryTableAdded({required this.table});
 
-  final DbElement table;
+  final QueryElement table;
 
   List<Object?> get props => [table];
 }
@@ -28,7 +28,7 @@ class QueryTableUpdated extends QueryTablesEvent {
   });
 
   final int index;
-  final DbElement table;
+  final QueryElement table;
 
   List<Object?> get props => [table];
 }
@@ -36,7 +36,7 @@ class QueryTableUpdated extends QueryTablesEvent {
 class QueryTableCopied extends QueryTablesEvent {
   const QueryTableCopied({required this.table});
 
-  final DbElement table;
+  final QueryElement table;
 
   List<Object?> get props => [table];
 }

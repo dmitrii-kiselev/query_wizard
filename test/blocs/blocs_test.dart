@@ -19,9 +19,9 @@ void main() {
 
     test('QueryWizardInitialized initialized', () {
       final columns = [
-        DbElement(name: 'Field 1', nodeType: DbNodeType.column),
-        DbElement(name: 'Field 2', nodeType: DbNodeType.column),
-        DbElement(name: 'Field 3', nodeType: DbNodeType.column),
+        QueryElement(name: 'Field 1', type: QueryElementType.column),
+        QueryElement(name: 'Field 2', type: QueryElementType.column),
+        QueryElement(name: 'Field 3', type: QueryElementType.column),
       ];
       final event = QuerySourcesInitialized(sources: columns);
 

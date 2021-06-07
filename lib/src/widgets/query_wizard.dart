@@ -17,7 +17,9 @@ class QueryWizard extends StatelessWidget {
     return MaterialApp(
       restorationScopeId: 'rootQueryWizard',
       title: 'Query Wizard',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       localizationsDelegates: const [
         ...QueryWizardLocalizations.localizationsDelegates,
       ],

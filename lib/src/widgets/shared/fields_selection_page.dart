@@ -5,18 +5,18 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
-typedef DbElementListCallback = Function(List<DbElement>);
+typedef QueryElementListCallback = Function(List<QueryElement>);
 
 class FieldsSelectionPage extends HookWidget {
   const FieldsSelectionPage({required this.tables, required this.onSelected});
 
-  final List<DbElement> tables;
-  final DbElementListCallback onSelected;
+  final List<QueryElement> tables;
+  final QueryElementListCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
     final selectedFields =
-        useState<List<DbElement>>(List.empty(growable: true));
+        useState<List<QueryElement>>(List.empty(growable: true));
 
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
@@ -44,7 +44,7 @@ class FieldsSelectionPage extends HookWidget {
       body: SourcesTreeView(
         items: tables,
         onTap: (item) {
-          if (item.value.nodeType == DbNodeType.column) {
+          if (item.value.type == QueryElementType.column) {
             final fields = selectedFields.value.where((f) => f == item.value);
             if (fields.isEmpty) {
               selectedFields.value.add(item.value);

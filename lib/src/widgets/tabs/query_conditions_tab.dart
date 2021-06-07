@@ -95,7 +95,7 @@ class _ConditionPage extends HookWidget {
 
   final int? index;
   final QueryConditionsBloc bloc;
-  final List<DbElement> tables;
+  final List<QueryElement> tables;
   final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
 
   final _formKey = GlobalKey<FormState>();
@@ -108,7 +108,7 @@ class _ConditionPage extends HookWidget {
 
     final customConditionController = useTextEditingController();
     final isCustom = useState<bool?>(false);
-    final leftField = useState<DbElement?>(null);
+    final leftField = useState<QueryElement?>(null);
     final logicalCompareType = useState<String?>('=');
     final rightFieldController = useTextEditingController();
     final pageInitialized = useState<bool>(false);
@@ -145,9 +145,9 @@ class _ConditionPage extends HookWidget {
       ];
     } else {
       actions = [
-        DropdownButtonFormField<DbElement>(
+        DropdownButtonFormField<QueryElement>(
           value: leftField.value,
-          items: fields.map<DropdownMenuItem<DbElement>>(
+          items: fields.map<DropdownMenuItem<QueryElement>>(
             (value) {
               return DropdownMenuItem(
                 child: Text(

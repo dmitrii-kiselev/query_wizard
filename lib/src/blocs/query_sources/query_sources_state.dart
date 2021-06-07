@@ -5,14 +5,14 @@ import 'package:query_wizard/models.dart';
 abstract class QuerySourcesState extends Equatable {
   const QuerySourcesState({required this.sources});
 
-  final List<DbElement> sources;
+  final List<QueryElement> sources;
 
   @override
   List<Object?> get props => [sources];
 }
 
 class QuerySourcesInitial extends QuerySourcesState {
-  QuerySourcesInitial({List<DbElement>? sources})
+  QuerySourcesInitial({List<QueryElement>? sources})
       : super(sources: sources ?? []);
 }
 
@@ -32,6 +32,6 @@ class QuerySourcesLoadFailure extends QuerySourcesState {
 }
 
 class QuerySourcesChanged extends QuerySourcesState {
-  const QuerySourcesChanged({required List<DbElement> sources})
+  const QuerySourcesChanged({required List<QueryElement> sources})
       : super(sources: sources);
 }

@@ -23,16 +23,16 @@ class QueryTablesBar extends StatelessWidget {
           body: SourcesTreeView(
             items: state.tables,
             onTap: (item) {
-              if (item.value.nodeType == DbNodeType.column) {
+              if (item.value.type == QueryElementType.column) {
                 final event = QueryFieldAdded(field: item.value);
                 fieldsBloc.add(event);
               }
             },
-            onCopy: (DbElement table) {
+            onCopy: (QueryElement table) {
               final event = QueryTableCopied(table: table);
               tablesBloc.add(event);
             },
-            onEdit: (DbElement table) {
+            onEdit: (QueryElement table) {
               final tables = tablesBloc.state.tables;
               final index = tables.indexOf(table);
 
@@ -43,7 +43,7 @@ class QueryTablesBar extends StatelessWidget {
                       builder: (context) => _ChangeTableNameDialog(
                           index: index, bloc: tablesBloc)));
             },
-            onRemove: (DbElement table) {
+            onRemove: (QueryElement table) {
               final tables = tablesBloc.state.tables;
               final event = QueryTableDeleted(index: tables.indexOf(table));
 
@@ -91,10 +91,10 @@ class _ChangeTableNameDialog extends HookWidget {
       actions: [
         TextButton(
           onPressed: () {
-            final newTable = DbElement.withElements(
+            final newTable = QueryElement.withElements(
                 name: table.name,
                 alias: controller.text,
-                nodeType: table.nodeType,
+                type: table.type,
                 elements: table.elements);
             final event = QueryTableUpdated(index: index, table: newTable);
 

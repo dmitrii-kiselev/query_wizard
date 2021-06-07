@@ -3,18 +3,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:query_wizard/models.dart';
 
 void main() {
-  test('DbElement initialized', () {
+  test('QueryElement initialized', () {
     final parentTable =
-        DbElement(name: 'Parent table', nodeType: DbNodeType.column);
+        QueryElement(name: 'Parent table', type: QueryElementType.column);
     final columns = [
-      DbElement(name: 'Field 1', nodeType: DbNodeType.column),
-      DbElement(name: 'Field 2', nodeType: DbNodeType.column),
-      DbElement(name: 'Field 3', nodeType: DbNodeType.column),
+      QueryElement(name: 'Field 1', type: QueryElementType.column),
+      QueryElement(name: 'Field 2', type: QueryElementType.column),
+      QueryElement(name: 'Field 3', type: QueryElementType.column),
     ];
 
-    final element = DbElement.withElementsAndParent(
+    final element = QueryElement.withElementsAndParent(
         name: 'Child table',
-        nodeType: DbNodeType.table,
+        type: QueryElementType.table,
         elements: columns,
         parent: parentTable);
 
@@ -25,7 +25,7 @@ void main() {
         equals([
           element.name,
           '',
-          element.nodeType,
+          element.type,
           element.parent,
           element.elements
         ]));

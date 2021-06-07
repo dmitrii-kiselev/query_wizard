@@ -7,12 +7,12 @@ import 'package:query_wizard/models.dart';
 class ItemValue {
   const ItemValue({required this.value, required this.checked});
 
-  final DbElement value;
+  final QueryElement value;
   final bool checked;
 }
 
 typedef SourcesTreeCallback = Function(ItemValue);
-typedef DbElementCallback = Function(DbElement);
+typedef QueryElementCallback = Function(QueryElement);
 
 class SourcesTreeView extends StatelessWidget {
   SourcesTreeView({
@@ -25,16 +25,16 @@ class SourcesTreeView extends StatelessWidget {
     this.onRemove,
   }) : super(key: key);
 
-  final List<DbElement> items;
+  final List<QueryElement> items;
   final SourcesTreeCallback? onTap;
   final SourcesTreeCallback? onLongPress;
-  final DbElementCallback? onCopy;
-  final DbElementCallback? onEdit;
-  final DbElementCallback? onRemove;
+  final QueryElementCallback? onCopy;
+  final QueryElementCallback? onEdit;
+  final QueryElementCallback? onRemove;
 
-  List<Widget> _getChildList(List<DbElement> items) {
+  List<Widget> _getChildList(List<QueryElement> items) {
     return items.map((item) {
-      if (item.nodeType == DbNodeType.table) {
+      if (item.type == QueryElementType.table) {
         return Container(
           margin: EdgeInsets.only(left: 8),
           child: TreeViewChild(
@@ -98,13 +98,13 @@ class TreeViewChild extends HookWidget {
     this.onRemove,
   }) : super(key: key);
 
-  final DbElement parent;
-  final List<DbElement> children;
+  final QueryElement parent;
+  final List<QueryElement> children;
   final SourcesTreeCallback? onTap;
   final SourcesTreeCallback? onLongPress;
-  final DbElementCallback? onCopy;
-  final DbElementCallback? onEdit;
-  final DbElementCallback? onRemove;
+  final QueryElementCallback? onCopy;
+  final QueryElementCallback? onEdit;
+  final QueryElementCallback? onRemove;
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +120,7 @@ class TreeViewChild extends HookWidget {
         TreeItem(
             item: parent,
             onTap: (item) {
-              if (item.value.nodeType == DbNodeType.table) {
+              if (item.value.type == QueryElementType.table) {
                 toggleExpanded();
               }
 
@@ -165,16 +165,16 @@ class TreeItem extends HookWidget {
     this.onRemove,
   });
 
-  final DbElement item;
+  final QueryElement item;
   final VoidCallback? onPressedNext;
   final SourcesTreeCallback? onTap;
   final SourcesTreeCallback? onLongPress;
-  final DbElementCallback? onCopy;
-  final DbElementCallback? onEdit;
-  final DbElementCallback? onRemove;
+  final QueryElementCallback? onCopy;
+  final QueryElementCallback? onEdit;
+  final QueryElementCallback? onRemove;
 
   bool _isRoot() {
-    return item.nodeType == DbNodeType.table;
+    return item.type == QueryElementType.table;
   }
 
   double _getElevation() {

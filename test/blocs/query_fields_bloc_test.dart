@@ -20,17 +20,18 @@ void main() {
     blocTest('adds field when QueryFieldAdded is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
           final event = QueryFieldAdded(field: field);
 
           bloc.add(event);
         },
         expect: () => [
               QueryFieldsInitial(fields: [
-                DbElement(name: 'Field', nodeType: DbNodeType.column)
+                QueryElement(name: 'Field', type: QueryElementType.column)
               ]),
               QueryFieldsChanged(fields: [
-                DbElement(name: 'Field', nodeType: DbNodeType.column)
+                QueryElement(name: 'Field', type: QueryElementType.column)
               ]),
             ]);
 
@@ -38,7 +39,7 @@ void main() {
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
           final field =
-              DbElement(name: 'Field New', nodeType: DbNodeType.column);
+              QueryElement(name: 'Field New', type: QueryElementType.column);
           final fieldAdded = QueryFieldAdded(field: field);
           final fieldUpdated = QueryFieldUpdated(index: 0, field: field);
 
@@ -47,7 +48,7 @@ void main() {
         },
         expect: () {
           final expectedFields = [
-            DbElement(name: 'Field New', nodeType: DbNodeType.column)
+            QueryElement(name: 'Field New', type: QueryElementType.column)
           ];
 
           return [
@@ -61,7 +62,8 @@ void main() {
     blocTest('copies field when QueryFieldCopied is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
           final fieldAdded = QueryFieldAdded(field: field);
           final fieldCopied = QueryFieldCopied(field: field);
 
@@ -70,8 +72,8 @@ void main() {
         },
         expect: () {
           final expectedFields = [
-            DbElement(name: 'Field', nodeType: DbNodeType.column),
-            DbElement(name: 'Field', nodeType: DbNodeType.column)
+            QueryElement(name: 'Field', type: QueryElementType.column),
+            QueryElement(name: 'Field', type: QueryElementType.column)
           ];
 
           return [
@@ -86,14 +88,15 @@ void main() {
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
           final fieldAdded = QueryFieldAdded(
-              field: DbElement(name: 'Field', nodeType: DbNodeType.column));
+              field:
+                  QueryElement(name: 'Field', type: QueryElementType.column));
           final fieldDeleted = QueryFieldDeleted(index: 0);
 
           bloc.add(fieldAdded);
           bloc.add(fieldDeleted);
         },
         expect: () {
-          final List<DbElement> expectedFields = [];
+          final List<QueryElement> expectedFields = [];
 
           return [
             QueryFieldsInitial(fields: expectedFields),
@@ -106,7 +109,8 @@ void main() {
     blocTest('changes field order when QueryFieldOrderChanged is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          final field = DbElement(name: 'Field', nodeType: DbNodeType.column);
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
           final fieldAdded1 = QueryFieldAdded(field: field);
           final fieldAdded2 = QueryFieldAdded(field: field);
           final fieldOrderChanged =
@@ -118,8 +122,8 @@ void main() {
         },
         expect: () {
           final expectedFields = [
-            DbElement(name: 'Field', nodeType: DbNodeType.column),
-            DbElement(name: 'Field', nodeType: DbNodeType.column)
+            QueryElement(name: 'Field', type: QueryElementType.column),
+            QueryElement(name: 'Field', type: QueryElementType.column)
           ];
 
           return [
