@@ -10,7 +10,7 @@ class QueryNavigationRail extends HookWidget {
 
   List<NavigationRailDestination> _getQueries(List<Query> queries) {
     return <NavigationRailDestination>[
-      for (int index = 0; index < queries.length; index++)
+      for (var query in queries)
         NavigationRailDestination(
           icon: const Icon(
             Icons.query_builder_rounded,
@@ -19,7 +19,7 @@ class QueryNavigationRail extends HookWidget {
             Icons.query_builder_rounded,
           ),
           label: Text(
-            queries[index].name,
+            query.name,
           ),
         ),
     ];
@@ -34,8 +34,10 @@ class QueryNavigationRail extends HookWidget {
         return NavigationRail(
           selectedIndex: selectedQueryIndex.value,
           onDestinationSelected: (index) {
+            var query = state.queries[index];
+
             selectedQueryIndex.value = index;
-            bloc.changeQuery(state.queries[index]);
+            bloc.changeQuery(query);
           },
           labelType: NavigationRailLabelType.selected,
           destinations: _getQueries(state.queries),

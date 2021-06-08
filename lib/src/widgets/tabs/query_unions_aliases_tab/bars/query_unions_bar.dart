@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 
-class QueryUnions extends StatelessWidget {
-  const QueryUnions({Key? key}) : super(key: key);
+class QueryUnionsBar extends StatelessWidget {
+  const QueryUnionsBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class QueryUnions extends StatelessWidget {
             itemCount: state.queries.length,
             itemBuilder: (context, index) {
               final query = state.queries[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -31,16 +33,14 @@ class QueryUnions extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            final event = QueryCopied(query: query);
-                            bloc.add(event);
+                            bloc.add(QueryCopied(query: query));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryDeleted(index: index));
                           },
                         ),
                       ],
@@ -48,17 +48,16 @@ class QueryUnions extends StatelessWidget {
                     title: Text(query.name)),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event =
-                  QueryOrderChanged(oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(
+                  QueryOrderChanged(oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              final event = QueryAdded(query: Query.empty());
-              bloc.add(event);
+              bloc.add(QueryAdded(query: Query.empty()));
             },
             child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',

@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
@@ -24,6 +25,7 @@ class QueryGroupingsBar extends HookWidget {
             itemCount: state.groupings.length,
             itemBuilder: (context, index) {
               final grouping = state.groupings[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -33,10 +35,9 @@ class QueryGroupingsBar extends HookWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: 'Remove',
+                          tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryGroupingDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryGroupingDeleted(index: index));
                           },
                         ),
                       ],
@@ -44,11 +45,11 @@ class QueryGroupingsBar extends HookWidget {
                     title: Text(grouping.toString())),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QueryGroupingOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(QueryGroupingOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(

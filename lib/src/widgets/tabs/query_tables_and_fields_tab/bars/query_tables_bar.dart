@@ -24,13 +24,11 @@ class QueryTablesBar extends StatelessWidget {
             items: state.tables,
             onTap: (item) {
               if (item.value.type == QueryElementType.column) {
-                final event = QueryFieldAdded(field: item.value);
-                fieldsBloc.add(event);
+                fieldsBloc.add(QueryFieldAdded(field: item.value));
               }
             },
             onCopy: (QueryElement table) {
-              final event = QueryTableCopied(table: table);
-              tablesBloc.add(event);
+              tablesBloc.add(QueryTableCopied(table: table));
             },
             onEdit: (QueryElement table) {
               final tables = tablesBloc.state.tables;
@@ -45,9 +43,7 @@ class QueryTablesBar extends StatelessWidget {
             },
             onRemove: (QueryElement table) {
               final tables = tablesBloc.state.tables;
-              final event = QueryTableDeleted(index: tables.indexOf(table));
-
-              tablesBloc.add(event);
+              tablesBloc.add(QueryTableDeleted(index: tables.indexOf(table)));
             },
           ),
           floatingActionButton: FloatingActionButton(
@@ -96,9 +92,8 @@ class _ChangeTableNameDialog extends HookWidget {
                 alias: controller.text,
                 type: table.type,
                 elements: table.elements);
-            final event = QueryTableUpdated(index: index, table: newTable);
 
-            bloc.add(event);
+            bloc.add(QueryTableUpdated(index: index, table: newTable));
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

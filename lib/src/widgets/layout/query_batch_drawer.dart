@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 import 'package:query_wizard/models.dart';
 
@@ -11,14 +12,14 @@ class QueryBatchDrawer extends HookWidget {
   List<ListTile> _getQueryBatches(
       List<QueryBatch> queryBatches, QueryWizardBloc bloc) {
     return <ListTile>[
-      for (int index = 0; index < queryBatches.length; index++)
+      for (var queryBatch in queryBatches)
         ListTile(
           title: Text(
-            queryBatches[index].name,
+            queryBatch.name,
           ),
           leading: const Icon(Icons.batch_prediction_rounded),
           onTap: () {
-            bloc.changeQueryBatch(queryBatches[index]);
+            bloc.changeQueryBatch(queryBatch);
           },
         )
     ];
@@ -26,6 +27,7 @@ class QueryBatchDrawer extends HookWidget {
 
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
         builder: (context, state) {
@@ -33,7 +35,7 @@ class QueryBatchDrawer extends HookWidget {
         final drawerItems = ListView(
           children: [
             UserAccountsDrawerHeader(
-              accountName: Text('Query Batches'),
+              accountName: Text(localizations?.queryBatches ?? 'Query Batches'),
               accountEmail: Text(''),
               currentAccountPicture:
                   const CircleAvatar(child: FlutterLogo(size: 42.0)),

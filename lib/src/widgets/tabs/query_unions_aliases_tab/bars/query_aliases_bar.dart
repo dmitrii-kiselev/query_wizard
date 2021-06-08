@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
 
-class QueryAliases extends StatelessWidget {
-  const QueryAliases({Key? key}) : super(key: key);
+class QueryAliasesBar extends StatelessWidget {
+  const QueryAliasesBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final map = Map<String, Map<String, String?>>();
-
+    final localizations = QueryWizardLocalizations.of(context);
     final unionsBloc = BlocProvider.of<QueriesBloc>(context);
     final queries = unionsBloc.state.queries;
 
+    final map = Map<String, Map<String, String?>>();
     final fields = queries.expand((q) => q.fields).toSet();
 
     final fieldNames = Map.fromIterables(
@@ -44,7 +45,7 @@ class QueryAliases extends StatelessWidget {
         0,
         DataColumn(
           label: Text(
-            'Field names',
+            localizations?.fieldNames ?? 'Field names',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ));

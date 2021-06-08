@@ -49,11 +49,11 @@ class QueryWizardLayout extends HookWidget {
       _QueryWizardTab(
           message: localizations?.orderTab ?? 'Order',
           icon: Icons.sort_rounded,
-          widget: QueryOrderTab()),
+          widget: QueryOrdersTab()),
       _QueryWizardTab(
           message: localizations?.queryBatchTab ?? 'Query batch',
           icon: Icons.batch_prediction,
-          widget: QueryBatchTab()),
+          widget: QueryBatchesTab()),
     ];
 
     final bloc = BlocProvider.of<QueryWizardBloc>(context);

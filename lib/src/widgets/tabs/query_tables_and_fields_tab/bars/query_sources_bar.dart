@@ -25,14 +25,12 @@ class QuerySourcesBar extends StatelessWidget {
               onTap: (item) {
                 if (item.value.type == QueryElementType.column &&
                     item.checked) {
-                  final event = QueryFieldAdded(field: item.value);
-                  fieldsBloc.add(event);
+                  fieldsBloc.add(QueryFieldAdded(field: item.value));
                 }
               },
               onLongPress: (item) {
                 if (item.value.type == QueryElementType.table && item.checked) {
-                  final event = QueryTableAdded(table: item.value);
-                  tablesBloc.add(event);
+                  tablesBloc.add(QueryTableAdded(table: item.value));
                 }
               }),
           floatingActionButton: FloatingActionButton(

@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryFieldsBar extends StatelessWidget {
@@ -47,16 +48,14 @@ class QueryFieldsBar extends StatelessWidget {
                         icon: const Icon(Icons.copy_outlined),
                         tooltip: localizations?.copy ?? 'Copy',
                         onPressed: () {
-                          final event = QueryFieldCopied(field: field);
-                          bloc.add(event);
+                          bloc.add(QueryFieldCopied(field: field));
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.highlight_remove_outlined),
                         tooltip: localizations?.remove ?? 'Remove',
                         onPressed: () {
-                          final event = QueryFieldDeleted(index: index);
-                          bloc.add(event);
+                          bloc.add(QueryFieldDeleted(index: index));
                         },
                       ),
                     ],
@@ -64,7 +63,8 @@ class QueryFieldsBar extends StatelessWidget {
                 ),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
@@ -109,18 +109,15 @@ class _CustomExpressionPage extends HookWidget {
           actions: [
             TextButton(
               onPressed: () {
-                QueryFieldsEvent event;
-
                 final field = QueryElement(
                     name: controller.text, type: QueryElementType.column);
 
-                if (this.index == null) {
-                  event = QueryFieldAdded(field: field);
+                if (index == null) {
+                  bloc.add(QueryFieldAdded(field: field));
                 } else {
-                  event = QueryFieldUpdated(index: this.index!, field: field);
+                  bloc.add(QueryFieldUpdated(index: index!, field: field));
                 }
 
-                bloc.add(event);
                 Navigator.pop(context);
               },
               child: Text(
@@ -147,7 +144,8 @@ class _CustomExpressionPage extends HookWidget {
               )),
             ],
           ),
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(
+              QueryWizardConstants.defaultEdgeInsetsAllValue),
         ),
         resizeToAvoidBottomInset: true);
   }

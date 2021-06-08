@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 
+import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 
-class QueryBatchTab extends StatelessWidget {
-  const QueryBatchTab({Key? key}) : super(key: key);
+class QueryBatchesTab extends StatelessWidget {
+  const QueryBatchesTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +22,7 @@ class QueryBatchTab extends StatelessWidget {
             itemCount: state.queryBatches.length,
             itemBuilder: (context, index) {
               final queryBatch = state.queryBatches[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -32,17 +34,14 @@ class QueryBatchTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            final event =
-                                QueryBatchCopied(queryBatch: queryBatch);
-                            bloc.add(event);
+                            bloc.add(QueryBatchCopied(queryBatch: queryBatch));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryBatchDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryBatchDeleted(index: index));
                           },
                         ),
                       ],
@@ -50,18 +49,16 @@ class QueryBatchTab extends StatelessWidget {
                     title: Text(queryBatch.name)),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QueryBatchOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(QueryBatchOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              final event = QueryBatchAdded(queryBatch: QueryBatch.empty());
-
-              bloc.add(event);
+              bloc.add(QueryBatchAdded(queryBatch: QueryBatch.empty()));
             },
             child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',

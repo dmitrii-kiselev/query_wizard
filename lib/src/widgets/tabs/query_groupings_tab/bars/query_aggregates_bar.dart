@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
@@ -24,6 +25,7 @@ class QueryAggregatesBar extends HookWidget {
             itemCount: state.aggregates.length,
             itemBuilder: (context, index) {
               final aggregate = state.aggregates[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -33,10 +35,9 @@ class QueryAggregatesBar extends HookWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: 'Remove',
+                          tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryAggregateDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryAggregateDeleted(index: index));
                           },
                         ),
                       ],
@@ -56,11 +57,11 @@ class QueryAggregatesBar extends HookWidget {
                     title: Text(aggregate.toString())),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QueryAggregateOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(QueryAggregateOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(
@@ -102,20 +103,13 @@ class _ChangeAggregateDialog extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
     final function = useState<String?>('Sum');
     final aggregate = bloc.state.aggregates.elementAt(index);
-    final List<String> functions = [
-      'Sum',
-      'Count Distinct',
-      'Count',
-      'Max',
-      'Min',
-      'Average'
-    ];
 
     return AlertDialog(
       title: Text(localizations?.changeTableName ?? 'Change aggregate field'),
       content: DropdownButtonFormField<String>(
         value: function.value,
-        items: functions.map<DropdownMenuItem<String>>(
+        items: QueryWizardConstants.aggregateFunctions
+            .map<DropdownMenuItem<String>>(
           (value) {
             return DropdownMenuItem(
               child: Text(value),
@@ -135,10 +129,8 @@ class _ChangeAggregateDialog extends HookWidget {
             final newAggregate = QueryAggregate(
                 field: aggregate.field, function: function.value ?? '');
 
-            final event =
-                QueryAggregateUpdated(index: index, aggregate: newAggregate);
-
-            bloc.add(event);
+            bloc.add(
+                QueryAggregateUpdated(index: index, aggregate: newAggregate));
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

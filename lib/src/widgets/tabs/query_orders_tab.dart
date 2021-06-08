@@ -4,11 +4,12 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 import 'package:query_wizard/widgets.dart';
 
-class QueryOrderTab extends HookWidget {
-  const QueryOrderTab({Key? key}) : super(key: key);
+class QueryOrdersTab extends HookWidget {
+  const QueryOrdersTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class QueryOrderTab extends HookWidget {
             itemCount: state.orders.length,
             itemBuilder: (context, index) {
               final grouping = state.orders[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -35,8 +37,7 @@ class QueryOrderTab extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryOrderDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryOrderDeleted(index: index));
                           },
                         ),
                       ],
@@ -46,7 +47,7 @@ class QueryOrderTab extends HookWidget {
                         context,
                         DialogRoute<String>(
                           context: context,
-                          builder: (context) => _ChangeOrderDialog(
+                          builder: (context) => _ChangeQueryOrderDialog(
                             index: index,
                             bloc: bloc,
                           ),
@@ -56,11 +57,11 @@ class QueryOrderTab extends HookWidget {
                     title: Text(grouping.toString())),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event = QueryOrderOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(QueryOrderOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(
@@ -92,8 +93,8 @@ class QueryOrderTab extends HookWidget {
   }
 }
 
-class _ChangeOrderDialog extends HookWidget {
-  const _ChangeOrderDialog({required this.index, required this.bloc});
+class _ChangeQueryOrderDialog extends HookWidget {
+  const _ChangeQueryOrderDialog({required this.index, required this.bloc});
 
   final int index;
   final QueryOrdersBloc bloc;
@@ -103,16 +104,13 @@ class _ChangeOrderDialog extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
     final type = useState<QuerySortingType?>(QuerySortingType.ascending);
     final sorting = bloc.state.orders.elementAt(index);
-    final List<QuerySortingType> sortingTypes = [
-      QuerySortingType.ascending,
-      QuerySortingType.descending,
-    ];
 
     return AlertDialog(
       title: Text(localizations?.changeSortingField ?? 'Change sorting field'),
       content: DropdownButtonFormField<QuerySortingType>(
         value: type.value,
-        items: sortingTypes.map<DropdownMenuItem<QuerySortingType>>(
+        items: QueryWizardConstants.sortingTypes
+            .map<DropdownMenuItem<QuerySortingType>>(
           (value) {
             return DropdownMenuItem(
               child: Text(value.toString()),
@@ -133,9 +131,7 @@ class _ChangeOrderDialog extends HookWidget {
                 field: sorting.field,
                 type: type.value ?? QuerySortingType.ascending);
 
-            final event = QueryOrderUpdated(index: index, order: newOrder);
-
-            bloc.add(event);
+            bloc.add(QueryOrderUpdated(index: index, order: newOrder));
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

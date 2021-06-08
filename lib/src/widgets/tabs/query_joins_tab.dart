@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/blocs.dart';
+import 'package:query_wizard/constants.dart';
 import 'package:query_wizard/models.dart';
 
 class QueryJoinsTab extends StatelessWidget {
@@ -24,6 +25,7 @@ class QueryJoinsTab extends StatelessWidget {
             itemCount: state.joins.length,
             itemBuilder: (context, index) {
               final join = state.joins[index];
+
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
@@ -53,7 +55,7 @@ class QueryJoinsTab extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute<void>(
-                            builder: (context) => _JoinPage(
+                            builder: (context) => _QueryJoinPage(
                                 index: index,
                                 bloc: bloc,
                                 tables: tables,
@@ -64,11 +66,11 @@ class QueryJoinsTab extends StatelessWidget {
                     title: Text(join.toString())),
               );
             },
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              final event =
-                  QueryJoinOrderChanged(oldIndex: oldIndex, newIndex: newIndex);
-              bloc.add(event);
+              bloc.add(QueryJoinOrderChanged(
+                  oldIndex: oldIndex, newIndex: newIndex));
             },
           ),
           floatingActionButton: FloatingActionButton(
@@ -76,8 +78,8 @@ class QueryJoinsTab extends StatelessWidget {
               Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) =>
-                        _JoinPage(bloc: bloc, tables: tables, fields: fields),
+                    builder: (context) => _QueryJoinPage(
+                        bloc: bloc, tables: tables, fields: fields),
                     fullscreenDialog: true,
                   ));
             },
@@ -92,9 +94,8 @@ class QueryJoinsTab extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class _JoinPage extends HookWidget {
-  _JoinPage(
+class _QueryJoinPage extends HookWidget {
+  _QueryJoinPage(
       {this.index,
       required this.bloc,
       required this.tables,
@@ -104,7 +105,6 @@ class _JoinPage extends HookWidget {
   final QueryJoinsBloc bloc;
   final List<QueryElement> tables;
   final List<QueryElement> fields;
-  final List<String> logicalCompareTypes = ['=', '<>', '<', '>', '<=', '>='];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -113,7 +113,6 @@ class _JoinPage extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
 
-    final customConditionController = useTextEditingController();
     final leftTable = useState<QueryElement?>(null);
     final isLeftAll = useState<bool?>(false);
     final rightTable = useState<QueryElement?>(null);
@@ -122,6 +121,7 @@ class _JoinPage extends HookWidget {
     final leftField = useState<QueryElement?>(null);
     final logicalCompareType = useState<String?>('=');
     final rightField = useState<QueryElement?>(null);
+    final customConditionController = useTextEditingController();
     final pageInitialized = useState<bool>(false);
 
     if (index != null && !pageInitialized.value) {
@@ -129,87 +129,31 @@ class _JoinPage extends HookWidget {
 
       leftTable.value =
           tables.firstWhere((t) => (t.alias ?? t.name) == join.leftTable);
-      isLeftAll.value = join.isLeftAll;
+
       rightTable.value =
           tables.firstWhere((t) => (t.alias ?? t.name) == join.rightTable);
+
+      isLeftAll.value = join.isLeftAll;
       isRightAll.value = join.isRightAll;
       isCustom.value = join.condition.isCustom;
       leftField.value = leftTable.value?.elements
           .firstWhere((f) => f.name == join.condition.leftField);
+
       logicalCompareType.value = join.condition.logicalCompareType;
       rightField.value = rightTable.value?.elements
           .firstWhere((f) => f.name == join.condition.rightField);
+
       customConditionController.text = join.condition.customCondition;
 
       pageInitialized.value = true;
     }
 
-    var actions;
-
-    if (isCustom.value ?? false) {
-      actions = [
-        TextFormField(
-          controller: customConditionController,
-          decoration: InputDecoration(
-            labelText: localizations?.customCondition ?? 'Custom condition',
-            icon: Icon(Icons.text_fields_rounded),
-          ),
-          scrollPadding: EdgeInsets.all(20.0),
-          keyboardType: TextInputType.multiline,
-          autofocus: true,
-        ),
-      ];
-    } else {
-      actions = [
-        DropdownButtonFormField<QueryElement>(
-          value: leftField.value,
-          items: leftTable.value?.elements.map<DropdownMenuItem<QueryElement>>(
-            (value) {
-              return DropdownMenuItem(
-                child: Text(value.name),
-                value: value,
-              );
-            },
-          ).toList(),
-          onChanged: (value) => leftField.value = value,
-          decoration: InputDecoration(
-            labelText: localizations?.leftField ?? 'Left field',
-            icon: Icon(Icons.horizontal_rule_rounded),
-          ),
-        ),
-        DropdownButtonFormField<String>(
-          value: logicalCompareType.value,
-          items: logicalCompareTypes.map<DropdownMenuItem<String>>(
-            (value) {
-              return DropdownMenuItem(
-                child: Text(value),
-                value: value,
-              );
-            },
-          ).toList(),
-          onChanged: (value) => logicalCompareType.value = value,
-          decoration: InputDecoration(
-            labelText: localizations?.condition ?? 'Condition',
-            icon: Icon(Icons.compare_arrows),
-          ),
-        ),
-        DropdownButtonFormField<QueryElement>(
-          value: rightField.value,
-          items: rightTable.value?.elements.map<DropdownMenuItem<QueryElement>>(
-            (value) {
-              return DropdownMenuItem(
-                child: Text(value.name),
-                value: value,
-              );
-            },
-          ).toList(),
-          onChanged: (value) => rightField.value = value,
-          decoration: InputDecoration(
-            labelText: localizations?.rightField ?? 'Right field',
-            icon: Icon(Icons.horizontal_rule_rounded),
-          ),
-        )
-      ];
+    String _buildCustomCondition() {
+      return '${(leftTable.value?.alias ?? leftTable.value?.name ?? '')}.'
+          '${(leftField.value?.name ?? '')} '
+          '${(logicalCompareType.value ?? '')} '
+          '${(rightTable.value?.alias ?? rightTable.value?.name ?? '')}.'
+          '${(rightField.value?.name ?? '')}';
     }
 
     return Scaffold(
@@ -218,8 +162,6 @@ class _JoinPage extends HookWidget {
         actions: [
           TextButton(
             onPressed: () {
-              QueryJoinsEvent event;
-
               final condition = QueryCondition(
                   isCustom: isCustom.value ?? false,
                   leftField: leftField.value?.name ?? '',
@@ -235,13 +177,12 @@ class _JoinPage extends HookWidget {
                   isRightAll: isRightAll.value ?? false,
                   condition: condition);
 
-              if (this.index == null) {
-                event = QueryJoinAdded(join: join);
+              if (index == null) {
+                bloc.add(QueryJoinAdded(join: join));
               } else {
-                event = QueryJoinUpdated(index: this.index!, join: join);
+                bloc.add(QueryJoinUpdated(index: index!, join: join));
               }
 
-              bloc.add(event);
               Navigator.pop(context);
             },
             child: Text(
@@ -325,24 +266,85 @@ class _JoinPage extends HookWidget {
                         }
 
                         customConditionController.text =
-                            (leftTable.value?.alias ??
-                                    leftTable.value?.name ??
-                                    '') +
-                                '.' +
-                                (leftField.value?.name ?? '') +
-                                ' ' +
-                                (logicalCompareType.value ?? '') +
-                                ' ' +
-                                (rightTable.value?.alias ??
-                                    rightTable.value?.name ??
-                                    '') +
-                                '.' +
-                                (rightField.value?.name ?? '');
+                            _buildCustomCondition();
                       }
                     },
                     title: Text(localizations?.custom ?? 'Custom'),
                   ),
-                  ...actions,
+                  Visibility(
+                    visible: isCustom.value ?? false,
+                    child: TextFormField(
+                      controller: customConditionController,
+                      decoration: InputDecoration(
+                        labelText: localizations?.customCondition ??
+                            'Custom condition',
+                        icon: Icon(Icons.text_fields_rounded),
+                      ),
+                      scrollPadding: EdgeInsets.all(20.0),
+                      keyboardType: TextInputType.multiline,
+                      autofocus: true,
+                    ),
+                  ),
+                  Visibility(
+                    visible: !(isCustom.value ?? false),
+                    child: DropdownButtonFormField<QueryElement>(
+                      value: leftField.value,
+                      items: leftTable.value?.elements
+                          .map<DropdownMenuItem<QueryElement>>(
+                        (value) {
+                          return DropdownMenuItem(
+                            child: Text(value.name),
+                            value: value,
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) => leftField.value = value,
+                      decoration: InputDecoration(
+                        labelText: localizations?.leftField ?? 'Left field',
+                        icon: Icon(Icons.horizontal_rule_rounded),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !(isCustom.value ?? false),
+                    child: DropdownButtonFormField<String>(
+                      value: logicalCompareType.value,
+                      items: QueryWizardConstants.logicalCompareTypes
+                          .map<DropdownMenuItem<String>>(
+                        (value) {
+                          return DropdownMenuItem(
+                            child: Text(value),
+                            value: value,
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) => logicalCompareType.value = value,
+                      decoration: InputDecoration(
+                        labelText: localizations?.condition ?? 'Condition',
+                        icon: Icon(Icons.compare_arrows),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: !(isCustom.value ?? false),
+                    child: DropdownButtonFormField<QueryElement>(
+                      value: rightField.value,
+                      items: rightTable.value?.elements
+                          .map<DropdownMenuItem<QueryElement>>(
+                        (value) {
+                          return DropdownMenuItem(
+                            child: Text(value.name),
+                            value: value,
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) => rightField.value = value,
+                      decoration: InputDecoration(
+                        labelText: localizations?.rightField ?? 'Right field',
+                        icon: Icon(Icons.horizontal_rule_rounded),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
