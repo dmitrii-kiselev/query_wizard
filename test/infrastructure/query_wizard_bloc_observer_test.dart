@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:query_wizard/blocs.dart';
 
+import 'package:query_wizard/application.dart';
 import 'package:query_wizard/infrastructure.dart';
-import 'package:query_wizard/repositories.dart';
 
 var log = [];
 
@@ -56,9 +55,8 @@ main() {
 
 QueryWizardBloc buildQueryWizardBloc(
     QueryWizardRepository queryWizardRepository) {
-  final sourcesBloc = QuerySourcesBloc(
-      queryWizardRepository: queryWizardRepository,
-      initialState: QuerySourcesInitial());
+  final sourcesBloc =
+      QuerySourcesBloc(queryWizardRepository: queryWizardRepository);
 
   final tablesBloc = QueryTablesBloc();
   final fieldsBloc = QueryFieldsBloc();

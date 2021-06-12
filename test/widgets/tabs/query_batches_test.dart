@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/repositories.dart';
-import 'package:query_wizard/widgets.dart';
+import 'package:query_wizard/infrastructure.dart';
+import 'package:query_wizard/presentation.dart';
 
 void main() {
   testWidgets('Query batch tab initialized', (WidgetTester tester) async {
-    final QueryWizardRepository queryWizardRepository = QueryWizardRepository(
-      queryWizardClient: DesignTimeQueryWizardClient(),
-    );
+    configureDependencies(Environment.dev);
 
-    await tester.pumpWidget(
-        QueryWizard(queryWizardRepository: queryWizardRepository),
-        Duration(milliseconds: 1000));
+    await tester.pumpWidget(QueryWizard(), Duration(milliseconds: 1000));
     await tester.pumpAndSettle(Duration(milliseconds: 1000));
     await tester.tap(find.byKey(ValueKey('Query batch')));
 
