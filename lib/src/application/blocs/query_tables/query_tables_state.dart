@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/domain.dart';
 
 abstract class QueryTablesState extends Equatable {
-  QueryTablesState({required this.tables});
+  const QueryTablesState({required this.tables});
 
   final List<QueryElement> tables;
 
@@ -17,6 +17,6 @@ class QueryTablesInitial extends QueryTablesState {
 }
 
 class QueryTablesChanged extends QueryTablesState {
-  QueryTablesChanged({required List<QueryElement> tables})
+  const QueryTablesChanged({required List<QueryElement> tables})
       : super(tables: tables);
 }

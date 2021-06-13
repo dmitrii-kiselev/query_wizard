@@ -8,7 +8,7 @@ void main() {
   testWidgets('Tables and fields initialized', (WidgetTester tester) async {
     configureDependencies(Environment.dev);
 
-    await tester.pumpWidget(QueryWizard());
+    await tester.pumpWidget(const QueryWizard());
     await tester.pumpAndSettle();
 
     expect(find.text('Database'), findsOneWidget);

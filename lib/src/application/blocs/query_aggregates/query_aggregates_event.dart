@@ -11,6 +11,7 @@ class QueryAggregatesInitialized extends QueryAggregatesEvent {
 
   final List<QueryAggregate> aggregates;
 
+  @override
   List<Object?> get props => [aggregates];
 }
 
@@ -19,6 +20,7 @@ class QueryAggregateAdded extends QueryAggregatesEvent {
 
   final QueryAggregate aggregate;
 
+  @override
   List<Object?> get props => [aggregate];
 }
 
@@ -31,6 +33,7 @@ class QueryAggregateUpdated extends QueryAggregatesEvent {
   final int index;
   final QueryAggregate aggregate;
 
+  @override
   List<Object?> get props => [aggregate];
 }
 
@@ -39,6 +42,7 @@ class QueryAggregateDeleted extends QueryAggregatesEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

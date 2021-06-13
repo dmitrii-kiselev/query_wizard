@@ -7,10 +7,11 @@ abstract class QuerySourcesEvent extends Equatable {
 }
 
 class QuerySourcesInitialized extends QuerySourcesEvent {
-  QuerySourcesInitialized({required this.sources});
+  const QuerySourcesInitialized({required this.sources});
 
   final List<QueryElement> sources;
 
+  @override
   List<Object?> get props => [sources];
 }
 

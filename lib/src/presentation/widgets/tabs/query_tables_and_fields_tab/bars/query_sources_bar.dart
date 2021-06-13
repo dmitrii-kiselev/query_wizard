@@ -35,16 +35,16 @@ class QuerySourcesBar extends StatelessWidget {
               }),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              final event = QuerySourcesRequested();
+              const event = QuerySourcesRequested();
               sourcesBloc.add(event);
             },
-            child: const Icon(Icons.update_rounded),
             tooltip: localizations?.refresh ?? 'Refresh',
+            child: const Icon(Icons.update_rounded),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

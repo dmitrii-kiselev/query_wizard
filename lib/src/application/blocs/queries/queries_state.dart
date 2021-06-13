@@ -16,5 +16,6 @@ class QueriesInitial extends QueriesState {
 }
 
 class QueriesChanged extends QueriesState {
-  QueriesChanged({required List<Query> queries}) : super(queries: queries);
+  const QueriesChanged({required List<Query> queries})
+      : super(queries: queries);
 }

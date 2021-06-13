@@ -19,29 +19,32 @@ void main() {
     blocTest('adds join when QueryJoinAdded is added',
         build: () => joinsBloc,
         act: (QueryJoinsBloc bloc) {
-          final join = QueryJoin.empty();
-          final event = QueryJoinAdded(join: join);
+          const join = QueryJoin.empty();
+          const event = QueryJoinAdded(join: join);
 
           bloc.add(event);
         },
         expect: () => [
-              QueryJoinsInitial(joins: [QueryJoin.empty()]),
-              QueryJoinsChanged(joins: [QueryJoin.empty()])
+              // ignore: prefer_const_literals_to_create_immutables
+              QueryJoinsInitial(joins: [const QueryJoin.empty()]),
+              const QueryJoinsChanged(joins: [QueryJoin.empty()])
             ]);
 
     blocTest('changes join when QueryJoinUpdated is added',
         build: () => joinsBloc,
         act: (QueryJoinsBloc bloc) {
-          final join = QueryJoin.empty();
-          final joinAdded = QueryJoinAdded(join: join);
-          final joinUpdated =
+          const join = QueryJoin.empty();
+          const joinAdded = QueryJoinAdded(join: join);
+          const joinUpdated =
               QueryJoinUpdated(index: 0, join: join, isLeftAll: true);
 
           bloc.add(joinAdded);
           bloc.add(joinUpdated);
         },
         expect: () {
-          final expectedJoins = [QueryJoin.empty().copyWith(isLeftAll: true)];
+          final expectedJoins = [
+            const QueryJoin.empty().copyWith(isLeftAll: true)
+          ];
 
           return [
             QueryJoinsInitial(joins: expectedJoins),
@@ -54,15 +57,18 @@ void main() {
     blocTest('copies join when QueryJoinCopied is added',
         build: () => joinsBloc,
         act: (QueryJoinsBloc bloc) {
-          final join = QueryJoin.empty();
-          final joinAdded = QueryJoinAdded(join: join);
-          final joinCopied = QueryJoinCopied(join: join);
+          const join = QueryJoin.empty();
+          const joinAdded = QueryJoinAdded(join: join);
+          const joinCopied = QueryJoinCopied(join: join);
 
           bloc.add(joinAdded);
           bloc.add(joinCopied);
         },
         expect: () {
-          final expectedJoins = [QueryJoin.empty(), QueryJoin.empty()];
+          final expectedJoins = [
+            const QueryJoin.empty(),
+            const QueryJoin.empty()
+          ];
 
           return [
             QueryJoinsInitial(joins: expectedJoins),
@@ -75,9 +81,9 @@ void main() {
     blocTest('removes join when QueryJoinDeleted is added',
         build: () => joinsBloc,
         act: (QueryJoinsBloc bloc) {
-          final join = QueryJoin.empty();
-          final joinAdded = QueryJoinAdded(join: join);
-          final joinDeleted = QueryJoinDeleted(index: 0);
+          const join = QueryJoin.empty();
+          const joinAdded = QueryJoinAdded(join: join);
+          const joinDeleted = QueryJoinDeleted(index: 0);
 
           bloc.add(joinAdded);
           bloc.add(joinDeleted);
@@ -96,10 +102,10 @@ void main() {
     blocTest('changes join order when QueryJoinOrderChanged is added',
         build: () => joinsBloc,
         act: (QueryJoinsBloc bloc) {
-          final join = QueryJoin.empty();
-          final joinAdded1 = QueryJoinAdded(join: join);
-          final joinAdded2 = QueryJoinAdded(join: QueryJoin.empty());
-          final joinOrderChanged =
+          const join = QueryJoin.empty();
+          const joinAdded1 = QueryJoinAdded(join: join);
+          const joinAdded2 = QueryJoinAdded(join: QueryJoin.empty());
+          const joinOrderChanged =
               QueryJoinOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(joinAdded1);
@@ -107,7 +113,10 @@ void main() {
           bloc.add(joinOrderChanged);
         },
         expect: () {
-          final expectedJoins = [QueryJoin.empty(), QueryJoin.empty()];
+          final expectedJoins = [
+            const QueryJoin.empty(),
+            const QueryJoin.empty()
+          ];
 
           return [
             QueryJoinsInitial(joins: expectedJoins),

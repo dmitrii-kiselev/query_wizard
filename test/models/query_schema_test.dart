@@ -4,7 +4,7 @@ import 'package:query_wizard/domain.dart';
 
 void main() {
   test('QuerySchema initialized', () {
-    final schema = QuerySchema(queryBatches: []);
+    const schema = QuerySchema(queryBatches: []);
 
     expect(schema.queryBatches, []);
     expect(schema.props, equals([schema.queryBatches]));

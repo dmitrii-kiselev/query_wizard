@@ -6,8 +6,8 @@ void main() {
   test('QueryBatch initialized', () {
     final batch = QueryBatch(
         name: '',
-        sources: [],
-        queries: [],
+        sources: [...[]],
+        queries: [...[]],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
 
@@ -27,8 +27,8 @@ void main() {
     final batch = QueryBatch.empty();
     final expected = QueryBatch(
         name: '',
-        sources: [],
-        queries: [],
+        sources: [...[]],
+        queries: [...[]],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
 

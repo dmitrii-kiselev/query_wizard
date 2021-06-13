@@ -13,7 +13,7 @@ class QueryElement extends Equatable {
       required List<QueryElement> elements}) {
     this.elements.addAll(elements);
 
-    for (var element in elements) {
+    for (final element in elements) {
       element.parent = this;
     }
   }
@@ -26,10 +26,11 @@ class QueryElement extends Equatable {
       required QueryElement parent}) {
     this.elements.addAll(elements);
 
-    for (var element in elements) {
+    for (final element in elements) {
       element.parent = this;
     }
 
+    // ignore: prefer_initializing_formals
     this.parent = parent;
   }
 

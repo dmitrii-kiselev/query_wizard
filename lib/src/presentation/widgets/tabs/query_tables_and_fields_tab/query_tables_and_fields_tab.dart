@@ -9,7 +9,11 @@ class QueryTablesAndFieldsTab extends HookWidget {
   const QueryTablesAndFieldsTab({Key? key}) : super(key: key);
 
   List<Widget> _buildBars() {
-    return [QuerySourcesBar(), QueryTablesBar(), QueryFieldsBar()];
+    return [
+      const QuerySourcesBar(),
+      const QueryTablesBar(),
+      const QueryFieldsBar()
+    ];
   }
 
   Widget _getBar(int index) {
@@ -46,14 +50,14 @@ class QueryTablesAndFieldsTab extends HookWidget {
     return Scaffold(
       body: Center(
         child: PageTransitionSwitcher(
-          child: _getBar(currentIndex.value),
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(
-              child: child,
               animation: animation,
               secondaryAnimation: secondaryAnimation,
+              child: child,
             );
           },
+          child: _getBar(currentIndex.value),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

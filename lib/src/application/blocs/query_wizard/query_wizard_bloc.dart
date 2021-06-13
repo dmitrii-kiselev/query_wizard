@@ -19,7 +19,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
       required this.batchesBloc,
       required this.ordersBloc,
       required this.queryWizardRepository})
-      : super(QueryWizardInitial());
+      : super(const QueryWizardInitial());
 
   final QuerySourcesBloc sourcesBloc;
   final QueryTablesBloc tablesBloc;
@@ -39,7 +39,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   @override
   Stream<QueryWizardState> mapEventToState(QueryWizardEvent event) async* {
     if (event is QuerySchemaRequested) {
-      yield QueryWizardLoadInProgress();
+      yield const QueryWizardLoadInProgress();
       try {
         late QuerySchema querySchema;
         if (event.query != "") {
@@ -55,7 +55,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
 
         yield QueryWizardLoadSuccess(querySchema: querySchema);
       } catch (_) {
-        yield QueryWizardLoadFailure();
+        yield const QueryWizardLoadFailure();
       }
     }
   }

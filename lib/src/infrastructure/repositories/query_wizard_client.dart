@@ -11,6 +11,7 @@ abstract class QueryWizardClient {
 @dev
 @LazySingleton(as: QueryWizardClient)
 class DesignTimeQueryWizardClient implements QueryWizardClient {
+  @override
   Future<List<QueryElement>> getSources() async {
     return [
       QueryElement.withElements(
@@ -130,13 +131,14 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
   }
 
+  @override
   Future<QuerySchema> parseQuery(String query) async {
     final sources1 = await getSources();
     final sources2 = await getSources();
     final sources3 = await getSources();
 
     final List<QueryJoin> joins1 = [
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'CUSTOMERS',
           isLeftAll: true,
           rightTable: 'ORDERS',
@@ -147,7 +149,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDERS',
           isLeftAll: true,
           rightTable: 'ORDER_ITEMS',
@@ -158,7 +160,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDER_ITEMS',
           isLeftAll: true,
           rightTable: 'PRODUCTS',
@@ -172,7 +174,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final List<QueryJoin> joins2 = [
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'CUSTOMERS',
           isLeftAll: true,
           rightTable: 'ORDERS',
@@ -183,7 +185,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDERS',
           isLeftAll: true,
           rightTable: 'ORDER_ITEMS',
@@ -194,7 +196,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDER_ITEMS',
           isLeftAll: true,
           rightTable: 'PRODUCTS',
@@ -208,7 +210,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final List<QueryJoin> joins3 = [
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'CUSTOMERS',
           isLeftAll: true,
           rightTable: 'ORDERS',
@@ -219,7 +221,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDERS',
           isLeftAll: true,
           rightTable: 'ORDER_ITEMS',
@@ -230,7 +232,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
-      QueryJoin(
+      const QueryJoin(
           leftTable: 'ORDER_ITEMS',
           isLeftAll: true,
           rightTable: 'PRODUCTS',
@@ -262,19 +264,19 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final aggregates1 = [
-      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
+      const QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final aggregates2 = [
-      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
+      const QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final aggregates3 = [
-      QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
+      const QueryAggregate(field: 'ORDER_ITEMS.UNIT_PRICE', function: 'Sum'),
     ];
 
     final conditions1 = [
-      QueryCondition(
+      const QueryCondition(
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
@@ -283,7 +285,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final conditions2 = [
-      QueryCondition(
+      const QueryCondition(
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
@@ -292,7 +294,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final conditions3 = [
-      QueryCondition(
+      const QueryCondition(
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
           logicalCompareType: '=',
@@ -301,17 +303,17 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     ];
 
     final orders1 = [
-      QueryOrder(
+      const QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
     final orders2 = [
-      QueryOrder(
+      const QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
     final orders3 = [
-      QueryOrder(
+      const QueryOrder(
           field: 'ORDER_ITEMS.UNIT_PRICE', type: QuerySortingType.ascending),
     ];
 
@@ -319,7 +321,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         name: 'Query 1',
         sources: sources1,
         tables: [...sources1],
-        fields: [],
+        fields: [...[]],
         joins: joins1,
         groupings: groupings1,
         aggregates: aggregates1,
@@ -333,7 +335,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         name: 'Query 2',
         sources: sources2,
         tables: [...sources2],
-        fields: [],
+        fields: [...[]],
         joins: joins2,
         groupings: groupings2,
         aggregates: aggregates2,
@@ -347,7 +349,7 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
         name: 'Query 3',
         sources: sources3,
         tables: [...sources3],
-        fields: [],
+        fields: [...[]],
         joins: joins3,
         groupings: groupings3,
         aggregates: aggregates3,
@@ -359,24 +361,24 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
 
     final batch1 = QueryBatch(
         name: 'Query batch 1',
-        sources: [],
+        sources: [...[]],
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
     final batch2 = QueryBatch(
         name: 'Query batch 2',
-        sources: [],
+        sources: [...[]],
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
     final batch3 = QueryBatch(
         name: 'Query batch 3',
-        sources: [],
+        sources: [...[]],
         queries: [query1, query2, query3],
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
 
-    final querySchema = new QuerySchema(queryBatches: [batch1, batch2, batch3]);
+    final querySchema = QuerySchema(queryBatches: [batch1, batch2, batch3]);
 
     return querySchema;
   }
@@ -387,8 +389,8 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
 class FakeQueryWizardApiClient extends QueryWizardClient {
   @override
   Future<List<QueryElement>> getSources() async {
-    return await new Future.delayed(new Duration(milliseconds: 1000), () {
-      throw new Exception();
+    return Future.delayed(const Duration(milliseconds: 1000), () {
+      throw Exception();
     });
   }
 

@@ -55,7 +55,7 @@ void main() {
         act: (QueryBatchesBloc bloc) {
           final queryBatch = QueryBatch.empty();
           final batchAdded = QueryBatchAdded(queryBatch: queryBatch);
-          final batchDeleted = QueryBatchDeleted(index: 0);
+          const batchDeleted = QueryBatchDeleted(index: 0);
 
           bloc.add(batchAdded);
           bloc.add(batchDeleted);
@@ -77,7 +77,7 @@ void main() {
           final queryBatch = QueryBatch.empty();
           final batchAdded1 = QueryBatchAdded(queryBatch: queryBatch);
           final batchAdded2 = QueryBatchAdded(queryBatch: QueryBatch.empty());
-          final batchOrderChanged =
+          const batchOrderChanged =
               QueryBatchOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(batchAdded1);

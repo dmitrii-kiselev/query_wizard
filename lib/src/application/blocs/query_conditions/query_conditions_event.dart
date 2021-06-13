@@ -11,6 +11,7 @@ class QueryConditionsInitialized extends QueryConditionsEvent {
 
   final List<QueryCondition> conditions;
 
+  @override
   List<Object?> get props => [conditions];
 }
 
@@ -19,6 +20,7 @@ class QueryConditionAdded extends QueryConditionsEvent {
 
   final QueryCondition condition;
 
+  @override
   List<Object?> get props => [condition];
 }
 
@@ -40,6 +42,7 @@ class QueryConditionUpdated extends QueryConditionsEvent {
   final String? rightField;
   final String? customCondition;
 
+  @override
   List<Object?> get props => [condition];
 }
 
@@ -48,6 +51,7 @@ class QueryConditionCopied extends QueryConditionsEvent {
 
   final QueryCondition condition;
 
+  @override
   List<Object?> get props => [condition];
 }
 
@@ -56,6 +60,7 @@ class QueryConditionDeleted extends QueryConditionsEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

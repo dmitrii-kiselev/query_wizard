@@ -9,7 +9,7 @@ class QueryUnionsAliasesTab extends HookWidget {
   const QueryUnionsAliasesTab({Key? key}) : super(key: key);
 
   List<Widget> _buildBars() {
-    return [QueryUnionsBar(), QueryAliasesBar()];
+    return [const QueryUnionsBar(), const QueryAliasesBar()];
   }
 
   Widget _getBar(int index) {
@@ -42,14 +42,14 @@ class QueryUnionsAliasesTab extends HookWidget {
     return Scaffold(
       body: Center(
         child: PageTransitionSwitcher(
-          child: _getBar(currentIndex.value),
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(
-              child: child,
               animation: animation,
               secondaryAnimation: secondaryAnimation,
+              child: child,
             );
           },
+          child: _getBar(currentIndex.value),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

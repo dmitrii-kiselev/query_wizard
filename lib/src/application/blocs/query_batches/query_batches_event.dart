@@ -11,6 +11,7 @@ class QueryBatchesInitialized extends QueryBatchesEvent {
 
   final List<QueryBatch> queryBatches;
 
+  @override
   List<Object?> get props => [queryBatches];
 }
 
@@ -19,6 +20,7 @@ class QueryBatchAdded extends QueryBatchesEvent {
 
   final QueryBatch queryBatch;
 
+  @override
   List<Object?> get props => [queryBatch];
 }
 
@@ -27,6 +29,7 @@ class QueryBatchCopied extends QueryBatchesEvent {
 
   final QueryBatch queryBatch;
 
+  @override
   List<Object?> get props => [queryBatch];
 }
 
@@ -35,6 +38,7 @@ class QueryBatchDeleted extends QueryBatchesEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

@@ -25,6 +25,7 @@ class QueryNavigationRail extends HookWidget {
     ];
   }
 
+  @override
   Widget build(BuildContext context) {
     final selectedQueryIndex = useState(0);
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
@@ -34,7 +35,7 @@ class QueryNavigationRail extends HookWidget {
         return NavigationRail(
           selectedIndex: selectedQueryIndex.value,
           onDestinationSelected: (index) {
-            var query = state.queries[index];
+            final query = state.queries[index];
 
             selectedQueryIndex.value = index;
             bloc.changeQuery(query);
@@ -44,7 +45,7 @@ class QueryNavigationRail extends HookWidget {
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

@@ -4,14 +4,14 @@ import 'package:query_wizard/domain.dart';
 
 void main() {
   test('QueryCondition initialized', () {
-    final condition = QueryCondition(
+    const condition = QueryCondition(
         isCustom: false,
         leftField: '',
         logicalCompareType: '',
         rightField: '',
         customCondition: '');
 
-    expect(condition, QueryCondition.empty());
+    expect(condition, const QueryCondition.empty());
     expect(
         condition.props,
         equals([
@@ -24,8 +24,8 @@ void main() {
   });
 
   test('Empty QueryCondition initialized', () {
-    final condition = QueryCondition.empty();
-    final expected = QueryCondition(
+    const condition = QueryCondition.empty();
+    const expected = QueryCondition(
         isCustom: false,
         leftField: '',
         logicalCompareType: '',

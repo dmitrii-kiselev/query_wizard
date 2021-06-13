@@ -11,6 +11,7 @@ class QueryOrdersInitialized extends QueryOrdersEvent {
 
   final List<QueryOrder> orders;
 
+  @override
   List<Object?> get props => [orders];
 }
 
@@ -19,6 +20,7 @@ class QueryOrderAdded extends QueryOrdersEvent {
 
   final QueryOrder order;
 
+  @override
   List<Object?> get props => [order];
 }
 
@@ -31,6 +33,7 @@ class QueryOrderUpdated extends QueryOrdersEvent {
   final int index;
   final QueryOrder order;
 
+  @override
   List<Object?> get props => [order];
 }
 
@@ -39,6 +42,7 @@ class QueryOrderDeleted extends QueryOrdersEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

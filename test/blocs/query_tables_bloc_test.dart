@@ -91,7 +91,7 @@ void main() {
           final table =
               QueryElement(name: 'Table', type: QueryElementType.table);
           final tableAdded = QueryTableAdded(table: table);
-          final tableDeleted = QueryTableDeleted(index: 0);
+          const tableDeleted = QueryTableDeleted(index: 0);
 
           bloc.add(tableAdded);
           bloc.add(tableDeleted);
@@ -115,7 +115,7 @@ void main() {
           final tableAdded1 = QueryTableAdded(table: table);
           final tableAdded2 = QueryTableAdded(
               table: QueryElement(name: 'Table', type: QueryElementType.table));
-          final tableOrderChanged =
+          const tableOrderChanged =
               QueryTableOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(tableAdded1);

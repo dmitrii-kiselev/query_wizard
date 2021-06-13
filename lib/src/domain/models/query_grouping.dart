@@ -18,10 +18,11 @@ class QueryGrouping extends Equatable {
       required QueryGrouping parent}) {
     this.elements.addAll(elements);
 
-    for (var element in elements) {
+    for (final element in elements) {
       element.parent = this;
     }
 
+    // ignore: prefer_initializing_formals
     this.parent = parent;
   }
 

@@ -89,7 +89,7 @@ void main() {
           final fieldAdded = QueryFieldAdded(
               field:
                   QueryElement(name: 'Field', type: QueryElementType.column));
-          final fieldDeleted = QueryFieldDeleted(index: 0);
+          const fieldDeleted = QueryFieldDeleted(index: 0);
 
           bloc.add(fieldAdded);
           bloc.add(fieldDeleted);
@@ -112,7 +112,7 @@ void main() {
               QueryElement(name: 'Field', type: QueryElementType.column);
           final fieldAdded1 = QueryFieldAdded(field: field);
           final fieldAdded2 = QueryFieldAdded(field: field);
-          final fieldOrderChanged =
+          const fieldOrderChanged =
               QueryFieldOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(fieldAdded1);

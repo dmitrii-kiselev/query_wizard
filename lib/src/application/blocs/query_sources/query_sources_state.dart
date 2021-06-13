@@ -21,7 +21,8 @@ class QuerySourcesLoadInProgress extends QuerySourcesState {
 }
 
 class QuerySourcesLoadSuccess extends QuerySourcesState {
-  const QuerySourcesLoadSuccess({required sources}) : super(sources: sources);
+  const QuerySourcesLoadSuccess({required List<QueryElement> sources})
+      : super(sources: sources);
 
   @override
   List<Object> get props => [sources];

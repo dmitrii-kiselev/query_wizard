@@ -6,16 +6,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/infrastructure.dart';
 
-var log = [];
+List log = [];
 
-main() {
+void main() {
   setUp(() {
     log = [];
   });
 
   test('onEvent', overridePrint(() {
     final observer = QueryWizardBlocObserver();
-    final event = 'event';
+    const event = 'event';
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
@@ -30,9 +30,9 @@ main() {
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
-    final state = '';
-    final event = 'event';
-    final transition = Transition<String, String>(
+    const state = '';
+    const event = 'event';
+    const transition = Transition<String, String>(
         currentState: state, event: event, nextState: state);
 
     observer.onTransition(bloc, transition);
@@ -42,7 +42,7 @@ main() {
 
   test('onError', overridePrint(() {
     final observer = QueryWizardBlocObserver();
-    final error = 'error';
+    const error = 'error';
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
@@ -84,8 +84,8 @@ QueryWizardBloc buildQueryWizardBloc(
   return queryWizardBloc;
 }
 
-void Function() overridePrint(void testFn()) => () {
-      var spec = new ZoneSpecification(print: (_, __, ___, String msg) {
+void Function() overridePrint(void Function() testFn) => () {
+      final spec = ZoneSpecification(print: (_, __, ___, String msg) {
         log.add(msg);
       });
 

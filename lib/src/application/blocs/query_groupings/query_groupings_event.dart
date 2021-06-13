@@ -11,6 +11,7 @@ class QueryGroupingsInitialized extends QueryGroupingsEvent {
 
   final List<QueryGrouping> groupings;
 
+  @override
   List<Object?> get props => [groupings];
 }
 
@@ -19,6 +20,7 @@ class QueryGroupingAdded extends QueryGroupingsEvent {
 
   final QueryGrouping grouping;
 
+  @override
   List<Object?> get props => [grouping];
 }
 
@@ -27,6 +29,7 @@ class QueryGroupingDeleted extends QueryGroupingsEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

@@ -22,18 +22,22 @@ abstract class QueryMoreState extends Equatable {
 }
 
 class QueryMoreInitial extends QueryMoreState {
-  QueryMoreInitial({isTop, topCounter, isDistinct, queryType, tempTableName})
+  const QueryMoreInitial()
       : super(
-            isTop: isTop,
-            topCounter: topCounter,
-            isDistinct: isDistinct,
-            queryType: queryType,
-            tempTableName: tempTableName);
+            isTop: false,
+            topCounter: 0,
+            isDistinct: false,
+            queryType: QueryType.selectQuery,
+            tempTableName: '');
 }
 
 class QueryMoreChangedState extends QueryMoreState {
-  QueryMoreChangedState(
-      {isTop, topCounter, isDistinct, queryType, tempTableName})
+  const QueryMoreChangedState(
+      {required bool isTop,
+      required int topCounter,
+      required bool isDistinct,
+      required QueryType queryType,
+      required String tempTableName})
       : super(
             isTop: isTop,
             topCounter: topCounter,

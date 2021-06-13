@@ -59,23 +59,23 @@ class QueryGroupingsBar extends HookWidget {
                     builder: (context) => FieldsSelectionPage(
                         tables: tables,
                         onSelected: (fields) {
-                          fields.forEach((f) {
+                          for (final field in fields) {
                             bloc.add(QueryGroupingAdded(
                                 grouping: QueryGrouping(
-                                    name: f.name,
+                                    name: field.name,
                                     type: GroupingType.grouping)));
-                          });
+                          }
                         }),
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

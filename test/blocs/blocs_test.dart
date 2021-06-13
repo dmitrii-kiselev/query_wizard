@@ -6,13 +6,13 @@ import 'package:query_wizard/domain.dart';
 void main() {
   group('QueryWizardState', () {
     test('QueryWizardInitial initialized', () {
-      final event = QueryWizardInitial();
+      const event = QueryWizardInitial();
 
       expect(event.props, equals([]));
     });
 
     test('QueryWizardLoadInProgress initialized', () {
-      final event = QueryWizardLoadInProgress();
+      const event = QueryWizardLoadInProgress();
 
       expect(event.props, equals([]));
     });
@@ -29,7 +29,7 @@ void main() {
     });
 
     test('QueryWizardLoadFailure initialized', () {
-      final event = QueryWizardLoadFailure();
+      const event = QueryWizardLoadFailure();
 
       expect(event.props, equals([]));
     });
@@ -37,7 +37,7 @@ void main() {
 
   group('QueryWizardState', () {
     test('SourcesRequested initialized', () {
-      final event = QuerySourcesRequested();
+      const event = QuerySourcesRequested();
 
       expect(event.props, equals([]));
     });

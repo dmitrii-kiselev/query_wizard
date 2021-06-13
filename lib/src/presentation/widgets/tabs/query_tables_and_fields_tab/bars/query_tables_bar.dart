@@ -51,15 +51,16 @@ class QueryTablesBar extends StatelessWidget {
               Navigator.push(
                   context,
                   DialogRoute<String>(
-                      context: context, builder: (context) => _SubqueryPage()));
+                      context: context,
+                      builder: (context) => const _SubqueryPage()));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

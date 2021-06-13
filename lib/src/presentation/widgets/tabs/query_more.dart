@@ -12,7 +12,7 @@ import 'package:query_wizard/domain.dart';
 class QueryMoreTab extends HookWidget {
   QueryMoreTab({Key? key}) : super(key: key);
 
-  final debounce = Debounce(delay: Duration(milliseconds: 500));
+  final debounce = Debounce(delay: const Duration(milliseconds: 500));
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class QueryMoreTab extends HookWidget {
     final queryType = useState<QueryType?>(currentQueryButch?.queryType);
     final tempTableName = useState<String?>(currentQueryButch?.name);
 
-    updateCurrentQuery() {
+    void updateCurrentQuery() {
       final index = queryUnionsBloc.state.queries.indexOf(currentQuery!);
 
       queryUnionsBloc.state.queries.remove(currentQuery);
@@ -53,7 +53,7 @@ class QueryMoreTab extends HookWidget {
       queryUnionsBloc.state.queries.insert(index, newQuery);
     }
 
-    updateCurrentQueryBatch() {
+    void updateCurrentQueryBatch() {
       final index =
           queryBatchTabBloc.state.queryBatches.indexOf(currentQueryButch!);
 
@@ -97,7 +97,7 @@ class QueryMoreTab extends HookWidget {
                     }
                   },
                   decoration: InputDecoration(
-                      counter: Offstage(),
+                      counter: const Offstage(),
                       labelText: localizations?.topCounter ?? 'Top counter'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
@@ -144,7 +144,7 @@ class QueryMoreTab extends HookWidget {
                   decoration: InputDecoration(
                       labelText: localizations?.temporaryTableName ??
                           'Temporary table name',
-                      icon: Icon(Icons.table_rows_rounded)),
+                      icon: const Icon(Icons.table_rows_rounded)),
                 ),
               ),
             ],
@@ -161,7 +161,7 @@ class Debounce {
 
   Debounce({required this.delay});
 
-  call(VoidCallback action) {
+  void call(VoidCallback action) {
     _timer?.cancel();
     _timer = Timer(delay, action);
   }

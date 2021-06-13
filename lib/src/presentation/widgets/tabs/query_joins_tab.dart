@@ -82,13 +82,13 @@ class QueryJoinsTab extends StatelessWidget {
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
@@ -148,11 +148,11 @@ class _QueryJoinPage extends HookWidget {
     }
 
     String _buildCustomCondition() {
-      return '${(leftTable.value?.alias ?? leftTable.value?.name ?? '')}.'
-          '${(leftField.value?.name ?? '')} '
-          '${(logicalCompareType.value ?? '')} '
-          '${(rightTable.value?.alias ?? rightTable.value?.name ?? '')}.'
-          '${(rightField.value?.name ?? '')}';
+      return '${leftTable.value?.alias ?? leftTable.value?.name ?? ''}.'
+          '${leftField.value?.name ?? ''} '
+          '${logicalCompareType.value ?? ''} '
+          '${rightTable.value?.alias ?? rightTable.value?.name ?? ''}.'
+          '${rightField.value?.name ?? ''}';
     }
 
     return Scaffold(
@@ -208,8 +208,8 @@ class _QueryJoinPage extends HookWidget {
                         .map<DropdownMenuItem<QueryElement>>(
                       (value) {
                         return DropdownMenuItem(
-                          child: Text(value.alias ?? value.name),
                           value: value,
+                          child: Text(value.alias ?? value.name),
                         );
                       },
                     ).toList(),
@@ -219,7 +219,7 @@ class _QueryJoinPage extends HookWidget {
                     },
                     decoration: InputDecoration(
                       labelText: localizations?.leftTable ?? 'Left table',
-                      icon: Icon(Icons.table_rows_rounded),
+                      icon: const Icon(Icons.table_rows_rounded),
                     ),
                   ),
                   DropdownButtonFormField<QueryElement>(
@@ -229,8 +229,8 @@ class _QueryJoinPage extends HookWidget {
                         .map<DropdownMenuItem<QueryElement>>(
                       (value) {
                         return DropdownMenuItem(
-                          child: Text(value.alias ?? value.name),
                           value: value,
+                          child: Text(value.alias ?? value.name),
                         );
                       },
                     ).toList(),
@@ -240,7 +240,7 @@ class _QueryJoinPage extends HookWidget {
                     },
                     decoration: InputDecoration(
                       labelText: localizations?.rightTable ?? 'Right table',
-                      icon: Icon(Icons.table_rows_rounded),
+                      icon: const Icon(Icons.table_rows_rounded),
                     ),
                   ),
                   CheckboxListTile(
@@ -277,9 +277,8 @@ class _QueryJoinPage extends HookWidget {
                       decoration: InputDecoration(
                         labelText: localizations?.customCondition ??
                             'Custom condition',
-                        icon: Icon(Icons.text_fields_rounded),
+                        icon: const Icon(Icons.text_fields_rounded),
                       ),
-                      scrollPadding: EdgeInsets.all(20.0),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                     ),
@@ -292,15 +291,15 @@ class _QueryJoinPage extends HookWidget {
                           .map<DropdownMenuItem<QueryElement>>(
                         (value) {
                           return DropdownMenuItem(
-                            child: Text(value.name),
                             value: value,
+                            child: Text(value.name),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => leftField.value = value,
                       decoration: InputDecoration(
                         labelText: localizations?.leftField ?? 'Left field',
-                        icon: Icon(Icons.horizontal_rule_rounded),
+                        icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                     ),
                   ),
@@ -312,15 +311,15 @@ class _QueryJoinPage extends HookWidget {
                           .map<DropdownMenuItem<String>>(
                         (value) {
                           return DropdownMenuItem(
-                            child: Text(value),
                             value: value,
+                            child: Text(value),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => logicalCompareType.value = value,
                       decoration: InputDecoration(
                         labelText: localizations?.condition ?? 'Condition',
-                        icon: Icon(Icons.compare_arrows),
+                        icon: const Icon(Icons.compare_arrows),
                       ),
                     ),
                   ),
@@ -332,15 +331,15 @@ class _QueryJoinPage extends HookWidget {
                           .map<DropdownMenuItem<QueryElement>>(
                         (value) {
                           return DropdownMenuItem(
-                            child: Text(value.name),
                             value: value,
+                            child: Text(value.name),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => rightField.value = value,
                       decoration: InputDecoration(
                         labelText: localizations?.rightField ?? 'Right field',
-                        icon: Icon(Icons.horizontal_rule_rounded),
+                        icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                     ),
                   ),

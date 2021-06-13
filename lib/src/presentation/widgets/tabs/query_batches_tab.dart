@@ -59,8 +59,8 @@ class QueryBatchesTab extends StatelessWidget {
             onPressed: () {
               bloc.add(QueryBatchAdded(queryBatch: QueryBatch.empty()));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }

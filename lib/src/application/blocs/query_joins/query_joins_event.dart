@@ -11,6 +11,7 @@ class QueryJoinsInitialized extends QueryJoinsEvent {
 
   final List<QueryJoin> joins;
 
+  @override
   List<Object?> get props => [joins];
 }
 
@@ -19,6 +20,7 @@ class QueryJoinAdded extends QueryJoinsEvent {
 
   final QueryJoin join;
 
+  @override
   List<Object?> get props => [join];
 }
 
@@ -40,6 +42,7 @@ class QueryJoinUpdated extends QueryJoinsEvent {
   final bool? isRightAll;
   final QueryCondition? condition;
 
+  @override
   List<Object?> get props => [join];
 }
 
@@ -48,6 +51,7 @@ class QueryJoinCopied extends QueryJoinsEvent {
 
   final QueryJoin join;
 
+  @override
   List<Object?> get props => [join];
 }
 
@@ -56,6 +60,7 @@ class QueryJoinDeleted extends QueryJoinsEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

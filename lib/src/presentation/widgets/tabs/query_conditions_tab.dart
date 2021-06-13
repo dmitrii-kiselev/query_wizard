@@ -79,13 +79,13 @@ class QueryConditionsTab extends StatelessWidget {
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
@@ -180,8 +180,8 @@ class _QueryConditionPage extends HookWidget {
                         }
 
                         customConditionController.text =
-                            '${(leftField.value?.name ?? '')} '
-                            '${(logicalCompareType.value ?? '')} '
+                            '${leftField.value?.name ?? ''} '
+                            '${logicalCompareType.value ?? ''} '
                             '${rightFieldController.text}';
                       }
                     },
@@ -194,9 +194,8 @@ class _QueryConditionPage extends HookWidget {
                       decoration: InputDecoration(
                         labelText: localizations?.customCondition ??
                             'Custom condition',
-                        icon: Icon(Icons.text_fields_rounded),
+                        icon: const Icon(Icons.text_fields_rounded),
                       ),
-                      scrollPadding: EdgeInsets.all(20.0),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                     ),
@@ -208,10 +207,10 @@ class _QueryConditionPage extends HookWidget {
                       items: fields.map<DropdownMenuItem<QueryElement>>(
                         (value) {
                           return DropdownMenuItem(
+                            value: value,
                             child: Text(
                                 '${value.parent?.alias ?? value.parent?.name}.'
                                 '${value.name}'),
-                            value: value,
                           );
                         },
                       ).toList(),
@@ -221,7 +220,7 @@ class _QueryConditionPage extends HookWidget {
                       },
                       decoration: InputDecoration(
                         labelText: localizations?.leftField ?? 'Left field',
-                        icon: Icon(Icons.horizontal_rule_rounded),
+                        icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                     ),
                   ),
@@ -233,15 +232,15 @@ class _QueryConditionPage extends HookWidget {
                           .map<DropdownMenuItem<String>>(
                         (value) {
                           return DropdownMenuItem(
-                            child: Text(value),
                             value: value,
+                            child: Text(value),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => logicalCompareType.value = value,
                       decoration: InputDecoration(
                         labelText: localizations?.condition ?? 'Condition',
-                        icon: Icon(Icons.compare_arrows),
+                        icon: const Icon(Icons.compare_arrows),
                       ),
                     ),
                   ),
@@ -251,8 +250,7 @@ class _QueryConditionPage extends HookWidget {
                       controller: rightFieldController,
                       decoration: InputDecoration(
                           labelText: localizations?.rightField ?? 'Right field',
-                          icon: Icon(Icons.horizontal_rule_rounded)),
-                      scrollPadding: EdgeInsets.all(20.0),
+                          icon: const Icon(Icons.horizontal_rule_rounded)),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                     ),

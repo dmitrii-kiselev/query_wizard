@@ -22,8 +22,12 @@ abstract class QueryMoreEvent extends Equatable {
 }
 
 class QueryMoreInitialized extends QueryMoreEvent {
-  QueryMoreInitialized(
-      {isTop, topCounter, isDistinct, queryType, tempTableName})
+  const QueryMoreInitialized(
+      {required bool isTop,
+      required int topCounter,
+      required bool isDistinct,
+      required QueryType queryType,
+      required String tempTableName})
       : super(
             isTop: isTop,
             topCounter: topCounter,
@@ -33,7 +37,12 @@ class QueryMoreInitialized extends QueryMoreEvent {
 }
 
 class QueryMoreChanged extends QueryMoreEvent {
-  QueryMoreChanged({isTop, topCounter, isDistinct, queryType, tempTableName})
+  const QueryMoreChanged(
+      {required bool isTop,
+      required int topCounter,
+      required bool isDistinct,
+      required QueryType queryType,
+      required String tempTableName})
       : super(
             isTop: isTop,
             topCounter: topCounter,

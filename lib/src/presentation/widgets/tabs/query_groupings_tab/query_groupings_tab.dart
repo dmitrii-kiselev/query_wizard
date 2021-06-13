@@ -10,8 +10,8 @@ class QueryGroupingsTab extends HookWidget {
 
   List<Widget> _buildBars() {
     return [
-      QueryGroupingsBar(),
-      QueryAggregatesBar(),
+      const QueryGroupingsBar(),
+      const QueryAggregatesBar(),
     ];
   }
 
@@ -45,14 +45,14 @@ class QueryGroupingsTab extends HookWidget {
     return Scaffold(
       body: Center(
         child: PageTransitionSwitcher(
-          child: _getBar(currentIndex.value),
           transitionBuilder: (child, animation, secondaryAnimation) {
             return FadeThroughTransition(
-              child: child,
               animation: animation,
               secondaryAnimation: secondaryAnimation,
+              child: child,
             );
           },
+          child: _getBar(currentIndex.value),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

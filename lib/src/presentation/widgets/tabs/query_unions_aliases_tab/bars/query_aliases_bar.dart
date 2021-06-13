@@ -13,7 +13,7 @@ class QueryAliasesBar extends StatelessWidget {
     final unionsBloc = BlocProvider.of<QueriesBloc>(context);
     final queries = unionsBloc.state.queries;
 
-    final map = Map<String, Map<String, String?>>();
+    final map = <String, Map<String, String?>>{};
     final fields = queries.expand((q) => q.fields).toSet();
 
     final fieldNames = Map.fromIterables(
@@ -21,11 +21,11 @@ class QueryAliasesBar extends StatelessWidget {
 
     map['field_names'] = fieldNames;
 
-    for (var query in queries) {
-      final fieldsMap = new Map<String, String?>();
+    for (final query in queries) {
+      final fieldsMap = <String, String?>{};
 
-      for (var field in fields) {
-        var f = query.fields.firstWhere((f) => f.name == field.name);
+      for (final field in fields) {
+        final f = query.fields.firstWhere((f) => f.name == field.name);
         fieldsMap[field.name] = f.alias;
       }
 
@@ -36,7 +36,7 @@ class QueryAliasesBar extends StatelessWidget {
         .map((q) => DataColumn(
               label: Text(
                 q.name,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ))
         .toList();
@@ -46,7 +46,7 @@ class QueryAliasesBar extends StatelessWidget {
         DataColumn(
           label: Text(
             localizations?.fieldNames ?? 'Field names',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ));
 
@@ -57,7 +57,7 @@ class QueryAliasesBar extends StatelessWidget {
 
       cells.add(DataCell(Text(fieldNames[name] ?? '')));
 
-      for (var query in queries) {
+      for (final query in queries) {
         if (map.containsKey(query.name)) {
           final queryFieldNames = map[query.name];
           if (queryFieldNames != null && queryFieldNames.containsKey(name)) {

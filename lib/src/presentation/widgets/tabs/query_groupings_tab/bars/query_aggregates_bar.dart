@@ -71,22 +71,22 @@ class QueryAggregatesBar extends HookWidget {
                     builder: (context) => FieldsSelectionPage(
                         tables: tables,
                         onSelected: (fields) {
-                          fields.forEach((f) {
+                          for (final field in fields) {
                             bloc.add(QueryAggregateAdded(
                                 aggregate: QueryAggregate(
-                                    field: f.name, function: 'Sum')));
-                          });
+                                    field: field.name, function: 'Sum')));
+                          }
                         }),
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
@@ -111,15 +111,15 @@ class _ChangeAggregateDialog extends HookWidget {
             .map<DropdownMenuItem<String>>(
           (value) {
             return DropdownMenuItem(
-              child: Text(value),
               value: value,
+              child: Text(value),
             );
           },
         ).toList(),
         onChanged: (value) => function.value = value,
         decoration: InputDecoration(
           labelText: localizations?.function ?? 'Function',
-          icon: Icon(Icons.compare_arrows),
+          icon: const Icon(Icons.compare_arrows),
         ),
       ),
       actions: [

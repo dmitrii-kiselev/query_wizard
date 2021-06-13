@@ -9,6 +9,7 @@ class QueriesInitialized extends QueriesEvent {
 
   final List<Query> queries;
 
+  @override
   List<Object?> get props => [queries];
 }
 
@@ -17,6 +18,7 @@ class QueryAdded extends QueriesEvent {
 
   final Query query;
 
+  @override
   List<Object?> get props => [query];
 }
 
@@ -25,6 +27,7 @@ class QueryCopied extends QueriesEvent {
 
   final Query query;
 
+  @override
   List<Object?> get props => [Query];
 }
 
@@ -33,6 +36,7 @@ class QueryDeleted extends QueriesEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

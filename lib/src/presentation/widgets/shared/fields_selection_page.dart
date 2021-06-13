@@ -8,7 +8,9 @@ import 'package:query_wizard/presentation.dart';
 typedef QueryElementListCallback = Function(List<QueryElement>);
 
 class FieldsSelectionPage extends HookWidget {
-  const FieldsSelectionPage({required this.tables, required this.onSelected});
+  const FieldsSelectionPage(
+      {Key? key, required this.tables, required this.onSelected})
+      : super(key: key);
 
   final List<QueryElement> tables;
   final QueryElementListCallback onSelected;

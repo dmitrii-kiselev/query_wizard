@@ -25,7 +25,7 @@ class QueryFieldsBar extends StatelessWidget {
 
               return Card(
                 child: ListTile(
-                  leading: Icon(Icons.horizontal_rule_rounded),
+                  leading: const Icon(Icons.horizontal_rule_rounded),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -74,13 +74,13 @@ class QueryFieldsBar extends StatelessWidget {
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
@@ -98,7 +98,7 @@ class _CustomExpressionPage extends HookWidget {
     final theme = Theme.of(context);
 
     if (index != null) {
-      var field = bloc.state.fields.elementAt(index!);
+      final field = bloc.state.fields.elementAt(index!);
       controller.text = field.name;
     }
 
@@ -129,6 +129,8 @@ class _CustomExpressionPage extends HookWidget {
           ],
         ),
         body: Container(
+          padding: const EdgeInsets.all(
+              QueryWizardConstants.defaultEdgeInsetsAllValue),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -136,15 +138,12 @@ class _CustomExpressionPage extends HookWidget {
                   child: TextField(
                 controller: controller,
                 decoration: const InputDecoration(border: OutlineInputBorder()),
-                scrollPadding: EdgeInsets.all(20.0),
                 keyboardType: TextInputType.multiline,
                 maxLines: 99999,
                 autofocus: true,
               )),
             ],
           ),
-          padding: const EdgeInsets.all(
-              QueryWizardConstants.defaultEdgeInsetsAllValue),
         ),
         resizeToAvoidBottomInset: true);
   }

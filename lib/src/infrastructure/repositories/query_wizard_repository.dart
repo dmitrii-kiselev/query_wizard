@@ -12,10 +12,10 @@ class QueryWizardRepository {
   QueryWizardRepository({required this.queryWizardClient});
 
   Future<List<QueryElement>> getSources() async {
-    return await queryWizardClient.getSources();
+    return queryWizardClient.getSources();
   }
 
   Future<QuerySchema> parseQuery(String query) async {
-    return await queryWizardClient.parseQuery(query);
+    return queryWizardClient.parseQuery(query);
   }
 }

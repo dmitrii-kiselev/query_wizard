@@ -12,18 +12,19 @@ void main() {
     await GetIt.instance.reset();
     configureDependencies(Environment.dev);
 
-    await tester.pumpWidget(QueryWizard(), Duration(milliseconds: 1000));
-    await tester.pumpAndSettle(Duration(milliseconds: 1000));
+    await tester.pumpWidget(
+        const QueryWizard(), const Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     expect(find.text('Query Wizard'), findsOneWidget);
-    expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
-    expect(find.byKey(ValueKey('Joins')), findsOneWidget);
-    expect(find.byKey(ValueKey('Grouping')), findsOneWidget);
-    expect(find.byKey(ValueKey('Conditions')), findsOneWidget);
-    expect(find.byKey(ValueKey('More')), findsOneWidget);
-    expect(find.byKey(ValueKey('Unions/Aliases')), findsOneWidget);
-    expect(find.byKey(ValueKey('Order')), findsOneWidget);
-    expect(find.byKey(ValueKey('Query batch')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Tables and fields')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Joins')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Grouping')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Conditions')), findsOneWidget);
+    expect(find.byKey(const ValueKey('More')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Unions/Aliases')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Order')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Query batch')), findsOneWidget);
   });
 
   testWidgets('Query Wizard not initialized smoke test',
@@ -31,8 +32,9 @@ void main() {
     await GetIt.instance.reset();
     configureDependencies(Environment.test);
 
-    await tester.pumpWidget(QueryWizard(), Duration(milliseconds: 1000));
-    await tester.pumpAndSettle(Duration(milliseconds: 1000));
+    await tester.pumpWidget(
+        const QueryWizard(), const Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     expect(find.text('Query Wizard'), findsNothing);
     expect(find.text('Something went wrong!'), findsOneWidget);
@@ -42,11 +44,12 @@ void main() {
     await GetIt.instance.reset();
     configureDependencies(Environment.dev);
 
-    await tester.pumpWidget(QueryWizard(), Duration(milliseconds: 1000));
-    await tester.pumpAndSettle(Duration(milliseconds: 1000));
-    await tester.tap(find.byKey(ValueKey('Joins')));
+    await tester.pumpWidget(
+        const QueryWizard(), const Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+    await tester.tap(find.byKey(const ValueKey('Joins')));
 
-    expect(find.byKey(ValueKey('Tables and fields')), findsOneWidget);
-    expect(find.byKey(ValueKey('Joins')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Tables and fields')), findsOneWidget);
+    expect(find.byKey(const ValueKey('Joins')), findsOneWidget);
   });
 }

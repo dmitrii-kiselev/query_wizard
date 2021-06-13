@@ -9,9 +9,10 @@ class QuerySchema extends Equatable {
       : queryBatches = [
           QueryBatch(
               name: 'Query batch 1',
-              sources: [],
+              sources: [...[]],
+              // ignore: prefer_const_literals_to_create_immutables
               queries: [
-                Query(
+                const Query(
                     name: 'Query 1',
                     sources: [],
                     tables: [],

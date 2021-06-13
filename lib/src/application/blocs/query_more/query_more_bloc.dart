@@ -5,11 +5,11 @@ import 'package:query_wizard/application.dart';
 
 @lazySingleton
 class QueryMoreBloc extends Bloc<QueryMoreEvent, QueryMoreState> {
-  QueryMoreBloc() : super(QueryMoreInitial());
+  QueryMoreBloc() : super(const QueryMoreInitial());
 
   @override
   Stream<QueryMoreState> mapEventToState(QueryMoreEvent event) async* {
-    yield QueryMoreInitial();
+    yield const QueryMoreInitial();
 
     if (event is QueryMoreInitialized) {
       yield* _mapQueryMoreInitializedToState(event);

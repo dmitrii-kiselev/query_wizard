@@ -19,22 +19,24 @@ void main() {
     blocTest('adds condition when QueryConditionAdded is added',
         build: () => conditionsBloc,
         act: (QueryConditionsBloc bloc) {
-          final condition = QueryCondition.empty();
-          final event = QueryConditionAdded(condition: condition);
+          const condition = QueryCondition.empty();
+          const event = QueryConditionAdded(condition: condition);
 
           bloc.add(event);
         },
         expect: () => [
-              QueryConditionsInitial(conditions: [QueryCondition.empty()]),
-              QueryConditionsChanged(conditions: [QueryCondition.empty()])
+              QueryConditionsInitial(
+                  // ignore: prefer_const_literals_to_create_immutables
+                  conditions: [const QueryCondition.empty()]),
+              const QueryConditionsChanged(conditions: [QueryCondition.empty()])
             ]);
 
     blocTest('changes condition when QueryConditionUpdated is added',
         build: () => conditionsBloc,
         act: (QueryConditionsBloc bloc) {
-          final condition = QueryCondition.empty();
-          final conditionAdded = QueryConditionAdded(condition: condition);
-          final conditionUpdated = QueryConditionUpdated(
+          const condition = QueryCondition.empty();
+          const conditionAdded = QueryConditionAdded(condition: condition);
+          const conditionUpdated = QueryConditionUpdated(
               index: 0, condition: condition, isCustom: true);
 
           bloc.add(conditionAdded);
@@ -42,7 +44,7 @@ void main() {
         },
         expect: () {
           final expectedConditions = [
-            QueryCondition.empty().copyWith(isCustom: true)
+            const QueryCondition.empty().copyWith(isCustom: true)
           ];
 
           return [
@@ -56,17 +58,17 @@ void main() {
     blocTest('copies condition when QueryConditionCopied is added',
         build: () => conditionsBloc,
         act: (QueryConditionsBloc bloc) {
-          final condition = QueryCondition.empty();
-          final conditionAdded = QueryConditionAdded(condition: condition);
-          final conditionCopied = QueryConditionCopied(condition: condition);
+          const condition = QueryCondition.empty();
+          const conditionAdded = QueryConditionAdded(condition: condition);
+          const conditionCopied = QueryConditionCopied(condition: condition);
 
           bloc.add(conditionAdded);
           bloc.add(conditionCopied);
         },
         expect: () {
           final expectedConditions = [
-            QueryCondition.empty(),
-            QueryCondition.empty()
+            const QueryCondition.empty(),
+            const QueryCondition.empty()
           ];
 
           return [
@@ -80,9 +82,9 @@ void main() {
     blocTest('removes condition when QueryConditionDeleted is added',
         build: () => conditionsBloc,
         act: (QueryConditionsBloc bloc) {
-          final condition = QueryCondition.empty();
-          final conditionAdded = QueryConditionAdded(condition: condition);
-          final conditionDeleted = QueryConditionDeleted(index: 0);
+          const condition = QueryCondition.empty();
+          const conditionAdded = QueryConditionAdded(condition: condition);
+          const conditionDeleted = QueryConditionDeleted(index: 0);
 
           bloc.add(conditionAdded);
           bloc.add(conditionDeleted);
@@ -101,11 +103,11 @@ void main() {
     blocTest('changes condition order when QueryConditionOrderChanged is added',
         build: () => conditionsBloc,
         act: (QueryConditionsBloc bloc) {
-          final condition = QueryCondition.empty();
-          final conditionAdded1 = QueryConditionAdded(condition: condition);
-          final conditionAdded2 =
+          const condition = QueryCondition.empty();
+          const conditionAdded1 = QueryConditionAdded(condition: condition);
+          const conditionAdded2 =
               QueryConditionAdded(condition: QueryCondition.empty());
-          final conditionOrderChanged =
+          const conditionOrderChanged =
               QueryConditionOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(conditionAdded1);
@@ -113,18 +115,18 @@ void main() {
           bloc.add(conditionOrderChanged);
         },
         expect: () {
-          final expectedConditions = [
+          const expectedConditions = [
             QueryCondition.empty(),
             QueryCondition.empty()
           ];
 
           return [
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions),
+            const QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions),
+            const QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions)
+            const QueryConditionsChanged(conditions: expectedConditions)
           ];
         });
   });

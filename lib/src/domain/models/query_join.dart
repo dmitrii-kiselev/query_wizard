@@ -10,12 +10,12 @@ class QueryJoin extends Equatable {
       required this.isRightAll,
       required this.condition});
 
-  QueryJoin.empty()
+  const QueryJoin.empty()
       : leftTable = '',
         isLeftAll = false,
         rightTable = '',
         isRightAll = false,
-        condition = QueryCondition.empty();
+        condition = const QueryCondition.empty();
 
   final String leftTable;
   final bool isLeftAll;
@@ -31,15 +31,9 @@ class QueryJoin extends Equatable {
   String toString() {
     return condition.isCustom
         ? condition.customCondition
-        : leftTable +
-            '.' +
-            condition.leftField +
-            ' ' +
-            condition.logicalCompareType +
-            ' ' +
-            rightTable +
-            '.' +
-            condition.rightField;
+        : '$leftTable.${condition.leftField} '
+            '${condition.logicalCompareType} '
+            '$rightTable.${condition.rightField}';
   }
 }
 

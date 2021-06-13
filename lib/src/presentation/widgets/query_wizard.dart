@@ -7,7 +7,7 @@ import 'package:query_wizard/infrastructure.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryWizard extends StatelessWidget {
-  QueryWizard({Key? key}) : super(key: key);
+  const QueryWizard({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,5 +39,5 @@ Widget buildHome() {
     BlocProvider(create: (context) => getIt<QueryOrdersBloc>()),
     BlocProvider(create: (context) => getIt<QueryBatchesBloc>()),
     BlocProvider(create: (context) => getIt<QueryWizardBloc>()),
-  ], child: QueryWizardLayout(title: 'Query Wizard'));
+  ], child: const QueryWizardLayout(title: 'Query Wizard'));
 }

@@ -11,6 +11,7 @@ class QueryTablesInitialized extends QueryTablesEvent {
 
   final List<QueryElement> tables;
 
+  @override
   List<Object?> get props => [tables];
 }
 
@@ -19,6 +20,7 @@ class QueryTableAdded extends QueryTablesEvent {
 
   final QueryElement table;
 
+  @override
   List<Object?> get props => [table];
 }
 
@@ -31,6 +33,7 @@ class QueryTableUpdated extends QueryTablesEvent {
   final int index;
   final QueryElement table;
 
+  @override
   List<Object?> get props => [table];
 }
 
@@ -39,6 +42,7 @@ class QueryTableCopied extends QueryTablesEvent {
 
   final QueryElement table;
 
+  @override
   List<Object?> get props => [table];
 }
 
@@ -47,6 +51,7 @@ class QueryTableDeleted extends QueryTablesEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

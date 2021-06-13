@@ -4,7 +4,7 @@ import 'package:query_wizard/domain.dart';
 
 void main() {
   test('QueryOrder initialized', () {
-    final sorting = QueryOrder(field: '', type: QuerySortingType.ascending);
+    const sorting = QueryOrder(field: '', type: QuerySortingType.ascending);
 
     expect(sorting.field, '');
     expect(sorting.type, QuerySortingType.ascending);

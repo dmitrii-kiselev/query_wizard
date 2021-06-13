@@ -9,9 +9,10 @@ void main() {
   testWidgets('Groupings tab initialized', (WidgetTester tester) async {
     configureDependencies(Environment.dev);
 
-    await tester.pumpWidget(QueryWizard(), Duration(milliseconds: 1000));
-    await tester.pumpAndSettle(Duration(milliseconds: 1000));
-    await tester.tap(find.byKey(ValueKey('Grouping')));
+    await tester.pumpWidget(
+        const QueryWizard(), const Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+    await tester.tap(find.byKey(const ValueKey('Grouping')));
 
     expect(find.text('Groupings'), findsNothing);
   });

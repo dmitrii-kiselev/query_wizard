@@ -71,23 +71,23 @@ class QueryOrdersTab extends HookWidget {
                     builder: (context) => FieldsSelectionPage(
                         tables: tables,
                         onSelected: (fields) {
-                          fields.forEach((f) {
+                          for (final field in fields) {
                             bloc.add(QueryOrderAdded(
                                 order: QueryOrder(
-                                    field: f.name,
+                                    field: field.name,
                                     type: QuerySortingType.ascending)));
-                          });
+                          }
                         }),
                     fullscreenDialog: true,
                   ));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
@@ -112,15 +112,15 @@ class _ChangeQueryOrderDialog extends HookWidget {
             .map<DropdownMenuItem<QuerySortingType>>(
           (value) {
             return DropdownMenuItem(
-              child: Text(value.toString()),
               value: value,
+              child: Text(value.toString()),
             );
           },
         ).toList(),
         onChanged: (value) => type.value = value,
         decoration: InputDecoration(
           labelText: localizations?.sorting ?? 'Sorting',
-          icon: Icon(Icons.compare_arrows),
+          icon: const Icon(Icons.compare_arrows),
         ),
       ),
       actions: [

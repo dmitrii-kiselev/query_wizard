@@ -11,6 +11,7 @@ class QueryFieldsInitialized extends QueryFieldsEvent {
 
   final List<QueryElement> fields;
 
+  @override
   List<Object?> get props => [fields];
 }
 
@@ -19,11 +20,12 @@ class QueryFieldAdded extends QueryFieldsEvent {
 
   final QueryElement field;
 
+  @override
   List<Object?> get props => [field];
 }
 
 class QueryFieldUpdated extends QueryFieldsEvent {
-  QueryFieldUpdated({
+  const QueryFieldUpdated({
     required this.index,
     required this.field,
   });
@@ -31,6 +33,7 @@ class QueryFieldUpdated extends QueryFieldsEvent {
   final int index;
   final QueryElement field;
 
+  @override
   List<Object?> get props => [field];
 }
 
@@ -39,6 +42,7 @@ class QueryFieldCopied extends QueryFieldsEvent {
 
   final QueryElement field;
 
+  @override
   List<Object?> get props => [field];
 }
 
@@ -47,6 +51,7 @@ class QueryFieldDeleted extends QueryFieldsEvent {
 
   final int index;
 
+  @override
   List<Object?> get props => [index];
 }
 

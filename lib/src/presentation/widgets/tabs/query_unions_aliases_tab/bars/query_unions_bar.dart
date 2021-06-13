@@ -58,13 +58,13 @@ class QueryUnionsBar extends StatelessWidget {
             onPressed: () {
               bloc.add(QueryAdded(query: Query.empty()));
             },
-            child: const Icon(Icons.add),
             tooltip: localizations?.add ?? 'Add',
+            child: const Icon(Icons.add),
           ),
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

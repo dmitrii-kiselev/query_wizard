@@ -4,7 +4,7 @@ import 'package:query_wizard/domain.dart';
 
 void main() {
   test('Query initialized', () {
-    final query = Query(
+    const query = Query(
         name: 'Query',
         sources: [],
         tables: [],
@@ -39,7 +39,7 @@ void main() {
 
   test('Empty query initialized', () {
     final query = Query.empty();
-    final expected = Query(
+    const expected = Query(
         name: 'Query',
         sources: [],
         tables: [],

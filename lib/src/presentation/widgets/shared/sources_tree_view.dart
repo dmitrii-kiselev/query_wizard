@@ -15,7 +15,7 @@ typedef SourcesTreeCallback = Function(ItemValue);
 typedef QueryElementCallback = Function(QueryElement);
 
 class SourcesTreeView extends StatelessWidget {
-  SourcesTreeView({
+  const SourcesTreeView({
     Key? key,
     required this.items,
     this.onTap,
@@ -36,7 +36,7 @@ class SourcesTreeView extends StatelessWidget {
     return items.map((item) {
       if (item.type == QueryElementType.table) {
         return Container(
-          margin: EdgeInsets.only(left: 8),
+          margin: const EdgeInsets.only(left: 8),
           child: TreeViewChild(
               parent: item,
               children: item.elements,
@@ -87,7 +87,7 @@ class _TreeViewData extends StatelessWidget {
 }
 
 class TreeViewChild extends HookWidget {
-  TreeViewChild({
+  const TreeViewChild({
     Key? key,
     required this.parent,
     required this.children,
@@ -133,7 +133,7 @@ class TreeViewChild extends HookWidget {
             onEdit: onEdit,
             onRemove: onRemove),
         AnimatedContainer(
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: isExpanded.value ?? false
               ? Column(
                   mainAxisSize: MainAxisSize.min,
@@ -147,7 +147,7 @@ class TreeViewChild extends HookWidget {
                           onRemove: onRemove))
                       .toList(),
                 )
-              : Offstage(),
+              : const Offstage(),
         ),
       ],
     );
@@ -155,7 +155,8 @@ class TreeViewChild extends HookWidget {
 }
 
 class TreeItem extends HookWidget {
-  TreeItem({
+  const TreeItem({
+    Key? key,
     required this.item,
     this.onPressedNext,
     this.onTap,
@@ -163,7 +164,7 @@ class TreeItem extends HookWidget {
     this.onCopy,
     this.onEdit,
     this.onRemove,
-  });
+  }) : super(key: key);
 
   final QueryElement item;
   final VoidCallback? onPressedNext;
@@ -183,8 +184,8 @@ class TreeItem extends HookWidget {
 
   Icon _getLeadingIcon() {
     return _isRoot()
-        ? Icon(Icons.table_rows_rounded)
-        : Icon(Icons.horizontal_rule_rounded);
+        ? const Icon(Icons.table_rows_rounded)
+        : const Icon(Icons.horizontal_rule_rounded);
   }
 
   List<IconButton> _getActions(QueryWizardLocalizations? localizations) {
@@ -216,7 +217,7 @@ class TreeItem extends HookWidget {
       }
 
       actions.add(IconButton(
-        icon: Icon(Icons.navigate_next),
+        icon: const Icon(Icons.navigate_next),
         onPressed: onPressedNext,
       ));
     }
@@ -226,7 +227,7 @@ class TreeItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alias = (_isRoot() ? item.alias ?? '' : item.name);
+    final alias = _isRoot() ? item.alias ?? '' : item.name;
 
     final elevation = _getElevation();
     final selected = useState(false);
@@ -246,7 +247,7 @@ class TreeItem extends HookWidget {
           children: actions,
         ),
         onTap: () {
-          this.onTap!(ItemValue(value: item, checked: !selected.value));
+          onTap!(ItemValue(value: item, checked: !selected.value));
           if (!_isRoot()) {
             selected.value = !selected.value;
           }

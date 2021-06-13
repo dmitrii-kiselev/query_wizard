@@ -25,6 +25,7 @@ class QueryBatchDrawer extends HookWidget {
     ];
   }
 
+  @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
@@ -36,7 +37,7 @@ class QueryBatchDrawer extends HookWidget {
           children: [
             UserAccountsDrawerHeader(
               accountName: Text(localizations?.queryBatches ?? 'Query Batches'),
-              accountEmail: Text(''),
+              accountEmail: const Text(''),
               currentAccountPicture:
                   const CircleAvatar(child: FlutterLogo(size: 42.0)),
             ),
@@ -49,7 +50,7 @@ class QueryBatchDrawer extends HookWidget {
         );
       }
 
-      return Center(child: CircularProgressIndicator());
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }
