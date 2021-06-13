@@ -188,41 +188,36 @@ class TreeItem extends HookWidget {
         : const Icon(Icons.horizontal_rule_rounded);
   }
 
-  List<IconButton> _getActions(QueryWizardLocalizations? localizations) {
-    final actions = List<IconButton>.empty(growable: true);
-
-    if (_isRoot()) {
-      if (onCopy != null) {
-        actions.add(IconButton(
-          icon: const Icon(Icons.copy_rounded),
-          tooltip: localizations?.copy ?? 'Copy',
-          onPressed: () => onCopy!(item),
-        ));
-      }
-
-      if (onEdit != null) {
-        actions.add(IconButton(
-          icon: const Icon(Icons.edit_rounded),
-          tooltip: localizations?.remove ?? 'Edit',
-          onPressed: () => onEdit!(item),
-        ));
-      }
-
-      if (onRemove != null) {
-        actions.add(IconButton(
-          icon: const Icon(Icons.highlight_remove_rounded),
-          tooltip: localizations?.remove ?? 'Remove',
-          onPressed: () => onRemove!(item),
-        ));
-      }
-
-      actions.add(IconButton(
-        icon: const Icon(Icons.navigate_next),
-        onPressed: onPressedNext,
-      ));
-    }
-
-    return actions;
+  List<Widget> _getActions(QueryWizardLocalizations? localizations) {
+    return [
+      Visibility(
+          visible: _isRoot() && onCopy != null,
+          child: IconButton(
+            icon: const Icon(Icons.copy_rounded),
+            tooltip: localizations?.copy ?? 'Copy',
+            onPressed: () => onCopy!(item),
+          )),
+      Visibility(
+          visible: _isRoot() && onEdit != null,
+          child: IconButton(
+            icon: const Icon(Icons.edit_rounded),
+            tooltip: localizations?.edit ?? 'Edit',
+            onPressed: () => onEdit!(item),
+          )),
+      Visibility(
+          visible: _isRoot() && onRemove != null,
+          child: IconButton(
+            icon: const Icon(Icons.highlight_remove_rounded),
+            tooltip: localizations?.remove ?? 'Remove',
+            onPressed: () => onRemove!(item),
+          )),
+      Visibility(
+          visible: _isRoot() && onRemove != null,
+          child: IconButton(
+            icon: const Icon(Icons.navigate_next),
+            onPressed: onPressedNext,
+          ))
+    ];
   }
 
   @override
