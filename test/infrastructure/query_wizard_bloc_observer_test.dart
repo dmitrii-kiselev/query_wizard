@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
 import 'package:query_wizard/infrastructure.dart';
 
 List log = [];
@@ -17,7 +18,7 @@ void main() {
     final observer = QueryWizardBlocObserver();
     const event = 'event';
     final client = DesignTimeQueryWizardClient();
-    final repository = QueryWizardRepository(queryWizardClient: client);
+    final repository = QueryWizardRepositoryImpl(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
 
     observer.onEvent(bloc, event);
@@ -28,7 +29,7 @@ void main() {
   test('onTransition', overridePrint(() {
     final observer = QueryWizardBlocObserver();
     final client = DesignTimeQueryWizardClient();
-    final repository = QueryWizardRepository(queryWizardClient: client);
+    final repository = QueryWizardRepositoryImpl(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
     const state = '';
     const event = 'event';
@@ -44,7 +45,7 @@ void main() {
     final observer = QueryWizardBlocObserver();
     const error = 'error';
     final client = DesignTimeQueryWizardClient();
-    final repository = QueryWizardRepository(queryWizardClient: client);
+    final repository = QueryWizardRepositoryImpl(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
 
     observer.onError(bloc, error, StackTrace.empty);

@@ -2,12 +2,6 @@ import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/domain.dart';
 
-abstract class QueryWizardClient {
-  Future<List<QueryElement>> getSources();
-
-  Future<QuerySchema> parseQuery(String query);
-}
-
 @dev
 @LazySingleton(as: QueryWizardClient)
 class DesignTimeQueryWizardClient implements QueryWizardClient {
@@ -381,22 +375,5 @@ class DesignTimeQueryWizardClient implements QueryWizardClient {
     final querySchema = QuerySchema(queryBatches: [batch1, batch2, batch3]);
 
     return querySchema;
-  }
-}
-
-@test
-@LazySingleton(as: QueryWizardClient)
-class FakeQueryWizardApiClient extends QueryWizardClient {
-  @override
-  Future<List<QueryElement>> getSources() async {
-    return Future.delayed(const Duration(milliseconds: 1000), () {
-      throw Exception();
-    });
-  }
-
-  @override
-  Future<QuerySchema> parseQuery(String query) {
-    // TODO: implement parseQuery
-    throw UnimplementedError();
   }
 }

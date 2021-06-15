@@ -7,8 +7,8 @@
 import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 
-import '../../../application.dart' as _i16;
-import '../../../infrastructure.dart' as _i13;
+import '../../../application.dart' as _i19;
+import '../../../domain.dart' as _i13;
 import '../../application/blocs/queries/queries_bloc.dart' as _i3;
 import '../../application/blocs/query_aggregates/query_aggregates_bloc.dart'
     as _i4;
@@ -21,11 +21,12 @@ import '../../application/blocs/query_groupings/query_groupings_bloc.dart'
 import '../../application/blocs/query_joins/query_joins_bloc.dart' as _i9;
 import '../../application/blocs/query_more/query_more_bloc.dart' as _i10;
 import '../../application/blocs/query_orders/query_orders_bloc.dart' as _i11;
-import '../../application/blocs/query_sources/query_sources_bloc.dart' as _i12;
-import '../../application/blocs/query_tables/query_tables_bloc.dart' as _i14;
-import '../../application/blocs/query_wizard/query_wizard_bloc.dart' as _i15;
-import '../repositories/query_wizard_client.dart' as _i17;
-import '../repositories/query_wizard_repository.dart' as _i18;
+import '../../application/blocs/query_sources/query_sources_bloc.dart' as _i17;
+import '../../application/blocs/query_tables/query_tables_bloc.dart' as _i12;
+import '../../application/blocs/query_wizard/query_wizard_bloc.dart' as _i18;
+import '../clients/design_time_query_wizard_client.dart' as _i14;
+import '../clients/fake_query_wizard_api_client.dart' as _i15;
+import '../repositories/query_wizard_repository_impl.dart' as _i16;
 
 const String _dev = 'dev';
 const String _test = 'test';
@@ -44,28 +45,29 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i9.QueryJoinsBloc>(() => _i9.QueryJoinsBloc());
   gh.lazySingleton<_i10.QueryMoreBloc>(() => _i10.QueryMoreBloc());
   gh.lazySingleton<_i11.QueryOrdersBloc>(() => _i11.QueryOrdersBloc());
-  gh.lazySingleton<_i12.QuerySourcesBloc>(() => _i12.QuerySourcesBloc(
-      queryWizardRepository: get<_i13.QueryWizardRepository>()));
-  gh.lazySingleton<_i14.QueryTablesBloc>(() => _i14.QueryTablesBloc());
-  gh.lazySingleton<_i15.QueryWizardBloc>(() => _i15.QueryWizardBloc(
-      sourcesBloc: get<_i16.QuerySourcesBloc>(),
-      tablesBloc: get<_i16.QueryTablesBloc>(),
-      fieldsBloc: get<_i16.QueryFieldsBloc>(),
-      joinsBloc: get<_i16.QueryJoinsBloc>(),
-      aggregatesBloc: get<_i16.QueryAggregatesBloc>(),
-      groupingsBloc: get<_i16.QueryGroupingsBloc>(),
-      queriesBloc: get<_i16.QueriesBloc>(),
-      conditionsBloc: get<_i16.QueryConditionsBloc>(),
-      batchesBloc: get<_i16.QueryBatchesBloc>(),
-      ordersBloc: get<_i16.QueryOrdersBloc>(),
-      queryWizardRepository: get<_i13.QueryWizardRepository>()));
-  gh.lazySingleton<_i17.QueryWizardClient>(
-      () => _i17.DesignTimeQueryWizardClient(),
+  gh.lazySingleton<_i12.QueryTablesBloc>(() => _i12.QueryTablesBloc());
+  gh.lazySingleton<_i13.QueryWizardClient>(
+      () => _i14.DesignTimeQueryWizardClient(),
       registerFor: {_dev});
-  gh.lazySingleton<_i17.QueryWizardClient>(
-      () => _i17.FakeQueryWizardApiClient(),
+  gh.lazySingleton<_i13.QueryWizardClient>(
+      () => _i15.FakeQueryWizardApiClient(),
       registerFor: {_test});
-  gh.lazySingleton<_i18.QueryWizardRepository>(() => _i18.QueryWizardRepository(
-      queryWizardClient: get<_i13.QueryWizardClient>()));
+  gh.lazySingleton<_i13.QueryWizardRepository>(() =>
+      _i16.QueryWizardRepositoryImpl(
+          queryWizardClient: get<_i13.QueryWizardClient>()));
+  gh.lazySingleton<_i17.QuerySourcesBloc>(() => _i17.QuerySourcesBloc(
+      queryWizardRepository: get<_i13.QueryWizardRepository>()));
+  gh.lazySingleton<_i18.QueryWizardBloc>(() => _i18.QueryWizardBloc(
+      sourcesBloc: get<_i19.QuerySourcesBloc>(),
+      tablesBloc: get<_i19.QueryTablesBloc>(),
+      fieldsBloc: get<_i19.QueryFieldsBloc>(),
+      joinsBloc: get<_i19.QueryJoinsBloc>(),
+      aggregatesBloc: get<_i19.QueryAggregatesBloc>(),
+      groupingsBloc: get<_i19.QueryGroupingsBloc>(),
+      queriesBloc: get<_i19.QueriesBloc>(),
+      conditionsBloc: get<_i19.QueryConditionsBloc>(),
+      batchesBloc: get<_i19.QueryBatchesBloc>(),
+      ordersBloc: get<_i19.QueryOrdersBloc>(),
+      queryWizardRepository: get<_i13.QueryWizardRepository>()));
   return get;
 }

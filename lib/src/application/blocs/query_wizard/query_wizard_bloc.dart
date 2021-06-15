@@ -3,7 +3,6 @@ import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-import 'package:query_wizard/infrastructure.dart';
 
 @lazySingleton
 class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
