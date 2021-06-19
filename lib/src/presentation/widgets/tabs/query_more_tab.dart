@@ -18,7 +18,7 @@ class QueryMoreTab extends HookWidget {
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
     final queryWizardBloc = BlocProvider.of<QueryWizardBloc>(context);
-    final queryUnionsBloc = BlocProvider.of<QueriesBloc>(context);
+    final queriesBloc = BlocProvider.of<QueriesBloc>(context);
     final queryBatchTabBloc = BlocProvider.of<QueryBatchesBloc>(context);
 
     final currentQuery = queryWizardBloc.currentQuery;
@@ -31,9 +31,9 @@ class QueryMoreTab extends HookWidget {
     final tempTableName = useState<String?>(currentQueryButch?.name);
 
     void updateCurrentQuery() {
-      final index = queryUnionsBloc.state.queries.indexOf(currentQuery!);
+      final index = queriesBloc.state.queries.indexOf(currentQuery!);
 
-      queryUnionsBloc.state.queries.remove(currentQuery);
+      queriesBloc.state.queries.remove(currentQuery);
 
       final newQuery = Query(
           name: currentQuery.name,
@@ -50,7 +50,7 @@ class QueryMoreTab extends HookWidget {
           isDistinct: isDistinct.value ?? false);
 
       queryWizardBloc.currentQuery = newQuery;
-      queryUnionsBloc.state.queries.insert(index, newQuery);
+      queriesBloc.state.queries.insert(index, newQuery);
     }
 
     void updateCurrentQueryBatch() {

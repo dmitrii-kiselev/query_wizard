@@ -36,16 +36,14 @@ class QueryJoinsTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            final event = QueryJoinCopied(join: join);
-                            bloc.add(event);
+                            bloc.add(QueryJoinCopied(join: join));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryJoinDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryJoinDeleted(index: index));
                           },
                         ),
                       ],

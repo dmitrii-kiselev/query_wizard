@@ -20,9 +20,7 @@ void main() {
         build: () => queryBatchesBloc,
         act: (QueryBatchesBloc bloc) {
           final queryBatch = QueryBatch.empty();
-          final event = QueryBatchAdded(queryBatch: queryBatch);
-
-          bloc.add(event);
+          bloc.add(QueryBatchAdded(queryBatch: queryBatch));
         },
         expect: () => [
               QueryBatchesInitial(queryBatches: [QueryBatch.empty()]),

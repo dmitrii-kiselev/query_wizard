@@ -35,17 +35,15 @@ class QueryConditionsTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            final event =
-                                QueryConditionCopied(condition: condition);
-                            bloc.add(event);
+                            bloc.add(
+                                QueryConditionCopied(condition: condition));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            final event = QueryConditionDeleted(index: index);
-                            bloc.add(event);
+                            bloc.add(QueryConditionDeleted(index: index));
                           },
                         ),
                       ],
