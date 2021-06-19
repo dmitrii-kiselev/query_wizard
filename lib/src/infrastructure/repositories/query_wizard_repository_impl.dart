@@ -4,11 +4,11 @@ import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/domain.dart';
 
-@LazySingleton(as: QueryWizardRepository)
-class QueryWizardRepositoryImpl implements QueryWizardRepository {
+@LazySingleton(as: IQueryWizardRepository)
+class QueryWizardRepository implements IQueryWizardRepository {
   final QueryWizardClient queryWizardClient;
 
-  QueryWizardRepositoryImpl({required this.queryWizardClient});
+  QueryWizardRepository({required this.queryWizardClient});
 
   @override
   Future<List<QueryElement>> getSources() async {

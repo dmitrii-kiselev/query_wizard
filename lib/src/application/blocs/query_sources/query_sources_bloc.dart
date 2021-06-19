@@ -6,7 +6,7 @@ import 'package:query_wizard/domain.dart';
 
 @lazySingleton
 class QuerySourcesBloc extends Bloc<QuerySourcesEvent, QuerySourcesState> {
-  final QueryWizardRepository queryWizardRepository;
+  final IQueryWizardRepository queryWizardRepository;
 
   QuerySourcesBloc({required this.queryWizardRepository})
       : super(QuerySourcesInitial());

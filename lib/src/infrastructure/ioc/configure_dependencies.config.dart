@@ -52,11 +52,11 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.lazySingleton<_i13.QueryWizardClient>(
       () => _i15.FakeQueryWizardApiClient(),
       registerFor: {_test});
-  gh.lazySingleton<_i13.QueryWizardRepository>(() =>
-      _i16.QueryWizardRepositoryImpl(
+  gh.lazySingleton<_i13.IQueryWizardRepository>(() =>
+      _i16.QueryWizardRepository(
           queryWizardClient: get<_i13.QueryWizardClient>()));
   gh.lazySingleton<_i17.QuerySourcesBloc>(() => _i17.QuerySourcesBloc(
-      queryWizardRepository: get<_i13.QueryWizardRepository>()));
+      queryWizardRepository: get<_i13.IQueryWizardRepository>()));
   gh.lazySingleton<_i18.QueryWizardBloc>(() => _i18.QueryWizardBloc(
       sourcesBloc: get<_i19.QuerySourcesBloc>(),
       tablesBloc: get<_i19.QueryTablesBloc>(),
@@ -68,6 +68,6 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       conditionsBloc: get<_i19.QueryConditionsBloc>(),
       batchesBloc: get<_i19.QueryBatchesBloc>(),
       ordersBloc: get<_i19.QueryOrdersBloc>(),
-      queryWizardRepository: get<_i13.QueryWizardRepository>()));
+      queryWizardRepository: get<_i13.IQueryWizardRepository>()));
   return get;
 }

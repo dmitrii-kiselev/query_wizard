@@ -30,7 +30,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueriesBloc queriesBloc;
   final QueryOrdersBloc ordersBloc;
   final QueryBatchesBloc batchesBloc;
-  final QueryWizardRepository queryWizardRepository;
+  final IQueryWizardRepository queryWizardRepository;
 
   Query? currentQuery;
   QueryBatch? currentQueryButch;
