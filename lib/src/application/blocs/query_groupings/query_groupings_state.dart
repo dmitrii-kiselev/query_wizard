@@ -1,12 +1,22 @@
-part of 'query_groupings_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryGroupingsState with _$QueryGroupingsState {
-  const factory QueryGroupingsState({
-    required List<QueryGrouping> groupings,
-  }) = _QueryGroupingsState;
+import 'package:query_wizard/domain.dart';
 
-  factory QueryGroupingsState.initial() => QueryGroupingsState(
-        groupings: List<QueryGrouping>.empty(growable: true),
-      );
+abstract class QueryGroupingsState extends Equatable {
+  const QueryGroupingsState({required this.groupings});
+
+  final List<QueryGrouping> groupings;
+
+  @override
+  List<Object?> get props => [groupings];
+}
+
+class QueryGroupingsInitial extends QueryGroupingsState {
+  QueryGroupingsInitial({List<QueryGrouping>? groupings})
+      : super(groupings: groupings ?? []);
+}
+
+class QueryGroupingsChanged extends QueryGroupingsState {
+  const QueryGroupingsChanged({required List<QueryGrouping> groupings})
+      : super(groupings: groupings);
 }

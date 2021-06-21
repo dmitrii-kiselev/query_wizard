@@ -1,12 +1,22 @@
-part of 'query_aggregates_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryAggregatesState with _$QueryAggregatesState {
-  const factory QueryAggregatesState({
-    required List<QueryAggregate> aggregates,
-  }) = _QueryAggregatesState;
+import 'package:query_wizard/domain.dart';
 
-  factory QueryAggregatesState.initial() => QueryAggregatesState(
-        aggregates: List<QueryAggregate>.empty(growable: true),
-      );
+abstract class QueryAggregatesState extends Equatable {
+  const QueryAggregatesState({required this.aggregates});
+
+  final List<QueryAggregate> aggregates;
+
+  @override
+  List<Object?> get props => [aggregates];
+}
+
+class QueryAggregatesInitial extends QueryAggregatesState {
+  QueryAggregatesInitial({List<QueryAggregate>? aggregates})
+      : super(aggregates: aggregates ?? []);
+}
+
+class QueryAggregatesChanged extends QueryAggregatesState {
+  const QueryAggregatesChanged({required List<QueryAggregate> aggregates})
+      : super(aggregates: aggregates);
 }

@@ -1,28 +1,54 @@
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:equatable/equatable.dart';
 
-part 'query_condition.freezed.dart';
+class QueryCondition extends Equatable {
+  const QueryCondition(
+      {required this.isCustom,
+      required this.leftField,
+      required this.logicalCompareType,
+      required this.rightField,
+      required this.customCondition});
 
-@freezed
-class QueryCondition with _$QueryCondition {
-  const factory QueryCondition({
-    required bool isCustom,
-    required String leftField,
-    required String logicalCompareType,
-    required String rightField,
-    required String customCondition,
-  }) = _QueryCondition;
+  const QueryCondition.empty()
+      : isCustom = false,
+        leftField = '',
+        logicalCompareType = '',
+        rightField = '',
+        customCondition = '';
 
-  factory QueryCondition.empty() => const QueryCondition(
-        isCustom: false,
-        leftField: '',
-        logicalCompareType: '',
-        rightField: '',
-        customCondition: '',
-      );
+  final bool isCustom;
+  final String leftField;
+  final String logicalCompareType;
+  final String rightField;
+  final String customCondition;
+
+  @override
+  List<Object?> get props =>
+      [isCustom, leftField, logicalCompareType, rightField, customCondition];
 
   @override
   String toString() {
     return isCustom ? 'Custom' : '$leftField $logicalCompareType $rightField';
   }
+}
+
+extension CopyQueryCondition on QueryCondition {
+  QueryCondition copy() => QueryCondition(
+      isCustom: isCustom,
+      leftField: leftField,
+      logicalCompareType: logicalCompareType,
+      rightField: rightField,
+      customCondition: customCondition);
+
+  QueryCondition copyWith(
+          {bool? isCustom,
+          String? leftField,
+          String? logicalCompareType,
+          String? rightField,
+          String? customCondition}) =>
+      QueryCondition(
+          isCustom: isCustom ?? this.isCustom,
+          leftField: leftField ?? this.leftField,
+          logicalCompareType: logicalCompareType ?? this.logicalCompareType,
+          rightField: rightField ?? this.rightField,
+          customCondition: customCondition ?? this.customCondition);
 }

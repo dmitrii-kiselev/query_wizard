@@ -1,25 +1,54 @@
-part of 'query_batches_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryBatchesEvent with _$QueryBatchesEvent {
-  const factory QueryBatchesEvent.initialized({
-    required List<QueryBatch> batches,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QueryBatchesEvent.batchAdded({
-    required QueryBatch batch,
-  }) = _BatchAdded;
+abstract class QueryBatchesEvent extends Equatable {
+  const QueryBatchesEvent();
+}
 
-  const factory QueryBatchesEvent.batchCopied({
-    required QueryBatch batch,
-  }) = _BatchCopied;
+class QueryBatchesInitialized extends QueryBatchesEvent {
+  const QueryBatchesInitialized({required this.queryBatches});
 
-  const factory QueryBatchesEvent.batchDeleted({
-    required int index,
-  }) = _BatchDeleted;
+  final List<QueryBatch> queryBatches;
 
-  const factory QueryBatchesEvent.batchOrderChanged({
-    required int oldIndex,
-    required int newIndex,
-  }) = _BatchOrderChanged;
+  @override
+  List<Object?> get props => [queryBatches];
+}
+
+class QueryBatchAdded extends QueryBatchesEvent {
+  const QueryBatchAdded({required this.queryBatch});
+
+  final QueryBatch queryBatch;
+
+  @override
+  List<Object?> get props => [queryBatch];
+}
+
+class QueryBatchCopied extends QueryBatchesEvent {
+  const QueryBatchCopied({required this.queryBatch});
+
+  final QueryBatch queryBatch;
+
+  @override
+  List<Object?> get props => [queryBatch];
+}
+
+class QueryBatchDeleted extends QueryBatchesEvent {
+  const QueryBatchDeleted({required this.index});
+
+  final int index;
+
+  @override
+  List<Object?> get props => [index];
+}
+
+class QueryBatchOrderChanged extends QueryBatchesEvent {
+  const QueryBatchOrderChanged(
+      {required this.oldIndex, required this.newIndex});
+
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
 }

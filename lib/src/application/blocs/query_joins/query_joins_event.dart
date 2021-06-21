@@ -1,35 +1,75 @@
-part of 'query_joins_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryJoinsEvent with _$QueryJoinsEvent {
-  const factory QueryJoinsEvent.initialized({
-    required List<QueryJoin> joins,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QueryJoinsEvent.joinAdded({
-    required QueryJoin join,
-  }) = _QueryJoinAdded;
+abstract class QueryJoinsEvent extends Equatable {
+  const QueryJoinsEvent();
+}
 
-  const factory QueryJoinsEvent.joinUpdated({
-    required int index,
-    required QueryJoin join,
-    String? leftTable,
-    bool? isLeftAll,
-    String? rightTable,
-    bool? isRightAll,
-    QueryCondition? condition,
-  }) = _QueryJoinUpdated;
+class QueryJoinsInitialized extends QueryJoinsEvent {
+  const QueryJoinsInitialized({required this.joins});
 
-  const factory QueryJoinsEvent.joinCopied({
-    required QueryJoin join,
-  }) = _QueryJoinCopied;
+  final List<QueryJoin> joins;
 
-  const factory QueryJoinsEvent.joinDeleted({
-    required int index,
-  }) = _QueryJoinDeleted;
+  @override
+  List<Object?> get props => [joins];
+}
 
-  const factory QueryJoinsEvent.joinOrderChanged({
-    required int oldIndex,
-    required int newIndex,
-  }) = _QueryJoinOrderChanged;
+class QueryJoinAdded extends QueryJoinsEvent {
+  const QueryJoinAdded({required this.join});
+
+  final QueryJoin join;
+
+  @override
+  List<Object?> get props => [join];
+}
+
+class QueryJoinUpdated extends QueryJoinsEvent {
+  const QueryJoinUpdated(
+      {required this.index,
+      required this.join,
+      this.leftTable,
+      this.isLeftAll,
+      this.rightTable,
+      this.isRightAll,
+      this.condition});
+
+  final int index;
+  final QueryJoin join;
+  final String? leftTable;
+  final bool? isLeftAll;
+  final String? rightTable;
+  final bool? isRightAll;
+  final QueryCondition? condition;
+
+  @override
+  List<Object?> get props => [join];
+}
+
+class QueryJoinCopied extends QueryJoinsEvent {
+  const QueryJoinCopied({required this.join});
+
+  final QueryJoin join;
+
+  @override
+  List<Object?> get props => [join];
+}
+
+class QueryJoinDeleted extends QueryJoinsEvent {
+  const QueryJoinDeleted({required this.index});
+
+  final int index;
+
+  @override
+  List<Object?> get props => [index];
+}
+
+class QueryJoinOrderChanged extends QueryJoinsEvent {
+  const QueryJoinOrderChanged({required this.oldIndex, required this.newIndex});
+
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
 }

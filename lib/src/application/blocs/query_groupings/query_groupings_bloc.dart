@@ -1,47 +1,56 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/domain.dart';
-
-part 'query_groupings_bloc.freezed.dart';
-
-part 'query_groupings_event.dart';
-
-part 'query_groupings_state.dart';
+import 'package:query_wizard/application.dart';
 
 @lazySingleton
 class QueryGroupingsBloc
     extends Bloc<QueryGroupingsEvent, QueryGroupingsState> {
-  QueryGroupingsBloc() : super(QueryGroupingsState.initial());
+  QueryGroupingsBloc() : super(QueryGroupingsInitial());
 
   @override
   Stream<QueryGroupingsState> mapEventToState(
       QueryGroupingsEvent event) async* {
-    yield* event.map(
-      initialized: (e) async* {
-        yield state.copyWith(groupings: e.groupings);
-      },
-      groupingAdded: (e) async* {
-        state.groupings.add(e.grouping);
-        yield state.copyWith(groupings: state.groupings);
-      },
-      groupingDeleted: (e) async* {
-        state.groupings.removeAt(e.index);
-        yield state.copyWith(groupings: state.groupings);
-      },
-      groupingOrderChanged: (e) async* {
-        var newIndex = e.newIndex;
-        if (e.oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+    yield QueryGroupingsInitial(groupings: state.groupings);
 
-        final item = state.groupings.removeAt(e.oldIndex);
-        state.groupings.insert(newIndex, item);
+    if (event is QueryGroupingsInitialized) {
+      yield* _mapQueryGroupingsInitializedToState(event);
+    } else if (event is QueryGroupingAdded) {
+      yield* _mapQueryGroupingAddedToState(event);
+    } else if (event is QueryGroupingDeleted) {
+      yield* _mapQueryGroupingDeletedToState(event);
+    } else if (event is QueryGroupingOrderChanged) {
+      yield* _mapQueryGroupingOrderChangedToState(event);
+    }
+  }
 
-        yield state.copyWith(groupings: state.groupings);
-      },
-    );
+  Stream<QueryGroupingsState> _mapQueryGroupingsInitializedToState(
+      QueryGroupingsInitialized event) async* {
+    yield QueryGroupingsChanged(groupings: event.groupings);
+  }
+
+  Stream<QueryGroupingsState> _mapQueryGroupingAddedToState(
+      QueryGroupingAdded event) async* {
+    state.groupings.add(event.grouping);
+    yield QueryGroupingsChanged(groupings: state.groupings);
+  }
+
+  Stream<QueryGroupingsState> _mapQueryGroupingDeletedToState(
+      QueryGroupingDeleted event) async* {
+    state.groupings.removeAt(event.index);
+    yield QueryGroupingsChanged(groupings: state.groupings);
+  }
+
+  Stream<QueryGroupingsState> _mapQueryGroupingOrderChangedToState(
+      QueryGroupingOrderChanged event) async* {
+    var newIndex = event.newIndex;
+    if (event.oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final item = state.groupings.removeAt(event.oldIndex);
+    state.groupings.insert(newIndex, item);
+
+    yield QueryGroupingsChanged(groupings: state.groupings);
   }
 }

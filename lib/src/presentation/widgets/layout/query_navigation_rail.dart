@@ -30,27 +30,22 @@ class QueryNavigationRail extends HookWidget {
     final selectedQueryIndex = useState(0);
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
 
-    return BlocBuilder<QueriesBloc, QueriesState>(builder: (
-      context,
-      state,
-    ) {
-      if (state.queries.length < 2) {
-        return const Center(
-          child: CircularProgressIndicator(),
+    return BlocBuilder<QueriesBloc, QueriesState>(builder: (context, state) {
+      if (state is QueriesChanged) {
+        return NavigationRail(
+          selectedIndex: selectedQueryIndex.value,
+          onDestinationSelected: (index) {
+            final query = state.queries[index];
+
+            selectedQueryIndex.value = index;
+            bloc.changeQuery(query);
+          },
+          labelType: NavigationRailLabelType.selected,
+          destinations: _getQueries(state.queries),
         );
       }
 
-      return NavigationRail(
-        selectedIndex: selectedQueryIndex.value,
-        onDestinationSelected: (index) {
-          final query = state.queries[index];
-
-          selectedQueryIndex.value = index;
-          bloc.changeQuery(query);
-        },
-        labelType: NavigationRailLabelType.selected,
-        destinations: _getQueries(state.queries),
-      );
+      return const Center(child: CircularProgressIndicator());
     });
   }
 }

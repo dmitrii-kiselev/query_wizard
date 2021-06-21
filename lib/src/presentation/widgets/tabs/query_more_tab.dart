@@ -36,39 +36,38 @@ class QueryMoreTab extends HookWidget {
       queriesBloc.state.queries.remove(currentQuery);
 
       final newQuery = Query(
-        name: currentQuery.name,
-        sources: currentQuery.sources,
-        tables: currentQuery.tables,
-        fields: currentQuery.fields,
-        joins: currentQuery.joins,
-        groupings: currentQuery.groupings,
-        aggregates: currentQuery.aggregates,
-        conditions: currentQuery.conditions,
-        orders: currentQuery.orders,
-        isTop: isTop.value ?? false,
-        topCounter: topCounter.value ?? 0,
-        isDistinct: isDistinct.value ?? false,
-      );
+          name: currentQuery.name,
+          sources: currentQuery.sources,
+          tables: currentQuery.tables,
+          fields: currentQuery.fields,
+          joins: currentQuery.joins,
+          groupings: currentQuery.groupings,
+          aggregates: currentQuery.aggregates,
+          conditions: currentQuery.conditions,
+          orders: currentQuery.orders,
+          isTop: isTop.value ?? false,
+          topCounter: topCounter.value ?? 0,
+          isDistinct: isDistinct.value ?? false);
 
       queryWizardBloc.currentQuery = newQuery;
       queriesBloc.state.queries.insert(index, newQuery);
     }
 
     void updateCurrentQueryBatch() {
-      final index = queryBatchTabBloc.state.batches.indexOf(currentQueryButch!);
+      final index =
+          queryBatchTabBloc.state.queryBatches.indexOf(currentQueryButch!);
 
-      queryBatchTabBloc.state.batches.remove(currentQueryButch);
+      queryBatchTabBloc.state.queryBatches.remove(currentQueryButch);
 
       final newQueryButch = QueryBatch(
-        name: tempTableName.value ?? '',
-        sources: currentQueryButch.sources,
-        queries: currentQueryButch.queries,
-        aliases: currentQueryButch.aliases,
-        queryType: queryType.value ?? QueryType.selectQuery,
-      );
+          name: tempTableName.value ?? '',
+          sources: currentQueryButch.sources,
+          queries: currentQueryButch.queries,
+          aliases: currentQueryButch.aliases,
+          queryType: queryType.value ?? QueryType.selectQuery);
 
       queryWizardBloc.currentQueryButch = newQueryButch;
-      queryBatchTabBloc.state.batches.insert(index, newQueryButch);
+      queryBatchTabBloc.state.queryBatches.insert(index, newQueryButch);
     }
 
     return ListView(
@@ -91,18 +90,15 @@ class QueryMoreTab extends HookWidget {
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     if (value is int) {
-                      debounce.call(
-                        () {
-                          topCounter.value = int.parse(value);
-                          updateCurrentQuery();
-                        },
-                      );
+                      debounce.call(() {
+                        topCounter.value = int.parse(value);
+                        updateCurrentQuery();
+                      });
                     }
                   },
                   decoration: InputDecoration(
-                    counter: const Offstage(),
-                    labelText: localizations?.topCounter ?? 'Top counter',
-                  ),
+                      counter: const Offstage(),
+                      labelText: localizations?.topCounter ?? 'Top counter'),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly
                   ],
@@ -127,32 +123,28 @@ class QueryMoreTab extends HookWidget {
                 },
               ),
               RadioListTile<QueryType?>(
-                title: Text(localizations?.createTemporaryTable ??
-                    'Create temporary table'),
-                value: QueryType.temporaryTable,
-                groupValue: queryType.value,
-                onChanged: (value) {
-                  queryType.value = value;
-                  updateCurrentQueryBatch();
-                },
-              ),
+                  title: Text(localizations?.createTemporaryTable ??
+                      'Create temporary table'),
+                  value: QueryType.temporaryTable,
+                  groupValue: queryType.value,
+                  onChanged: (value) {
+                    queryType.value = value;
+                    updateCurrentQueryBatch();
+                  }),
               Visibility(
                 visible: queryType.value == QueryType.temporaryTable,
                 child: TextFormField(
                   keyboardType: TextInputType.text,
                   onChanged: (value) {
-                    debounce.call(
-                      () {
-                        tempTableName.value = value;
-                        updateCurrentQueryBatch();
-                      },
-                    );
+                    debounce.call(() {
+                      tempTableName.value = value;
+                      updateCurrentQueryBatch();
+                    });
                   },
                   decoration: InputDecoration(
-                    labelText: localizations?.temporaryTableName ??
-                        'Temporary table name',
-                    icon: const Icon(Icons.table_rows_rounded),
-                  ),
+                      labelText: localizations?.temporaryTableName ??
+                          'Temporary table name',
+                      icon: const Icon(Icons.table_rows_rounded)),
                 ),
               ),
             ],

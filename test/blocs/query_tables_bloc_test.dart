@@ -19,98 +19,79 @@ void main() {
     blocTest('adds table when QueryTableAdded is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          const event = QueryTablesEvent.tableAdded(
-            table: QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: [],
-            ),
-          );
+          final event = QueryTableAdded(
+              table: QueryElement(name: 'Table', type: QueryElementType.table));
 
           bloc.add(event);
         },
         expect: () => [
-              const QueryTablesState(tables: [
-                QueryElement(
-                  name: 'Table',
-                  type: QueryElementType.table,
-                  elements: [],
-                ),
+              QueryTablesInitial(tables: [
+                QueryElement(name: 'Table', type: QueryElementType.table)
+              ]),
+              QueryTablesChanged(tables: [
+                QueryElement(name: 'Table', type: QueryElementType.table)
               ])
             ]);
 
     blocTest('changes table when QueryTableUpdated is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          const table = QueryElement(
-            name: 'Table',
-            type: QueryElementType.table,
-            elements: [],
-          );
-          const tableAdded = QueryTablesEvent.tableAdded(table: table);
-          const tableUpdated = QueryTablesEvent.tableUpdated(
-            index: 0,
-            table: QueryElement(
-                name: 'Table New', type: QueryElementType.table, elements: []),
-          );
+          final table =
+              QueryElement(name: 'Table', type: QueryElementType.table);
+          final tableAdded = QueryTableAdded(table: table);
+          final tableUpdated = QueryTableUpdated(
+              index: 0,
+              table: QueryElement(
+                  name: 'Table New', type: QueryElementType.table));
 
           bloc.add(tableAdded);
           bloc.add(tableUpdated);
         },
         expect: () {
-          const expectedTables = [
-            QueryElement(
-                name: 'Table New', type: QueryElementType.table, elements: [])
+          final expectedTables = [
+            QueryElement(name: 'Table New', type: QueryElementType.table)
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables)
           ];
         });
 
     blocTest('copies table when QueryTableCopied is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          const table = QueryElement(
-            name: 'Table',
-            type: QueryElementType.table,
-            elements: [],
-          );
-          const tableAdded = QueryTablesEvent.tableAdded(table: table);
-          const tableCopied = QueryTablesEvent.tableCopied(table: table);
+          final table =
+              QueryElement(name: 'Table', type: QueryElementType.table);
+          final tableAdded = QueryTableAdded(table: table);
+          final tableCopied = QueryTableCopied(table: table);
 
           bloc.add(tableAdded);
           bloc.add(tableCopied);
         },
         expect: () {
-          const expectedTables = [
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: [],
-            ),
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: [],
-            ),
+          final expectedTables = [
+            QueryElement(name: 'Table', type: QueryElementType.table),
+            QueryElement(name: 'Table', type: QueryElementType.table)
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables)
           ];
         });
 
     blocTest('removes table when QueryTableDeleted is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          const table = QueryElement(
-            name: 'Table',
-            type: QueryElementType.table,
-            elements: [],
-          );
-          const tableAdded = QueryTablesEvent.tableAdded(table: table);
-          const tableDeleted = QueryTablesEvent.tableDeleted(index: 0);
+          final table =
+              QueryElement(name: 'Table', type: QueryElementType.table);
+          final tableAdded = QueryTableAdded(table: table);
+          const tableDeleted = QueryTableDeleted(index: 0);
 
           bloc.add(tableAdded);
           bloc.add(tableDeleted);
@@ -119,50 +100,41 @@ void main() {
           final List<QueryElement> expectedTables = [];
 
           return [
-            QueryTablesState(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables)
           ];
         });
 
     blocTest('changes table order when QueryTableOrderChanged is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
-          const table = QueryElement(
-            name: 'Table',
-            type: QueryElementType.table,
-            elements: [],
-          );
-          const tableAdded1 = QueryTablesEvent.tableAdded(table: table);
-          const tableAdded2 = QueryTablesEvent.tableAdded(
-              table: QueryElement(
-            name: 'Table',
-            type: QueryElementType.table,
-            elements: [],
-          ));
-          const tableOrderChanged = QueryTablesEvent.tableOrderChanged(
-            newIndex: 0,
-            oldIndex: 1,
-          );
+          final table =
+              QueryElement(name: 'Table', type: QueryElementType.table);
+          final tableAdded1 = QueryTableAdded(table: table);
+          final tableAdded2 = QueryTableAdded(
+              table: QueryElement(name: 'Table', type: QueryElementType.table));
+          const tableOrderChanged =
+              QueryTableOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(tableAdded1);
           bloc.add(tableAdded2);
           bloc.add(tableOrderChanged);
         },
         expect: () {
-          const expectedTables = [
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: [],
-            ),
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: [],
-            )
+          final expectedTables = [
+            QueryElement(name: 'Table', type: QueryElementType.table),
+            QueryElement(name: 'Table', type: QueryElementType.table)
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables),
+            QueryTablesInitial(tables: expectedTables),
+            QueryTablesChanged(tables: expectedTables)
           ];
         });
   });

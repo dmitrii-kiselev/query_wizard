@@ -1,12 +1,22 @@
-part of 'query_batches_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryBatchesState with _$QueryBatchesState {
-  const factory QueryBatchesState({
-    required List<QueryBatch> batches,
-  }) = _QueryBatchesState;
+import 'package:query_wizard/domain.dart';
 
-  factory QueryBatchesState.initial() => QueryBatchesState(
-        batches: List<QueryBatch>.empty(growable: true),
-      );
+abstract class QueryBatchesState extends Equatable {
+  const QueryBatchesState({required this.queryBatches});
+
+  final List<QueryBatch> queryBatches;
+
+  @override
+  List<Object?> get props => [queryBatches];
+}
+
+class QueryBatchesInitial extends QueryBatchesState {
+  QueryBatchesInitial({List<QueryBatch>? queryBatches})
+      : super(queryBatches: queryBatches ?? []);
+}
+
+class QueryBatchesChanged extends QueryBatchesState {
+  const QueryBatchesChanged({required List<QueryBatch> queryBatches})
+      : super(queryBatches: queryBatches);
 }

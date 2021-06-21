@@ -1,30 +1,67 @@
-part of 'query_fields_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryFieldsEvent with _$QueryFieldsEvent {
-  const factory QueryFieldsEvent.initialized({
-    required List<QueryElement> fields,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QueryFieldsEvent.fieldAdded({
-    required QueryElement field,
-  }) = _QueryFieldAdded;
+abstract class QueryFieldsEvent extends Equatable {
+  const QueryFieldsEvent();
+}
 
-  const factory QueryFieldsEvent.fieldUpdated({
-    required int index,
-    required QueryElement field,
-  }) = _FieldUpdated;
+class QueryFieldsInitialized extends QueryFieldsEvent {
+  const QueryFieldsInitialized({required this.fields});
 
-  const factory QueryFieldsEvent.fieldCopied({
-    required QueryElement field,
-  }) = _FieldCopied;
+  final List<QueryElement> fields;
 
-  const factory QueryFieldsEvent.fieldDeleted({
-    required int index,
-  }) = _FieldDeleted;
+  @override
+  List<Object?> get props => [fields];
+}
 
-  const factory QueryFieldsEvent.fieldOrderChanged({
-    required int oldIndex,
-    required int newIndex,
-  }) = _FieldOrderChanged;
+class QueryFieldAdded extends QueryFieldsEvent {
+  const QueryFieldAdded({required this.field});
+
+  final QueryElement field;
+
+  @override
+  List<Object?> get props => [field];
+}
+
+class QueryFieldUpdated extends QueryFieldsEvent {
+  const QueryFieldUpdated({
+    required this.index,
+    required this.field,
+  });
+
+  final int index;
+  final QueryElement field;
+
+  @override
+  List<Object?> get props => [field];
+}
+
+class QueryFieldCopied extends QueryFieldsEvent {
+  const QueryFieldCopied({required this.field});
+
+  final QueryElement field;
+
+  @override
+  List<Object?> get props => [field];
+}
+
+class QueryFieldDeleted extends QueryFieldsEvent {
+  const QueryFieldDeleted({required this.index});
+
+  final int index;
+
+  @override
+  List<Object?> get props => [index];
+}
+
+class QueryFieldOrderChanged extends QueryFieldsEvent {
+  const QueryFieldOrderChanged(
+      {required this.oldIndex, required this.newIndex});
+
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
 }

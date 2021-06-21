@@ -1,24 +1,38 @@
-part of 'query_sources_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-abstract class QuerySourcesState with _$QuerySourcesState {
-  const factory QuerySourcesState({
-    required List<QueryElement> sources,
-  }) = _QueryFieldsState;
+import 'package:query_wizard/domain.dart';
 
-  factory QuerySourcesState.initial() => QuerySourcesState(
-        sources: List<QueryElement>.empty(growable: true),
-      );
+abstract class QuerySourcesState extends Equatable {
+  const QuerySourcesState({required this.sources});
 
-  const factory QuerySourcesState.loadInProgress() = _LoadInProgress;
+  final List<QueryElement> sources;
 
-  const factory QuerySourcesState.loadSuccess({
-    required List<QueryElement> sources,
-  }) = _LoadSuccess;
+  @override
+  List<Object?> get props => [sources];
+}
 
-  const factory QuerySourcesState.loadFailure() = _LoadFailure;
+class QuerySourcesInitial extends QuerySourcesState {
+  QuerySourcesInitial({List<QueryElement>? sources})
+      : super(sources: sources ?? []);
+}
 
-  const factory QuerySourcesState.sourcesChanged({
-    required List<QueryElement> sources,
-  }) = SourcesChanged;
+class QuerySourcesLoadInProgress extends QuerySourcesState {
+  QuerySourcesLoadInProgress() : super(sources: []);
+}
+
+class QuerySourcesLoadSuccess extends QuerySourcesState {
+  const QuerySourcesLoadSuccess({required List<QueryElement> sources})
+      : super(sources: sources);
+
+  @override
+  List<Object> get props => [sources];
+}
+
+class QuerySourcesLoadFailure extends QuerySourcesState {
+  QuerySourcesLoadFailure() : super(sources: []);
+}
+
+class QuerySourcesChanged extends QuerySourcesState {
+  const QuerySourcesChanged({required List<QueryElement> sources})
+      : super(sources: sources);
 }

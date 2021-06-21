@@ -12,7 +12,7 @@ class QueryTablesAndFieldsTab extends HookWidget {
     return [
       const QuerySourcesBar(),
       const QueryTablesBar(),
-      const QueryFieldsBar(),
+      const QueryFieldsBar()
     ];
   }
 
@@ -22,8 +22,7 @@ class QueryTablesAndFieldsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
-  ) {
+      QueryWizardLocalizations? localizations) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.source_rounded),

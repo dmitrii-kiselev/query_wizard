@@ -9,10 +9,7 @@ import 'package:query_wizard/presentation.dart';
 class QueryWizardLayout extends HookWidget {
   final String title;
 
-  const QueryWizardLayout({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
+  const QueryWizardLayout({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,31 +58,24 @@ class QueryWizardLayout extends HookWidget {
 
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
 
-    bloc.add(
-      const QueryWizardEvent.querySchemaRequested(query: 'query'),
-    );
+    bloc.add(const QuerySchemaRequested('query'));
 
     return Scaffold(
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
           builder: (context, state) {
-        return state.map(
-          initial: (s) => const Center(
-            child: CircularProgressIndicator(),
-          ),
-          loadInProgress: (s) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
-          loadSuccess: (s) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Text(title),
-                bottom: TabBar(
-                  controller: tabController,
-                  tabs: [
-                    for (final tab in tabs)
-                      Tab(
+        if (state is QueryWizardLoadInProgress) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is QueryWizardLoadSuccess) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(title),
+              bottom: TabBar(
+                controller: tabController,
+                tabs: [
+                  for (final tab in tabs)
+                    Tab(
                         key: ValueKey(tab.message),
                         child: Tooltip(
                           message: tab.message,
@@ -93,53 +83,49 @@ class QueryWizardLayout extends HookWidget {
                             tab.icon,
                             color: Colors.white,
                           ),
-                        ),
-                      ),
-                  ],
+                        )),
+                ],
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.update_rounded,
+                  ),
+                  onPressed: () {
+                    bloc.add(const QuerySchemaRequested('query'));
+                  },
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.update_rounded,
+              ],
+            ),
+            body: Center(
+              child: Row(
+                children: [
+                  const QueryNavigationRail(),
+                  const VerticalDivider(thickness: 1, width: 1),
+                  Expanded(
+                    child: Center(
+                      child: QueryWizardTabs(
+                          tabController: tabController,
+                          tabs: tabs.map((t) => t.widget).toList()),
                     ),
-                    onPressed: () {
-                      bloc.add(
-                        const QueryWizardEvent.querySchemaRequested(
-                          query: 'query',
-                        ),
-                      );
-                    },
                   ),
                 ],
               ),
-              body: Center(
-                child: Row(
-                  children: [
-                    const QueryNavigationRail(),
-                    const VerticalDivider(thickness: 1, width: 1),
-                    Expanded(
-                      child: Center(
-                        child: QueryWizardTabs(
-                          tabController: tabController,
-                          tabs: tabs.map((t) => t.widget).toList(),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              drawer: const QueryBatchDrawer(),
-            );
-          },
-          loadFailure: (s) {
-            return Center(
-              child: Text(
-                localizations?.somethingWentWrong ?? 'Something went wrong!',
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          },
-        );
+            ),
+            drawer: const QueryBatchDrawer(),
+          );
+        }
+
+        if (state is QueryWizardLoadFailure) {
+          return Center(
+            child: Text(
+              localizations?.somethingWentWrong ?? 'Something went wrong!',
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        return const Center(child: CircularProgressIndicator());
       }),
     );
   }

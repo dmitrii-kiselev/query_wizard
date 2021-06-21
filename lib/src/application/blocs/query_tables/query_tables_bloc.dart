@@ -1,55 +1,72 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/domain.dart';
-
-part 'query_tables_bloc.freezed.dart';
-
-part 'query_tables_event.dart';
-
-part 'query_tables_state.dart';
+import 'package:query_wizard/application.dart';
 
 @lazySingleton
 class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
-  QueryTablesBloc() : super(QueryTablesState.initial());
+  QueryTablesBloc() : super(QueryTablesInitial());
 
   @override
   Stream<QueryTablesState> mapEventToState(QueryTablesEvent event) async* {
-    yield* event.map(
-      initialized: (e) async* {
-        yield state.copyWith(tables: e.tables);
-      },
-      tableAdded: (e) async* {
-        state.tables.add(e.table);
-        yield state.copyWith(tables: state.tables);
-      },
-      tableUpdated: (e) async* {
-        state.tables.removeAt(e.index);
-        state.tables.insert(e.index, e.table);
+    yield QueryTablesInitial(tables: state.tables);
 
-        yield state.copyWith(tables: state.tables);
-      },
-      tableCopied: (e) async* {
-        state.tables.add(e.table.copyWith());
-        yield state.copyWith(tables: state.tables);
-      },
-      tableDeleted: (e) async* {
-        state.tables.removeAt(e.index);
-        yield state.copyWith(tables: state.tables);
-      },
-      tableOrderChanged: (e) async* {
-        var newIndex = e.newIndex;
-        if (e.oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+    if (event is QueryTablesInitialized) {
+      yield* _mapQueryTablesInitializedToState(event);
+    } else if (event is QueryTableAdded) {
+      yield* _mapQueryTableAddedToState(event);
+    } else if (event is QueryTableUpdated) {
+      yield* _mapQueryTableUpdatedToState(event);
+    } else if (event is QueryTableCopied) {
+      yield* _mapQueryTableCopiedToState(event);
+    } else if (event is QueryTableDeleted) {
+      yield* _mapQueryTableDeletedToState(event);
+    } else if (event is QueryTableOrderChanged) {
+      yield* _mapQueryTableOrderChangedToState(event);
+    }
+  }
 
-        final item = state.tables.removeAt(e.oldIndex);
-        state.tables.insert(newIndex, item);
+  Stream<QueryTablesState> _mapQueryTablesInitializedToState(
+      QueryTablesInitialized event) async* {
+    yield QueryTablesChanged(tables: event.tables);
+  }
 
-        yield state.copyWith(tables: state.tables);
-      },
-    );
+  Stream<QueryTablesState> _mapQueryTableAddedToState(
+      QueryTableAdded event) async* {
+    state.tables.add(event.table);
+    yield QueryTablesChanged(tables: state.tables);
+  }
+
+  Stream<QueryTablesState> _mapQueryTableUpdatedToState(
+      QueryTableUpdated event) async* {
+    state.tables.removeAt(event.index);
+    state.tables.insert(event.index, event.table);
+
+    yield QueryTablesChanged(tables: state.tables);
+  }
+
+  Stream<QueryTablesState> _mapQueryTableCopiedToState(
+      QueryTableCopied event) async* {
+    state.tables.add(event.table);
+    yield QueryTablesChanged(tables: state.tables);
+  }
+
+  Stream<QueryTablesState> _mapQueryTableDeletedToState(
+      QueryTableDeleted event) async* {
+    state.tables.removeAt(event.index);
+    yield QueryTablesChanged(tables: state.tables);
+  }
+
+  Stream<QueryTablesState> _mapQueryTableOrderChangedToState(
+      QueryTableOrderChanged event) async* {
+    var newIndex = event.newIndex;
+    if (event.oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final table = state.tables.removeAt(event.oldIndex);
+    state.tables.insert(newIndex, table);
+
+    yield QueryTablesChanged(tables: state.tables);
   }
 }

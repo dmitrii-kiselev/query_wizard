@@ -1,12 +1,22 @@
-part of 'query_tables_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryTablesState with _$QueryTablesState {
-  const factory QueryTablesState({
-    required List<QueryElement> tables,
-  }) = _QueryTablesState;
+import 'package:query_wizard/domain.dart';
 
-  factory QueryTablesState.initial() => QueryTablesState(
-        tables: List<QueryElement>.empty(growable: true),
-      );
+abstract class QueryTablesState extends Equatable {
+  const QueryTablesState({required this.tables});
+
+  final List<QueryElement> tables;
+
+  @override
+  List<Object?> get props => [tables];
+}
+
+class QueryTablesInitial extends QueryTablesState {
+  QueryTablesInitial({List<QueryElement>? tables})
+      : super(tables: tables ?? []);
+}
+
+class QueryTablesChanged extends QueryTablesState {
+  const QueryTablesChanged({required List<QueryElement> tables})
+      : super(tables: tables);
 }

@@ -1,10 +1,23 @@
-part of 'query_sources_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QuerySourcesEvent with _$QuerySourcesEvent {
-  const factory QuerySourcesEvent.initialized({
-    required List<QueryElement> sources,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QuerySourcesEvent.sourcesRequested() = _SourcesRequested;
+abstract class QuerySourcesEvent extends Equatable {
+  const QuerySourcesEvent();
+}
+
+class QuerySourcesInitialized extends QuerySourcesEvent {
+  const QuerySourcesInitialized({required this.sources});
+
+  final List<QueryElement> sources;
+
+  @override
+  List<Object?> get props => [sources];
+}
+
+class QuerySourcesRequested extends QuerySourcesEvent {
+  const QuerySourcesRequested();
+
+  @override
+  List<Object> get props => [];
 }

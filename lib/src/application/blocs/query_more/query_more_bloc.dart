@@ -1,39 +1,40 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/domain.dart';
-
-part 'query_more_bloc.freezed.dart';
-
-part 'query_more_event.dart';
-
-part 'query_more_state.dart';
+import 'package:query_wizard/application.dart';
 
 @lazySingleton
 class QueryMoreBloc extends Bloc<QueryMoreEvent, QueryMoreState> {
-  QueryMoreBloc() : super(QueryMoreState.initial());
+  QueryMoreBloc() : super(const QueryMoreInitial());
 
   @override
   Stream<QueryMoreState> mapEventToState(QueryMoreEvent event) async* {
-    yield* event.map(
-      initialized: (e) async* {
-        yield QueryMoreState(
-            isTop: e.isTop,
-            topCounter: e.topCounter,
-            isDistinct: e.isDistinct,
-            queryType: e.queryType,
-            tempTableName: e.tempTableName);
-      },
-      changed: (e) async* {
-        yield QueryMoreState(
-            isTop: e.isTop,
-            topCounter: e.topCounter,
-            isDistinct: e.isDistinct,
-            queryType: e.queryType,
-            tempTableName: e.tempTableName);
-      },
-    );
+    yield const QueryMoreInitial();
+
+    if (event is QueryMoreInitialized) {
+      yield* _mapQueryMoreInitializedToState(event);
+    } else if (event is QueryMoreChanged) {
+      yield* _mapQueryMoreChangedToState(event);
+    }
+  }
+
+  Stream<QueryMoreState> _mapQueryMoreInitializedToState(
+      QueryMoreInitialized event) async* {
+    yield QueryMoreChangedState(
+        isTop: event.isTop,
+        topCounter: event.topCounter,
+        isDistinct: event.isDistinct,
+        queryType: event.queryType,
+        tempTableName: event.tempTableName);
+  }
+
+  Stream<QueryMoreState> _mapQueryMoreChangedToState(
+      QueryMoreChanged event) async* {
+    yield QueryMoreChangedState(
+        isTop: event.isTop,
+        topCounter: event.topCounter,
+        isDistinct: event.isDistinct,
+        queryType: event.queryType,
+        tempTableName: event.tempTableName);
   }
 }

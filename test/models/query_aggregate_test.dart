@@ -8,5 +8,6 @@ void main() {
 
     expect(aggregate.field, '');
     expect(aggregate.function, '');
+    expect(aggregate.props, equals([aggregate.field, aggregate.function]));
   });
 }

@@ -1,56 +1,67 @@
-import 'package:meta/meta.dart';
-
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-
-part 'query_aggregates_bloc.freezed.dart';
-
-part 'query_aggregates_event.dart';
-
-part 'query_aggregates_state.dart';
 
 @lazySingleton
 class QueryAggregatesBloc
     extends Bloc<QueryAggregatesEvent, QueryAggregatesState> {
-  QueryAggregatesBloc() : super(QueryAggregatesState.initial());
+  QueryAggregatesBloc() : super(QueryAggregatesInitial());
 
   @override
   Stream<QueryAggregatesState> mapEventToState(
-    QueryAggregatesEvent event,
-  ) async* {
-    yield* event.map(
-      initialized: (e) async* {
-        yield state.copyWith(aggregates: e.aggregates);
-      },
-      aggregateAdded: (e) async* {
-        state.aggregates.add(e.aggregate);
-        yield state.copyWith(aggregates: state.aggregates);
-      },
-      aggregateUpdated: (e) async* {
-        state.aggregates.removeAt(e.index);
-        state.aggregates.insert(e.index, e.aggregate);
+      QueryAggregatesEvent event) async* {
+    yield QueryAggregatesInitial(aggregates: state.aggregates);
 
-        yield state.copyWith(aggregates: state.aggregates);
-      },
-      aggregateDeleted: (e) async* {
-        state.aggregates.removeAt(e.index);
-        yield state.copyWith(aggregates: state.aggregates);
-      },
-      aggregateOrderChanged: (e) async* {
-        var newIndex = e.newIndex;
-        if (e.oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+    if (event is QueryAggregatesInitialized) {
+      yield* _mapQueryAggregatesInitializedToState(event);
+    } else if (event is QueryAggregateAdded) {
+      yield* _mapQueryAggregateAddedToState(event);
+    } else if (event is QueryAggregateUpdated) {
+      yield* _mapQueryAggregateUpdatedToState(event);
+    } else if (event is QueryAggregateDeleted) {
+      yield* _mapQueryAggregateDeletedToState(event);
+    } else if (event is QueryAggregateOrderChanged) {
+      yield* _mapQueryAggregateOrderChangedToState(event);
+    }
+  }
 
-        final item = state.aggregates.removeAt(e.oldIndex);
-        state.aggregates.insert(newIndex, item);
+  Stream<QueryAggregatesState> _mapQueryAggregatesInitializedToState(
+      QueryAggregatesInitialized event) async* {
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
+  }
 
-        yield state.copyWith(aggregates: state.aggregates);
-      },
-    );
+  Stream<QueryAggregatesState> _mapQueryAggregateAddedToState(
+      QueryAggregateAdded event) async* {
+    state.aggregates.add(event.aggregate);
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
+  }
+
+  Stream<QueryAggregatesState> _mapQueryAggregateUpdatedToState(
+      QueryAggregateUpdated event) async* {
+    state.aggregates.removeAt(event.index);
+    state.aggregates.insert(event.index, event.aggregate);
+
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
+  }
+
+  Stream<QueryAggregatesState> _mapQueryAggregateDeletedToState(
+      QueryAggregateDeleted event) async* {
+    state.aggregates.removeAt(event.index);
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
+  }
+
+  Stream<QueryAggregatesState> _mapQueryAggregateOrderChangedToState(
+      QueryAggregateOrderChanged event) async* {
+    var newIndex = event.newIndex;
+    if (event.oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final QueryAggregate item = state.aggregates.removeAt(event.oldIndex);
+    state.aggregates.insert(newIndex, item);
+
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 }

@@ -1,20 +1,52 @@
-part of 'query_more_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryMoreEvent with _$QueryMoreEvent {
-  const factory QueryMoreEvent.initialized({
-    required bool isTop,
-    required int topCounter,
-    required bool isDistinct,
-    required QueryType queryType,
-    required String tempTableName,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QueryMoreEvent.changed({
-    required bool isTop,
-    required int topCounter,
-    required bool isDistinct,
-    required QueryType queryType,
-    required String tempTableName,
-  }) = _Changed;
+abstract class QueryMoreEvent extends Equatable {
+  final bool isTop;
+  final int topCounter;
+  final bool isDistinct;
+  final QueryType queryType;
+  final String tempTableName;
+
+  const QueryMoreEvent(
+      {required this.isTop,
+      required this.topCounter,
+      required this.isDistinct,
+      required this.queryType,
+      required this.tempTableName});
+
+  @override
+  List<Object?> get props =>
+      [isTop, topCounter, isDistinct, queryType, tempTableName];
+}
+
+class QueryMoreInitialized extends QueryMoreEvent {
+  const QueryMoreInitialized(
+      {required bool isTop,
+      required int topCounter,
+      required bool isDistinct,
+      required QueryType queryType,
+      required String tempTableName})
+      : super(
+            isTop: isTop,
+            topCounter: topCounter,
+            isDistinct: isDistinct,
+            queryType: queryType,
+            tempTableName: tempTableName);
+}
+
+class QueryMoreChanged extends QueryMoreEvent {
+  const QueryMoreChanged(
+      {required bool isTop,
+      required int topCounter,
+      required bool isDistinct,
+      required QueryType queryType,
+      required String tempTableName})
+      : super(
+            isTop: isTop,
+            topCounter: topCounter,
+            isDistinct: isDistinct,
+            queryType: queryType,
+            tempTableName: tempTableName);
 }

@@ -1,10 +1,17 @@
-part of 'query_wizard_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryWizardEvent with _$QueryWizardEvent {
-  const factory QueryWizardEvent.initialized() = _Initialized;
+abstract class QueryWizardEvent extends Equatable {
+  const QueryWizardEvent();
 
-  const factory QueryWizardEvent.querySchemaRequested({
-    required String query,
-  }) = _QuerySchemaRequested;
+  @override
+  List<Object> get props => [];
+}
+
+class QuerySchemaRequested extends QueryWizardEvent {
+  const QuerySchemaRequested(this.query);
+
+  final String query;
+
+  @override
+  List<Object> get props => [query];
 }

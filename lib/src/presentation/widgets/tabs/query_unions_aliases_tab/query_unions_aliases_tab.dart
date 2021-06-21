@@ -9,10 +9,7 @@ class QueryUnionsAliasesTab extends HookWidget {
   const QueryUnionsAliasesTab({Key? key}) : super(key: key);
 
   List<Widget> _buildBars() {
-    return [
-      const QueryUnionsBar(),
-      const QueryAliasesBar(),
-    ];
+    return [const QueryUnionsBar(), const QueryAliasesBar()];
   }
 
   Widget _getBar(int index) {
@@ -21,8 +18,7 @@ class QueryUnionsAliasesTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
-  ) {
+      QueryWizardLocalizations? localizations) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.merge_type_rounded),

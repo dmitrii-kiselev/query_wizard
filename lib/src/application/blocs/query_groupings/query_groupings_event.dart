@@ -1,21 +1,45 @@
-part of 'query_groupings_bloc.dart';
+import 'package:equatable/equatable.dart';
 
-@freezed
-class QueryGroupingsEvent with _$QueryGroupingsEvent {
-  const factory QueryGroupingsEvent.initialized({
-    required List<QueryGrouping> groupings,
-  }) = _Initialized;
+import 'package:query_wizard/domain.dart';
 
-  const factory QueryGroupingsEvent.groupingAdded({
-    required QueryGrouping grouping,
-  }) = _GroupingAdded;
+abstract class QueryGroupingsEvent extends Equatable {
+  const QueryGroupingsEvent();
+}
 
-  const factory QueryGroupingsEvent.groupingDeleted({
-    required int index,
-  }) = _GroupingDeleted;
+class QueryGroupingsInitialized extends QueryGroupingsEvent {
+  const QueryGroupingsInitialized({required this.groupings});
 
-  const factory QueryGroupingsEvent.groupingOrderChanged({
-    required int oldIndex,
-    required int newIndex,
-  }) = _GroupingOrderChanged;
+  final List<QueryGrouping> groupings;
+
+  @override
+  List<Object?> get props => [groupings];
+}
+
+class QueryGroupingAdded extends QueryGroupingsEvent {
+  const QueryGroupingAdded({required this.grouping});
+
+  final QueryGrouping grouping;
+
+  @override
+  List<Object?> get props => [grouping];
+}
+
+class QueryGroupingDeleted extends QueryGroupingsEvent {
+  const QueryGroupingDeleted({required this.index});
+
+  final int index;
+
+  @override
+  List<Object?> get props => [index];
+}
+
+class QueryGroupingOrderChanged extends QueryGroupingsEvent {
+  const QueryGroupingOrderChanged(
+      {required this.oldIndex, required this.newIndex});
+
+  final int oldIndex;
+  final int newIndex;
+
+  @override
+  List<Object?> get props => [oldIndex, newIndex];
 }

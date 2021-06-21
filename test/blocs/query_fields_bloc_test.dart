@@ -19,102 +19,77 @@ void main() {
     blocTest('adds field when QueryFieldAdded is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          const field = QueryElement(
-            name: 'Field',
-            type: QueryElementType.column,
-            elements: [],
-          );
-          const event = QueryFieldsEvent.fieldAdded(
-            field: field,
-          );
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
+          final event = QueryFieldAdded(field: field);
 
           bloc.add(event);
         },
         expect: () => [
-              const QueryFieldsState(fields: [
-                QueryElement(
-                  name: 'Field',
-                  type: QueryElementType.column,
-                  elements: [],
-                )
+              QueryFieldsInitial(fields: [
+                QueryElement(name: 'Field', type: QueryElementType.column)
+              ]),
+              QueryFieldsChanged(fields: [
+                QueryElement(name: 'Field', type: QueryElementType.column)
               ]),
             ]);
 
     blocTest('changes field when QueryFieldUpdated is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          const field = QueryElement(
-            name: 'Field New',
-            type: QueryElementType.column,
-            elements: [],
-          );
-          const fieldAdded = QueryFieldsEvent.fieldAdded(field: field);
-          const fieldUpdated = QueryFieldsEvent.fieldUpdated(
-            index: 0,
-            field: field,
-          );
+          final field =
+              QueryElement(name: 'Field New', type: QueryElementType.column);
+          final fieldAdded = QueryFieldAdded(field: field);
+          final fieldUpdated = QueryFieldUpdated(index: 0, field: field);
 
           bloc.add(fieldAdded);
           bloc.add(fieldUpdated);
         },
         expect: () {
-          const expectedFields = [
-            QueryElement(
-              name: 'Field New',
-              type: QueryElementType.column,
-              elements: [],
-            )
+          final expectedFields = [
+            QueryElement(name: 'Field New', type: QueryElementType.column)
           ];
 
           return [
-            const QueryFieldsState(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields)
           ];
         });
 
     blocTest('copies field when QueryFieldCopied is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          const field = QueryElement(
-            name: 'Field',
-            type: QueryElementType.column,
-            elements: [],
-          );
-          const fieldAdded = QueryFieldsEvent.fieldAdded(field: field);
-          const fieldCopied = QueryFieldsEvent.fieldCopied(field: field);
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
+          final fieldAdded = QueryFieldAdded(field: field);
+          final fieldCopied = QueryFieldCopied(field: field);
 
           bloc.add(fieldAdded);
           bloc.add(fieldCopied);
         },
         expect: () {
           final expectedFields = [
-            const QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            ),
-            const QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            )
+            QueryElement(name: 'Field', type: QueryElementType.column),
+            QueryElement(name: 'Field', type: QueryElementType.column)
           ];
 
           return [
-            QueryFieldsState(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields)
           ];
         });
 
     blocTest('removes field when QueryFieldDeleted is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          const fieldAdded = QueryFieldsEvent.fieldAdded(
-            field: QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            ),
-          );
-          const fieldDeleted = QueryFieldsEvent.fieldDeleted(index: 0);
+          final fieldAdded = QueryFieldAdded(
+              field:
+                  QueryElement(name: 'Field', type: QueryElementType.column));
+          const fieldDeleted = QueryFieldDeleted(index: 0);
 
           bloc.add(fieldAdded);
           bloc.add(fieldDeleted);
@@ -123,24 +98,22 @@ void main() {
           final List<QueryElement> expectedFields = [];
 
           return [
-            QueryFieldsState(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields)
           ];
         });
 
     blocTest('changes field order when QueryFieldOrderChanged is added',
         build: () => fieldsTabBloc,
         act: (QueryFieldsBloc bloc) {
-          const field = QueryElement(
-            name: 'Field',
-            type: QueryElementType.column,
-            elements: [],
-          );
-          const fieldAdded1 = QueryFieldsEvent.fieldAdded(field: field);
-          const fieldAdded2 = QueryFieldsEvent.fieldAdded(field: field);
-          const fieldOrderChanged = QueryFieldsEvent.fieldOrderChanged(
-            newIndex: 0,
-            oldIndex: 1,
-          );
+          final field =
+              QueryElement(name: 'Field', type: QueryElementType.column);
+          final fieldAdded1 = QueryFieldAdded(field: field);
+          final fieldAdded2 = QueryFieldAdded(field: field);
+          const fieldOrderChanged =
+              QueryFieldOrderChanged(newIndex: 0, oldIndex: 1);
 
           bloc.add(fieldAdded1);
           bloc.add(fieldAdded2);
@@ -148,20 +121,17 @@ void main() {
         },
         expect: () {
           final expectedFields = [
-            const QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            ),
-            const QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            ),
+            QueryElement(name: 'Field', type: QueryElementType.column),
+            QueryElement(name: 'Field', type: QueryElementType.column)
           ];
 
           return [
-            QueryFieldsState(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields),
+            QueryFieldsInitial(fields: expectedFields),
+            QueryFieldsChanged(fields: expectedFields)
           ];
         });
   });

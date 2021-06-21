@@ -7,5 +7,6 @@ void main() {
     const schema = QuerySchema(queryBatches: []);
 
     expect(schema.queryBatches, []);
+    expect(schema.props, equals([schema.queryBatches]));
   });
 }

@@ -21,8 +21,7 @@ class QueryGroupingsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
-  ) {
+      QueryWizardLocalizations? localizations) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.group_work_rounded),

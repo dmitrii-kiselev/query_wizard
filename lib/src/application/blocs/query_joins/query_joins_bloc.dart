@@ -1,70 +1,89 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-
-part 'query_joins_bloc.freezed.dart';
-
-part 'query_joins_event.dart';
-
-part 'query_joins_state.dart';
 
 @lazySingleton
 class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
-  QueryJoinsBloc() : super(QueryJoinsState.initial());
+  QueryJoinsBloc() : super(QueryJoinsInitial());
 
   @override
   Stream<QueryJoinsState> mapEventToState(QueryJoinsEvent event) async* {
-    yield* event.map(
-      initialized: (e) async* {
-        yield state.copyWith(joins: e.joins);
-      },
-      joinAdded: (e) async* {
-        state.joins.add(e.join);
-        yield state.copyWith(joins: state.joins);
-      },
-      joinUpdated: (e) async* {
-        final condition = QueryCondition(
-            isCustom: e.condition?.isCustom ?? e.join.condition.isCustom,
-            leftField: e.condition?.leftField ?? e.join.condition.leftField,
-            logicalCompareType: e.condition?.logicalCompareType ??
-                e.join.condition.logicalCompareType,
-            rightField: e.condition?.rightField ?? e.join.condition.rightField,
-            customCondition: e.condition?.customCondition ??
-                e.join.condition.customCondition);
-        final join = QueryJoin(
-            leftTable: e.leftTable ?? e.join.leftTable,
-            isLeftAll: e.isLeftAll ?? e.join.isLeftAll,
-            rightTable: e.rightTable ?? e.join.rightTable,
-            isRightAll: e.isRightAll ?? e.join.isRightAll,
-            condition: e.condition ?? condition);
+    yield QueryJoinsInitial(joins: state.joins);
 
-        state.joins.removeAt(e.index);
-        state.joins.insert(e.index, join);
+    if (event is QueryJoinsInitialized) {
+      yield* _mapQueryJoinsInitializedToState(event);
+    } else if (event is QueryJoinAdded) {
+      yield* _mapQueryJoinAddedToState(event);
+    } else if (event is QueryJoinUpdated) {
+      yield* _mapQueryJoinUpdatedToState(event);
+    } else if (event is QueryJoinCopied) {
+      yield* _mapQueryJoinCopiedToState(event);
+    } else if (event is QueryJoinDeleted) {
+      yield* _mapQueryJoinDeletedToState(event);
+    } else if (event is QueryJoinOrderChanged) {
+      yield* _mapQueryJoinOrderChangedToState(event);
+    }
+  }
 
-        yield state.copyWith(joins: state.joins);
-      },
-      joinCopied: (e) async* {
-        state.joins.add(e.join.copyWith());
-        yield state.copyWith(joins: state.joins);
-      },
-      joinDeleted: (e) async* {
-        state.joins.removeAt(e.index);
-        yield state.copyWith(joins: state.joins);
-      },
-      joinOrderChanged: (e) async* {
-        var newIndex = e.newIndex;
-        if (e.oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+  Stream<QueryJoinsState> _mapQueryJoinsInitializedToState(
+      QueryJoinsInitialized event) async* {
+    yield QueryJoinsChanged(joins: event.joins);
+  }
 
-        final item = state.joins.removeAt(e.oldIndex);
-        state.joins.insert(newIndex, item);
+  Stream<QueryJoinsState> _mapQueryJoinAddedToState(
+      QueryJoinAdded event) async* {
+    state.joins.add(event.join);
+    yield QueryJoinsChanged(joins: state.joins);
+  }
 
-        yield state.copyWith(joins: state.joins);
-      },
-    );
+  Stream<QueryJoinsState> _mapQueryJoinUpdatedToState(
+      QueryJoinUpdated event) async* {
+    final condition = QueryCondition(
+        isCustom: event.condition?.isCustom ?? event.join.condition.isCustom,
+        leftField: event.condition?.leftField ?? event.join.condition.leftField,
+        logicalCompareType: event.condition?.logicalCompareType ??
+            event.join.condition.logicalCompareType,
+        rightField:
+            event.condition?.rightField ?? event.join.condition.rightField,
+        customCondition: event.condition?.customCondition ??
+            event.join.condition.customCondition);
+    final join = QueryJoin(
+        leftTable: event.leftTable ?? event.join.leftTable,
+        isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
+        rightTable: event.rightTable ?? event.join.rightTable,
+        isRightAll: event.isRightAll ?? event.join.isRightAll,
+        condition: event.condition ?? condition);
+
+    state.joins.removeAt(event.index);
+    state.joins.insert(event.index, join);
+
+    yield QueryJoinsChanged(joins: state.joins);
+  }
+
+  Stream<QueryJoinsState> _mapQueryJoinCopiedToState(
+      QueryJoinCopied event) async* {
+    state.joins.add(event.join.copy());
+    yield QueryJoinsChanged(joins: state.joins);
+  }
+
+  Stream<QueryJoinsState> _mapQueryJoinDeletedToState(
+      QueryJoinDeleted event) async* {
+    state.joins.removeAt(event.index);
+    yield QueryJoinsChanged(joins: state.joins);
+  }
+
+  Stream<QueryJoinsState> _mapQueryJoinOrderChangedToState(
+      QueryJoinOrderChanged event) async* {
+    var newIndex = event.newIndex;
+    if (event.oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+
+    final QueryJoin item = state.joins.removeAt(event.oldIndex);
+    state.joins.insert(newIndex, item);
+
+    yield QueryJoinsChanged(joins: state.joins);
   }
 }
