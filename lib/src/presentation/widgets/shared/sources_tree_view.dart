@@ -222,12 +222,12 @@ class TreeItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alias = _isRoot() ? item.alias ?? '' : item.name;
+    final alias = _isRoot() ? item.alias ?? item.name : item.name;
 
     final elevation = _getElevation();
     final selected = useState(false);
     final leading = _getLeadingIcon();
-    final title = Text(alias == '' ? item.name : alias);
+    final title = Text(alias);
     final actions = _getActions(QueryWizardLocalizations.of(context));
 
     return Card(

@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:query_wizard/src/application/blocs/query_conditions/query_conditions_bloc.dart';
 
 class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
@@ -16,8 +17,10 @@ class QueryConditionsTab extends StatelessWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryConditionsBloc, QueryConditionsState>(
-        builder: (context, state) {
-      if (state is QueryConditionsChanged) {
+      builder: (
+        context,
+        state,
+      ) {
         return Scaffold(
           body: ReorderableListView.builder(
             itemCount: state.conditions.length,
@@ -36,26 +39,34 @@ class QueryConditionsTab extends StatelessWidget {
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
                             bloc.add(
-                                QueryConditionCopied(condition: condition));
+                              QueryConditionsEvent.conditionCopied(
+                                condition: condition,
+                              ),
+                            );
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(QueryConditionDeleted(index: index));
+                            bloc.add(
+                              QueryConditionsEvent.conditionDeleted(
+                                index: index,
+                              ),
+                            );
                           },
                         ),
                       ],
                     ),
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (context) => _QueryConditionPage(
-                                index: index, bloc: bloc, tables: tables),
-                            fullscreenDialog: true,
-                          ));
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => _QueryConditionPage(
+                              index: index, bloc: bloc, tables: tables),
+                          fullscreenDialog: true,
+                        ),
+                      );
                     },
                     title: Text(condition.toString())),
               );
@@ -63,28 +74,31 @@ class QueryConditionsTab extends StatelessWidget {
             padding: const EdgeInsets.all(
                 QueryWizardConstants.defaultEdgeInsetsAllValue),
             onReorder: (int oldIndex, int newIndex) {
-              bloc.add(QueryConditionOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex));
+              bloc.add(
+                QueryConditionsEvent.conditionOrderChanged(
+                  oldIndex: oldIndex,
+                  newIndex: newIndex,
+                ),
+              );
             },
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) =>
-                        _QueryConditionPage(bloc: bloc, tables: tables),
-                    fullscreenDialog: true,
-                  ));
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) =>
+                      _QueryConditionPage(bloc: bloc, tables: tables),
+                  fullscreenDialog: true,
+                ),
+              );
             },
             tooltip: localizations?.add ?? 'Add',
             child: const Icon(Icons.add),
           ),
         );
-      }
-
-      return const Center(child: CircularProgressIndicator());
-    });
+      },
+    );
   }
 }
 
@@ -114,9 +128,11 @@ class _QueryConditionPage extends HookWidget {
       final condition = bloc.state.conditions.elementAt(index!);
 
       isCustom.value = condition.isCustom;
-      leftField.value = fields.firstWhere((f) =>
-          '${f.parent?.alias ?? f.parent?.name}.${f.name}' ==
-          condition.leftField);
+      leftField.value = fields.firstWhere(
+        (f) =>
+            '${f.parent?.alias ?? f.parent?.name}.${f.name}' ==
+            condition.leftField,
+      );
 
       logicalCompareType.value = condition.logicalCompareType;
       rightFieldController.text = condition.rightField;
@@ -132,19 +148,28 @@ class _QueryConditionPage extends HookWidget {
           TextButton(
             onPressed: () {
               final condition = QueryCondition(
-                  isCustom: isCustom.value ?? false,
-                  leftField:
-                      '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}'
-                      '.${leftField.value?.name ?? ''}',
-                  logicalCompareType: logicalCompareType.value ?? '',
-                  rightField: rightFieldController.text,
-                  customCondition: customConditionController.text);
+                isCustom: isCustom.value ?? false,
+                leftField:
+                    '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}.'
+                    '${leftField.value?.name ?? ''}',
+                logicalCompareType: logicalCompareType.value ?? '',
+                rightField: rightFieldController.text,
+                customCondition: customConditionController.text,
+              );
 
               if (index == null) {
-                bloc.add(QueryConditionAdded(condition: condition));
+                bloc.add(
+                  QueryConditionsEvent.conditionAdded(
+                    condition: condition,
+                  ),
+                );
               } else {
                 bloc.add(
-                    QueryConditionUpdated(index: index!, condition: condition));
+                  QueryConditionsEvent.conditionUpdated(
+                    index: index!,
+                    condition: condition,
+                  ),
+                );
               }
 
               Navigator.pop(context);
@@ -207,8 +232,9 @@ class _QueryConditionPage extends HookWidget {
                           return DropdownMenuItem(
                             value: value,
                             child: Text(
-                                '${value.parent?.alias ?? value.parent?.name}.'
-                                '${value.name}'),
+                              '${value.parent?.alias ?? value.parent?.name}.'
+                              '${value.name}',
+                            ),
                           );
                         },
                       ).toList(),
@@ -247,8 +273,9 @@ class _QueryConditionPage extends HookWidget {
                     child: TextFormField(
                       controller: rightFieldController,
                       decoration: InputDecoration(
-                          labelText: localizations?.rightField ?? 'Right field',
-                          icon: const Icon(Icons.horizontal_rule_rounded)),
+                        labelText: localizations?.rightField ?? 'Right field',
+                        icon: const Icon(Icons.horizontal_rule_rounded),
+                      ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                     ),

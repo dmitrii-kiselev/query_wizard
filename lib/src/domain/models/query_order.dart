@@ -1,16 +1,14 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class QueryOrder extends Equatable {
-  const QueryOrder({required this.field, required this.type});
+import 'package:query_wizard/domain.dart';
 
-  final String field;
-  final QuerySortingType type;
+part 'query_order.freezed.dart';
 
-  @override
-  List<Object?> get props => [field, type];
-
-  @override
-  String toString() => '$field $type';
+@freezed
+class QueryOrder with _$QueryOrder {
+  const factory QueryOrder({
+    required String field,
+    required QuerySortingType type,
+  }) = _QueryOrder;
 }
-
-enum QuerySortingType { ascending, descending }

@@ -1,21 +1,10 @@
-import 'package:equatable/equatable.dart';
+part of 'queries_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueriesState with _$QueriesState {
+  const factory QueriesState({required List<Query> queries}) = _QueriesState;
 
-abstract class QueriesState extends Equatable {
-  const QueriesState({required this.queries});
-
-  final List<Query> queries;
-
-  @override
-  List<Object?> get props => [queries];
-}
-
-class QueriesInitial extends QueriesState {
-  QueriesInitial({List<Query>? queries}) : super(queries: queries ?? []);
-}
-
-class QueriesChanged extends QueriesState {
-  const QueriesChanged({required List<Query> queries})
-      : super(queries: queries);
+  factory QueriesState.initial() => QueriesState(
+        queries: List<Query>.empty(growable: true),
+      );
 }

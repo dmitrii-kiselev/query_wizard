@@ -1,76 +1,35 @@
-import 'package:equatable/equatable.dart';
+part of 'query_conditions_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryConditionsEvent with _$QueryConditionsEvent {
+  const factory QueryConditionsEvent.initialized({
+    required List<QueryCondition> conditions,
+  }) = _Initialized;
 
-abstract class QueryConditionsEvent extends Equatable {
-  const QueryConditionsEvent();
-}
+  const factory QueryConditionsEvent.conditionAdded({
+    required QueryCondition condition,
+  }) = _ConditionAdded;
 
-class QueryConditionsInitialized extends QueryConditionsEvent {
-  const QueryConditionsInitialized({required this.conditions});
+  const factory QueryConditionsEvent.conditionUpdated({
+    required int index,
+    required QueryCondition condition,
+    bool? isCustom,
+    String? leftField,
+    String? logicalCompareType,
+    String? rightField,
+    String? customCondition,
+  }) = _ConditionUpdated;
 
-  final List<QueryCondition> conditions;
+  const factory QueryConditionsEvent.conditionCopied({
+    required QueryCondition condition,
+  }) = _ConditionCopied;
 
-  @override
-  List<Object?> get props => [conditions];
-}
+  const factory QueryConditionsEvent.conditionDeleted({
+    required int index,
+  }) = _ConditionDeleted;
 
-class QueryConditionAdded extends QueryConditionsEvent {
-  const QueryConditionAdded({required this.condition});
-
-  final QueryCondition condition;
-
-  @override
-  List<Object?> get props => [condition];
-}
-
-class QueryConditionUpdated extends QueryConditionsEvent {
-  const QueryConditionUpdated(
-      {required this.index,
-      required this.condition,
-      this.isCustom,
-      this.leftField,
-      this.logicalCompareType,
-      this.rightField,
-      this.customCondition});
-
-  final int index;
-  final QueryCondition condition;
-  final bool? isCustom;
-  final String? leftField;
-  final String? logicalCompareType;
-  final String? rightField;
-  final String? customCondition;
-
-  @override
-  List<Object?> get props => [condition];
-}
-
-class QueryConditionCopied extends QueryConditionsEvent {
-  const QueryConditionCopied({required this.condition});
-
-  final QueryCondition condition;
-
-  @override
-  List<Object?> get props => [condition];
-}
-
-class QueryConditionDeleted extends QueryConditionsEvent {
-  const QueryConditionDeleted({required this.index});
-
-  final int index;
-
-  @override
-  List<Object?> get props => [index];
-}
-
-class QueryConditionOrderChanged extends QueryConditionsEvent {
-  const QueryConditionOrderChanged(
-      {required this.oldIndex, required this.newIndex});
-
-  final int oldIndex;
-  final int newIndex;
-
-  @override
-  List<Object?> get props => [oldIndex, newIndex];
+  const factory QueryConditionsEvent.conditionOrderChanged({
+    required int oldIndex,
+    required int newIndex,
+  }) = _ConditionOrderChanged;
 }

@@ -1,22 +1,12 @@
-import 'package:equatable/equatable.dart';
+part of 'query_conditions_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryConditionsState with _$QueryConditionsState {
+  const factory QueryConditionsState({
+    required List<QueryCondition> conditions,
+  }) = _QueryConditionsState;
 
-abstract class QueryConditionsState extends Equatable {
-  const QueryConditionsState({required this.conditions});
-
-  final List<QueryCondition> conditions;
-
-  @override
-  List<Object?> get props => [conditions];
-}
-
-class QueryConditionsInitial extends QueryConditionsState {
-  QueryConditionsInitial({List<QueryCondition>? conditions})
-      : super(conditions: conditions ?? []);
-}
-
-class QueryConditionsChanged extends QueryConditionsState {
-  const QueryConditionsChanged({required List<QueryCondition> conditions})
-      : super(conditions: conditions);
+  factory QueryConditionsState.initial() => QueryConditionsState(
+        conditions: List<QueryCondition>.empty(growable: true),
+      );
 }

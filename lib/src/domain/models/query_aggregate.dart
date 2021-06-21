@@ -1,16 +1,12 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class QueryAggregate extends Equatable {
-  const QueryAggregate({required this.field, required this.function});
+part 'query_aggregate.freezed.dart';
 
-  final String field;
-  final String function;
-
-  @override
-  List<Object?> get props => [field, function];
-
-  @override
-  String toString() {
-    return '$field $function';
-  }
+@freezed
+class QueryAggregate with _$QueryAggregate {
+  const factory QueryAggregate({
+    required String field,
+    required String function,
+  }) = _QueryAggregate;
 }

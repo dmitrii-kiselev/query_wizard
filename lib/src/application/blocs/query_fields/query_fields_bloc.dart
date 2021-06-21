@@ -1,72 +1,55 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
+
+part 'query_fields_bloc.freezed.dart';
+
+part 'query_fields_event.dart';
+
+part 'query_fields_state.dart';
 
 @lazySingleton
 class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
-  QueryFieldsBloc() : super(QueryFieldsInitial());
+  QueryFieldsBloc() : super(QueryFieldsState.initial());
 
   @override
   Stream<QueryFieldsState> mapEventToState(QueryFieldsEvent event) async* {
-    yield QueryFieldsInitial(fields: state.fields);
+    yield* event.map(
+      initialized: (e) async* {
+        yield state.copyWith(fields: e.fields);
+      },
+      fieldAdded: (e) async* {
+        state.fields.add(e.field);
+        yield state.copyWith(fields: state.fields);
+      },
+      fieldUpdated: (e) async* {
+        state.fields.removeAt(e.index);
+        state.fields.insert(e.index, e.field);
 
-    if (event is QueryFieldsInitialized) {
-      yield* _mapQueryFieldsInitializedToState(event);
-    } else if (event is QueryFieldAdded) {
-      yield* _mapQueryFieldAddedToState(event);
-    } else if (event is QueryFieldUpdated) {
-      yield* _mapQueryFieldUpdatedToState(event);
-    } else if (event is QueryFieldCopied) {
-      yield* _mapQueryFieldCopiedToState(event);
-    } else if (event is QueryFieldDeleted) {
-      yield* _mapQueryFieldDeletedToState(event);
-    } else if (event is QueryFieldOrderChanged) {
-      yield* _mapQueryFieldOrderChangedToState(event);
-    }
-  }
+        yield state.copyWith(fields: state.fields);
+      },
+      fieldCopied: (e) async* {
+        state.fields.add(e.field.copyWith());
+        yield state.copyWith(fields: state.fields);
+      },
+      fieldDeleted: (e) async* {
+        state.fields.removeAt(e.index);
+        yield state.copyWith(fields: state.fields);
+      },
+      fieldOrderChanged: (e) async* {
+        var newIndex = e.newIndex;
+        if (e.oldIndex < newIndex) {
+          newIndex -= 1;
+        }
 
-  Stream<QueryFieldsState> _mapQueryFieldsInitializedToState(
-      QueryFieldsInitialized event) async* {
-    yield QueryFieldsChanged(fields: event.fields);
-  }
+        final item = state.fields.removeAt(e.oldIndex);
+        state.fields.insert(newIndex, item);
 
-  Stream<QueryFieldsState> _mapQueryFieldAddedToState(
-      QueryFieldAdded event) async* {
-    state.fields.add(event.field);
-    yield QueryFieldsChanged(fields: state.fields);
-  }
-
-  Stream<QueryFieldsState> _mapQueryFieldUpdatedToState(
-      QueryFieldUpdated event) async* {
-    state.fields.removeAt(event.index);
-    state.fields.insert(event.index, event.field);
-
-    yield QueryFieldsChanged(fields: state.fields);
-  }
-
-  Stream<QueryFieldsState> _mapQueryFieldCopiedToState(
-      QueryFieldCopied event) async* {
-    state.fields.add(event.field);
-    yield QueryFieldsChanged(fields: state.fields);
-  }
-
-  Stream<QueryFieldsState> _mapQueryFieldDeletedToState(
-      QueryFieldDeleted event) async* {
-    state.fields.removeAt(event.index);
-    yield QueryFieldsChanged(fields: state.fields);
-  }
-
-  Stream<QueryFieldsState> _mapQueryFieldOrderChangedToState(
-      QueryFieldOrderChanged event) async* {
-    var newIndex = event.newIndex;
-    if (event.oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    final field = state.fields.removeAt(event.oldIndex);
-    state.fields.insert(newIndex, field);
-
-    yield QueryFieldsChanged(fields: state.fields);
+        yield state.copyWith(fields: state.fields);
+      },
+    );
   }
 }

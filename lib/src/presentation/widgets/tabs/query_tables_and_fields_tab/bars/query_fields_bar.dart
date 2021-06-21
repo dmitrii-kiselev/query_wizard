@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:query_wizard/src/application/blocs/query_fields/query_fields_bloc.dart';
 
 class QueryFieldsBar extends StatelessWidget {
   const QueryFieldsBar({Key? key}) : super(key: key);
@@ -14,73 +15,84 @@ class QueryFieldsBar extends StatelessWidget {
     final bloc = BlocProvider.of<QueryFieldsBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryFieldsBloc, QueryFieldsState>(
-        builder: (context, state) {
-      if (state is QueryFieldsChanged) {
-        return Scaffold(
-          body: ListView.builder(
-            itemCount: state.fields.length,
-            itemBuilder: (context, index) {
-              final field = state.fields[index];
+    return BlocBuilder<QueryFieldsBloc, QueryFieldsState>(builder: (
+      context,
+      state,
+    ) {
+      return Scaffold(
+        body: ListView.builder(
+          itemCount: state.fields.length,
+          itemBuilder: (context, index) {
+            final field = state.fields[index];
 
-              return Card(
-                child: ListTile(
-                  leading: const Icon(Icons.horizontal_rule_rounded),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (context) =>
-                              _CustomExpressionPage(index: index, bloc: bloc),
-                          fullscreenDialog: true,
-                        ));
-                  },
-                  title: Text(field.name),
-                  subtitle: field.parent != null
-                      ? Text(field.parent!.alias ?? field.parent!.name)
-                      : null,
-                  trailing: Wrap(
-                    alignment: WrapAlignment.spaceEvenly,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.copy_outlined),
-                        tooltip: localizations?.copy ?? 'Copy',
-                        onPressed: () {
-                          bloc.add(QueryFieldCopied(field: field));
-                        },
+            return Card(
+              child: ListTile(
+                leading: const Icon(Icons.horizontal_rule_rounded),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute<void>(
+                      builder: (context) => _CustomExpressionPage(
+                        index: index,
+                        bloc: bloc,
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.highlight_remove_outlined),
-                        tooltip: localizations?.remove ?? 'Remove',
-                        onPressed: () {
-                          bloc.add(QueryFieldDeleted(index: index));
-                        },
-                      ),
-                    ],
-                  ),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                },
+                title: Text(field.name),
+                subtitle: field.parent != null
+                    ? Text(field.parent!.alias ?? field.parent!.name)
+                    : null,
+                trailing: Wrap(
+                  alignment: WrapAlignment.spaceEvenly,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.copy_outlined),
+                      tooltip: localizations?.copy ?? 'Copy',
+                      onPressed: () {
+                        bloc.add(
+                          QueryFieldsEvent.fieldCopied(
+                            field: field,
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.highlight_remove_outlined),
+                      tooltip: localizations?.remove ?? 'Remove',
+                      onPressed: () {
+                        bloc.add(
+                          QueryFieldsEvent.fieldDeleted(
+                            index: index,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              );
-            },
-            padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
+              ),
+            );
+          },
+          padding: const EdgeInsets.all(
+            QueryWizardConstants.defaultEdgeInsetsAllValue,
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => _CustomExpressionPage(bloc: bloc),
-                    fullscreenDialog: true,
-                  ));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
-        );
-      }
-
-      return const Center(child: CircularProgressIndicator());
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => _CustomExpressionPage(bloc: bloc),
+                fullscreenDialog: true,
+              ),
+            );
+          },
+          tooltip: localizations?.add ?? 'Add',
+          child: const Icon(Icons.add),
+        ),
+      );
     });
   }
 }
@@ -109,12 +121,24 @@ class _CustomExpressionPage extends HookWidget {
             TextButton(
               onPressed: () {
                 final field = QueryElement(
-                    name: controller.text, type: QueryElementType.column);
+                    name: controller.text,
+                    type: QueryElementType.column,
+                    alias: '',
+                    elements: []);
 
                 if (index == null) {
-                  bloc.add(QueryFieldAdded(field: field));
+                  bloc.add(
+                    QueryFieldsEvent.fieldAdded(
+                      field: field,
+                    ),
+                  );
                 } else {
-                  bloc.add(QueryFieldUpdated(index: index!, field: field));
+                  bloc.add(
+                    QueryFieldsEvent.fieldUpdated(
+                      index: index!,
+                      field: field,
+                    ),
+                  );
                 }
 
                 Navigator.pop(context);
@@ -130,18 +154,22 @@ class _CustomExpressionPage extends HookWidget {
         ),
         body: Container(
           padding: const EdgeInsets.all(
-              QueryWizardConstants.defaultEdgeInsetsAllValue),
+            QueryWizardConstants.defaultEdgeInsetsAllValue,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                  child: TextField(
-                controller: controller,
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                keyboardType: TextInputType.multiline,
-                maxLines: 99999,
-                autofocus: true,
-              )),
+                child: TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 99999,
+                  autofocus: true,
+                ),
+              ),
             ],
           ),
         ),

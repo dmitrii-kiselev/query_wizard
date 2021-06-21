@@ -30,27 +30,25 @@ class QueryBatchDrawer extends HookWidget {
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
-        builder: (context, state) {
-      if (state is QueryBatchesChanged) {
-        final drawerItems = ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(localizations?.queryBatches ?? 'Query Batches'),
-              accountEmail: const Text(''),
-              currentAccountPicture:
-                  const CircleAvatar(child: FlutterLogo(size: 42.0)),
-            ),
-            ..._getQueryBatches(state.queryBatches, bloc),
-          ],
-        );
+    return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(builder: (
+      context,
+      state,
+    ) {
+      final drawerItems = ListView(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text(localizations?.queryBatches ?? 'Query Batches'),
+            accountEmail: const Text(''),
+            currentAccountPicture:
+                const CircleAvatar(child: FlutterLogo(size: 42.0)),
+          ),
+          ..._getQueryBatches(state.batches, bloc),
+        ],
+      );
 
-        return Drawer(
-          child: drawerItems,
-        );
-      }
-
-      return const Center(child: CircularProgressIndicator());
+      return Drawer(
+        child: drawerItems,
+      );
     });
   }
 }

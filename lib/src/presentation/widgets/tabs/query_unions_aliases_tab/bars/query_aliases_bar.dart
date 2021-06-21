@@ -17,7 +17,9 @@ class QueryAliasesBar extends StatelessWidget {
     final fields = queries.expand((q) => q.fields).toSet();
 
     final fieldNames = Map.fromIterables(
-        fields.map((f) => f.name), fields.map((f) => f.alias));
+      fields.map((f) => f.name),
+      fields.map((f) => f.alias),
+    );
 
     map['field_names'] = fieldNames;
 
@@ -33,22 +35,25 @@ class QueryAliasesBar extends StatelessWidget {
     }
 
     final columns = queries
-        .map((q) => DataColumn(
-              label: Text(
-                q.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ))
+        .map(
+          (q) => DataColumn(
+            label: Text(
+              q.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        )
         .toList();
 
     columns.insert(
-        0,
-        DataColumn(
-          label: Text(
-            localizations?.fieldNames ?? 'Field names',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ));
+      0,
+      DataColumn(
+        label: Text(
+          localizations?.fieldNames ?? 'Field names',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
 
     final rows = List<DataRow>.empty(growable: true);
 

@@ -1,64 +1,51 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
+
+part 'query_orders_bloc.freezed.dart';
+
+part 'query_orders_event.dart';
+
+part 'query_orders_state.dart';
 
 @lazySingleton
 class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
-  QueryOrdersBloc() : super(QueryOrdersInitial());
+  QueryOrdersBloc() : super(QueryOrdersState.initial());
 
   @override
   Stream<QueryOrdersState> mapEventToState(QueryOrdersEvent event) async* {
-    yield QueryOrdersInitial(orders: state.orders);
+    yield* event.map(
+      initialized: (e) async* {
+        yield state.copyWith(orders: e.orders);
+      },
+      orderAdded: (e) async* {
+        state.orders.add(e.order);
+        yield state.copyWith(orders: state.orders);
+      },
+      orderUpdated: (e) async* {
+        state.orders.removeAt(e.index);
+        state.orders.insert(e.index, e.order);
 
-    if (event is QueryOrdersInitialized) {
-      yield* _mapQueryOrdersInitializedToState(event);
-    } else if (event is QueryOrderAdded) {
-      yield* _mapQueryOrderAddedToState(event);
-    } else if (event is QueryOrderUpdated) {
-      yield* _mapQueryOrderUpdatedToState(event);
-    } else if (event is QueryOrderDeleted) {
-      yield* _mapQueryOrderDeletedToState(event);
-    } else if (event is QueryOrderOrderChanged) {
-      yield* _mapQueryOrderOrderChangedToState(event);
-    }
-  }
+        yield state.copyWith(orders: state.orders);
+      },
+      orderDeleted: (e) async* {
+        state.orders.removeAt(e.index);
+        yield state.copyWith(orders: state.orders);
+      },
+      orderChanged: (e) async* {
+        var newIndex = e.newIndex;
+        if (e.oldIndex < newIndex) {
+          newIndex -= 1;
+        }
 
-  Stream<QueryOrdersState> _mapQueryOrdersInitializedToState(
-      QueryOrdersInitialized event) async* {
-    yield QueryOrdersChanged(orders: event.orders);
-  }
+        final item = state.orders.removeAt(e.oldIndex);
+        state.orders.insert(newIndex, item);
 
-  Stream<QueryOrdersState> _mapQueryOrderAddedToState(
-      QueryOrderAdded event) async* {
-    state.orders.add(event.order);
-    yield QueryOrdersChanged(orders: state.orders);
-  }
-
-  Stream<QueryOrdersState> _mapQueryOrderUpdatedToState(
-      QueryOrderUpdated event) async* {
-    state.orders.removeAt(event.index);
-    state.orders.insert(event.index, event.order);
-
-    yield QueryOrdersChanged(orders: state.orders);
-  }
-
-  Stream<QueryOrdersState> _mapQueryOrderDeletedToState(
-      QueryOrderDeleted event) async* {
-    state.orders.removeAt(event.index);
-    yield QueryOrdersChanged(orders: state.orders);
-  }
-
-  Stream<QueryOrdersState> _mapQueryOrderOrderChangedToState(
-      QueryOrderOrderChanged event) async* {
-    var newIndex = event.newIndex;
-    if (event.oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-
-    final item = state.orders.removeAt(event.oldIndex);
-    state.orders.insert(newIndex, item);
-
-    yield QueryOrdersChanged(orders: state.orders);
+        yield state.copyWith(orders: state.orders);
+      },
+    );
   }
 }

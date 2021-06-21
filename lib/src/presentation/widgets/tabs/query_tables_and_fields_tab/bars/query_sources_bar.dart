@@ -16,35 +16,77 @@ class QuerySourcesBar extends StatelessWidget {
     final fieldsBloc = BlocProvider.of<QueryFieldsBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
-        builder: (context, state) {
-      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
-        return Scaffold(
-          body: SourcesTreeView(
-              items: state.sources,
-              onTap: (item) {
-                if (item.value.type == QueryElementType.column &&
-                    item.checked) {
-                  fieldsBloc.add(QueryFieldAdded(field: item.value));
-                }
+    return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(builder: (
+      context,
+      state,
+    ) {
+      return state.map(
+        (value) => const Center(child: CircularProgressIndicator()),
+        loadInProgress: (s) {
+          return const Center(child: CircularProgressIndicator());
+        },
+        loadSuccess: (s) {
+          return Scaffold(
+            body: SourcesTreeView(
+                items: s.sources,
+                onTap: (item) {
+                  if (item.value.type == QueryElementType.column &&
+                      item.checked) {
+                    fieldsBloc
+                        .add(QueryFieldsEvent.fieldAdded(field: item.value));
+                  }
+                },
+                onLongPress: (item) {
+                  if (item.value.type == QueryElementType.table &&
+                      item.checked) {
+                    tablesBloc
+                        .add(QueryTablesEvent.tableAdded(table: item.value));
+                  }
+                }),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                sourcesBloc.add(
+                  const QuerySourcesEvent.sourcesRequested(),
+                );
               },
-              onLongPress: (item) {
-                if (item.value.type == QueryElementType.table && item.checked) {
-                  tablesBloc.add(QueryTableAdded(table: item.value));
-                }
-              }),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              const event = QuerySourcesRequested();
-              sourcesBloc.add(event);
-            },
-            tooltip: localizations?.refresh ?? 'Refresh',
-            child: const Icon(Icons.update_rounded),
-          ),
-        );
-      }
-
-      return const Center(child: CircularProgressIndicator());
+              tooltip: localizations?.refresh ?? 'Refresh',
+              child: const Icon(Icons.update_rounded),
+            ),
+          );
+        },
+        loadFailure: (s) {
+          return const Center(child: CircularProgressIndicator());
+        },
+        sourcesChanged: (s) {
+          return Scaffold(
+            body: SourcesTreeView(
+                items: s.sources,
+                onTap: (item) {
+                  if (item.value.type == QueryElementType.column &&
+                      item.checked) {
+                    fieldsBloc
+                        .add(QueryFieldsEvent.fieldAdded(field: item.value));
+                  }
+                },
+                onLongPress: (item) {
+                  if (item.value.type == QueryElementType.table &&
+                      item.checked) {
+                    tablesBloc
+                        .add(QueryTablesEvent.tableAdded(table: item.value));
+                  }
+                }),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                sourcesBloc.add(
+                  const QuerySourcesEvent.sourcesRequested(),
+                );
+              },
+              tooltip: localizations?.refresh ?? 'Refresh',
+              child: const Icon(Icons.update_rounded),
+            ),
+          );
+        },
+      );
     });
   }
 }

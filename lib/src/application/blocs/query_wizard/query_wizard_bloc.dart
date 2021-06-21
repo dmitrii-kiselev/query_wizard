@@ -1,24 +1,32 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
 
+part 'query_wizard_bloc.freezed.dart';
+
+part 'query_wizard_event.dart';
+
+part 'query_wizard_state.dart';
+
 @lazySingleton
 class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
-  QueryWizardBloc(
-      {required this.sourcesBloc,
-      required this.tablesBloc,
-      required this.fieldsBloc,
-      required this.joinsBloc,
-      required this.aggregatesBloc,
-      required this.groupingsBloc,
-      required this.queriesBloc,
-      required this.conditionsBloc,
-      required this.batchesBloc,
-      required this.ordersBloc,
-      required this.queryWizardRepository})
-      : super(const QueryWizardInitial());
+  QueryWizardBloc({
+    required this.sourcesBloc,
+    required this.tablesBloc,
+    required this.fieldsBloc,
+    required this.joinsBloc,
+    required this.aggregatesBloc,
+    required this.groupingsBloc,
+    required this.queriesBloc,
+    required this.conditionsBloc,
+    required this.batchesBloc,
+    required this.ordersBloc,
+    required this.queryWizardRepository,
+  }) : super(const QueryWizardState.initial());
 
   final QuerySourcesBloc sourcesBloc;
   final QueryTablesBloc tablesBloc;
@@ -37,31 +45,39 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
 
   @override
   Stream<QueryWizardState> mapEventToState(QueryWizardEvent event) async* {
-    if (event is QuerySchemaRequested) {
-      yield const QueryWizardLoadInProgress();
-      try {
-        late QuerySchema querySchema;
-        if (event.query != "") {
-          querySchema = await queryWizardRepository.parseQuery(event.query);
-        } else {
-          querySchema = QuerySchema.empty();
+    yield* event.map(
+      initialized: (e) async* {},
+      querySchemaRequested: (e) async* {
+        yield const QueryWizardState.loadInProgress();
+        try {
+          late QuerySchema querySchema;
+          if (e.query != '') {
+            querySchema = await queryWizardRepository.parseQuery(e.query);
+          } else {
+            querySchema = QuerySchema.empty();
+          }
+
+          batchesBloc.add(
+            QueryBatchesEvent.initialized(
+              batches: querySchema.queryBatches,
+            ),
+          );
+
+          changeQueryBatch(querySchema.queryBatches.first);
+
+          yield QueryWizardState.loadSuccess(querySchema: querySchema);
+        } catch (_) {
+          yield const QueryWizardState.loadFailure();
         }
-
-        batchesBloc.add(
-            QueryBatchesInitialized(queryBatches: querySchema.queryBatches));
-
-        changeQueryBatch(querySchema.queryBatches.first);
-
-        yield QueryWizardLoadSuccess(querySchema: querySchema);
-      } catch (_) {
-        yield const QueryWizardLoadFailure();
-      }
-    }
+      },
+    );
   }
 
   void changeQueryBatch(QueryBatch queryBatch) {
     currentQueryButch = queryBatch;
-    queriesBloc.add(QueriesInitialized(queries: queryBatch.queries));
+    queriesBloc.add(
+      QueriesEvent.initialized(queries: queryBatch.queries),
+    );
 
     changeQuery(queryBatch.queries.first);
   }
@@ -69,18 +85,32 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   void changeQuery(Query query) {
     currentQuery = query;
 
-    sourcesBloc.add(QuerySourcesInitialized(sources: query.sources));
-    tablesBloc.add(QueryTablesInitialized(tables: query.tables));
-    fieldsBloc.add(QueryFieldsInitialized(fields: query.fields));
-    joinsBloc.add(QueryJoinsInitialized(joins: query.joins));
+    sourcesBloc.add(
+      QuerySourcesEvent.initialized(sources: query.sources),
+    );
+    tablesBloc.add(
+      QueryTablesEvent.initialized(tables: query.tables),
+    );
+    fieldsBloc.add(
+      QueryFieldsEvent.initialized(fields: query.fields),
+    );
+    joinsBloc.add(
+      QueryJoinsEvent.initialized(joins: query.joins),
+    );
 
-    aggregatesBloc
-        .add(QueryAggregatesInitialized(aggregates: query.aggregates));
+    aggregatesBloc.add(
+      QueryAggregatesEvent.initialized(aggregates: query.aggregates),
+    );
 
-    groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
-    conditionsBloc
-        .add(QueryConditionsInitialized(conditions: query.conditions));
+    groupingsBloc.add(
+      QueryGroupingsEvent.initialized(groupings: query.groupings),
+    );
+    conditionsBloc.add(
+      QueryConditionsEvent.initialized(conditions: query.conditions),
+    );
 
-    ordersBloc.add(QueryOrdersInitialized(orders: query.orders));
+    ordersBloc.add(
+      QueryOrdersEvent.initialized(orders: query.orders),
+    );
   }
 }

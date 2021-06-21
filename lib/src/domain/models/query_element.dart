@@ -1,47 +1,17 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-enum QueryElementType { table, column }
+import 'package:query_wizard/domain.dart';
 
-// ignore: must_be_immutable
-class QueryElement extends Equatable {
-  QueryElement({required this.name, required this.type});
+part 'query_element.freezed.dart';
 
-  QueryElement.withElements(
-      {required this.name,
-      this.alias,
-      required this.type,
-      required List<QueryElement> elements}) {
-    this.elements.addAll(elements);
-
-    for (final element in elements) {
-      element.parent = this;
-    }
-  }
-
-  QueryElement.withElementsAndParent(
-      {required this.name,
-      this.alias,
-      required this.type,
-      required List<QueryElement> elements,
-      required QueryElement parent}) {
-    this.elements.addAll(elements);
-
-    for (final element in elements) {
-      element.parent = this;
-    }
-
-    // ignore: prefer_initializing_formals
-    this.parent = parent;
-  }
-
-  final String name;
-  String? alias;
-  final QueryElementType type;
-  QueryElement? parent;
-  final List<QueryElement> elements = List.empty(growable: true);
-
-  bool get hasElements => elements.isNotEmpty;
-
-  @override
-  List<Object> get props => [name, alias ?? '', type, parent ?? '', elements];
+@freezed
+class QueryElement with _$QueryElement {
+  const factory QueryElement({
+    required String name,
+    String? alias,
+    required QueryElementType type,
+    QueryElement? parent,
+    required List<QueryElement> elements,
+  }) = _QueryElement;
 }

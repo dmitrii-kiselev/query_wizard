@@ -1,67 +1,30 @@
-import 'package:equatable/equatable.dart';
+part of 'query_tables_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryTablesEvent with _$QueryTablesEvent {
+  const factory QueryTablesEvent.initialized({
+    required List<QueryElement> tables,
+  }) = _Initialized;
 
-abstract class QueryTablesEvent extends Equatable {
-  const QueryTablesEvent();
-}
+  const factory QueryTablesEvent.tableAdded({
+    required QueryElement table,
+  }) = _QueryTablesAdded;
 
-class QueryTablesInitialized extends QueryTablesEvent {
-  const QueryTablesInitialized({required this.tables});
+  const factory QueryTablesEvent.tableUpdated({
+    required int index,
+    required QueryElement table,
+  }) = _QueryTableUpdated;
 
-  final List<QueryElement> tables;
+  const factory QueryTablesEvent.tableCopied({
+    required QueryElement table,
+  }) = _QueryTablesCopied;
 
-  @override
-  List<Object?> get props => [tables];
-}
+  const factory QueryTablesEvent.tableDeleted({
+    required int index,
+  }) = _QueryTablesDeleted;
 
-class QueryTableAdded extends QueryTablesEvent {
-  const QueryTableAdded({required this.table});
-
-  final QueryElement table;
-
-  @override
-  List<Object?> get props => [table];
-}
-
-class QueryTableUpdated extends QueryTablesEvent {
-  const QueryTableUpdated({
-    required this.index,
-    required this.table,
-  });
-
-  final int index;
-  final QueryElement table;
-
-  @override
-  List<Object?> get props => [table];
-}
-
-class QueryTableCopied extends QueryTablesEvent {
-  const QueryTableCopied({required this.table});
-
-  final QueryElement table;
-
-  @override
-  List<Object?> get props => [table];
-}
-
-class QueryTableDeleted extends QueryTablesEvent {
-  const QueryTableDeleted({required this.index});
-
-  final int index;
-
-  @override
-  List<Object?> get props => [index];
-}
-
-class QueryTableOrderChanged extends QueryTablesEvent {
-  const QueryTableOrderChanged(
-      {required this.oldIndex, required this.newIndex});
-
-  final int oldIndex;
-  final int newIndex;
-
-  @override
-  List<Object?> get props => [oldIndex, newIndex];
+  const factory QueryTablesEvent.tableOrderChanged({
+    required int oldIndex,
+    required int newIndex,
+  }) = _QueryTablesOrderChanged;
 }

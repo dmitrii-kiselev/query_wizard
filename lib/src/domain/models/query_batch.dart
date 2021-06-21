@@ -1,50 +1,25 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class QueryBatch extends Equatable {
-  const QueryBatch(
-      {required this.name,
-      required this.sources,
-      required this.queries,
-      required this.aliases,
-      required this.queryType});
+part 'query_batch.freezed.dart';
 
-  QueryBatch.empty()
-      : name = '',
-        sources = [],
-        queries = [],
-        aliases = Map.identity(),
-        queryType = QueryType.selectQuery;
+@freezed
+class QueryBatch with _$QueryBatch {
+  const factory QueryBatch({
+    required String name,
+    required List<QueryElement> sources,
+    required List<Query> queries,
+    required Map<String, Map<String, String>> aliases,
+    required QueryType queryType,
+  }) = _QueryBatch;
 
-  final String name;
-  final List<QueryElement> sources;
-  final List<Query> queries;
-  final Map<String, Map<String, String>> aliases;
-  final QueryType queryType;
-
-  @override
-  List<Object?> get props => [name, sources, queries, aliases, queryType];
-}
-
-extension CopyQueryBatch on QueryBatch {
-  QueryBatch copy() => QueryBatch(
-      name: name,
-      sources: sources,
-      queries: queries,
-      aliases: aliases,
-      queryType: queryType);
-
-  QueryBatch copyWith(
-          {String? name,
-          List<QueryElement>? sources,
-          List<Query>? queries,
-          Map<String, Map<String, String>>? aliases,
-          QueryType? queryType}) =>
-      QueryBatch(
-          name: name ?? this.name,
-          sources: sources ?? this.sources,
-          queries: queries ?? this.queries,
-          aliases: aliases ?? this.aliases,
-          queryType: queryType ?? this.queryType);
+  factory QueryBatch.empty() => QueryBatch(
+        name: '',
+        sources: List<QueryElement>.empty(growable: true),
+        queries: List<Query>.empty(growable: true),
+        aliases: Map.identity(),
+        queryType: QueryType.selectQuery,
+      );
 }

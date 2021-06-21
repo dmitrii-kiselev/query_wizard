@@ -1,31 +1,14 @@
-import 'package:equatable/equatable.dart';
+part of 'query_wizard_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryWizardState with _$QueryWizardState {
+  const factory QueryWizardState.initial() = _Initial;
 
-abstract class QueryWizardState extends Equatable {
-  const QueryWizardState();
+  const factory QueryWizardState.loadInProgress() = _LoadInProgress;
 
-  @override
-  List<Object> get props => [];
-}
+  const factory QueryWizardState.loadSuccess({
+    required QuerySchema querySchema,
+  }) = _LoadSuccess;
 
-class QueryWizardInitial extends QueryWizardState {
-  const QueryWizardInitial();
-}
-
-class QueryWizardLoadInProgress extends QueryWizardState {
-  const QueryWizardLoadInProgress();
-}
-
-class QueryWizardLoadSuccess extends QueryWizardState {
-  const QueryWizardLoadSuccess({required this.querySchema});
-
-  final QuerySchema querySchema;
-
-  @override
-  List<Object> get props => [querySchema];
-}
-
-class QueryWizardLoadFailure extends QueryWizardState {
-  const QueryWizardLoadFailure();
+  const factory QueryWizardState.loadFailure() = _LoadFailure;
 }

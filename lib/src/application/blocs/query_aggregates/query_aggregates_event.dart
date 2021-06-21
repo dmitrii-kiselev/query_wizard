@@ -1,58 +1,26 @@
-import 'package:equatable/equatable.dart';
+part of 'query_aggregates_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryAggregatesEvent with _$QueryAggregatesEvent {
+  const factory QueryAggregatesEvent.initialized({
+    required List<QueryAggregate> aggregates,
+  }) = _Initialized;
 
-abstract class QueryAggregatesEvent extends Equatable {
-  const QueryAggregatesEvent();
-}
+  const factory QueryAggregatesEvent.aggregateAdded({
+    required QueryAggregate aggregate,
+  }) = _AggregateAdded;
 
-class QueryAggregatesInitialized extends QueryAggregatesEvent {
-  const QueryAggregatesInitialized({required this.aggregates});
+  const factory QueryAggregatesEvent.aggregateUpdated({
+    required int index,
+    required QueryAggregate aggregate,
+  }) = _AggregateCopied;
 
-  final List<QueryAggregate> aggregates;
+  const factory QueryAggregatesEvent.aggregateDeleted({
+    required int index,
+  }) = _AggregateDeleted;
 
-  @override
-  List<Object?> get props => [aggregates];
-}
-
-class QueryAggregateAdded extends QueryAggregatesEvent {
-  const QueryAggregateAdded({required this.aggregate});
-
-  final QueryAggregate aggregate;
-
-  @override
-  List<Object?> get props => [aggregate];
-}
-
-class QueryAggregateUpdated extends QueryAggregatesEvent {
-  const QueryAggregateUpdated({
-    required this.index,
-    required this.aggregate,
-  });
-
-  final int index;
-  final QueryAggregate aggregate;
-
-  @override
-  List<Object?> get props => [aggregate];
-}
-
-class QueryAggregateDeleted extends QueryAggregatesEvent {
-  const QueryAggregateDeleted({required this.index});
-
-  final int index;
-
-  @override
-  List<Object?> get props => [index];
-}
-
-class QueryAggregateOrderChanged extends QueryAggregatesEvent {
-  const QueryAggregateOrderChanged(
-      {required this.oldIndex, required this.newIndex});
-
-  final int oldIndex;
-  final int newIndex;
-
-  @override
-  List<Object?> get props => [oldIndex, newIndex];
+  const factory QueryAggregatesEvent.aggregateOrderChanged({
+    required int oldIndex,
+    required int newIndex,
+  }) = _AggregateOrderChanged;
 }

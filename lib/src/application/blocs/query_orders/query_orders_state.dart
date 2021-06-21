@@ -1,21 +1,12 @@
-import 'package:equatable/equatable.dart';
+part of 'query_orders_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryOrdersState with _$QueryOrdersState {
+  const factory QueryOrdersState({
+    required List<QueryOrder> orders,
+  }) = _QueryOrdersState;
 
-abstract class QueryOrdersState extends Equatable {
-  const QueryOrdersState({required this.orders});
-
-  final List<QueryOrder> orders;
-
-  @override
-  List<Object?> get props => [orders];
-}
-
-class QueryOrdersInitial extends QueryOrdersState {
-  QueryOrdersInitial({List<QueryOrder>? orders}) : super(orders: orders ?? []);
-}
-
-class QueryOrdersChanged extends QueryOrdersState {
-  const QueryOrdersChanged({required List<QueryOrder> orders})
-      : super(orders: orders);
+  factory QueryOrdersState.initial() => QueryOrdersState(
+        orders: List<QueryOrder>.empty(growable: true),
+      );
 }

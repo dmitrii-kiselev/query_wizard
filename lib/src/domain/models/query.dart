@@ -1,105 +1,39 @@
-import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class Query extends Equatable {
-  const Query(
-      {required this.name,
-      required this.sources,
-      required this.tables,
-      required this.fields,
-      required this.joins,
-      required this.groupings,
-      required this.aggregates,
-      required this.conditions,
-      required this.orders,
-      required this.isTop,
-      required this.topCounter,
-      required this.isDistinct});
+part 'query.freezed.dart';
 
-  Query.empty()
-      : name = 'Query',
-        sources = [],
-        tables = [],
-        fields = [],
-        joins = [],
-        groupings = [],
-        aggregates = [],
-        conditions = [],
-        orders = [],
-        isTop = false,
-        topCounter = 0,
-        isDistinct = false;
+@freezed
+class Query with _$Query {
+  const factory Query({
+    required String name,
+    required List<QueryElement> sources,
+    required List<QueryElement> tables,
+    required List<QueryElement> fields,
+    required List<QueryJoin> joins,
+    required List<QueryGrouping> groupings,
+    required List<QueryAggregate> aggregates,
+    required List<QueryCondition> conditions,
+    required List<QueryOrder> orders,
+    required bool isTop,
+    required int topCounter,
+    required bool isDistinct,
+  }) = _Query;
 
-  final String name;
-  final List<QueryElement> sources;
-  final List<QueryElement> tables;
-  final List<QueryElement> fields;
-  final List<QueryJoin> joins;
-  final List<QueryGrouping> groupings;
-  final List<QueryAggregate> aggregates;
-  final List<QueryCondition> conditions;
-  final List<QueryOrder> orders;
-  final bool isTop;
-  final int topCounter;
-  final bool isDistinct;
-
-  @override
-  List<Object?> get props => [
-        name,
-        sources,
-        tables,
-        fields,
-        joins,
-        groupings,
-        aggregates,
-        conditions,
-        orders,
-        isTop,
-        topCounter,
-        isDistinct
-      ];
-}
-
-extension CopyQuery on Query {
-  Query copy() => Query(
-      name: name,
-      sources: sources,
-      tables: tables,
-      fields: fields,
-      joins: joins,
-      groupings: groupings,
-      aggregates: aggregates,
-      conditions: conditions,
-      orders: orders,
-      isTop: isTop,
-      topCounter: topCounter,
-      isDistinct: isDistinct);
-
-  Query copyWith(
-          {String? name,
-          List<QueryElement>? sources,
-          List<QueryElement>? tables,
-          List<QueryElement>? fields,
-          List<QueryJoin>? joins,
-          List<QueryGrouping>? groupings,
-          List<QueryAggregate>? aggregates,
-          List<QueryCondition>? conditions,
-          List<QueryOrder>? orders,
-          bool? isTop,
-          int? topCounter,
-          bool? isDistinct}) =>
-      Query(
-          name: name ?? this.name,
-          sources: sources ?? this.sources,
-          tables: tables ?? this.tables,
-          fields: fields ?? this.fields,
-          joins: joins ?? this.joins,
-          groupings: groupings ?? this.groupings,
-          aggregates: aggregates ?? this.aggregates,
-          conditions: conditions ?? this.conditions,
-          orders: orders ?? this.orders,
-          topCounter: topCounter ?? this.topCounter,
-          isTop: isTop ?? this.isTop,
-          isDistinct: isDistinct ?? this.isDistinct);
+  factory Query.empty() => Query(
+        name: 'Query',
+        sources: List<QueryElement>.empty(growable: true),
+        tables: List<QueryElement>.empty(growable: true),
+        fields: List<QueryElement>.empty(growable: true),
+        joins: List<QueryJoin>.empty(growable: true),
+        groupings: List<QueryGrouping>.empty(growable: true),
+        aggregates: List<QueryAggregate>.empty(growable: true),
+        conditions: List<QueryCondition>.empty(growable: true),
+        orders: List<QueryOrder>.empty(growable: true),
+        isTop: false,
+        topCounter: 0,
+        isDistinct: false,
+      );
 }

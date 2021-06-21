@@ -1,58 +1,26 @@
-import 'package:equatable/equatable.dart';
+part of 'query_orders_bloc.dart';
 
-import 'package:query_wizard/domain.dart';
+@freezed
+class QueryOrdersEvent with _$QueryOrdersEvent {
+  const factory QueryOrdersEvent.initialized({
+    required List<QueryOrder> orders,
+  }) = _Initialized;
 
-abstract class QueryOrdersEvent extends Equatable {
-  const QueryOrdersEvent();
-}
+  const factory QueryOrdersEvent.orderAdded({
+    required QueryOrder order,
+  }) = _OrderAdded;
 
-class QueryOrdersInitialized extends QueryOrdersEvent {
-  const QueryOrdersInitialized({required this.orders});
+  const factory QueryOrdersEvent.orderUpdated({
+    required int index,
+    required QueryOrder order,
+  }) = _OrderUpdated;
 
-  final List<QueryOrder> orders;
+  const factory QueryOrdersEvent.orderDeleted({
+    required int index,
+  }) = _OrderDeleted;
 
-  @override
-  List<Object?> get props => [orders];
-}
-
-class QueryOrderAdded extends QueryOrdersEvent {
-  const QueryOrderAdded({required this.order});
-
-  final QueryOrder order;
-
-  @override
-  List<Object?> get props => [order];
-}
-
-class QueryOrderUpdated extends QueryOrdersEvent {
-  const QueryOrderUpdated({
-    required this.index,
-    required this.order,
-  });
-
-  final int index;
-  final QueryOrder order;
-
-  @override
-  List<Object?> get props => [order];
-}
-
-class QueryOrderDeleted extends QueryOrdersEvent {
-  const QueryOrderDeleted({required this.index});
-
-  final int index;
-
-  @override
-  List<Object?> get props => [index];
-}
-
-class QueryOrderOrderChanged extends QueryOrdersEvent {
-  const QueryOrderOrderChanged(
-      {required this.oldIndex, required this.newIndex});
-
-  final int oldIndex;
-  final int newIndex;
-
-  @override
-  List<Object?> get props => [oldIndex, newIndex];
+  const factory QueryOrdersEvent.orderChanged({
+    required int oldIndex,
+    required int newIndex,
+  }) = _OrderOrderChanged;
 }
