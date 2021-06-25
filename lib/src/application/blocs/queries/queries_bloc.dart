@@ -19,35 +19,21 @@ class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
 
   @override
   Stream<QueriesState> mapEventToState(QueriesEvent event) async* {
-    yield state.copyWith(
-      isChanging: true,
-      queries: state.queries,
-    );
-
     yield* event.map(
       initialized: (e) async* {
         yield state.copyWith(queries: e.queries);
       },
       queryAdded: (e) async* {
         state.queries.add(e.query);
-        yield state.copyWith(
-          isChanging: false,
-          queries: state.queries,
-        );
+        yield state.copyWith(queries: state.queries);
       },
       queryCopied: (e) async* {
         state.queries.add(e.query.copyWith());
-        yield state.copyWith(
-          isChanging: false,
-          queries: state.queries,
-        );
+        yield state.copyWith(queries: state.queries);
       },
       queryDeleted: (e) async* {
         state.queries.removeAt(e.index);
-        yield state.copyWith(
-          isChanging: false,
-          queries: state.queries,
-        );
+        yield state.copyWith(queries: state.queries);
       },
       queryOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -58,10 +44,7 @@ class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
         final item = state.queries.removeAt(e.oldIndex);
         state.queries.insert(newIndex, item);
 
-        yield state.copyWith(
-          isChanging: false,
-          queries: state.queries,
-        );
+        yield state.copyWith(queries: state.queries);
       },
     );
   }

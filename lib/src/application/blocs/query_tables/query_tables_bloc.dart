@@ -17,47 +17,27 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
 
   @override
   Stream<QueryTablesState> mapEventToState(QueryTablesEvent event) async* {
-    yield state.copyWith(
-      isChanging: true,
-      tables: state.tables,
-    );
-
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(
-          isChanging: false,
-          tables: e.tables,
-        );
+        yield state.copyWith(tables: e.tables);
       },
       tableAdded: (e) async* {
         state.tables.add(e.table);
-        yield state.copyWith(
-          isChanging: false,
-          tables: state.tables,
-        );
+        yield state.copyWith(tables: state.tables);
       },
       tableUpdated: (e) async* {
         state.tables.removeAt(e.index);
         state.tables.insert(e.index, e.table);
 
-        yield state.copyWith(
-          isChanging: false,
-          tables: state.tables,
-        );
+        yield state.copyWith(tables: state.tables);
       },
       tableCopied: (e) async* {
         state.tables.add(e.table.copyWith());
-        yield state.copyWith(
-          isChanging: false,
-          tables: state.tables,
-        );
+        yield state.copyWith(tables: state.tables);
       },
       tableDeleted: (e) async* {
         state.tables.removeAt(e.index);
-        yield state.copyWith(
-          isChanging: false,
-          tables: state.tables,
-        );
+        yield state.copyWith(tables: state.tables);
       },
       tableOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -67,10 +47,8 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
 
         final item = state.tables.removeAt(e.oldIndex);
         state.tables.insert(newIndex, item);
-        yield state.copyWith(
-          isChanging: false,
-          tables: state.tables,
-        );
+
+        yield state.copyWith(tables: state.tables);
       },
     );
   }

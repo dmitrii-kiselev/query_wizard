@@ -847,10 +847,8 @@ abstract class _OrderOrderChanged implements QueryOrdersEvent {
 class _$QueryOrdersStateTearOff {
   const _$QueryOrdersStateTearOff();
 
-  _QueryOrdersState call(
-      {required bool isChanging, required List<QueryOrder> orders}) {
+  _QueryOrdersState call({required List<QueryOrder> orders}) {
     return _QueryOrdersState(
-      isChanging: isChanging,
       orders: orders,
     );
   }
@@ -861,7 +859,6 @@ const $QueryOrdersState = _$QueryOrdersStateTearOff();
 
 /// @nodoc
 mixin _$QueryOrdersState {
-  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryOrder> get orders => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -874,7 +871,7 @@ abstract class $QueryOrdersStateCopyWith<$Res> {
   factory $QueryOrdersStateCopyWith(
           QueryOrdersState value, $Res Function(QueryOrdersState) then) =
       _$QueryOrdersStateCopyWithImpl<$Res>;
-  $Res call({bool isChanging, List<QueryOrder> orders});
+  $Res call({List<QueryOrder> orders});
 }
 
 /// @nodoc
@@ -888,14 +885,9 @@ class _$QueryOrdersStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? orders = freezed,
   }) {
     return _then(_value.copyWith(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       orders: orders == freezed
           ? _value.orders
           : orders // ignore: cast_nullable_to_non_nullable
@@ -911,7 +903,7 @@ abstract class _$QueryOrdersStateCopyWith<$Res>
           _QueryOrdersState value, $Res Function(_QueryOrdersState) then) =
       __$QueryOrdersStateCopyWithImpl<$Res>;
   @override
-  $Res call({bool isChanging, List<QueryOrder> orders});
+  $Res call({List<QueryOrder> orders});
 }
 
 /// @nodoc
@@ -927,14 +919,9 @@ class __$QueryOrdersStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? orders = freezed,
   }) {
     return _then(_QueryOrdersState(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       orders: orders == freezed
           ? _value.orders
           : orders // ignore: cast_nullable_to_non_nullable
@@ -948,16 +935,14 @@ class __$QueryOrdersStateCopyWithImpl<$Res>
 class _$_QueryOrdersState
     with DiagnosticableTreeMixin
     implements _QueryOrdersState {
-  const _$_QueryOrdersState({required this.isChanging, required this.orders});
+  const _$_QueryOrdersState({required this.orders});
 
-  @override
-  final bool isChanging;
   @override
   final List<QueryOrder> orders;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryOrdersState(isChanging: $isChanging, orders: $orders)';
+    return 'QueryOrdersState(orders: $orders)';
   }
 
   @override
@@ -965,7 +950,6 @@ class _$_QueryOrdersState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryOrdersState'))
-      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('orders', orders));
   }
 
@@ -973,18 +957,13 @@ class _$_QueryOrdersState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryOrdersState &&
-            (identical(other.isChanging, isChanging) ||
-                const DeepCollectionEquality()
-                    .equals(other.isChanging, isChanging)) &&
             (identical(other.orders, orders) ||
                 const DeepCollectionEquality().equals(other.orders, orders)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isChanging) ^
-      const DeepCollectionEquality().hash(orders);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(orders);
 
   @JsonKey(ignore: true)
   @override
@@ -993,12 +972,9 @@ class _$_QueryOrdersState
 }
 
 abstract class _QueryOrdersState implements QueryOrdersState {
-  const factory _QueryOrdersState(
-      {required bool isChanging,
-      required List<QueryOrder> orders}) = _$_QueryOrdersState;
+  const factory _QueryOrdersState({required List<QueryOrder> orders}) =
+      _$_QueryOrdersState;
 
-  @override
-  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryOrder> get orders => throw _privateConstructorUsedError;
   @override

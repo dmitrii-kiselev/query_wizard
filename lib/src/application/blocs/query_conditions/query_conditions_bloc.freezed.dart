@@ -1264,10 +1264,8 @@ abstract class _ConditionOrderChanged implements QueryConditionsEvent {
 class _$QueryConditionsStateTearOff {
   const _$QueryConditionsStateTearOff();
 
-  _QueryConditionsState call(
-      {required bool isChanging, required List<QueryCondition> conditions}) {
+  _QueryConditionsState call({required List<QueryCondition> conditions}) {
     return _QueryConditionsState(
-      isChanging: isChanging,
       conditions: conditions,
     );
   }
@@ -1278,7 +1276,6 @@ const $QueryConditionsState = _$QueryConditionsStateTearOff();
 
 /// @nodoc
 mixin _$QueryConditionsState {
-  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryCondition> get conditions => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -1291,7 +1288,7 @@ abstract class $QueryConditionsStateCopyWith<$Res> {
   factory $QueryConditionsStateCopyWith(QueryConditionsState value,
           $Res Function(QueryConditionsState) then) =
       _$QueryConditionsStateCopyWithImpl<$Res>;
-  $Res call({bool isChanging, List<QueryCondition> conditions});
+  $Res call({List<QueryCondition> conditions});
 }
 
 /// @nodoc
@@ -1305,14 +1302,9 @@ class _$QueryConditionsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? conditions = freezed,
   }) {
     return _then(_value.copyWith(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       conditions: conditions == freezed
           ? _value.conditions
           : conditions // ignore: cast_nullable_to_non_nullable
@@ -1328,7 +1320,7 @@ abstract class _$QueryConditionsStateCopyWith<$Res>
           $Res Function(_QueryConditionsState) then) =
       __$QueryConditionsStateCopyWithImpl<$Res>;
   @override
-  $Res call({bool isChanging, List<QueryCondition> conditions});
+  $Res call({List<QueryCondition> conditions});
 }
 
 /// @nodoc
@@ -1344,14 +1336,9 @@ class __$QueryConditionsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? conditions = freezed,
   }) {
     return _then(_QueryConditionsState(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       conditions: conditions == freezed
           ? _value.conditions
           : conditions // ignore: cast_nullable_to_non_nullable
@@ -1365,17 +1352,14 @@ class __$QueryConditionsStateCopyWithImpl<$Res>
 class _$_QueryConditionsState
     with DiagnosticableTreeMixin
     implements _QueryConditionsState {
-  const _$_QueryConditionsState(
-      {required this.isChanging, required this.conditions});
+  const _$_QueryConditionsState({required this.conditions});
 
-  @override
-  final bool isChanging;
   @override
   final List<QueryCondition> conditions;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryConditionsState(isChanging: $isChanging, conditions: $conditions)';
+    return 'QueryConditionsState(conditions: $conditions)';
   }
 
   @override
@@ -1383,7 +1367,6 @@ class _$_QueryConditionsState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryConditionsState'))
-      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('conditions', conditions));
   }
 
@@ -1391,9 +1374,6 @@ class _$_QueryConditionsState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryConditionsState &&
-            (identical(other.isChanging, isChanging) ||
-                const DeepCollectionEquality()
-                    .equals(other.isChanging, isChanging)) &&
             (identical(other.conditions, conditions) ||
                 const DeepCollectionEquality()
                     .equals(other.conditions, conditions)));
@@ -1401,9 +1381,7 @@ class _$_QueryConditionsState
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isChanging) ^
-      const DeepCollectionEquality().hash(conditions);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(conditions);
 
   @JsonKey(ignore: true)
   @override
@@ -1414,11 +1392,8 @@ class _$_QueryConditionsState
 
 abstract class _QueryConditionsState implements QueryConditionsState {
   const factory _QueryConditionsState(
-      {required bool isChanging,
-      required List<QueryCondition> conditions}) = _$_QueryConditionsState;
+      {required List<QueryCondition> conditions}) = _$_QueryConditionsState;
 
-  @override
-  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryCondition> get conditions => throw _privateConstructorUsedError;
   @override

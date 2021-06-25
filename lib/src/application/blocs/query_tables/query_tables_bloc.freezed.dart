@@ -1042,10 +1042,8 @@ abstract class _QueryTablesOrderChanged implements QueryTablesEvent {
 class _$QueryTablesStateTearOff {
   const _$QueryTablesStateTearOff();
 
-  _QueryTablesState call(
-      {required bool isChanging, required List<QueryElement> tables}) {
+  _QueryTablesState call({required List<QueryElement> tables}) {
     return _QueryTablesState(
-      isChanging: isChanging,
       tables: tables,
     );
   }
@@ -1056,7 +1054,6 @@ const $QueryTablesState = _$QueryTablesStateTearOff();
 
 /// @nodoc
 mixin _$QueryTablesState {
-  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryElement> get tables => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -1069,7 +1066,7 @@ abstract class $QueryTablesStateCopyWith<$Res> {
   factory $QueryTablesStateCopyWith(
           QueryTablesState value, $Res Function(QueryTablesState) then) =
       _$QueryTablesStateCopyWithImpl<$Res>;
-  $Res call({bool isChanging, List<QueryElement> tables});
+  $Res call({List<QueryElement> tables});
 }
 
 /// @nodoc
@@ -1083,14 +1080,9 @@ class _$QueryTablesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? tables = freezed,
   }) {
     return _then(_value.copyWith(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       tables: tables == freezed
           ? _value.tables
           : tables // ignore: cast_nullable_to_non_nullable
@@ -1106,7 +1098,7 @@ abstract class _$QueryTablesStateCopyWith<$Res>
           _QueryTablesState value, $Res Function(_QueryTablesState) then) =
       __$QueryTablesStateCopyWithImpl<$Res>;
   @override
-  $Res call({bool isChanging, List<QueryElement> tables});
+  $Res call({List<QueryElement> tables});
 }
 
 /// @nodoc
@@ -1122,14 +1114,9 @@ class __$QueryTablesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? isChanging = freezed,
     Object? tables = freezed,
   }) {
     return _then(_QueryTablesState(
-      isChanging: isChanging == freezed
-          ? _value.isChanging
-          : isChanging // ignore: cast_nullable_to_non_nullable
-              as bool,
       tables: tables == freezed
           ? _value.tables
           : tables // ignore: cast_nullable_to_non_nullable
@@ -1143,16 +1130,14 @@ class __$QueryTablesStateCopyWithImpl<$Res>
 class _$_QueryTablesState
     with DiagnosticableTreeMixin
     implements _QueryTablesState {
-  const _$_QueryTablesState({required this.isChanging, required this.tables});
+  const _$_QueryTablesState({required this.tables});
 
-  @override
-  final bool isChanging;
   @override
   final List<QueryElement> tables;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryTablesState(isChanging: $isChanging, tables: $tables)';
+    return 'QueryTablesState(tables: $tables)';
   }
 
   @override
@@ -1160,7 +1145,6 @@ class _$_QueryTablesState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryTablesState'))
-      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('tables', tables));
   }
 
@@ -1168,18 +1152,13 @@ class _$_QueryTablesState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryTablesState &&
-            (identical(other.isChanging, isChanging) ||
-                const DeepCollectionEquality()
-                    .equals(other.isChanging, isChanging)) &&
             (identical(other.tables, tables) ||
                 const DeepCollectionEquality().equals(other.tables, tables)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(isChanging) ^
-      const DeepCollectionEquality().hash(tables);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(tables);
 
   @JsonKey(ignore: true)
   @override
@@ -1188,12 +1167,9 @@ class _$_QueryTablesState
 }
 
 abstract class _QueryTablesState implements QueryTablesState {
-  const factory _QueryTablesState(
-      {required bool isChanging,
-      required List<QueryElement> tables}) = _$_QueryTablesState;
+  const factory _QueryTablesState({required List<QueryElement> tables}) =
+      _$_QueryTablesState;
 
-  @override
-  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryElement> get tables => throw _privateConstructorUsedError;
   @override

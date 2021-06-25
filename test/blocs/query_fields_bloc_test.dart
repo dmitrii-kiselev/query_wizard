@@ -16,44 +16,29 @@ void main() {
       expect(fieldsTabBloc.state.fields, []);
     });
 
-    blocTest(
-      'adds field when QueryFieldAdded is added',
-      build: () => fieldsTabBloc,
-      act: (QueryFieldsBloc bloc) {
-        const field = QueryElement(
-          name: 'Field',
-          type: QueryElementType.column,
-          elements: [],
-        );
-        const event = QueryFieldsEvent.fieldAdded(
-          field: field,
-        );
+    blocTest('adds field when QueryFieldAdded is added',
+        build: () => fieldsTabBloc,
+        act: (QueryFieldsBloc bloc) {
+          const field = QueryElement(
+            name: 'Field',
+            type: QueryElementType.column,
+            elements: [],
+          );
+          const event = QueryFieldsEvent.fieldAdded(
+            field: field,
+          );
 
-        bloc.add(event);
-      },
-      expect: () => [
-        const QueryFieldsState(
-          isChanging: true,
-          fields: [
-            QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            )
-          ],
-        ),
-        const QueryFieldsState(
-          isChanging: false,
-          fields: [
-            QueryElement(
-              name: 'Field',
-              type: QueryElementType.column,
-              elements: [],
-            )
-          ],
-        ),
-      ],
-    );
+          bloc.add(event);
+        },
+        expect: () => [
+              const QueryFieldsState(fields: [
+                QueryElement(
+                  name: 'Field',
+                  type: QueryElementType.column,
+                  elements: [],
+                )
+              ]),
+            ]);
 
     blocTest('changes field when QueryFieldUpdated is added',
         build: () => fieldsTabBloc,
@@ -82,10 +67,7 @@ void main() {
           ];
 
           return [
-            const QueryFieldsState(isChanging: true, fields: expectedFields),
-            const QueryFieldsState(isChanging: false, fields: expectedFields),
-            const QueryFieldsState(isChanging: true, fields: expectedFields),
-            const QueryFieldsState(isChanging: false, fields: expectedFields),
+            const QueryFieldsState(fields: expectedFields),
           ];
         });
 
@@ -118,10 +100,7 @@ void main() {
           ];
 
           return [
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
+            QueryFieldsState(fields: expectedFields),
           ];
         });
 
@@ -144,10 +123,7 @@ void main() {
           final List<QueryElement> expectedFields = [];
 
           return [
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
+            QueryFieldsState(fields: expectedFields),
           ];
         });
 
@@ -185,12 +161,7 @@ void main() {
           ];
 
           return [
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
-            QueryFieldsState(isChanging: true, fields: expectedFields),
-            QueryFieldsState(isChanging: false, fields: expectedFields),
+            QueryFieldsState(fields: expectedFields),
           ];
         });
   });

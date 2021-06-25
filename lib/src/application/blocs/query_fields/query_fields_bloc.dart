@@ -17,47 +17,27 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
 
   @override
   Stream<QueryFieldsState> mapEventToState(QueryFieldsEvent event) async* {
-    yield state.copyWith(
-      isChanging: true,
-      fields: state.fields,
-    );
-
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(
-          isChanging: false,
-          fields: e.fields,
-        );
+        yield state.copyWith(fields: e.fields);
       },
       fieldAdded: (e) async* {
         state.fields.add(e.field);
-        yield state.copyWith(
-          isChanging: false,
-          fields: state.fields,
-        );
+        yield state.copyWith(fields: state.fields);
       },
       fieldUpdated: (e) async* {
         state.fields.removeAt(e.index);
         state.fields.insert(e.index, e.field);
 
-        yield state.copyWith(
-          isChanging: false,
-          fields: state.fields,
-        );
+        yield state.copyWith(fields: state.fields);
       },
       fieldCopied: (e) async* {
         state.fields.add(e.field.copyWith());
-        yield state.copyWith(
-          isChanging: false,
-          fields: state.fields,
-        );
+        yield state.copyWith(fields: state.fields);
       },
       fieldDeleted: (e) async* {
         state.fields.removeAt(e.index);
-        yield state.copyWith(
-          isChanging: false,
-          fields: state.fields,
-        );
+        yield state.copyWith(fields: state.fields);
       },
       fieldOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -68,10 +48,7 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
         final item = state.fields.removeAt(e.oldIndex);
         state.fields.insert(newIndex, item);
 
-        yield state.copyWith(
-          isChanging: false,
-          fields: state.fields,
-        );
+        yield state.copyWith(fields: state.fields);
       },
     );
   }

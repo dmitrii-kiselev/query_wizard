@@ -29,14 +29,7 @@ void main() {
             bloc.add(event);
           },
           expect: () => [
-                QueryConditionsState(
-                  isChanging: true,
-                  conditions: [QueryCondition.empty()],
-                ),
-                QueryConditionsState(
-                  isChanging: false,
-                  conditions: [QueryCondition.empty()],
-                )
+                QueryConditionsState(conditions: [QueryCondition.empty()])
               ]);
 
       blocTest('changes condition when QueryConditionUpdated is added',
@@ -61,22 +54,7 @@ void main() {
             ];
 
             return [
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
+              QueryConditionsState(conditions: expectedConditions),
             ];
           });
 
@@ -101,22 +79,7 @@ void main() {
             ];
 
             return [
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
+              QueryConditionsState(conditions: expectedConditions),
             ];
           });
 
@@ -138,22 +101,7 @@ void main() {
             final List<QueryCondition> expectedConditions = [];
 
             return [
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: true,
-                conditions: expectedConditions,
-              ),
-              QueryConditionsState(
-                isChanging: false,
-                conditions: expectedConditions,
-              ),
+              QueryConditionsState(conditions: expectedConditions),
             ];
           });
 
@@ -185,30 +133,7 @@ void main() {
           ];
 
           return [
-            QueryConditionsState(
-              isChanging: true,
-              conditions: expectedConditions,
-            ),
-            QueryConditionsState(
-              isChanging: false,
-              conditions: expectedConditions,
-            ),
-            QueryConditionsState(
-              isChanging: true,
-              conditions: expectedConditions,
-            ),
-            QueryConditionsState(
-              isChanging: false,
-              conditions: expectedConditions,
-            ),
-            QueryConditionsState(
-              isChanging: true,
-              conditions: expectedConditions,
-            ),
-            QueryConditionsState(
-              isChanging: false,
-              conditions: expectedConditions,
-            ),
+            QueryConditionsState(conditions: expectedConditions),
           ];
         },
       );

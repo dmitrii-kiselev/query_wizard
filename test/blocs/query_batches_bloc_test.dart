@@ -26,8 +26,11 @@ void main() {
         );
       },
       expect: () => [
-        QueryBatchesState(isChanging: true, batches: [QueryBatch.empty()]),
-        QueryBatchesState(isChanging: false, batches: [QueryBatch.empty()])
+        QueryBatchesState(
+          batches: [
+            QueryBatch.empty(),
+          ],
+        )
       ],
     );
 
@@ -45,10 +48,7 @@ void main() {
           final expectedBatches = [QueryBatch.empty(), QueryBatch.empty()];
 
           return [
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
+            QueryBatchesState(batches: expectedBatches),
           ];
         });
 
@@ -65,12 +65,7 @@ void main() {
         expect: () {
           final List<QueryBatch> expectedBatches = [];
 
-          return [
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
-          ];
+          return [QueryBatchesState(batches: expectedBatches)];
         });
 
     blocTest('changes query batch order when QueryBatchOrderChanged is added',
@@ -92,12 +87,7 @@ void main() {
           final expectedBatches = [QueryBatch.empty(), QueryBatch.empty()];
 
           return [
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
-            QueryBatchesState(isChanging: true, batches: expectedBatches),
-            QueryBatchesState(isChanging: false, batches: expectedBatches),
+            QueryBatchesState(batches: expectedBatches),
           ];
         });
   });
