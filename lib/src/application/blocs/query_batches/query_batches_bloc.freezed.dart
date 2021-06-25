@@ -832,8 +832,10 @@ abstract class _BatchOrderChanged implements QueryBatchesEvent {
 class _$QueryBatchesStateTearOff {
   const _$QueryBatchesStateTearOff();
 
-  _QueryBatchesState call({required List<QueryBatch> batches}) {
+  _QueryBatchesState call(
+      {required bool isChanging, required List<QueryBatch> batches}) {
     return _QueryBatchesState(
+      isChanging: isChanging,
       batches: batches,
     );
   }
@@ -844,6 +846,7 @@ const $QueryBatchesState = _$QueryBatchesStateTearOff();
 
 /// @nodoc
 mixin _$QueryBatchesState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryBatch> get batches => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -856,7 +859,7 @@ abstract class $QueryBatchesStateCopyWith<$Res> {
   factory $QueryBatchesStateCopyWith(
           QueryBatchesState value, $Res Function(QueryBatchesState) then) =
       _$QueryBatchesStateCopyWithImpl<$Res>;
-  $Res call({List<QueryBatch> batches});
+  $Res call({bool isChanging, List<QueryBatch> batches});
 }
 
 /// @nodoc
@@ -870,9 +873,14 @@ class _$QueryBatchesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? batches = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       batches: batches == freezed
           ? _value.batches
           : batches // ignore: cast_nullable_to_non_nullable
@@ -888,7 +896,7 @@ abstract class _$QueryBatchesStateCopyWith<$Res>
           _QueryBatchesState value, $Res Function(_QueryBatchesState) then) =
       __$QueryBatchesStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueryBatch> batches});
+  $Res call({bool isChanging, List<QueryBatch> batches});
 }
 
 /// @nodoc
@@ -904,9 +912,14 @@ class __$QueryBatchesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? batches = freezed,
   }) {
     return _then(_QueryBatchesState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       batches: batches == freezed
           ? _value.batches
           : batches // ignore: cast_nullable_to_non_nullable
@@ -920,14 +933,16 @@ class __$QueryBatchesStateCopyWithImpl<$Res>
 class _$_QueryBatchesState
     with DiagnosticableTreeMixin
     implements _QueryBatchesState {
-  const _$_QueryBatchesState({required this.batches});
+  const _$_QueryBatchesState({required this.isChanging, required this.batches});
 
+  @override
+  final bool isChanging;
   @override
   final List<QueryBatch> batches;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryBatchesState(batches: $batches)';
+    return 'QueryBatchesState(isChanging: $isChanging, batches: $batches)';
   }
 
   @override
@@ -935,6 +950,7 @@ class _$_QueryBatchesState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryBatchesState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('batches', batches));
   }
 
@@ -942,13 +958,18 @@ class _$_QueryBatchesState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryBatchesState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.batches, batches) ||
                 const DeepCollectionEquality().equals(other.batches, batches)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(batches);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(batches);
 
   @JsonKey(ignore: true)
   @override
@@ -957,9 +978,12 @@ class _$_QueryBatchesState
 }
 
 abstract class _QueryBatchesState implements QueryBatchesState {
-  const factory _QueryBatchesState({required List<QueryBatch> batches}) =
-      _$_QueryBatchesState;
+  const factory _QueryBatchesState(
+      {required bool isChanging,
+      required List<QueryBatch> batches}) = _$_QueryBatchesState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryBatch> get batches => throw _privateConstructorUsedError;
   @override

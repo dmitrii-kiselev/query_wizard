@@ -20,19 +20,23 @@ class QueryMoreBloc extends Bloc<QueryMoreEvent, QueryMoreState> {
     yield* event.map(
       initialized: (e) async* {
         yield QueryMoreState(
-            isTop: e.isTop,
-            topCounter: e.topCounter,
-            isDistinct: e.isDistinct,
-            queryType: e.queryType,
-            tempTableName: e.tempTableName);
+          isChanging: false,
+          isTop: e.isTop,
+          topCounter: e.topCounter,
+          isDistinct: e.isDistinct,
+          queryType: e.queryType,
+          tempTableName: e.tempTableName,
+        );
       },
       changed: (e) async* {
         yield QueryMoreState(
-            isTop: e.isTop,
-            topCounter: e.topCounter,
-            isDistinct: e.isDistinct,
-            queryType: e.queryType,
-            tempTableName: e.tempTableName);
+          isChanging: false,
+          isTop: e.isTop,
+          topCounter: e.topCounter,
+          isDistinct: e.isDistinct,
+          queryType: e.queryType,
+          tempTableName: e.tempTableName,
+        );
       },
     );
   }

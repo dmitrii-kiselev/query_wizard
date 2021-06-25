@@ -877,8 +877,10 @@ abstract class _AggregateOrderChanged implements QueryAggregatesEvent {
 class _$QueryAggregatesStateTearOff {
   const _$QueryAggregatesStateTearOff();
 
-  _QueryAggregatesState call({required List<QueryAggregate> aggregates}) {
+  _QueryAggregatesState call(
+      {required bool isChanging, required List<QueryAggregate> aggregates}) {
     return _QueryAggregatesState(
+      isChanging: isChanging,
       aggregates: aggregates,
     );
   }
@@ -889,6 +891,7 @@ const $QueryAggregatesState = _$QueryAggregatesStateTearOff();
 
 /// @nodoc
 mixin _$QueryAggregatesState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryAggregate> get aggregates => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -901,7 +904,7 @@ abstract class $QueryAggregatesStateCopyWith<$Res> {
   factory $QueryAggregatesStateCopyWith(QueryAggregatesState value,
           $Res Function(QueryAggregatesState) then) =
       _$QueryAggregatesStateCopyWithImpl<$Res>;
-  $Res call({List<QueryAggregate> aggregates});
+  $Res call({bool isChanging, List<QueryAggregate> aggregates});
 }
 
 /// @nodoc
@@ -915,9 +918,14 @@ class _$QueryAggregatesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? aggregates = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       aggregates: aggregates == freezed
           ? _value.aggregates
           : aggregates // ignore: cast_nullable_to_non_nullable
@@ -933,7 +941,7 @@ abstract class _$QueryAggregatesStateCopyWith<$Res>
           $Res Function(_QueryAggregatesState) then) =
       __$QueryAggregatesStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueryAggregate> aggregates});
+  $Res call({bool isChanging, List<QueryAggregate> aggregates});
 }
 
 /// @nodoc
@@ -949,9 +957,14 @@ class __$QueryAggregatesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? aggregates = freezed,
   }) {
     return _then(_QueryAggregatesState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       aggregates: aggregates == freezed
           ? _value.aggregates
           : aggregates // ignore: cast_nullable_to_non_nullable
@@ -965,14 +978,17 @@ class __$QueryAggregatesStateCopyWithImpl<$Res>
 class _$_QueryAggregatesState
     with DiagnosticableTreeMixin
     implements _QueryAggregatesState {
-  const _$_QueryAggregatesState({required this.aggregates});
+  const _$_QueryAggregatesState(
+      {required this.isChanging, required this.aggregates});
 
+  @override
+  final bool isChanging;
   @override
   final List<QueryAggregate> aggregates;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryAggregatesState(aggregates: $aggregates)';
+    return 'QueryAggregatesState(isChanging: $isChanging, aggregates: $aggregates)';
   }
 
   @override
@@ -980,6 +996,7 @@ class _$_QueryAggregatesState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryAggregatesState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('aggregates', aggregates));
   }
 
@@ -987,6 +1004,9 @@ class _$_QueryAggregatesState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryAggregatesState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.aggregates, aggregates) ||
                 const DeepCollectionEquality()
                     .equals(other.aggregates, aggregates)));
@@ -994,7 +1014,9 @@ class _$_QueryAggregatesState
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(aggregates);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(aggregates);
 
   @JsonKey(ignore: true)
   @override
@@ -1005,8 +1027,11 @@ class _$_QueryAggregatesState
 
 abstract class _QueryAggregatesState implements QueryAggregatesState {
   const factory _QueryAggregatesState(
-      {required List<QueryAggregate> aggregates}) = _$_QueryAggregatesState;
+      {required bool isChanging,
+      required List<QueryAggregate> aggregates}) = _$_QueryAggregatesState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryAggregate> get aggregates => throw _privateConstructorUsedError;
   @override

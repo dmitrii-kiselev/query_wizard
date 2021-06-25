@@ -572,12 +572,14 @@ class _$QueryMoreStateTearOff {
   const _$QueryMoreStateTearOff();
 
   _QueryMoreState call(
-      {required bool isTop,
+      {required bool isChanging,
+      required bool isTop,
       required int topCounter,
       required bool isDistinct,
       required QueryType queryType,
       required String tempTableName}) {
     return _QueryMoreState(
+      isChanging: isChanging,
       isTop: isTop,
       topCounter: topCounter,
       isDistinct: isDistinct,
@@ -592,6 +594,7 @@ const $QueryMoreState = _$QueryMoreStateTearOff();
 
 /// @nodoc
 mixin _$QueryMoreState {
+  bool get isChanging => throw _privateConstructorUsedError;
   bool get isTop => throw _privateConstructorUsedError;
   int get topCounter => throw _privateConstructorUsedError;
   bool get isDistinct => throw _privateConstructorUsedError;
@@ -609,7 +612,8 @@ abstract class $QueryMoreStateCopyWith<$Res> {
           QueryMoreState value, $Res Function(QueryMoreState) then) =
       _$QueryMoreStateCopyWithImpl<$Res>;
   $Res call(
-      {bool isTop,
+      {bool isChanging,
+      bool isTop,
       int topCounter,
       bool isDistinct,
       QueryType queryType,
@@ -627,6 +631,7 @@ class _$QueryMoreStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? isTop = freezed,
     Object? topCounter = freezed,
     Object? isDistinct = freezed,
@@ -634,6 +639,10 @@ class _$QueryMoreStateCopyWithImpl<$Res>
     Object? tempTableName = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       isTop: isTop == freezed
           ? _value.isTop
           : isTop // ignore: cast_nullable_to_non_nullable
@@ -666,7 +675,8 @@ abstract class _$QueryMoreStateCopyWith<$Res>
       __$QueryMoreStateCopyWithImpl<$Res>;
   @override
   $Res call(
-      {bool isTop,
+      {bool isChanging,
+      bool isTop,
       int topCounter,
       bool isDistinct,
       QueryType queryType,
@@ -686,6 +696,7 @@ class __$QueryMoreStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? isTop = freezed,
     Object? topCounter = freezed,
     Object? isDistinct = freezed,
@@ -693,6 +704,10 @@ class __$QueryMoreStateCopyWithImpl<$Res>
     Object? tempTableName = freezed,
   }) {
     return _then(_QueryMoreState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       isTop: isTop == freezed
           ? _value.isTop
           : isTop // ignore: cast_nullable_to_non_nullable
@@ -723,12 +738,15 @@ class _$_QueryMoreState
     with DiagnosticableTreeMixin
     implements _QueryMoreState {
   const _$_QueryMoreState(
-      {required this.isTop,
+      {required this.isChanging,
+      required this.isTop,
       required this.topCounter,
       required this.isDistinct,
       required this.queryType,
       required this.tempTableName});
 
+  @override
+  final bool isChanging;
   @override
   final bool isTop;
   @override
@@ -742,7 +760,7 @@ class _$_QueryMoreState
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryMoreState(isTop: $isTop, topCounter: $topCounter, isDistinct: $isDistinct, queryType: $queryType, tempTableName: $tempTableName)';
+    return 'QueryMoreState(isChanging: $isChanging, isTop: $isTop, topCounter: $topCounter, isDistinct: $isDistinct, queryType: $queryType, tempTableName: $tempTableName)';
   }
 
   @override
@@ -750,6 +768,7 @@ class _$_QueryMoreState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryMoreState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('isTop', isTop))
       ..add(DiagnosticsProperty('topCounter', topCounter))
       ..add(DiagnosticsProperty('isDistinct', isDistinct))
@@ -761,6 +780,9 @@ class _$_QueryMoreState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryMoreState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.isTop, isTop) ||
                 const DeepCollectionEquality().equals(other.isTop, isTop)) &&
             (identical(other.topCounter, topCounter) ||
@@ -780,6 +802,7 @@ class _$_QueryMoreState
   @override
   int get hashCode =>
       runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
       const DeepCollectionEquality().hash(isTop) ^
       const DeepCollectionEquality().hash(topCounter) ^
       const DeepCollectionEquality().hash(isDistinct) ^
@@ -794,12 +817,15 @@ class _$_QueryMoreState
 
 abstract class _QueryMoreState implements QueryMoreState {
   const factory _QueryMoreState(
-      {required bool isTop,
+      {required bool isChanging,
+      required bool isTop,
       required int topCounter,
       required bool isDistinct,
       required QueryType queryType,
       required String tempTableName}) = _$_QueryMoreState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   bool get isTop => throw _privateConstructorUsedError;
   @override

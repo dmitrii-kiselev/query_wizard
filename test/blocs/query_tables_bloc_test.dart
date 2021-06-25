@@ -30,13 +30,26 @@ void main() {
           bloc.add(event);
         },
         expect: () => [
-              const QueryTablesState(tables: [
-                QueryElement(
-                  name: 'Table',
-                  type: QueryElementType.table,
-                  elements: [],
-                ),
-              ])
+              const QueryTablesState(
+                isChanging: true,
+                tables: [
+                  QueryElement(
+                    name: 'Table',
+                    type: QueryElementType.table,
+                    elements: [],
+                  ),
+                ],
+              ),
+              const QueryTablesState(
+                isChanging: false,
+                tables: [
+                  QueryElement(
+                    name: 'Table',
+                    type: QueryElementType.table,
+                    elements: [],
+                  ),
+                ],
+              ),
             ]);
 
     blocTest('changes table when QueryTableUpdated is added',
@@ -60,11 +73,17 @@ void main() {
         expect: () {
           const expectedTables = [
             QueryElement(
-                name: 'Table New', type: QueryElementType.table, elements: [])
+              name: 'Table New',
+              type: QueryElementType.table,
+              elements: [],
+            ),
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
           ];
         });
 
@@ -97,7 +116,10 @@ void main() {
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
           ];
         });
 
@@ -119,7 +141,10 @@ void main() {
           final List<QueryElement> expectedTables = [];
 
           return [
-            QueryTablesState(tables: expectedTables),
+            QueryTablesState(isChanging: true, tables: expectedTables),
+            QueryTablesState(isChanging: false, tables: expectedTables),
+            QueryTablesState(isChanging: true, tables: expectedTables),
+            QueryTablesState(isChanging: false, tables: expectedTables),
           ];
         });
 
@@ -162,7 +187,12 @@ void main() {
           ];
 
           return [
-            const QueryTablesState(tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
+            const QueryTablesState(isChanging: true, tables: expectedTables),
+            const QueryTablesState(isChanging: false, tables: expectedTables),
           ];
         });
   });

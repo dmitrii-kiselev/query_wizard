@@ -26,7 +26,8 @@ void main() {
         bloc.add(event);
       },
       expect: () => [
-        QueryJoinsState(joins: [QueryJoin.empty()])
+        QueryJoinsState(isChanging: true, joins: [QueryJoin.empty()]),
+        QueryJoinsState(isChanging: false, joins: [QueryJoin.empty()]),
       ],
     );
 
@@ -48,7 +49,10 @@ void main() {
           final expectedJoins = [QueryJoin.empty().copyWith(isLeftAll: true)];
 
           return [
-            QueryJoinsState(joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
           ];
         });
 
@@ -66,7 +70,10 @@ void main() {
           final expectedJoins = [QueryJoin.empty(), QueryJoin.empty()];
 
           return [
-            QueryJoinsState(joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
           ];
         });
 
@@ -84,7 +91,10 @@ void main() {
           final List<QueryJoin> expectedJoins = [];
 
           return [
-            QueryJoinsState(joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
           ];
         });
 
@@ -110,7 +120,12 @@ void main() {
           ];
 
           return [
-            QueryJoinsState(joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
+            QueryJoinsState(isChanging: true, joins: expectedJoins),
+            QueryJoinsState(isChanging: false, joins: expectedJoins),
           ];
         });
   });

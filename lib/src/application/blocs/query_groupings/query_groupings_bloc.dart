@@ -18,18 +18,33 @@ class QueryGroupingsBloc
 
   @override
   Stream<QueryGroupingsState> mapEventToState(
-      QueryGroupingsEvent event) async* {
+    QueryGroupingsEvent event,
+  ) async* {
+    yield state.copyWith(
+      isChanging: true,
+      groupings: state.groupings,
+    );
+
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(groupings: e.groupings);
+        yield state.copyWith(
+          isChanging: false,
+          groupings: e.groupings,
+        );
       },
       groupingAdded: (e) async* {
         state.groupings.add(e.grouping);
-        yield state.copyWith(groupings: state.groupings);
+        yield state.copyWith(
+          isChanging: false,
+          groupings: state.groupings,
+        );
       },
       groupingDeleted: (e) async* {
         state.groupings.removeAt(e.index);
-        yield state.copyWith(groupings: state.groupings);
+        yield state.copyWith(
+          isChanging: false,
+          groupings: state.groupings,
+        );
       },
       groupingOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -40,7 +55,10 @@ class QueryGroupingsBloc
         final item = state.groupings.removeAt(e.oldIndex);
         state.groupings.insert(newIndex, item);
 
-        yield state.copyWith(groupings: state.groupings);
+        yield state.copyWith(
+          isChanging: false,
+          groupings: state.groupings,
+        );
       },
     );
   }

@@ -17,13 +17,24 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
 
   @override
   Stream<QueryJoinsState> mapEventToState(QueryJoinsEvent event) async* {
+    yield state.copyWith(
+      isChanging: true,
+      joins: state.joins,
+    );
+
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(joins: e.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: e.joins,
+        );
       },
       joinAdded: (e) async* {
         state.joins.add(e.join);
-        yield state.copyWith(joins: state.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: state.joins,
+        );
       },
       joinUpdated: (e) async* {
         final condition = QueryCondition(
@@ -44,15 +55,24 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
         state.joins.removeAt(e.index);
         state.joins.insert(e.index, join);
 
-        yield state.copyWith(joins: state.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: state.joins,
+        );
       },
       joinCopied: (e) async* {
         state.joins.add(e.join.copyWith());
-        yield state.copyWith(joins: state.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: state.joins,
+        );
       },
       joinDeleted: (e) async* {
         state.joins.removeAt(e.index);
-        yield state.copyWith(joins: state.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: state.joins,
+        );
       },
       joinOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -63,7 +83,10 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
         final item = state.joins.removeAt(e.oldIndex);
         state.joins.insert(newIndex, item);
 
-        yield state.copyWith(joins: state.joins);
+        yield state.copyWith(
+          isChanging: false,
+          joins: state.joins,
+        );
       },
     );
   }

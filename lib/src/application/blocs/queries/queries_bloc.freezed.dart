@@ -826,8 +826,9 @@ abstract class _QueryOrderChanged implements QueriesEvent {
 class _$QueriesStateTearOff {
   const _$QueriesStateTearOff();
 
-  _QueriesState call({required List<Query> queries}) {
+  _QueriesState call({required bool isChanging, required List<Query> queries}) {
     return _QueriesState(
+      isChanging: isChanging,
       queries: queries,
     );
   }
@@ -838,6 +839,7 @@ const $QueriesState = _$QueriesStateTearOff();
 
 /// @nodoc
 mixin _$QueriesState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<Query> get queries => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -850,7 +852,7 @@ abstract class $QueriesStateCopyWith<$Res> {
   factory $QueriesStateCopyWith(
           QueriesState value, $Res Function(QueriesState) then) =
       _$QueriesStateCopyWithImpl<$Res>;
-  $Res call({List<Query> queries});
+  $Res call({bool isChanging, List<Query> queries});
 }
 
 /// @nodoc
@@ -863,9 +865,14 @@ class _$QueriesStateCopyWithImpl<$Res> implements $QueriesStateCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? queries = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       queries: queries == freezed
           ? _value.queries
           : queries // ignore: cast_nullable_to_non_nullable
@@ -881,7 +888,7 @@ abstract class _$QueriesStateCopyWith<$Res>
           _QueriesState value, $Res Function(_QueriesState) then) =
       __$QueriesStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<Query> queries});
+  $Res call({bool isChanging, List<Query> queries});
 }
 
 /// @nodoc
@@ -896,9 +903,14 @@ class __$QueriesStateCopyWithImpl<$Res> extends _$QueriesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? queries = freezed,
   }) {
     return _then(_QueriesState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       queries: queries == freezed
           ? _value.queries
           : queries // ignore: cast_nullable_to_non_nullable
@@ -910,14 +922,16 @@ class __$QueriesStateCopyWithImpl<$Res> extends _$QueriesStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_QueriesState with DiagnosticableTreeMixin implements _QueriesState {
-  const _$_QueriesState({required this.queries});
+  const _$_QueriesState({required this.isChanging, required this.queries});
 
+  @override
+  final bool isChanging;
   @override
   final List<Query> queries;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueriesState(queries: $queries)';
+    return 'QueriesState(isChanging: $isChanging, queries: $queries)';
   }
 
   @override
@@ -925,6 +939,7 @@ class _$_QueriesState with DiagnosticableTreeMixin implements _QueriesState {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueriesState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('queries', queries));
   }
 
@@ -932,13 +947,18 @@ class _$_QueriesState with DiagnosticableTreeMixin implements _QueriesState {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueriesState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.queries, queries) ||
                 const DeepCollectionEquality().equals(other.queries, queries)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(queries);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(queries);
 
   @JsonKey(ignore: true)
   @override
@@ -947,8 +967,12 @@ class _$_QueriesState with DiagnosticableTreeMixin implements _QueriesState {
 }
 
 abstract class _QueriesState implements QueriesState {
-  const factory _QueriesState({required List<Query> queries}) = _$_QueriesState;
+  const factory _QueriesState(
+      {required bool isChanging,
+      required List<Query> queries}) = _$_QueriesState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<Query> get queries => throw _privateConstructorUsedError;
   @override

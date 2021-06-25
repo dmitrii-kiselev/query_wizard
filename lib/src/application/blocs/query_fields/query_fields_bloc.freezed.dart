@@ -1030,8 +1030,10 @@ abstract class _FieldOrderChanged implements QueryFieldsEvent {
 class _$QueryFieldsStateTearOff {
   const _$QueryFieldsStateTearOff();
 
-  _QueryFieldsState call({required List<QueryElement> fields}) {
+  _QueryFieldsState call(
+      {required bool isChanging, required List<QueryElement> fields}) {
     return _QueryFieldsState(
+      isChanging: isChanging,
       fields: fields,
     );
   }
@@ -1042,6 +1044,7 @@ const $QueryFieldsState = _$QueryFieldsStateTearOff();
 
 /// @nodoc
 mixin _$QueryFieldsState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryElement> get fields => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -1054,7 +1057,7 @@ abstract class $QueryFieldsStateCopyWith<$Res> {
   factory $QueryFieldsStateCopyWith(
           QueryFieldsState value, $Res Function(QueryFieldsState) then) =
       _$QueryFieldsStateCopyWithImpl<$Res>;
-  $Res call({List<QueryElement> fields});
+  $Res call({bool isChanging, List<QueryElement> fields});
 }
 
 /// @nodoc
@@ -1068,9 +1071,14 @@ class _$QueryFieldsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? fields = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       fields: fields == freezed
           ? _value.fields
           : fields // ignore: cast_nullable_to_non_nullable
@@ -1086,7 +1094,7 @@ abstract class _$QueryFieldsStateCopyWith<$Res>
           _QueryFieldsState value, $Res Function(_QueryFieldsState) then) =
       __$QueryFieldsStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueryElement> fields});
+  $Res call({bool isChanging, List<QueryElement> fields});
 }
 
 /// @nodoc
@@ -1102,9 +1110,14 @@ class __$QueryFieldsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? fields = freezed,
   }) {
     return _then(_QueryFieldsState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       fields: fields == freezed
           ? _value.fields
           : fields // ignore: cast_nullable_to_non_nullable
@@ -1118,14 +1131,16 @@ class __$QueryFieldsStateCopyWithImpl<$Res>
 class _$_QueryFieldsState
     with DiagnosticableTreeMixin
     implements _QueryFieldsState {
-  const _$_QueryFieldsState({required this.fields});
+  const _$_QueryFieldsState({required this.isChanging, required this.fields});
 
+  @override
+  final bool isChanging;
   @override
   final List<QueryElement> fields;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryFieldsState(fields: $fields)';
+    return 'QueryFieldsState(isChanging: $isChanging, fields: $fields)';
   }
 
   @override
@@ -1133,6 +1148,7 @@ class _$_QueryFieldsState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryFieldsState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('fields', fields));
   }
 
@@ -1140,13 +1156,18 @@ class _$_QueryFieldsState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryFieldsState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.fields, fields) ||
                 const DeepCollectionEquality().equals(other.fields, fields)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(fields);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(fields);
 
   @JsonKey(ignore: true)
   @override
@@ -1155,9 +1176,12 @@ class _$_QueryFieldsState
 }
 
 abstract class _QueryFieldsState implements QueryFieldsState {
-  const factory _QueryFieldsState({required List<QueryElement> fields}) =
-      _$_QueryFieldsState;
+  const factory _QueryFieldsState(
+      {required bool isChanging,
+      required List<QueryElement> fields}) = _$_QueryFieldsState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryElement> get fields => throw _privateConstructorUsedError;
   @override

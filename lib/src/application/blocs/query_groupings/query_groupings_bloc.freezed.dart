@@ -669,8 +669,10 @@ abstract class _GroupingOrderChanged implements QueryGroupingsEvent {
 class _$QueryGroupingsStateTearOff {
   const _$QueryGroupingsStateTearOff();
 
-  _QueryGroupingsState call({required List<QueryGrouping> groupings}) {
+  _QueryGroupingsState call(
+      {required bool isChanging, required List<QueryGrouping> groupings}) {
     return _QueryGroupingsState(
+      isChanging: isChanging,
       groupings: groupings,
     );
   }
@@ -681,6 +683,7 @@ const $QueryGroupingsState = _$QueryGroupingsStateTearOff();
 
 /// @nodoc
 mixin _$QueryGroupingsState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryGrouping> get groupings => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -693,7 +696,7 @@ abstract class $QueryGroupingsStateCopyWith<$Res> {
   factory $QueryGroupingsStateCopyWith(
           QueryGroupingsState value, $Res Function(QueryGroupingsState) then) =
       _$QueryGroupingsStateCopyWithImpl<$Res>;
-  $Res call({List<QueryGrouping> groupings});
+  $Res call({bool isChanging, List<QueryGrouping> groupings});
 }
 
 /// @nodoc
@@ -707,9 +710,14 @@ class _$QueryGroupingsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? groupings = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       groupings: groupings == freezed
           ? _value.groupings
           : groupings // ignore: cast_nullable_to_non_nullable
@@ -725,7 +733,7 @@ abstract class _$QueryGroupingsStateCopyWith<$Res>
           $Res Function(_QueryGroupingsState) then) =
       __$QueryGroupingsStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueryGrouping> groupings});
+  $Res call({bool isChanging, List<QueryGrouping> groupings});
 }
 
 /// @nodoc
@@ -741,9 +749,14 @@ class __$QueryGroupingsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? groupings = freezed,
   }) {
     return _then(_QueryGroupingsState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       groupings: groupings == freezed
           ? _value.groupings
           : groupings // ignore: cast_nullable_to_non_nullable
@@ -757,14 +770,17 @@ class __$QueryGroupingsStateCopyWithImpl<$Res>
 class _$_QueryGroupingsState
     with DiagnosticableTreeMixin
     implements _QueryGroupingsState {
-  const _$_QueryGroupingsState({required this.groupings});
+  const _$_QueryGroupingsState(
+      {required this.isChanging, required this.groupings});
 
+  @override
+  final bool isChanging;
   @override
   final List<QueryGrouping> groupings;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryGroupingsState(groupings: $groupings)';
+    return 'QueryGroupingsState(isChanging: $isChanging, groupings: $groupings)';
   }
 
   @override
@@ -772,6 +788,7 @@ class _$_QueryGroupingsState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryGroupingsState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('groupings', groupings));
   }
 
@@ -779,6 +796,9 @@ class _$_QueryGroupingsState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryGroupingsState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.groupings, groupings) ||
                 const DeepCollectionEquality()
                     .equals(other.groupings, groupings)));
@@ -786,7 +806,9 @@ class _$_QueryGroupingsState
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(groupings);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(groupings);
 
   @JsonKey(ignore: true)
   @override
@@ -796,9 +818,12 @@ class _$_QueryGroupingsState
 }
 
 abstract class _QueryGroupingsState implements QueryGroupingsState {
-  const factory _QueryGroupingsState({required List<QueryGrouping> groupings}) =
-      _$_QueryGroupingsState;
+  const factory _QueryGroupingsState(
+      {required bool isChanging,
+      required List<QueryGrouping> groupings}) = _$_QueryGroupingsState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryGrouping> get groupings => throw _privateConstructorUsedError;
   @override

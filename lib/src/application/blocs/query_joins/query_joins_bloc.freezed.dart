@@ -1260,8 +1260,10 @@ abstract class _QueryJoinOrderChanged implements QueryJoinsEvent {
 class _$QueryJoinsStateTearOff {
   const _$QueryJoinsStateTearOff();
 
-  _QueryJoinsState call({required List<QueryJoin> joins}) {
+  _QueryJoinsState call(
+      {required bool isChanging, required List<QueryJoin> joins}) {
     return _QueryJoinsState(
+      isChanging: isChanging,
       joins: joins,
     );
   }
@@ -1272,6 +1274,7 @@ const $QueryJoinsState = _$QueryJoinsStateTearOff();
 
 /// @nodoc
 mixin _$QueryJoinsState {
+  bool get isChanging => throw _privateConstructorUsedError;
   List<QueryJoin> get joins => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -1284,7 +1287,7 @@ abstract class $QueryJoinsStateCopyWith<$Res> {
   factory $QueryJoinsStateCopyWith(
           QueryJoinsState value, $Res Function(QueryJoinsState) then) =
       _$QueryJoinsStateCopyWithImpl<$Res>;
-  $Res call({List<QueryJoin> joins});
+  $Res call({bool isChanging, List<QueryJoin> joins});
 }
 
 /// @nodoc
@@ -1298,9 +1301,14 @@ class _$QueryJoinsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? joins = freezed,
   }) {
     return _then(_value.copyWith(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       joins: joins == freezed
           ? _value.joins
           : joins // ignore: cast_nullable_to_non_nullable
@@ -1316,7 +1324,7 @@ abstract class _$QueryJoinsStateCopyWith<$Res>
           _QueryJoinsState value, $Res Function(_QueryJoinsState) then) =
       __$QueryJoinsStateCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueryJoin> joins});
+  $Res call({bool isChanging, List<QueryJoin> joins});
 }
 
 /// @nodoc
@@ -1332,9 +1340,14 @@ class __$QueryJoinsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? isChanging = freezed,
     Object? joins = freezed,
   }) {
     return _then(_QueryJoinsState(
+      isChanging: isChanging == freezed
+          ? _value.isChanging
+          : isChanging // ignore: cast_nullable_to_non_nullable
+              as bool,
       joins: joins == freezed
           ? _value.joins
           : joins // ignore: cast_nullable_to_non_nullable
@@ -1348,14 +1361,16 @@ class __$QueryJoinsStateCopyWithImpl<$Res>
 class _$_QueryJoinsState
     with DiagnosticableTreeMixin
     implements _QueryJoinsState {
-  const _$_QueryJoinsState({required this.joins});
+  const _$_QueryJoinsState({required this.isChanging, required this.joins});
 
+  @override
+  final bool isChanging;
   @override
   final List<QueryJoin> joins;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'QueryJoinsState(joins: $joins)';
+    return 'QueryJoinsState(isChanging: $isChanging, joins: $joins)';
   }
 
   @override
@@ -1363,6 +1378,7 @@ class _$_QueryJoinsState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'QueryJoinsState'))
+      ..add(DiagnosticsProperty('isChanging', isChanging))
       ..add(DiagnosticsProperty('joins', joins));
   }
 
@@ -1370,13 +1386,18 @@ class _$_QueryJoinsState
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _QueryJoinsState &&
+            (identical(other.isChanging, isChanging) ||
+                const DeepCollectionEquality()
+                    .equals(other.isChanging, isChanging)) &&
             (identical(other.joins, joins) ||
                 const DeepCollectionEquality().equals(other.joins, joins)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(joins);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(isChanging) ^
+      const DeepCollectionEquality().hash(joins);
 
   @JsonKey(ignore: true)
   @override
@@ -1385,9 +1406,12 @@ class _$_QueryJoinsState
 }
 
 abstract class _QueryJoinsState implements QueryJoinsState {
-  const factory _QueryJoinsState({required List<QueryJoin> joins}) =
-      _$_QueryJoinsState;
+  const factory _QueryJoinsState(
+      {required bool isChanging,
+      required List<QueryJoin> joins}) = _$_QueryJoinsState;
 
+  @override
+  bool get isChanging => throw _privateConstructorUsedError;
   @override
   List<QueryJoin> get joins => throw _privateConstructorUsedError;
   @override

@@ -22,23 +22,40 @@ class QueryAggregatesBloc
   Stream<QueryAggregatesState> mapEventToState(
     QueryAggregatesEvent event,
   ) async* {
+    yield state.copyWith(
+      isChanging: true,
+      aggregates: state.aggregates,
+    );
+
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(aggregates: e.aggregates);
+        yield state.copyWith(
+          isChanging: false,
+          aggregates: e.aggregates,
+        );
       },
       aggregateAdded: (e) async* {
         state.aggregates.add(e.aggregate);
-        yield state.copyWith(aggregates: state.aggregates);
+        yield state.copyWith(
+          isChanging: false,
+          aggregates: state.aggregates,
+        );
       },
       aggregateUpdated: (e) async* {
         state.aggregates.removeAt(e.index);
         state.aggregates.insert(e.index, e.aggregate);
 
-        yield state.copyWith(aggregates: state.aggregates);
+        yield state.copyWith(
+          isChanging: false,
+          aggregates: state.aggregates,
+        );
       },
       aggregateDeleted: (e) async* {
         state.aggregates.removeAt(e.index);
-        yield state.copyWith(aggregates: state.aggregates);
+        yield state.copyWith(
+          isChanging: false,
+          aggregates: state.aggregates,
+        );
       },
       aggregateOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -49,7 +66,10 @@ class QueryAggregatesBloc
         final item = state.aggregates.removeAt(e.oldIndex);
         state.aggregates.insert(newIndex, item);
 
-        yield state.copyWith(aggregates: state.aggregates);
+        yield state.copyWith(
+          isChanging: false,
+          aggregates: state.aggregates,
+        );
       },
     );
   }

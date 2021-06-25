@@ -18,14 +18,26 @@ class QueryConditionsBloc
 
   @override
   Stream<QueryConditionsState> mapEventToState(
-      QueryConditionsEvent event) async* {
+    QueryConditionsEvent event,
+  ) async* {
+    yield state.copyWith(
+      isChanging: true,
+      conditions: state.conditions,
+    );
+
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(conditions: e.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: e.conditions,
+        );
       },
       conditionAdded: (e) async* {
         state.conditions.add(e.condition);
-        yield state.copyWith(conditions: state.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: state.conditions,
+        );
       },
       conditionUpdated: (e) async* {
         final condition = QueryCondition(
@@ -39,15 +51,24 @@ class QueryConditionsBloc
         state.conditions.removeAt(e.index);
         state.conditions.insert(e.index, condition);
 
-        yield state.copyWith(conditions: state.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: state.conditions,
+        );
       },
       conditionCopied: (e) async* {
         state.conditions.add(e.condition.copyWith());
-        yield state.copyWith(conditions: state.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: state.conditions,
+        );
       },
       conditionDeleted: (e) async* {
         state.conditions.removeAt(e.index);
-        yield state.copyWith(conditions: state.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: state.conditions,
+        );
       },
       conditionOrderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -58,7 +79,10 @@ class QueryConditionsBloc
         final item = state.conditions.removeAt(e.oldIndex);
         state.conditions.insert(newIndex, item);
 
-        yield state.copyWith(conditions: state.conditions);
+        yield state.copyWith(
+          isChanging: false,
+          conditions: state.conditions,
+        );
       },
     );
   }

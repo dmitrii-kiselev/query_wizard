@@ -17,23 +17,40 @@ class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
 
   @override
   Stream<QueryOrdersState> mapEventToState(QueryOrdersEvent event) async* {
+    yield state.copyWith(
+      isChanging: true,
+      orders: state.orders,
+    );
+
     yield* event.map(
       initialized: (e) async* {
-        yield state.copyWith(orders: e.orders);
+        yield state.copyWith(
+          isChanging: false,
+          orders: e.orders,
+        );
       },
       orderAdded: (e) async* {
         state.orders.add(e.order);
-        yield state.copyWith(orders: state.orders);
+        yield state.copyWith(
+          isChanging: true,
+          orders: state.orders,
+        );
       },
       orderUpdated: (e) async* {
         state.orders.removeAt(e.index);
         state.orders.insert(e.index, e.order);
 
-        yield state.copyWith(orders: state.orders);
+        yield state.copyWith(
+          isChanging: true,
+          orders: state.orders,
+        );
       },
       orderDeleted: (e) async* {
         state.orders.removeAt(e.index);
-        yield state.copyWith(orders: state.orders);
+        yield state.copyWith(
+          isChanging: true,
+          orders: state.orders,
+        );
       },
       orderChanged: (e) async* {
         var newIndex = e.newIndex;
@@ -44,7 +61,10 @@ class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
         final item = state.orders.removeAt(e.oldIndex);
         state.orders.insert(newIndex, item);
 
-        yield state.copyWith(orders: state.orders);
+        yield state.copyWith(
+          isChanging: true,
+          orders: state.orders,
+        );
       },
     );
   }
