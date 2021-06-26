@@ -36,18 +36,14 @@ class QueryBatchesTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            bloc.add(
-                              QueryBatchCopied(queryBatch: queryBatch),
-                            );
+                            bloc.add(QueryBatchCopied(id: queryBatch.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(
-                              QueryBatchDeleted(index: index),
-                            );
+                            bloc.add(QueryBatchDeleted(id: queryBatch.id));
                           },
                         ),
                       ],
@@ -70,11 +66,7 @@ class QueryBatchesTab extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                bloc.add(
-                  QueryBatchAdded(
-                    queryBatch: QueryBatch.empty(),
-                  ),
-                );
+                bloc.add(QueryBatchAdded(queryBatch: QueryBatch.empty()));
               },
               tooltip: localizations?.add ?? 'Add',
               child: const Icon(Icons.add),

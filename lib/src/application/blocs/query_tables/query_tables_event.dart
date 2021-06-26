@@ -23,12 +23,8 @@ class QueryTableAdded extends QueryTablesEvent {
 }
 
 class QueryTableUpdated extends QueryTablesEvent {
-  const QueryTableUpdated({
-    required this.index,
-    required this.table,
-  });
+  const QueryTableUpdated({required this.table});
 
-  final int index;
   final QueryElement table;
 
   @override
@@ -36,21 +32,21 @@ class QueryTableUpdated extends QueryTablesEvent {
 }
 
 class QueryTableCopied extends QueryTablesEvent {
-  const QueryTableCopied({required this.table});
+  const QueryTableCopied({required this.id});
 
-  final QueryElement table;
+  final String id;
 
   @override
-  List<Object?> get props => [table];
+  List<Object?> get props => [id];
 }
 
 class QueryTableDeleted extends QueryTablesEvent {
-  const QueryTableDeleted({required this.index});
+  const QueryTableDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryTableOrderChanged extends QueryTablesEvent {

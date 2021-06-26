@@ -23,12 +23,8 @@ class QueryAggregateAdded extends QueryAggregatesEvent {
 }
 
 class QueryAggregateUpdated extends QueryAggregatesEvent {
-  const QueryAggregateUpdated({
-    required this.index,
-    required this.aggregate,
-  });
+  const QueryAggregateUpdated({required this.aggregate});
 
-  final int index;
   final QueryAggregate aggregate;
 
   @override
@@ -36,12 +32,12 @@ class QueryAggregateUpdated extends QueryAggregatesEvent {
 }
 
 class QueryAggregateDeleted extends QueryAggregatesEvent {
-  const QueryAggregateDeleted({required this.index});
+  const QueryAggregateDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryAggregateOrderChanged extends QueryAggregatesEvent {

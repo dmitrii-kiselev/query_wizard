@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
@@ -26,7 +27,7 @@ class QueryOrdersTab extends HookWidget {
             body: ReorderableListView.builder(
               itemCount: state.orders.length,
               itemBuilder: (context, index) {
-                final grouping = state.orders[index];
+                final order = state.orders[index];
 
                 return Card(
                   key: ValueKey('$index'),
@@ -39,9 +40,7 @@ class QueryOrdersTab extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(
-                              QueryOrderDeleted(index: index),
-                            );
+                            bloc.add(QueryOrderDeleted(id: order.id));
                           },
                         ),
                       ],
@@ -51,16 +50,14 @@ class QueryOrdersTab extends HookWidget {
                         context,
                         DialogRoute<String>(
                           context: context,
-                          builder: (context) => _ChangeQueryOrderDialog(
-                            index: index,
-                            bloc: bloc,
+                          builder: (_) => BlocProvider<QueryOrdersBloc>.value(
+                            value: bloc,
+                            child: _ChangeQueryOrderDialog(id: order.id),
                           ),
                         ),
                       );
                     },
-                    title: Text(
-                      grouping.toString(),
-                    ),
+                    title: Text(order.toString()),
                   ),
                 );
               },
@@ -88,8 +85,10 @@ class QueryOrdersTab extends HookWidget {
                           bloc.add(
                             QueryOrderAdded(
                               order: QueryOrder(
-                                  field: field.name,
-                                  type: QuerySortingType.ascending),
+                                id: const Uuid().v1(),
+                                field: field.name,
+                                type: QuerySortingType.ascending,
+                              ),
                             ),
                           );
                         }
@@ -113,18 +112,17 @@ class QueryOrdersTab extends HookWidget {
 
 class _ChangeQueryOrderDialog extends HookWidget {
   const _ChangeQueryOrderDialog({
-    required this.index,
-    required this.bloc,
+    required this.id,
   });
 
-  final int index;
-  final QueryOrdersBloc bloc;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
     final type = useState<QuerySortingType?>(QuerySortingType.ascending);
-    final sorting = bloc.state.orders.elementAt(index);
+    final bloc = BlocProvider.of<QueryOrdersBloc>(context);
+    final order = bloc.state.orders.findById(id);
 
     return AlertDialog(
       title: Text(localizations?.changeSortingField ?? 'Change sorting field'),
@@ -149,13 +147,12 @@ class _ChangeQueryOrderDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newOrder = QueryOrder(
-              field: sorting.field,
+              id: order.id,
+              field: order.field,
               type: type.value ?? QuerySortingType.ascending,
             );
 
-            bloc.add(
-              QueryOrderUpdated(index: index, order: newOrder),
-            );
+            bloc.add(QueryOrderUpdated(order: newOrder));
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

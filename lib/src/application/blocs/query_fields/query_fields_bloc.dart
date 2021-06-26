@@ -47,23 +47,22 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
   Stream<QueryFieldsState> _mapQueryFieldUpdatedToState(
     QueryFieldUpdated event,
   ) async* {
-    state.fields.removeAt(event.index);
-    state.fields.insert(event.index, event.field);
-
+    state.fields.update(event.field);
     yield QueryFieldsChanged(fields: state.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldCopiedToState(
     QueryFieldCopied event,
   ) async* {
-    state.fields.add(event.field);
+    final field = state.fields.findById(event.id);
+    state.fields.add(field.copy());
     yield QueryFieldsChanged(fields: state.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldDeletedToState(
     QueryFieldDeleted event,
   ) async* {
-    state.fields.removeAt(event.index);
+    state.fields.removeWhere((f) => f.id == event.id);
     yield QueryFieldsChanged(fields: state.fields);
   }
 

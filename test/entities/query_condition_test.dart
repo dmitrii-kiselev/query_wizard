@@ -5,6 +5,7 @@ import 'package:query_wizard/domain.dart';
 void main() {
   test('QueryJoin initialized', () {
     const join = QueryJoin(
+      id: '',
       leftTable: '',
       isLeftAll: false,
       rightTable: '',
@@ -16,6 +17,7 @@ void main() {
     expect(
       join.props,
       equals([
+        join.id,
         join.leftTable,
         join.isLeftAll,
         join.rightTable,
@@ -28,6 +30,7 @@ void main() {
   test('Empty join initialized', () {
     const join = QueryJoin.empty();
     const expected = QueryJoin(
+      id: '',
       leftTable: '',
       isLeftAll: false,
       rightTable: '',

@@ -23,12 +23,12 @@ class QueryGroupingAdded extends QueryGroupingsEvent {
 }
 
 class QueryGroupingDeleted extends QueryGroupingsEvent {
-  const QueryGroupingDeleted({required this.index});
+  const QueryGroupingDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryGroupingOrderChanged extends QueryGroupingsEvent {

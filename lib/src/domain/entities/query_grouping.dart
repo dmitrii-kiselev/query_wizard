@@ -2,27 +2,33 @@ import 'package:equatable/equatable.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class QueryElement extends Equatable {
-  const QueryElement({
+class QueryGrouping extends Equatable implements IEntity {
+  const QueryGrouping({
+    required this.id,
     required this.name,
-    this.alias,
     required this.type,
     this.parent,
     required this.elements,
   });
 
+  @override
+  final String id;
   final String name;
-  final String? alias;
-  final QueryElementType type;
-  final QueryElement? parent;
-  final List<QueryElement> elements;
+  final QueryGroupingType type;
+  final QueryGrouping? parent;
+  final List<QueryGrouping> elements;
 
   @override
   List<Object> get props => [
+        id,
         name,
-        alias ?? '',
         type,
         parent ?? '',
         elements,
       ];
+
+  @override
+  String toString() {
+    return '$name $type';
+  }
 }

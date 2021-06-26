@@ -23,12 +23,8 @@ class QueryOrderAdded extends QueryOrdersEvent {
 }
 
 class QueryOrderUpdated extends QueryOrdersEvent {
-  const QueryOrderUpdated({
-    required this.index,
-    required this.order,
-  });
+  const QueryOrderUpdated({required this.order});
 
-  final int index;
   final QueryOrder order;
 
   @override
@@ -36,12 +32,12 @@ class QueryOrderUpdated extends QueryOrdersEvent {
 }
 
 class QueryOrderDeleted extends QueryOrdersEvent {
-  const QueryOrderDeleted({required this.index});
+  const QueryOrderDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryOrderOrderChanged extends QueryOrdersEvent {

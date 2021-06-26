@@ -45,14 +45,17 @@ class QueryBatchesBloc extends Bloc<QueryBatchesEvent, QueryBatchesState> {
   Stream<QueryBatchesState> _mapQueryBatchCopiedToState(
     QueryBatchCopied event,
   ) async* {
-    state.queryBatches.add(event.queryBatch.copy());
+    final batch = state.queryBatches.firstWhere(
+      (b) => b.id == event.id,
+    );
+    state.queryBatches.add(batch.copy());
     yield QueryBatchesChanged(queryBatches: state.queryBatches);
   }
 
   Stream<QueryBatchesState> _mapQueryBatchDeletedToState(
     QueryBatchDeleted event,
   ) async* {
-    state.queryBatches.removeAt(event.index);
+    state.queryBatches.removeWhere((b) => b.id == event.id);
     yield QueryBatchesChanged(queryBatches: state.queryBatches);
   }
 

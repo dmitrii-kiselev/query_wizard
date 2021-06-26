@@ -5,6 +5,7 @@ import 'package:query_wizard/domain.dart';
 void main() {
   test('Query initialized', () {
     const query = Query(
+      id: '',
       name: 'Query',
       sources: [],
       tables: [],
@@ -23,6 +24,7 @@ void main() {
     expect(
       query.props,
       equals([
+        query.id,
         query.name,
         query.sources,
         query.tables,
@@ -42,6 +44,7 @@ void main() {
   test('Empty query initialized', () {
     final query = Query.empty();
     const expected = Query(
+      id: '',
       name: 'Query',
       sources: [],
       tables: [],
@@ -56,13 +59,35 @@ void main() {
       isDistinct: false,
     );
 
-    expect(query, expected);
+    expect(query.name, expected.name);
+    expect(query.sources, expected.sources);
+    expect(query.tables, expected.tables);
+    expect(query.fields, expected.fields);
+    expect(query.joins, expected.joins);
+    expect(query.groupings, expected.groupings);
+    expect(query.aggregates, expected.aggregates);
+    expect(query.conditions, expected.conditions);
+    expect(query.orders, expected.orders);
+    expect(query.isTop, expected.isTop);
+    expect(query.topCounter, expected.topCounter);
+    expect(query.isDistinct, expected.isDistinct);
   });
 
   test('Empty query copied', () {
     final query = Query.empty();
     final copiedQuery = query.copy();
 
-    expect(query, copiedQuery);
+    expect(query.name, copiedQuery.name);
+    expect(query.sources, copiedQuery.sources);
+    expect(query.tables, copiedQuery.tables);
+    expect(query.fields, copiedQuery.fields);
+    expect(query.joins, copiedQuery.joins);
+    expect(query.groupings, copiedQuery.groupings);
+    expect(query.aggregates, copiedQuery.aggregates);
+    expect(query.conditions, copiedQuery.conditions);
+    expect(query.orders, copiedQuery.orders);
+    expect(query.isTop, copiedQuery.isTop);
+    expect(query.topCounter, copiedQuery.topCounter);
+    expect(query.isDistinct, copiedQuery.isDistinct);
   });
 }

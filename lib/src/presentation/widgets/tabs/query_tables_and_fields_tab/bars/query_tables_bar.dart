@@ -34,29 +34,25 @@ class QueryTablesBar extends StatelessWidget {
               },
               onCopy: (QueryElement table) {
                 tablesBloc.add(
-                  QueryTableCopied(table: table),
+                  QueryTableCopied(id: table.id),
                 );
               },
               onEdit: (QueryElement table) {
-                final tables = tablesBloc.state.tables;
-                final index = tables.indexOf(table);
-
                 Navigator.push(
                   context,
                   DialogRoute<String>(
                     context: context,
-                    builder: (context) => _ChangeTableNameDialog(
-                      index: index,
-                      bloc: tablesBloc,
+                    builder: (_) => BlocProvider<QueryTablesBloc>.value(
+                      value: tablesBloc,
+                      child: _ChangeTableNameDialog(id: table.id),
                     ),
                   ),
                 );
               },
               onRemove: (QueryElement table) {
-                final tables = tablesBloc.state.tables;
                 tablesBloc.add(
                   QueryTableDeleted(
-                    index: tables.indexOf(table),
+                    id: table.id,
                   ),
                 );
               },
@@ -86,19 +82,16 @@ class QueryTablesBar extends StatelessWidget {
 }
 
 class _ChangeTableNameDialog extends HookWidget {
-  const _ChangeTableNameDialog({
-    required this.index,
-    required this.bloc,
-  });
+  const _ChangeTableNameDialog({required this.id});
 
-  final int index;
-  final QueryTablesBloc bloc;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController();
+    final bloc = BlocProvider.of<QueryTablesBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
-    final table = bloc.state.tables.elementAt(index);
+    final controller = useTextEditingController();
+    final table = bloc.state.tables.findById(id);
 
     controller.text = table.alias ?? table.name;
 
@@ -114,6 +107,7 @@ class _ChangeTableNameDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newTable = QueryElement(
+              id: table.id,
               name: table.name,
               alias: controller.text,
               type: table.type,
@@ -122,7 +116,6 @@ class _ChangeTableNameDialog extends HookWidget {
 
             bloc.add(
               QueryTableUpdated(
-                index: index,
                 table: newTable,
               ),
             );

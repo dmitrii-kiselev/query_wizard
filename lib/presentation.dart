@@ -13,8 +13,8 @@ export 'src/presentation/widgets/tabs/query_groupings_tab/bars/query_aggregates_
 export 'src/presentation/widgets/tabs/query_groupings_tab/bars/query_groupings_bar.dart';
 export 'src/presentation/widgets/tabs/query_groupings_tab/query_groupings_tab.dart';
 export 'src/presentation/widgets/tabs/query_joins_tab.dart';
-export 'src/presentation/widgets/tabs/query_more_tab.dart';
 export 'src/presentation/widgets/tabs/query_orders_tab.dart';
+export 'src/presentation/widgets/tabs/query_settings_tab.dart';
 export 'src/presentation/widgets/tabs/query_tables_and_fields_tab/bars/query_fields_bar.dart';
 export 'src/presentation/widgets/tabs/query_tables_and_fields_tab/bars/query_sources_bar.dart';
 export 'src/presentation/widgets/tabs/query_tables_and_fields_tab/bars/query_tables_bar.dart';

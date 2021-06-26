@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:query_wizard/infrastructure.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
@@ -12,8 +14,6 @@ class QueryJoinsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryJoinsBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
-    final fields = BlocProvider.of<QueryFieldsBloc>(context).state.fields;
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryJoinsBloc, QueryJoinsState>(
@@ -39,18 +39,14 @@ class QueryJoinsTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            bloc.add(
-                              QueryJoinCopied(join: join),
-                            );
+                            bloc.add(QueryJoinCopied(id: join.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(
-                              QueryJoinDeleted(index: index),
-                            );
+                            bloc.add(QueryJoinDeleted(id: join.id));
                           },
                         ),
                       ],
@@ -59,19 +55,22 @@ class QueryJoinsTab extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (context) => _QueryJoinPage(
-                            index: index,
-                            bloc: bloc,
-                            tables: tables,
-                            fields: fields,
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) => getIt<QueryTablesBloc>(),
+                              ),
+                              BlocProvider(
+                                create: (context) => getIt<QueryJoinsBloc>(),
+                              ),
+                            ],
+                            child: _QueryJoinPage(id: join.id),
                           ),
                           fullscreenDialog: true,
                         ),
                       );
                     },
-                    title: Text(
-                      join.toString(),
-                    ),
+                    title: Text(join.toString()),
                   ),
                 );
               },
@@ -92,10 +91,16 @@ class QueryJoinsTab extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => _QueryJoinPage(
-                      bloc: bloc,
-                      tables: tables,
-                      fields: fields,
+                    builder: (_) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) => getIt<QueryTablesBloc>(),
+                        ),
+                        BlocProvider(
+                          create: (context) => getIt<QueryJoinsBloc>(),
+                        ),
+                      ],
+                      child: _QueryJoinPage(),
                     ),
                     fullscreenDialog: true,
                   ),
@@ -116,22 +121,16 @@ class QueryJoinsTab extends StatelessWidget {
 }
 
 class _QueryJoinPage extends HookWidget {
-  _QueryJoinPage({
-    this.index,
-    required this.bloc,
-    required this.tables,
-    required this.fields,
-  });
+  _QueryJoinPage({this.id});
 
-  final int? index;
-  final QueryJoinsBloc bloc;
-  final List<QueryElement> tables;
-  final List<QueryElement> fields;
+  final String? id;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<QueryJoinsBloc>(context);
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
 
@@ -146,8 +145,8 @@ class _QueryJoinPage extends HookWidget {
     final customConditionController = useTextEditingController();
     final pageInitialized = useState<bool>(false);
 
-    if (index != null && !pageInitialized.value) {
-      final join = bloc.state.joins.elementAt(index!);
+    if (id != null && !pageInitialized.value) {
+      final join = bloc.state.joins.findById(id!);
 
       leftTable.value = tables.firstWhere(
         (t) => (t.alias ?? t.name) == join.leftTable,
@@ -188,6 +187,7 @@ class _QueryJoinPage extends HookWidget {
           TextButton(
             onPressed: () {
               final condition = QueryCondition(
+                id: const Uuid().v1(),
                 isCustom: isCustom.value ?? false,
                 leftField: leftField.value?.name ?? '',
                 logicalCompareType: logicalCompareType.value ?? '',
@@ -195,6 +195,7 @@ class _QueryJoinPage extends HookWidget {
                 customCondition: customConditionController.text,
               );
               final join = QueryJoin(
+                id: id == null ? const Uuid().v1() : id!,
                 leftTable:
                     leftTable.value?.alias ?? leftTable.value?.name ?? '',
                 isLeftAll: isLeftAll.value ?? false,
@@ -204,10 +205,10 @@ class _QueryJoinPage extends HookWidget {
                 condition: condition,
               );
 
-              if (index == null) {
+              if (id == null) {
                 bloc.add(QueryJoinAdded(join: join));
               } else {
-                bloc.add(QueryJoinUpdated(index: index!, join: join));
+                bloc.add(QueryJoinUpdated(join: join));
               }
 
               Navigator.pop(context);

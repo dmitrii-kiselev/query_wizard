@@ -46,7 +46,7 @@ class QueryGroupingsBloc
   Stream<QueryGroupingsState> _mapQueryGroupingDeletedToState(
     QueryGroupingDeleted event,
   ) async* {
-    state.groupings.removeAt(event.index);
+    state.groupings.removeWhere((g) => g.id == event.id);
     yield QueryGroupingsChanged(groupings: state.groupings);
   }
 

@@ -37,18 +37,14 @@ void main() {
         act: (QueryConditionsBloc bloc) {
           const condition = QueryCondition.empty();
           const conditionAdded = QueryConditionAdded(condition: condition);
-          const conditionUpdated = QueryConditionUpdated(
-            index: 0,
-            condition: condition,
-            isCustom: true,
-          );
+          const conditionUpdated = QueryConditionUpdated(condition: condition);
 
           bloc.add(conditionAdded);
           bloc.add(conditionUpdated);
         },
         expect: () {
           final expectedConditions = [
-            const QueryCondition.empty().copyWith(isCustom: true)
+            const QueryCondition.empty().copyWith(id: '')
           ];
 
           return [
@@ -64,22 +60,17 @@ void main() {
         act: (QueryConditionsBloc bloc) {
           const condition = QueryCondition.empty();
           const conditionAdded = QueryConditionAdded(condition: condition);
-          const conditionCopied = QueryConditionCopied(condition: condition);
+          const conditionCopied = QueryConditionCopied(id: '');
 
           bloc.add(conditionAdded);
           bloc.add(conditionCopied);
         },
         expect: () {
-          final expectedConditions = [
-            const QueryCondition.empty(),
-            const QueryCondition.empty()
-          ];
-
           return [
-            QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions),
-            QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions),
+            isA<QueryConditionsInitial>(),
+            isA<QueryConditionsChanged>(),
+            isA<QueryConditionsInitial>(),
+            isA<QueryConditionsChanged>(),
           ];
         });
 
@@ -88,7 +79,7 @@ void main() {
         act: (QueryConditionsBloc bloc) {
           const condition = QueryCondition.empty();
           const conditionAdded = QueryConditionAdded(condition: condition);
-          const conditionDeleted = QueryConditionDeleted(index: 0);
+          const conditionDeleted = QueryConditionDeleted(id: '');
 
           bloc.add(conditionAdded);
           bloc.add(conditionDeleted);

@@ -23,21 +23,21 @@ class QueryBatchAdded extends QueryBatchesEvent {
 }
 
 class QueryBatchCopied extends QueryBatchesEvent {
-  const QueryBatchCopied({required this.queryBatch});
+  const QueryBatchCopied({required this.id});
 
-  final QueryBatch queryBatch;
+  final String id;
 
   @override
-  List<Object?> get props => [queryBatch];
+  List<Object?> get props => [id];
 }
 
 class QueryBatchDeleted extends QueryBatchesEvent {
-  const QueryBatchDeleted({required this.index});
+  const QueryBatchDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryBatchOrderChanged extends QueryBatchesEvent {

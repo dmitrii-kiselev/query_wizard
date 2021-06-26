@@ -5,6 +5,7 @@ import 'package:query_wizard/domain.dart';
 void main() {
   test('QueryBatch initialized', () {
     final batch = QueryBatch(
+      id: '',
       name: '',
       sources: [...[]],
       queries: [...[]],
@@ -16,6 +17,7 @@ void main() {
     expect(
       batch.props,
       equals([
+        batch.id,
         batch.name,
         batch.sources,
         batch.queries,
@@ -28,6 +30,7 @@ void main() {
   test('Empty query batch initialized', () {
     final batch = QueryBatch.empty();
     final expected = QueryBatch(
+      id: '',
       name: '',
       sources: [...[]],
       queries: [...[]],
@@ -42,6 +45,10 @@ void main() {
     final batch = QueryBatch.empty();
     final copiedBatch = batch.copy();
 
-    expect(batch, copiedBatch);
+    expect(batch.name, copiedBatch.name);
+    expect(batch.sources, copiedBatch.sources);
+    expect(batch.queries, copiedBatch.queries);
+    expect(batch.aliases, copiedBatch.aliases);
+    expect(batch.queryType, copiedBatch.queryType);
   });
 }

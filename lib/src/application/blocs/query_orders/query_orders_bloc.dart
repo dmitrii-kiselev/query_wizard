@@ -45,16 +45,14 @@ class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
   Stream<QueryOrdersState> _mapQueryOrderUpdatedToState(
     QueryOrderUpdated event,
   ) async* {
-    state.orders.removeAt(event.index);
-    state.orders.insert(event.index, event.order);
-
+    state.orders.update(event.order);
     yield QueryOrdersChanged(orders: state.orders);
   }
 
   Stream<QueryOrdersState> _mapQueryOrderDeletedToState(
     QueryOrderDeleted event,
   ) async* {
-    state.orders.removeAt(event.index);
+    state.orders.removeWhere((o) => o.id == event.id);
     yield QueryOrdersChanged(orders: state.orders);
   }
 

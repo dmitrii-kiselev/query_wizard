@@ -15,7 +15,8 @@ class QueryConditionsBloc
 
   @override
   Stream<QueryConditionsState> mapEventToState(
-      QueryConditionsEvent event) async* {
+    QueryConditionsEvent event,
+  ) async* {
     yield QueryConditionsInitial(conditions: state.conditions);
 
     if (event is QueryConditionsInitialized) {
@@ -34,44 +35,39 @@ class QueryConditionsBloc
   }
 
   Stream<QueryConditionsState> _mapQueryConditionsInitializedToState(
-      QueryConditionsInitialized event) async* {
+    QueryConditionsInitialized event,
+  ) async* {
     yield QueryConditionsChanged(conditions: event.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionAddedToState(
-      QueryConditionAdded event) async* {
+    QueryConditionAdded event,
+  ) async* {
     state.conditions.add(event.condition);
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionUpdatedToState(
-      QueryConditionUpdated event) async* {
-    final condition = QueryCondition(
-      isCustom: event.isCustom ?? event.condition.isCustom,
-      leftField: event.leftField ?? event.condition.leftField,
-      logicalCompareType:
-          event.logicalCompareType ?? event.condition.logicalCompareType,
-      rightField: event.rightField ?? event.condition.rightField,
-      customCondition: event.customCondition ?? event.condition.customCondition,
-    );
-
-    state.conditions.removeAt(event.index);
-    state.conditions.insert(event.index, condition);
-
+    QueryConditionUpdated event,
+  ) async* {
+    state.conditions.update(event.condition);
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionCopiedToState(
     QueryConditionCopied event,
   ) async* {
-    state.conditions.add(event.condition.copy());
+    final condition = state.conditions.firstWhere(
+      (c) => c.id == event.id,
+    );
+    state.conditions.add(condition.copy());
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionDeletedToState(
     QueryConditionDeleted event,
   ) async* {
-    state.conditions.removeAt(event.index);
+    state.conditions.removeWhere((c) => c.id == event.id);
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 

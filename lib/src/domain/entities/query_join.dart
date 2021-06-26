@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class QueryJoin extends Equatable {
+class QueryJoin extends Equatable implements IEntity {
   const QueryJoin({
+    required this.id,
     required this.leftTable,
     required this.isLeftAll,
     required this.rightTable,
@@ -12,12 +14,15 @@ class QueryJoin extends Equatable {
   });
 
   const QueryJoin.empty()
-      : leftTable = '',
+      : id = '',
+        leftTable = '',
         isLeftAll = false,
         rightTable = '',
         isRightAll = false,
         condition = const QueryCondition.empty();
 
+  @override
+  final String id;
   final String leftTable;
   final bool isLeftAll;
   final String rightTable;
@@ -26,6 +31,7 @@ class QueryJoin extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         leftTable,
         isLeftAll,
         rightTable,
@@ -45,6 +51,7 @@ class QueryJoin extends Equatable {
 
 extension CopyJoin on QueryJoin {
   QueryJoin copy() => QueryJoin(
+        id: const Uuid().v1(),
         leftTable: leftTable,
         isLeftAll: isLeftAll,
         rightTable: rightTable,
@@ -53,6 +60,7 @@ extension CopyJoin on QueryJoin {
       );
 
   QueryJoin copyWith({
+    String? id,
     String? leftTable,
     bool? isLeftAll,
     String? rightTable,
@@ -60,6 +68,7 @@ extension CopyJoin on QueryJoin {
     QueryCondition? condition,
   }) =>
       QueryJoin(
+        id: id ?? const Uuid().v1(),
         leftTable: leftTable ?? this.leftTable,
         isLeftAll: isLeftAll ?? this.isLeftAll,
         rightTable: rightTable ?? this.rightTable,

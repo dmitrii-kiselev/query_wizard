@@ -1,7 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
-class QueryCondition extends Equatable {
+import 'package:query_wizard/domain.dart';
+
+class QueryCondition extends Equatable implements IEntity {
   const QueryCondition({
+    required this.id,
     required this.isCustom,
     required this.leftField,
     required this.logicalCompareType,
@@ -10,12 +14,15 @@ class QueryCondition extends Equatable {
   });
 
   const QueryCondition.empty()
-      : isCustom = false,
+      : id = '',
+        isCustom = false,
         leftField = '',
         logicalCompareType = '',
         rightField = '',
         customCondition = '';
 
+  @override
+  final String id;
   final bool isCustom;
   final String leftField;
   final String logicalCompareType;
@@ -24,6 +31,7 @@ class QueryCondition extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         isCustom,
         leftField,
         logicalCompareType,
@@ -39,6 +47,7 @@ class QueryCondition extends Equatable {
 
 extension CopyQueryCondition on QueryCondition {
   QueryCondition copy() => QueryCondition(
+        id: const Uuid().v1(),
         isCustom: isCustom,
         leftField: leftField,
         logicalCompareType: logicalCompareType,
@@ -47,6 +56,7 @@ extension CopyQueryCondition on QueryCondition {
       );
 
   QueryCondition copyWith({
+    String? id,
     bool? isCustom,
     String? leftField,
     String? logicalCompareType,
@@ -54,6 +64,7 @@ extension CopyQueryCondition on QueryCondition {
     String? customCondition,
   }) =>
       QueryCondition(
+        id: id ?? const Uuid().v1(),
         isCustom: isCustom ?? this.isCustom,
         leftField: leftField ?? this.leftField,
         logicalCompareType: logicalCompareType ?? this.logicalCompareType,

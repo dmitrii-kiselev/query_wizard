@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class Query extends Equatable {
+class Query extends Equatable implements IEntity {
   const Query({
+    required this.id,
     required this.name,
     required this.sources,
     required this.tables,
@@ -19,7 +21,8 @@ class Query extends Equatable {
   });
 
   Query.empty()
-      : name = 'Query',
+      : id = '',
+        name = 'Query',
         sources = [],
         tables = [],
         fields = [],
@@ -32,6 +35,8 @@ class Query extends Equatable {
         topCounter = 0,
         isDistinct = false;
 
+  @override
+  final String id;
   final String name;
   final List<QueryElement> sources;
   final List<QueryElement> tables;
@@ -47,6 +52,7 @@ class Query extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         name,
         sources,
         tables,
@@ -64,6 +70,7 @@ class Query extends Equatable {
 
 extension CopyQuery on Query {
   Query copy() => Query(
+        id: const Uuid().v1(),
         name: name,
         sources: sources,
         tables: tables,
@@ -93,6 +100,7 @@ extension CopyQuery on Query {
     bool? isDistinct,
   }) =>
       Query(
+        id: const Uuid().v1(),
         name: name ?? this.name,
         sources: sources ?? this.sources,
         tables: tables ?? this.tables,

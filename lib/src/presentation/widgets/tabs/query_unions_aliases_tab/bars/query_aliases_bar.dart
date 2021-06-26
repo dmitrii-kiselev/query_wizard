@@ -68,17 +68,13 @@ class QueryAliasesBar extends StatelessWidget {
             final queryFieldNames = map[query.name];
             if (queryFieldNames != null && queryFieldNames.containsKey(name)) {
               cells.add(
-                DataCell(
-                  Text(queryFieldNames[name] ?? ''),
-                ),
+                DataCell(Text(queryFieldNames[name] ?? '')),
               );
             }
           }
         }
 
-        rows.add(
-          DataRow(cells: cells),
-        );
+        rows.add(DataRow(cells: cells));
       },
     );
 

@@ -46,7 +46,7 @@ class QueryWizardLayout extends HookWidget {
       _QueryWizardTab(
         message: localizations?.moreTab ?? 'More',
         icon: Icons.more_horiz_rounded,
-        widget: QueryMoreTab(
+        widget: QuerySettingsTab(
           key: const ValueKey('MoreTab'),
         ),
       ),

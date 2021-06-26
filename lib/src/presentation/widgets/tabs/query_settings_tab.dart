@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
 
-class QueryMoreTab extends HookWidget {
-  QueryMoreTab({Key? key}) : super(key: key);
+class QuerySettingsTab extends HookWidget {
+  QuerySettingsTab({Key? key}) : super(key: key);
 
   final debounce = Debounce(delay: const Duration(milliseconds: 500));
 
@@ -36,6 +37,7 @@ class QueryMoreTab extends HookWidget {
       queriesBloc.state.queries.remove(currentQuery);
 
       final newQuery = Query(
+        id: const Uuid().v1(),
         name: currentQuery.name,
         sources: currentQuery.sources,
         tables: currentQuery.tables,
@@ -62,6 +64,7 @@ class QueryMoreTab extends HookWidget {
       queryBatchTabBloc.state.queryBatches.remove(currentQueryButch);
 
       final newQueryButch = QueryBatch(
+        id: const Uuid().v1(),
         name: tempTableName.value ?? '',
         sources: currentQueryButch.sources,
         queries: currentQueryButch.queries,

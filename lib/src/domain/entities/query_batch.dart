@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/domain.dart';
 
-class QueryBatch extends Equatable {
+class QueryBatch extends Equatable implements IEntity {
   const QueryBatch({
+    required this.id,
     required this.name,
     required this.sources,
     required this.queries,
@@ -12,12 +14,15 @@ class QueryBatch extends Equatable {
   });
 
   QueryBatch.empty()
-      : name = '',
+      : id = '',
+        name = '',
         sources = [],
         queries = [],
         aliases = Map.identity(),
         queryType = QueryType.selectQuery;
 
+  @override
+  final String id;
   final String name;
   final List<QueryElement> sources;
   final List<Query> queries;
@@ -26,6 +31,7 @@ class QueryBatch extends Equatable {
 
   @override
   List<Object?> get props => [
+        id,
         name,
         sources,
         queries,
@@ -36,6 +42,7 @@ class QueryBatch extends Equatable {
 
 extension CopyQueryBatch on QueryBatch {
   QueryBatch copy() => QueryBatch(
+        id: const Uuid().v1(),
         name: name,
         sources: sources,
         queries: queries,
@@ -51,6 +58,7 @@ extension CopyQueryBatch on QueryBatch {
     QueryType? queryType,
   }) =>
       QueryBatch(
+        id: const Uuid().v1(),
         name: name ?? this.name,
         sources: sources ?? this.sources,
         queries: queries ?? this.queries,

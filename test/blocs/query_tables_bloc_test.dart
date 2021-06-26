@@ -1,11 +1,13 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
 
 void main() {
   group('QueryTablesBloc', () {
+    final id = const Uuid().v1();
     late QueryTablesBloc tablesTabBloc;
 
     setUp(() {
@@ -21,6 +23,7 @@ void main() {
         act: (QueryTablesBloc bloc) {
           final event = QueryTableAdded(
             table: QueryElement(
+              id: id,
               name: 'Table',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
@@ -32,6 +35,7 @@ void main() {
         expect: () => [
               QueryTablesInitial(tables: [
                 QueryElement(
+                  id: id,
                   name: 'Table',
                   type: QueryElementType.table,
                   elements: List<QueryElement>.empty(growable: true),
@@ -39,6 +43,7 @@ void main() {
               ]),
               QueryTablesChanged(tables: [
                 QueryElement(
+                  id: id,
                   name: 'Table',
                   type: QueryElementType.table,
                   elements: List<QueryElement>.empty(growable: true),
@@ -50,14 +55,15 @@ void main() {
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
           final table = QueryElement(
+            id: id,
             name: 'Table',
             type: QueryElementType.table,
             elements: List<QueryElement>.empty(growable: true),
           );
           final tableAdded = QueryTableAdded(table: table);
           final tableUpdated = QueryTableUpdated(
-            index: 0,
             table: QueryElement(
+              id: id,
               name: 'Table New',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
@@ -70,6 +76,7 @@ void main() {
         expect: () {
           final expectedTables = [
             QueryElement(
+              id: id,
               name: 'Table New',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
@@ -88,48 +95,38 @@ void main() {
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
           final table = QueryElement(
+            id: id,
             name: 'Table',
             type: QueryElementType.table,
             elements: List<QueryElement>.empty(growable: true),
           );
           final tableAdded = QueryTableAdded(table: table);
-          final tableCopied = QueryTableCopied(table: table);
+          final tableCopied = QueryTableCopied(id: id);
 
           bloc.add(tableAdded);
           bloc.add(tableCopied);
         },
         expect: () {
-          final expectedTables = [
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: List<QueryElement>.empty(growable: true),
-            ),
-            QueryElement(
-              name: 'Table',
-              type: QueryElementType.table,
-              elements: List<QueryElement>.empty(growable: true),
-            ),
-          ];
-
           return [
-            QueryTablesInitial(tables: expectedTables),
-            QueryTablesChanged(tables: expectedTables),
-            QueryTablesInitial(tables: expectedTables),
-            QueryTablesChanged(tables: expectedTables),
+            isA<QueryTablesInitial>(),
+            isA<QueryTablesChanged>(),
+            isA<QueryTablesInitial>(),
+            isA<QueryTablesChanged>(),
           ];
         });
 
     blocTest('removes table when QueryTableDeleted is added',
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
+          final id = const Uuid().v1();
           final table = QueryElement(
+            id: id,
             name: 'Table',
             type: QueryElementType.table,
             elements: List<QueryElement>.empty(growable: true),
           );
           final tableAdded = QueryTableAdded(table: table);
-          const tableDeleted = QueryTableDeleted(index: 0);
+          final tableDeleted = QueryTableDeleted(id: id);
 
           bloc.add(tableAdded);
           bloc.add(tableDeleted);
@@ -149,14 +146,16 @@ void main() {
         build: () => tablesTabBloc,
         act: (QueryTablesBloc bloc) {
           final table = QueryElement(
-            name: 'Table',
+            id: id,
+            name: 'Table 1',
             type: QueryElementType.table,
             elements: List<QueryElement>.empty(growable: true),
           );
           final tableAdded1 = QueryTableAdded(table: table);
           final tableAdded2 = QueryTableAdded(
             table: QueryElement(
-              name: 'Table',
+              id: id,
+              name: 'Table 2',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
             ),
@@ -173,12 +172,14 @@ void main() {
         expect: () {
           final expectedTables = [
             QueryElement(
-              name: 'Table',
+              id: id,
+              name: 'Table 2',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
             ),
             QueryElement(
-              name: 'Table',
+              id: id,
+              name: 'Table 1',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
             ),

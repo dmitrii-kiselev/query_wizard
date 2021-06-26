@@ -47,41 +47,22 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
   Stream<QueryJoinsState> _mapQueryJoinUpdatedToState(
     QueryJoinUpdated event,
   ) async* {
-    final condition = QueryCondition(
-      isCustom: event.condition?.isCustom ?? event.join.condition.isCustom,
-      leftField: event.condition?.leftField ?? event.join.condition.leftField,
-      logicalCompareType: event.condition?.logicalCompareType ??
-          event.join.condition.logicalCompareType,
-      rightField:
-          event.condition?.rightField ?? event.join.condition.rightField,
-      customCondition: event.condition?.customCondition ??
-          event.join.condition.customCondition,
-    );
-    final join = QueryJoin(
-      leftTable: event.leftTable ?? event.join.leftTable,
-      isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
-      rightTable: event.rightTable ?? event.join.rightTable,
-      isRightAll: event.isRightAll ?? event.join.isRightAll,
-      condition: event.condition ?? condition,
-    );
-
-    state.joins.removeAt(event.index);
-    state.joins.insert(event.index, join);
-
+    state.joins.update(event.join);
     yield QueryJoinsChanged(joins: state.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinCopiedToState(
     QueryJoinCopied event,
   ) async* {
-    state.joins.add(event.join.copy());
+    final join = state.joins.findById(event.id);
+    state.joins.add(join.copy());
     yield QueryJoinsChanged(joins: state.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinDeletedToState(
     QueryJoinDeleted event,
   ) async* {
-    state.joins.removeAt(event.index);
+    state.joins.removeWhere((j) => j.id == event.id);
     yield QueryJoinsChanged(joins: state.joins);
   }
 

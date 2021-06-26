@@ -23,44 +23,30 @@ class QueryJoinAdded extends QueryJoinsEvent {
 }
 
 class QueryJoinUpdated extends QueryJoinsEvent {
-  const QueryJoinUpdated({
-    required this.index,
-    required this.join,
-    this.leftTable,
-    this.isLeftAll,
-    this.rightTable,
-    this.isRightAll,
-    this.condition,
-  });
+  const QueryJoinUpdated({required this.join});
 
-  final int index;
   final QueryJoin join;
-  final String? leftTable;
-  final bool? isLeftAll;
-  final String? rightTable;
-  final bool? isRightAll;
-  final QueryCondition? condition;
 
   @override
   List<Object?> get props => [join];
 }
 
 class QueryJoinCopied extends QueryJoinsEvent {
-  const QueryJoinCopied({required this.join});
+  const QueryJoinCopied({required this.id});
 
-  final QueryJoin join;
+  final String id;
 
   @override
-  List<Object?> get props => [join];
+  List<Object?> get props => [id];
 }
 
 class QueryJoinDeleted extends QueryJoinsEvent {
-  const QueryJoinDeleted({required this.index});
+  const QueryJoinDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryJoinOrderChanged extends QueryJoinsEvent {

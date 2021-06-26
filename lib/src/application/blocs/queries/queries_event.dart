@@ -30,12 +30,12 @@ class QueryCopied extends QueriesEvent {
 }
 
 class QueryDeleted extends QueriesEvent {
-  QueryDeleted({required this.index});
+  QueryDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryOrderChanged extends QueriesEvent {

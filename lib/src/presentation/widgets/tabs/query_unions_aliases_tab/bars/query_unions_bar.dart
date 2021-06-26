@@ -36,18 +36,14 @@ class QueryUnionsBar extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            bloc.add(
-                              QueryCopied(query: query),
-                            );
+                            bloc.add(QueryCopied(query: query));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(
-                              QueryDeleted(index: index),
-                            );
+                            bloc.add(QueryDeleted(id: query.id));
                           },
                         ),
                       ],
@@ -70,11 +66,7 @@ class QueryUnionsBar extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                bloc.add(
-                  QueryAdded(
-                    query: Query.empty(),
-                  ),
-                );
+                bloc.add(QueryAdded(query: Query.empty()));
               },
               tooltip: localizations?.add ?? 'Add',
               child: const Icon(Icons.add),
@@ -82,9 +74,7 @@ class QueryUnionsBar extends StatelessWidget {
           );
         }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

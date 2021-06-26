@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
@@ -20,16 +21,19 @@ void main() {
     test('QueryWizardInitialized initialized', () {
       final columns = [
         QueryElement(
+          id: const Uuid().v1(),
           name: 'Field 1',
           type: QueryElementType.column,
           elements: List<QueryElement>.empty(growable: true),
         ),
         QueryElement(
+          id: const Uuid().v1(),
           name: 'Field 2',
           type: QueryElementType.column,
           elements: List<QueryElement>.empty(growable: true),
         ),
         QueryElement(
+          id: const Uuid().v1(),
           name: 'Field 3',
           type: QueryElementType.column,
           elements: List<QueryElement>.empty(growable: true),

@@ -5,6 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:query_wizard/infrastructure.dart';
+import 'package:uuid/uuid.dart';
 
 class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
@@ -12,7 +14,6 @@ class QueryConditionsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryConditionsBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryConditionsBloc, QueryConditionsState>(builder: (
@@ -37,18 +38,14 @@ class QueryConditionsTab extends StatelessWidget {
                         icon: const Icon(Icons.copy_outlined),
                         tooltip: localizations?.copy ?? 'Copy',
                         onPressed: () {
-                          bloc.add(
-                            QueryConditionCopied(condition: condition),
-                          );
+                          bloc.add(QueryConditionCopied(id: condition.id));
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.highlight_remove_outlined),
                         tooltip: localizations?.remove ?? 'Remove',
                         onPressed: () {
-                          bloc.add(
-                            QueryConditionDeleted(index: index),
-                          );
+                          bloc.add(QueryConditionDeleted(id: condition.id));
                         },
                       ),
                     ],
@@ -57,17 +54,22 @@ class QueryConditionsTab extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (context) => _QueryConditionPage(
-                            index: index,
-                            bloc: bloc,
-                            tables: tables,
+                          builder: (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (context) => getIt<QueryTablesBloc>(),
+                              ),
+                              BlocProvider(
+                                create: (context) =>
+                                    getIt<QueryConditionsBloc>(),
+                              ),
+                            ],
+                            child: _QueryConditionPage(id: condition.id),
                           ),
                           fullscreenDialog: true,
                         ));
                   },
-                  title: Text(
-                    condition.toString(),
-                  ),
+                  title: Text(condition.toString()),
                 ),
               );
             },
@@ -88,9 +90,16 @@ class QueryConditionsTab extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute<void>(
-                  builder: (context) => _QueryConditionPage(
-                    bloc: bloc,
-                    tables: tables,
+                  builder: (_) => MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => getIt<QueryTablesBloc>(),
+                      ),
+                      BlocProvider(
+                        create: (context) => getIt<QueryConditionsBloc>(),
+                      ),
+                    ],
+                    child: _QueryConditionPage(),
                   ),
                   fullscreenDialog: true,
                 ),
@@ -108,20 +117,16 @@ class QueryConditionsTab extends StatelessWidget {
 }
 
 class _QueryConditionPage extends HookWidget {
-  _QueryConditionPage({
-    this.index,
-    required this.bloc,
-    required this.tables,
-  });
+  _QueryConditionPage({this.id});
 
-  final int? index;
-  final QueryConditionsBloc bloc;
-  final List<QueryElement> tables;
+  final String? id;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<QueryConditionsBloc>(context);
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
     final fields = tables.expand((t) => t.elements).toList();
@@ -133,8 +138,8 @@ class _QueryConditionPage extends HookWidget {
     final rightFieldController = useTextEditingController();
     final customConditionController = useTextEditingController();
 
-    if (index != null && !pageInitialized.value) {
-      final condition = bloc.state.conditions.elementAt(index!);
+    if (id != null && !pageInitialized.value) {
+      final condition = bloc.state.conditions.findById(id!);
 
       isCustom.value = condition.isCustom;
       leftField.value = fields.firstWhere((f) =>
@@ -155,6 +160,7 @@ class _QueryConditionPage extends HookWidget {
           TextButton(
             onPressed: () {
               final condition = QueryCondition(
+                  id: const Uuid().v1(),
                   isCustom: isCustom.value ?? false,
                   leftField:
                       '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}'
@@ -163,17 +169,10 @@ class _QueryConditionPage extends HookWidget {
                   rightField: rightFieldController.text,
                   customCondition: customConditionController.text);
 
-              if (index == null) {
-                bloc.add(
-                  QueryConditionAdded(condition: condition),
-                );
+              if (id == null) {
+                bloc.add(QueryConditionAdded(condition: condition));
               } else {
-                bloc.add(
-                  QueryConditionUpdated(
-                    index: index!,
-                    condition: condition,
-                  ),
-                );
+                bloc.add(QueryConditionUpdated(condition: condition));
               }
 
               Navigator.pop(context);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
@@ -39,7 +40,7 @@ class QueryAggregatesBar extends HookWidget {
                         tooltip: localizations?.remove ?? 'Remove',
                         onPressed: () {
                           bloc.add(
-                            QueryAggregateDeleted(index: index),
+                            QueryAggregateDeleted(id: aggregate.id),
                           );
                         },
                       ),
@@ -51,8 +52,7 @@ class QueryAggregatesBar extends HookWidget {
                       DialogRoute<String>(
                         context: context,
                         builder: (context) => _ChangeAggregateDialog(
-                          index: index,
-                          bloc: bloc,
+                          id: aggregate.id,
                         ),
                       ),
                     );
@@ -87,6 +87,7 @@ class QueryAggregatesBar extends HookWidget {
                         bloc.add(
                           QueryAggregateAdded(
                             aggregate: QueryAggregate(
+                              id: const Uuid().v1(),
                               field: field.name,
                               function: 'Sum',
                             ),
@@ -112,18 +113,17 @@ class QueryAggregatesBar extends HookWidget {
 
 class _ChangeAggregateDialog extends HookWidget {
   const _ChangeAggregateDialog({
-    required this.index,
-    required this.bloc,
+    required this.id,
   });
 
-  final int index;
-  final QueryAggregatesBloc bloc;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
     final function = useState<String?>('Sum');
-    final aggregate = bloc.state.aggregates.elementAt(index);
+    final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
+    final aggregate = bloc.state.aggregates.findById(id);
 
     return AlertDialog(
       title: Text(localizations?.changeTableName ?? 'Change aggregate field'),
@@ -148,12 +148,13 @@ class _ChangeAggregateDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newAggregate = QueryAggregate(
+              id: aggregate.id,
               field: aggregate.field,
               function: function.value ?? '',
             );
 
             bloc.add(
-              QueryAggregateUpdated(index: index, aggregate: newAggregate),
+              QueryAggregateUpdated(aggregate: newAggregate),
             );
             Navigator.pop(context);
           },

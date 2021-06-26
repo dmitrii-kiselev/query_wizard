@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:uuid/uuid.dart';
 
 class QueryFieldsBar extends StatelessWidget {
   const QueryFieldsBar({Key? key}) : super(key: key);
@@ -33,9 +34,9 @@ class QueryFieldsBar extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute<void>(
-                          builder: (context) => _CustomExpressionPage(
-                            index: index,
-                            bloc: bloc,
+                          builder: (_) => BlocProvider<QueryFieldsBloc>.value(
+                            value: bloc,
+                            child: _CustomExpressionPage(id: field.id),
                           ),
                           fullscreenDialog: true,
                         ),
@@ -54,7 +55,7 @@ class QueryFieldsBar extends StatelessWidget {
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
                             bloc.add(
-                              QueryFieldCopied(field: field),
+                              QueryFieldCopied(id: field.id),
                             );
                           },
                         ),
@@ -63,7 +64,7 @@ class QueryFieldsBar extends StatelessWidget {
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
                             bloc.add(
-                              QueryFieldDeleted(index: index),
+                              QueryFieldDeleted(id: field.id),
                             );
                           },
                         ),
@@ -81,7 +82,10 @@ class QueryFieldsBar extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute<void>(
-                    builder: (context) => _CustomExpressionPage(bloc: bloc),
+                    builder: (_) => BlocProvider<QueryFieldsBloc>.value(
+                      value: bloc,
+                      child: const _CustomExpressionPage(),
+                    ),
                     fullscreenDialog: true,
                   ),
                 );
@@ -99,22 +103,19 @@ class QueryFieldsBar extends StatelessWidget {
 }
 
 class _CustomExpressionPage extends HookWidget {
-  const _CustomExpressionPage({
-    this.index,
-    required this.bloc,
-  });
+  const _CustomExpressionPage({this.id});
 
-  final int? index;
-  final QueryFieldsBloc bloc;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<QueryFieldsBloc>(context);
     final controller = useTextEditingController();
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);
 
-    if (index != null) {
-      final field = bloc.state.fields.elementAt(index!);
+    if (id != null) {
+      final field = bloc.state.fields.findById(id!);
       controller.text = field.name;
     }
 
@@ -125,22 +126,16 @@ class _CustomExpressionPage extends HookWidget {
           TextButton(
             onPressed: () {
               final field = QueryElement(
+                id: id == null ? const Uuid().v1() : id!,
                 name: controller.text,
                 type: QueryElementType.column,
                 elements: List.empty(growable: true),
               );
 
-              if (index == null) {
-                bloc.add(
-                  QueryFieldAdded(field: field),
-                );
+              if (id == null) {
+                bloc.add(QueryFieldAdded(field: field));
               } else {
-                bloc.add(
-                  QueryFieldUpdated(
-                    index: index!,
-                    field: field,
-                  ),
-                );
+                bloc.add(QueryFieldUpdated(field: field));
               }
 
               Navigator.pop(context);
@@ -164,9 +159,7 @@ class _CustomExpressionPage extends HookWidget {
             Expanded(
               child: TextField(
                 controller: controller,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 keyboardType: TextInputType.multiline,
                 maxLines: 99999,
                 autofocus: true,

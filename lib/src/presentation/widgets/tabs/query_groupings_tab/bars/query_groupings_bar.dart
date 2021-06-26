@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
 import 'package:query_wizard/presentation.dart';
+import 'package:uuid/uuid.dart';
 
 class QueryGroupingsBar extends HookWidget {
   const QueryGroupingsBar({Key? key}) : super(key: key);
@@ -40,7 +41,7 @@ class QueryGroupingsBar extends HookWidget {
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
                             bloc.add(
-                              QueryGroupingDeleted(index: index),
+                              QueryGroupingDeleted(id: grouping.id),
                             );
                           },
                         ),
@@ -76,6 +77,7 @@ class QueryGroupingsBar extends HookWidget {
                           bloc.add(
                             QueryGroupingAdded(
                               grouping: QueryGrouping(
+                                id: const Uuid().v1(),
                                 name: field.name,
                                 type: QueryGroupingType.grouping,
                                 elements: List.empty(growable: true),

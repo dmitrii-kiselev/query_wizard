@@ -46,7 +46,7 @@ class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
   }
 
   Stream<QueriesState> _mapQueryDeletedToState(QueryDeleted event) async* {
-    state.queries.removeAt(event.index);
+    state.queries.removeWhere((q) => q.id == event.id);
     yield QueriesChanged(queries: state.queries);
   }
 

@@ -32,22 +32,17 @@ void main() {
         act: (QueryBatchesBloc bloc) {
           final queryBatch = QueryBatch.empty();
           final batchAdded = QueryBatchAdded(queryBatch: queryBatch);
-          final batchCopied = QueryBatchCopied(queryBatch: queryBatch);
+          const batchCopied = QueryBatchCopied(id: '');
 
           bloc.add(batchAdded);
           bloc.add(batchCopied);
         },
         expect: () {
-          final expectedBatches = [
-            QueryBatch.empty(),
-            QueryBatch.empty(),
-          ];
-
           return [
-            QueryBatchesInitial(queryBatches: expectedBatches),
-            QueryBatchesChanged(queryBatches: expectedBatches),
-            QueryBatchesInitial(queryBatches: expectedBatches),
-            QueryBatchesChanged(queryBatches: expectedBatches),
+            isA<QueryBatchesInitial>(),
+            isA<QueryBatchesChanged>(),
+            isA<QueryBatchesInitial>(),
+            isA<QueryBatchesChanged>(),
           ];
         });
 
@@ -56,8 +51,7 @@ void main() {
         act: (QueryBatchesBloc bloc) {
           final queryBatch = QueryBatch.empty();
           final batchAdded = QueryBatchAdded(queryBatch: queryBatch);
-
-          const batchDeleted = QueryBatchDeleted(index: 0);
+          const batchDeleted = QueryBatchDeleted(id: '');
 
           bloc.add(batchAdded);
           bloc.add(batchDeleted);

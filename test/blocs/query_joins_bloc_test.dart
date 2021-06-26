@@ -35,18 +35,14 @@ void main() {
         act: (QueryJoinsBloc bloc) {
           const join = QueryJoin.empty();
           const joinAdded = QueryJoinAdded(join: join);
-          const joinUpdated = QueryJoinUpdated(
-            index: 0,
-            join: join,
-            isLeftAll: true,
-          );
+          const joinUpdated = QueryJoinUpdated(join: join);
 
           bloc.add(joinAdded);
           bloc.add(joinUpdated);
         },
         expect: () {
           final expectedJoins = [
-            const QueryJoin.empty().copyWith(isLeftAll: true),
+            const QueryJoin.empty().copyWith(id: ''),
           ];
 
           return [
@@ -62,22 +58,17 @@ void main() {
         act: (QueryJoinsBloc bloc) {
           const join = QueryJoin.empty();
           const joinAdded = QueryJoinAdded(join: join);
-          const joinCopied = QueryJoinCopied(join: join);
+          const joinCopied = QueryJoinCopied(id: '');
 
           bloc.add(joinAdded);
           bloc.add(joinCopied);
         },
         expect: () {
-          final expectedJoins = [
-            const QueryJoin.empty(),
-            const QueryJoin.empty(),
-          ];
-
           return [
-            QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins),
-            QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins),
+            isA<QueryJoinsInitial>(),
+            isA<QueryJoinsChanged>(),
+            isA<QueryJoinsInitial>(),
+            isA<QueryJoinsChanged>(),
           ];
         });
 
@@ -86,7 +77,7 @@ void main() {
         act: (QueryJoinsBloc bloc) {
           const join = QueryJoin.empty();
           const joinAdded = QueryJoinAdded(join: join);
-          const joinDeleted = QueryJoinDeleted(index: 0);
+          const joinDeleted = QueryJoinDeleted(id: '');
 
           bloc.add(joinAdded);
           bloc.add(joinDeleted);

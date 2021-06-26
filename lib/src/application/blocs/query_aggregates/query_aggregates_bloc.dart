@@ -48,16 +48,14 @@ class QueryAggregatesBloc
   Stream<QueryAggregatesState> _mapQueryAggregateUpdatedToState(
     QueryAggregateUpdated event,
   ) async* {
-    state.aggregates.removeAt(event.index);
-    state.aggregates.insert(event.index, event.aggregate);
-
+    state.aggregates.update(event.aggregate);
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregateDeletedToState(
     QueryAggregateDeleted event,
   ) async* {
-    state.aggregates.removeAt(event.index);
+    state.aggregates.removeWhere((a) => a.id == event.id);
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 

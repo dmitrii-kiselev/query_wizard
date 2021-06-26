@@ -24,48 +24,38 @@ class QueryConditionAdded extends QueryConditionsEvent {
 
 class QueryConditionUpdated extends QueryConditionsEvent {
   const QueryConditionUpdated({
-    required this.index,
     required this.condition,
-    this.isCustom,
-    this.leftField,
-    this.logicalCompareType,
-    this.rightField,
-    this.customCondition,
   });
 
-  final int index;
   final QueryCondition condition;
-  final bool? isCustom;
-  final String? leftField;
-  final String? logicalCompareType;
-  final String? rightField;
-  final String? customCondition;
 
   @override
   List<Object?> get props => [condition];
 }
 
 class QueryConditionCopied extends QueryConditionsEvent {
-  const QueryConditionCopied({required this.condition});
+  const QueryConditionCopied({required this.id});
 
-  final QueryCondition condition;
+  final String id;
 
   @override
-  List<Object?> get props => [condition];
+  List<Object?> get props => [id];
 }
 
 class QueryConditionDeleted extends QueryConditionsEvent {
-  const QueryConditionDeleted({required this.index});
+  const QueryConditionDeleted({required this.id});
 
-  final int index;
+  final String id;
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [id];
 }
 
 class QueryConditionOrderChanged extends QueryConditionsEvent {
-  const QueryConditionOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryConditionOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

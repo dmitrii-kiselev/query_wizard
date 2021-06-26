@@ -47,23 +47,20 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
   Stream<QueryTablesState> _mapQueryTableUpdatedToState(
     QueryTableUpdated event,
   ) async* {
-    state.tables.removeAt(event.index);
-    state.tables.insert(event.index, event.table);
-
+    state.tables.update(event.table);
     yield QueryTablesChanged(tables: state.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableCopiedToState(
     QueryTableCopied event,
   ) async* {
-    state.tables.add(event.table);
     yield QueryTablesChanged(tables: state.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableDeletedToState(
     QueryTableDeleted event,
   ) async* {
-    state.tables.removeAt(event.index);
+    state.tables.removeWhere((t) => t.id == event.id);
     yield QueryTablesChanged(tables: state.tables);
   }
 
