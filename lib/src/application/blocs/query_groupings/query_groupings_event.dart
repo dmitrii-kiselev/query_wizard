@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_groupings_bloc.dart';
 
 abstract class QueryGroupingsEvent extends Equatable {
   const QueryGroupingsEvent();
@@ -34,8 +32,10 @@ class QueryGroupingDeleted extends QueryGroupingsEvent {
 }
 
 class QueryGroupingOrderChanged extends QueryGroupingsEvent {
-  const QueryGroupingOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryGroupingOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

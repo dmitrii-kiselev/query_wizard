@@ -17,7 +17,9 @@ class QueryAliasesBar extends StatelessWidget {
     final fields = queries.expand((q) => q.fields).toSet();
 
     final fieldNames = Map.fromIterables(
-        fields.map((f) => f.name), fields.map((f) => f.alias));
+      fields.map((f) => f.name),
+      fields.map((f) => f.alias),
+    );
 
     map['field_names'] = fieldNames;
 
@@ -33,41 +35,52 @@ class QueryAliasesBar extends StatelessWidget {
     }
 
     final columns = queries
-        .map((q) => DataColumn(
-              label: Text(
-                q.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ))
+        .map(
+          (q) => DataColumn(
+            label: Text(
+              q.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        )
         .toList();
 
     columns.insert(
-        0,
-        DataColumn(
-          label: Text(
-            localizations?.fieldNames ?? 'Field names',
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ));
+      0,
+      DataColumn(
+        label: Text(
+          localizations?.fieldNames ?? 'Field names',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
 
     final rows = List<DataRow>.empty(growable: true);
 
-    fieldNames.forEach((name, alias) {
-      final cells = <DataCell>[];
+    fieldNames.forEach(
+      (name, alias) {
+        final cells = <DataCell>[];
 
-      cells.add(DataCell(Text(fieldNames[name] ?? '')));
+        cells.add(DataCell(Text(fieldNames[name] ?? '')));
 
-      for (final query in queries) {
-        if (map.containsKey(query.name)) {
-          final queryFieldNames = map[query.name];
-          if (queryFieldNames != null && queryFieldNames.containsKey(name)) {
-            cells.add(DataCell(Text(queryFieldNames[name] ?? '')));
+        for (final query in queries) {
+          if (map.containsKey(query.name)) {
+            final queryFieldNames = map[query.name];
+            if (queryFieldNames != null && queryFieldNames.containsKey(name)) {
+              cells.add(
+                DataCell(
+                  Text(queryFieldNames[name] ?? ''),
+                ),
+              );
+            }
           }
         }
-      }
 
-      rows.add(DataRow(cells: cells));
-    });
+        rows.add(
+          DataRow(cells: cells),
+        );
+      },
+    );
 
     return Scrollbar(
       child: ListView(

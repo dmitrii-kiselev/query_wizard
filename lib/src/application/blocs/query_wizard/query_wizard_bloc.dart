@@ -1,24 +1,29 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
 
+part 'query_wizard_event.dart';
+
+part 'query_wizard_state.dart';
+
 @lazySingleton
 class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
-  QueryWizardBloc(
-      {required this.sourcesBloc,
-      required this.tablesBloc,
-      required this.fieldsBloc,
-      required this.joinsBloc,
-      required this.aggregatesBloc,
-      required this.groupingsBloc,
-      required this.queriesBloc,
-      required this.conditionsBloc,
-      required this.batchesBloc,
-      required this.ordersBloc,
-      required this.queryWizardRepository})
-      : super(const QueryWizardInitial());
+  QueryWizardBloc({
+    required this.sourcesBloc,
+    required this.tablesBloc,
+    required this.fieldsBloc,
+    required this.joinsBloc,
+    required this.aggregatesBloc,
+    required this.groupingsBloc,
+    required this.queriesBloc,
+    required this.conditionsBloc,
+    required this.batchesBloc,
+    required this.ordersBloc,
+    required this.queryWizardRepository,
+  }) : super(const QueryWizardInitial());
 
   final QuerySourcesBloc sourcesBloc;
   final QueryTablesBloc tablesBloc;
@@ -41,14 +46,15 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
       yield const QueryWizardLoadInProgress();
       try {
         late QuerySchema querySchema;
-        if (event.query != "") {
+        if (event.query != '') {
           querySchema = await queryWizardRepository.parseQuery(event.query);
         } else {
           querySchema = QuerySchema.empty();
         }
 
-        batchesBloc.add(
-            QueryBatchesInitialized(queryBatches: querySchema.queryBatches));
+        batchesBloc.add(QueryBatchesInitialized(
+          queryBatches: querySchema.queryBatches,
+        ));
 
         changeQueryBatch(querySchema.queryBatches.first);
 
@@ -74,12 +80,14 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
     fieldsBloc.add(QueryFieldsInitialized(fields: query.fields));
     joinsBloc.add(QueryJoinsInitialized(joins: query.joins));
 
-    aggregatesBloc
-        .add(QueryAggregatesInitialized(aggregates: query.aggregates));
+    aggregatesBloc.add(QueryAggregatesInitialized(
+      aggregates: query.aggregates,
+    ));
 
     groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
-    conditionsBloc
-        .add(QueryConditionsInitialized(conditions: query.conditions));
+    conditionsBloc.add(QueryConditionsInitialized(
+      conditions: query.conditions,
+    ));
 
     ordersBloc.add(QueryOrdersInitialized(orders: query.orders));
   }

@@ -17,56 +17,79 @@ class QueryTablesBar extends StatelessWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryTablesBloc, QueryTablesState>(
-        builder: (context, state) {
-      if (state is QueryTablesChanged) {
-        return Scaffold(
-          body: SourcesTreeView(
-            items: state.tables,
-            onTap: (item) {
-              if (item.value.type == QueryElementType.column) {
-                fieldsBloc.add(QueryFieldAdded(field: item.value));
-              }
-            },
-            onCopy: (QueryElement table) {
-              tablesBloc.add(QueryTableCopied(table: table));
-            },
-            onEdit: (QueryElement table) {
-              final tables = tablesBloc.state.tables;
-              final index = tables.indexOf(table);
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueryTablesChanged) {
+          return Scaffold(
+            body: SourcesTreeView(
+              items: state.tables,
+              onTap: (item) {
+                if (item.value.type == QueryElementType.column) {
+                  fieldsBloc.add(
+                    QueryFieldAdded(field: item.value),
+                  );
+                }
+              },
+              onCopy: (QueryElement table) {
+                tablesBloc.add(
+                  QueryTableCopied(table: table),
+                );
+              },
+              onEdit: (QueryElement table) {
+                final tables = tablesBloc.state.tables;
+                final index = tables.indexOf(table);
 
-              Navigator.push(
+                Navigator.push(
                   context,
                   DialogRoute<String>(
-                      context: context,
-                      builder: (context) => _ChangeTableNameDialog(
-                          index: index, bloc: tablesBloc)));
-            },
-            onRemove: (QueryElement table) {
-              final tables = tablesBloc.state.tables;
-              tablesBloc.add(QueryTableDeleted(index: tables.indexOf(table)));
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
+                    context: context,
+                    builder: (context) => _ChangeTableNameDialog(
+                      index: index,
+                      bloc: tablesBloc,
+                    ),
+                  ),
+                );
+              },
+              onRemove: (QueryElement table) {
+                final tables = tablesBloc.state.tables;
+                tablesBloc.add(
+                  QueryTableDeleted(
+                    index: tables.indexOf(table),
+                  ),
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   DialogRoute<String>(
-                      context: context,
-                      builder: (context) => const _SubqueryPage()));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
+                    context: context,
+                    builder: (context) => const _SubqueryPage(),
+                  ),
+                );
+              },
+              tooltip: localizations?.add ?? 'Add',
+              child: const Icon(Icons.add),
+            ),
+          );
+        }
+
+        return const Center(
+          child: CircularProgressIndicator(),
         );
-      }
-
-      return const Center(child: CircularProgressIndicator());
-    });
+      },
+    );
   }
 }
 
 class _ChangeTableNameDialog extends HookWidget {
-  const _ChangeTableNameDialog({required this.index, required this.bloc});
+  const _ChangeTableNameDialog({
+    required this.index,
+    required this.bloc,
+  });
 
   final int index;
   final QueryTablesBloc bloc;
@@ -83,18 +106,26 @@ class _ChangeTableNameDialog extends HookWidget {
       title: Text(localizations?.changeTableName ?? 'Change Table Name'),
       content: TextField(
         controller: controller,
-        decoration: const InputDecoration(border: OutlineInputBorder()),
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () {
-            final newTable = QueryElement.withElements(
-                name: table.name,
-                alias: controller.text,
-                type: table.type,
-                elements: table.elements);
+            final newTable = QueryElement(
+              name: table.name,
+              alias: controller.text,
+              type: table.type,
+              elements: table.elements,
+            );
 
-            bloc.add(QueryTableUpdated(index: index, table: newTable));
+            bloc.add(
+              QueryTableUpdated(
+                index: index,
+                table: newTable,
+              ),
+            );
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

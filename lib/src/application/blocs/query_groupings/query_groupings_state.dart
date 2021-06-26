@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_groupings_bloc.dart';
 
 abstract class QueryGroupingsState extends Equatable {
   const QueryGroupingsState({required this.groupings});

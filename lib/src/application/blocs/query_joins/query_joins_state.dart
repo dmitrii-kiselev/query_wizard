@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_joins_bloc.dart';
 
 abstract class QueryJoinsState extends Equatable {
   const QueryJoinsState({required this.joins});

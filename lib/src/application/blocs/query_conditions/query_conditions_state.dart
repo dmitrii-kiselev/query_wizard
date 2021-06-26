@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_conditions_bloc.dart';
 
 abstract class QueryConditionsState extends Equatable {
   const QueryConditionsState({required this.conditions});

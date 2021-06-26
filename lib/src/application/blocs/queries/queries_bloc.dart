@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+
+part 'queries_event.dart';
+
+part 'queries_state.dart';
 
 @lazySingleton
 class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
@@ -26,7 +30,8 @@ class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
   }
 
   Stream<QueriesState> _mapQueryInitializedToState(
-      QueriesInitialized event) async* {
+    QueriesInitialized event,
+  ) async* {
     yield QueriesChanged(queries: event.queries);
   }
 
@@ -46,7 +51,8 @@ class QueriesBloc extends Bloc<QueriesEvent, QueriesState> {
   }
 
   Stream<QueriesState> _mapQueryOrderChangedToState(
-      QueryOrderChanged event) async* {
+    QueryOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

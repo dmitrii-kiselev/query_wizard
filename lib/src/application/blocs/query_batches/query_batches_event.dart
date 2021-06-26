@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_batches_bloc.dart';
 
 abstract class QueryBatchesEvent extends Equatable {
   const QueryBatchesEvent();
@@ -43,8 +41,10 @@ class QueryBatchDeleted extends QueryBatchesEvent {
 }
 
 class QueryBatchOrderChanged extends QueryBatchesEvent {
-  const QueryBatchOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryBatchOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

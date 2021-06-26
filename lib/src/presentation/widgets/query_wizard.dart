@@ -27,17 +27,20 @@ class QueryWizard extends StatelessWidget {
 }
 
 Widget buildHome() {
-  return MultiBlocProvider(providers: [
-    BlocProvider(create: (context) => getIt<QuerySourcesBloc>()),
-    BlocProvider(create: (context) => getIt<QueryTablesBloc>()),
-    BlocProvider(create: (context) => getIt<QueryFieldsBloc>()),
-    BlocProvider(create: (context) => getIt<QueryJoinsBloc>()),
-    BlocProvider(create: (context) => getIt<QueryAggregatesBloc>()),
-    BlocProvider(create: (context) => getIt<QueryGroupingsBloc>()),
-    BlocProvider(create: (context) => getIt<QueryConditionsBloc>()),
-    BlocProvider(create: (context) => getIt<QueriesBloc>()),
-    BlocProvider(create: (context) => getIt<QueryOrdersBloc>()),
-    BlocProvider(create: (context) => getIt<QueryBatchesBloc>()),
-    BlocProvider(create: (context) => getIt<QueryWizardBloc>()),
-  ], child: const QueryWizardLayout(title: 'Query Wizard'));
+  return MultiBlocProvider(
+    providers: [
+      BlocProvider(create: (context) => getIt<QuerySourcesBloc>()),
+      BlocProvider(create: (context) => getIt<QueryTablesBloc>()),
+      BlocProvider(create: (context) => getIt<QueryFieldsBloc>()),
+      BlocProvider(create: (context) => getIt<QueryJoinsBloc>()),
+      BlocProvider(create: (context) => getIt<QueryAggregatesBloc>()),
+      BlocProvider(create: (context) => getIt<QueryGroupingsBloc>()),
+      BlocProvider(create: (context) => getIt<QueryConditionsBloc>()),
+      BlocProvider(create: (context) => getIt<QueriesBloc>()),
+      BlocProvider(create: (context) => getIt<QueryOrdersBloc>()),
+      BlocProvider(create: (context) => getIt<QueryBatchesBloc>()),
+      BlocProvider(create: (context) => getIt<QueryWizardBloc>()),
+    ],
+    child: const QueryWizardLayout(title: 'Query Wizard'),
+  );
 }

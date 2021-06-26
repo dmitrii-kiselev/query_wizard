@@ -1,7 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
+
+part 'query_tables_event.dart';
+
+part 'query_tables_state.dart';
 
 @lazySingleton
 class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
@@ -27,18 +32,21 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
   }
 
   Stream<QueryTablesState> _mapQueryTablesInitializedToState(
-      QueryTablesInitialized event) async* {
+    QueryTablesInitialized event,
+  ) async* {
     yield QueryTablesChanged(tables: event.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableAddedToState(
-      QueryTableAdded event) async* {
+    QueryTableAdded event,
+  ) async* {
     state.tables.add(event.table);
     yield QueryTablesChanged(tables: state.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableUpdatedToState(
-      QueryTableUpdated event) async* {
+    QueryTableUpdated event,
+  ) async* {
     state.tables.removeAt(event.index);
     state.tables.insert(event.index, event.table);
 
@@ -46,19 +54,22 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
   }
 
   Stream<QueryTablesState> _mapQueryTableCopiedToState(
-      QueryTableCopied event) async* {
+    QueryTableCopied event,
+  ) async* {
     state.tables.add(event.table);
     yield QueryTablesChanged(tables: state.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableDeletedToState(
-      QueryTableDeleted event) async* {
+    QueryTableDeleted event,
+  ) async* {
     state.tables.removeAt(event.index);
     yield QueryTablesChanged(tables: state.tables);
   }
 
   Stream<QueryTablesState> _mapQueryTableOrderChangedToState(
-      QueryTableOrderChanged event) async* {
+    QueryTableOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

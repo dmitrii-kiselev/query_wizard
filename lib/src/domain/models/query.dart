@@ -3,19 +3,20 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/domain.dart';
 
 class Query extends Equatable {
-  const Query(
-      {required this.name,
-      required this.sources,
-      required this.tables,
-      required this.fields,
-      required this.joins,
-      required this.groupings,
-      required this.aggregates,
-      required this.conditions,
-      required this.orders,
-      required this.isTop,
-      required this.topCounter,
-      required this.isDistinct});
+  const Query({
+    required this.name,
+    required this.sources,
+    required this.tables,
+    required this.fields,
+    required this.joins,
+    required this.groupings,
+    required this.aggregates,
+    required this.conditions,
+    required this.orders,
+    required this.isTop,
+    required this.topCounter,
+    required this.isDistinct,
+  });
 
   Query.empty()
       : name = 'Query',
@@ -57,49 +58,52 @@ class Query extends Equatable {
         orders,
         isTop,
         topCounter,
-        isDistinct
+        isDistinct,
       ];
 }
 
 extension CopyQuery on Query {
   Query copy() => Query(
-      name: name,
-      sources: sources,
-      tables: tables,
-      fields: fields,
-      joins: joins,
-      groupings: groupings,
-      aggregates: aggregates,
-      conditions: conditions,
-      orders: orders,
-      isTop: isTop,
-      topCounter: topCounter,
-      isDistinct: isDistinct);
+        name: name,
+        sources: sources,
+        tables: tables,
+        fields: fields,
+        joins: joins,
+        groupings: groupings,
+        aggregates: aggregates,
+        conditions: conditions,
+        orders: orders,
+        isTop: isTop,
+        topCounter: topCounter,
+        isDistinct: isDistinct,
+      );
 
-  Query copyWith(
-          {String? name,
-          List<QueryElement>? sources,
-          List<QueryElement>? tables,
-          List<QueryElement>? fields,
-          List<QueryJoin>? joins,
-          List<QueryGrouping>? groupings,
-          List<QueryAggregate>? aggregates,
-          List<QueryCondition>? conditions,
-          List<QueryOrder>? orders,
-          bool? isTop,
-          int? topCounter,
-          bool? isDistinct}) =>
+  Query copyWith({
+    String? name,
+    List<QueryElement>? sources,
+    List<QueryElement>? tables,
+    List<QueryElement>? fields,
+    List<QueryJoin>? joins,
+    List<QueryGrouping>? groupings,
+    List<QueryAggregate>? aggregates,
+    List<QueryCondition>? conditions,
+    List<QueryOrder>? orders,
+    bool? isTop,
+    int? topCounter,
+    bool? isDistinct,
+  }) =>
       Query(
-          name: name ?? this.name,
-          sources: sources ?? this.sources,
-          tables: tables ?? this.tables,
-          fields: fields ?? this.fields,
-          joins: joins ?? this.joins,
-          groupings: groupings ?? this.groupings,
-          aggregates: aggregates ?? this.aggregates,
-          conditions: conditions ?? this.conditions,
-          orders: orders ?? this.orders,
-          topCounter: topCounter ?? this.topCounter,
-          isTop: isTop ?? this.isTop,
-          isDistinct: isDistinct ?? this.isDistinct);
+        name: name ?? this.name,
+        sources: sources ?? this.sources,
+        tables: tables ?? this.tables,
+        fields: fields ?? this.fields,
+        joins: joins ?? this.joins,
+        groupings: groupings ?? this.groupings,
+        aggregates: aggregates ?? this.aggregates,
+        conditions: conditions ?? this.conditions,
+        orders: orders ?? this.orders,
+        topCounter: topCounter ?? this.topCounter,
+        isTop: isTop ?? this.isTop,
+        isDistinct: isDistinct ?? this.isDistinct,
+      );
 }

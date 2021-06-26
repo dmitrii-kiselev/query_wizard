@@ -19,9 +19,21 @@ void main() {
 
     test('QueryWizardInitialized initialized', () {
       final columns = [
-        QueryElement(name: 'Field 1', type: QueryElementType.column),
-        QueryElement(name: 'Field 2', type: QueryElementType.column),
-        QueryElement(name: 'Field 3', type: QueryElementType.column),
+        QueryElement(
+          name: 'Field 1',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
+        QueryElement(
+          name: 'Field 2',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
+        QueryElement(
+          name: 'Field 3',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
       ];
       final event = QuerySourcesInitialized(sources: columns);
 
@@ -30,7 +42,6 @@ void main() {
 
     test('QueryWizardLoadFailure initialized', () {
       const event = QueryWizardLoadFailure();
-
       expect(event.props, equals([]));
     });
   });
@@ -38,7 +49,6 @@ void main() {
   group('QueryWizardState', () {
     test('SourcesRequested initialized', () {
       const event = QuerySourcesRequested();
-
       expect(event.props, equals([]));
     });
   });

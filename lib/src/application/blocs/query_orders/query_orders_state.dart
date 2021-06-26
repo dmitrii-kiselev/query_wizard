@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_orders_bloc.dart';
 
 abstract class QueryOrdersState extends Equatable {
   const QueryOrdersState({required this.orders});

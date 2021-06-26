@@ -6,7 +6,7 @@ import 'package:query_wizard/domain.dart';
 
 @LazySingleton(as: IQueryWizardRepository)
 class QueryWizardRepository implements IQueryWizardRepository {
-  final QueryWizardClient queryWizardClient;
+  final IQueryWizardClient queryWizardClient;
 
   QueryWizardRepository({required this.queryWizardClient});
 

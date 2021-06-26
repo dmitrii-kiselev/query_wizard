@@ -17,17 +17,20 @@ class QueryJoinsTab extends StatelessWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryJoinsBloc, QueryJoinsState>(
-        builder: (context, state) {
-      if (state is QueryJoinsChanged) {
-        return Scaffold(
-          body: ReorderableListView.builder(
-            itemCount: state.joins.length,
-            itemBuilder: (context, index) {
-              final join = state.joins[index];
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueryJoinsChanged) {
+          return Scaffold(
+            body: ReorderableListView.builder(
+              itemCount: state.joins.length,
+              itemBuilder: (context, index) {
+                final join = state.joins[index];
 
-              return Card(
-                key: ValueKey('$index'),
-                child: ListTile(
+                return Card(
+                  key: ValueKey('$index'),
+                  child: ListTile(
                     leading: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -36,67 +39,89 @@ class QueryJoinsTab extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            bloc.add(QueryJoinCopied(join: join));
+                            bloc.add(
+                              QueryJoinCopied(join: join),
+                            );
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(QueryJoinDeleted(index: index));
+                            bloc.add(
+                              QueryJoinDeleted(index: index),
+                            );
                           },
                         ),
                       ],
                     ),
                     onTap: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute<void>(
-                            builder: (context) => _QueryJoinPage(
-                                index: index,
-                                bloc: bloc,
-                                tables: tables,
-                                fields: fields),
-                            fullscreenDialog: true,
-                          ));
+                        context,
+                        MaterialPageRoute<void>(
+                          builder: (context) => _QueryJoinPage(
+                            index: index,
+                            bloc: bloc,
+                            tables: tables,
+                            fields: fields,
+                          ),
+                          fullscreenDialog: true,
+                        ),
+                      );
                     },
-                    title: Text(join.toString())),
-              );
-            },
-            padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
-            onReorder: (int oldIndex, int newIndex) {
-              bloc.add(QueryJoinOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex));
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
+                    title: Text(
+                      join.toString(),
+                    ),
+                  ),
+                );
+              },
+              padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue,
+              ),
+              onReorder: (int oldIndex, int newIndex) {
+                bloc.add(
+                  QueryJoinOrderChanged(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) => _QueryJoinPage(
-                        bloc: bloc, tables: tables, fields: fields),
+                      bloc: bloc,
+                      tables: tables,
+                      fields: fields,
+                    ),
                     fullscreenDialog: true,
-                  ));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
-        );
-      }
+                  ),
+                );
+              },
+              tooltip: localizations?.add ?? 'Add',
+              child: const Icon(Icons.add),
+            ),
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }
 
 class _QueryJoinPage extends HookWidget {
-  _QueryJoinPage(
-      {this.index,
-      required this.bloc,
-      required this.tables,
-      required this.fields});
+  _QueryJoinPage({
+    this.index,
+    required this.bloc,
+    required this.tables,
+    required this.fields,
+  });
 
   final int? index;
   final QueryJoinsBloc bloc;
@@ -124,24 +149,27 @@ class _QueryJoinPage extends HookWidget {
     if (index != null && !pageInitialized.value) {
       final join = bloc.state.joins.elementAt(index!);
 
-      leftTable.value =
-          tables.firstWhere((t) => (t.alias ?? t.name) == join.leftTable);
+      leftTable.value = tables.firstWhere(
+        (t) => (t.alias ?? t.name) == join.leftTable,
+      );
 
-      rightTable.value =
-          tables.firstWhere((t) => (t.alias ?? t.name) == join.rightTable);
+      rightTable.value = tables.firstWhere(
+        (t) => (t.alias ?? t.name) == join.rightTable,
+      );
 
       isLeftAll.value = join.isLeftAll;
       isRightAll.value = join.isRightAll;
       isCustom.value = join.condition.isCustom;
-      leftField.value = leftTable.value?.elements
-          .firstWhere((f) => f.name == join.condition.leftField);
+      leftField.value = leftTable.value?.elements.firstWhere(
+        (f) => f.name == join.condition.leftField,
+      );
 
       logicalCompareType.value = join.condition.logicalCompareType;
-      rightField.value = rightTable.value?.elements
-          .firstWhere((f) => f.name == join.condition.rightField);
+      rightField.value = rightTable.value?.elements.firstWhere(
+        (f) => f.name == join.condition.rightField,
+      );
 
       customConditionController.text = join.condition.customCondition;
-
       pageInitialized.value = true;
     }
 
@@ -160,19 +188,21 @@ class _QueryJoinPage extends HookWidget {
           TextButton(
             onPressed: () {
               final condition = QueryCondition(
-                  isCustom: isCustom.value ?? false,
-                  leftField: leftField.value?.name ?? '',
-                  logicalCompareType: logicalCompareType.value ?? '',
-                  rightField: rightField.value?.name ?? '',
-                  customCondition: customConditionController.text);
+                isCustom: isCustom.value ?? false,
+                leftField: leftField.value?.name ?? '',
+                logicalCompareType: logicalCompareType.value ?? '',
+                rightField: rightField.value?.name ?? '',
+                customCondition: customConditionController.text,
+              );
               final join = QueryJoin(
-                  leftTable:
-                      leftTable.value?.alias ?? leftTable.value?.name ?? '',
-                  isLeftAll: isLeftAll.value ?? false,
-                  rightTable:
-                      rightTable.value?.alias ?? rightTable.value?.name ?? '',
-                  isRightAll: isRightAll.value ?? false,
-                  condition: condition);
+                leftTable:
+                    leftTable.value?.alias ?? leftTable.value?.name ?? '',
+                isLeftAll: isLeftAll.value ?? false,
+                rightTable:
+                    rightTable.value?.alias ?? rightTable.value?.name ?? '',
+                isRightAll: isRightAll.value ?? false,
+                condition: condition,
+              );
 
               if (index == null) {
                 bloc.add(QueryJoinAdded(join: join));

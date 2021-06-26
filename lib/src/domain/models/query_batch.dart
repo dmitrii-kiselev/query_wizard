@@ -3,12 +3,13 @@ import 'package:equatable/equatable.dart';
 import 'package:query_wizard/domain.dart';
 
 class QueryBatch extends Equatable {
-  const QueryBatch(
-      {required this.name,
-      required this.sources,
-      required this.queries,
-      required this.aliases,
-      required this.queryType});
+  const QueryBatch({
+    required this.name,
+    required this.sources,
+    required this.queries,
+    required this.aliases,
+    required this.queryType,
+  });
 
   QueryBatch.empty()
       : name = '',
@@ -24,27 +25,36 @@ class QueryBatch extends Equatable {
   final QueryType queryType;
 
   @override
-  List<Object?> get props => [name, sources, queries, aliases, queryType];
+  List<Object?> get props => [
+        name,
+        sources,
+        queries,
+        aliases,
+        queryType,
+      ];
 }
 
 extension CopyQueryBatch on QueryBatch {
   QueryBatch copy() => QueryBatch(
-      name: name,
-      sources: sources,
-      queries: queries,
-      aliases: aliases,
-      queryType: queryType);
+        name: name,
+        sources: sources,
+        queries: queries,
+        aliases: aliases,
+        queryType: queryType,
+      );
 
-  QueryBatch copyWith(
-          {String? name,
-          List<QueryElement>? sources,
-          List<Query>? queries,
-          Map<String, Map<String, String>>? aliases,
-          QueryType? queryType}) =>
+  QueryBatch copyWith({
+    String? name,
+    List<QueryElement>? sources,
+    List<Query>? queries,
+    Map<String, Map<String, String>>? aliases,
+    QueryType? queryType,
+  }) =>
       QueryBatch(
-          name: name ?? this.name,
-          sources: sources ?? this.sources,
-          queries: queries ?? this.queries,
-          aliases: aliases ?? this.aliases,
-          queryType: queryType ?? this.queryType);
+        name: name ?? this.name,
+        sources: sources ?? this.sources,
+        queries: queries ?? this.queries,
+        aliases: aliases ?? this.aliases,
+        queryType: queryType ?? this.queryType,
+      );
 }

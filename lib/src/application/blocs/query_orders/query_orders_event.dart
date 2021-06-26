@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_orders_bloc.dart';
 
 abstract class QueryOrdersEvent extends Equatable {
   const QueryOrdersEvent();
@@ -47,8 +45,10 @@ class QueryOrderDeleted extends QueryOrdersEvent {
 }
 
 class QueryOrderOrderChanged extends QueryOrdersEvent {
-  const QueryOrderOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryOrderOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

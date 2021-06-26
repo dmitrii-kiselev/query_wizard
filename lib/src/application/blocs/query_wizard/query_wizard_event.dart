@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'query_wizard_bloc.dart';
 
 abstract class QueryWizardEvent extends Equatable {
   const QueryWizardEvent();

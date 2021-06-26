@@ -10,7 +10,9 @@ class QueryBatchDrawer extends HookWidget {
   const QueryBatchDrawer({Key? key}) : super(key: key);
 
   List<ListTile> _getQueryBatches(
-      List<QueryBatch> queryBatches, QueryWizardBloc bloc) {
+    List<QueryBatch> queryBatches,
+    QueryWizardBloc bloc,
+  ) {
     return <ListTile>[
       for (var queryBatch in queryBatches)
         ListTile(
@@ -31,26 +33,33 @@ class QueryBatchDrawer extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
-        builder: (context, state) {
-      if (state is QueryBatchesChanged) {
-        final drawerItems = ListView(
-          children: [
-            UserAccountsDrawerHeader(
-              accountName: Text(localizations?.queryBatches ?? 'Query Batches'),
-              accountEmail: const Text(''),
-              currentAccountPicture:
-                  const CircleAvatar(child: FlutterLogo(size: 42.0)),
-            ),
-            ..._getQueryBatches(state.queryBatches, bloc),
-          ],
-        );
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueryBatchesChanged) {
+          final drawerItems = ListView(
+            children: [
+              UserAccountsDrawerHeader(
+                accountName: Text(
+                  localizations?.queryBatches ?? 'Query Batches',
+                ),
+                accountEmail: const Text(''),
+                currentAccountPicture: const CircleAvatar(
+                  child: FlutterLogo(size: 42.0),
+                ),
+              ),
+              ..._getQueryBatches(state.queryBatches, bloc),
+            ],
+          );
 
-        return Drawer(
-          child: drawerItems,
-        );
-      }
+          return Drawer(
+            child: drawerItems,
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }

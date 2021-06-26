@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_fields_bloc.dart';
 
 abstract class QueryFieldsEvent extends Equatable {
   const QueryFieldsEvent();
@@ -56,8 +54,10 @@ class QueryFieldDeleted extends QueryFieldsEvent {
 }
 
 class QueryFieldOrderChanged extends QueryFieldsEvent {
-  const QueryFieldOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryFieldOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

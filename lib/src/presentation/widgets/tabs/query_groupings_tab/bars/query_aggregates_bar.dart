@@ -16,8 +16,10 @@ class QueryAggregatesBar extends HookWidget {
     final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueryAggregatesBloc, QueryAggregatesState>(
-        builder: (context, state) {
+    return BlocBuilder<QueryAggregatesBloc, QueryAggregatesState>(builder: (
+      context,
+      state,
+    ) {
       if (state is QueryAggregatesChanged) {
         return Scaffold(
           body: ReorderableListView.builder(
@@ -28,57 +30,74 @@ class QueryAggregatesBar extends HookWidget {
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
-                    leading: Wrap(
-                      alignment: WrapAlignment.spaceEvenly,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
-                          onPressed: () {
-                            bloc.add(QueryAggregateDeleted(index: index));
-                          },
+                  leading: Wrap(
+                    alignment: WrapAlignment.spaceEvenly,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.highlight_remove_outlined),
+                        tooltip: localizations?.remove ?? 'Remove',
+                        onPressed: () {
+                          bloc.add(
+                            QueryAggregateDeleted(index: index),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      DialogRoute<String>(
+                        context: context,
+                        builder: (context) => _ChangeAggregateDialog(
+                          index: index,
+                          bloc: bloc,
                         ),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        DialogRoute<String>(
-                          context: context,
-                          builder: (context) => _ChangeAggregateDialog(
-                            index: index,
-                            bloc: bloc,
-                          ),
-                        ),
-                      );
-                    },
-                    title: Text(aggregate.toString())),
+                      ),
+                    );
+                  },
+                  title: Text(
+                    aggregate.toString(),
+                  ),
+                ),
               );
             },
             padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
+              QueryWizardConstants.defaultEdgeInsetsAllValue,
+            ),
             onReorder: (int oldIndex, int newIndex) {
-              bloc.add(QueryAggregateOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex));
+              bloc.add(
+                QueryAggregateOrderChanged(
+                  oldIndex: oldIndex,
+                  newIndex: newIndex,
+                ),
+              );
             },
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => FieldsSelectionPage(
-                        tables: tables,
-                        onSelected: (fields) {
-                          for (final field in fields) {
-                            bloc.add(QueryAggregateAdded(
-                                aggregate: QueryAggregate(
-                                    field: field.name, function: 'Sum')));
-                          }
-                        }),
-                    fullscreenDialog: true,
-                  ));
+                context,
+                MaterialPageRoute<void>(
+                  builder: (context) => FieldsSelectionPage(
+                    tables: tables,
+                    onSelected: (fields) {
+                      for (final field in fields) {
+                        bloc.add(
+                          QueryAggregateAdded(
+                            aggregate: QueryAggregate(
+                              field: field.name,
+                              function: 'Sum',
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  fullscreenDialog: true,
+                ),
+              );
             },
             tooltip: localizations?.add ?? 'Add',
             child: const Icon(Icons.add),
@@ -92,7 +111,10 @@ class QueryAggregatesBar extends HookWidget {
 }
 
 class _ChangeAggregateDialog extends HookWidget {
-  const _ChangeAggregateDialog({required this.index, required this.bloc});
+  const _ChangeAggregateDialog({
+    required this.index,
+    required this.bloc,
+  });
 
   final int index;
   final QueryAggregatesBloc bloc;
@@ -126,10 +148,13 @@ class _ChangeAggregateDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newAggregate = QueryAggregate(
-                field: aggregate.field, function: function.value ?? '');
+              field: aggregate.field,
+              function: function.value ?? '',
+            );
 
             bloc.add(
-                QueryAggregateUpdated(index: index, aggregate: newAggregate));
+              QueryAggregateUpdated(index: index, aggregate: newAggregate),
+            );
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

@@ -17,17 +17,20 @@ class QueryGroupingsBar extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryGroupingsBloc, QueryGroupingsState>(
-        builder: (context, state) {
-      if (state is QueryGroupingsChanged) {
-        return Scaffold(
-          body: ReorderableListView.builder(
-            itemCount: state.groupings.length,
-            itemBuilder: (context, index) {
-              final grouping = state.groupings[index];
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueryGroupingsChanged) {
+          return Scaffold(
+            body: ReorderableListView.builder(
+              itemCount: state.groupings.length,
+              itemBuilder: (context, index) {
+                final grouping = state.groupings[index];
 
-              return Card(
-                key: ValueKey('$index'),
-                child: ListTile(
+                return Card(
+                  key: ValueKey('$index'),
+                  child: ListTile(
                     leading: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -36,46 +39,64 @@ class QueryGroupingsBar extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(QueryGroupingDeleted(index: index));
+                            bloc.add(
+                              QueryGroupingDeleted(index: index),
+                            );
                           },
                         ),
                       ],
                     ),
-                    title: Text(grouping.toString())),
-              );
-            },
-            padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
-            onReorder: (int oldIndex, int newIndex) {
-              bloc.add(QueryGroupingOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex));
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
+                    title: Text(
+                      grouping.toString(),
+                    ),
+                  ),
+                );
+              },
+              padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue,
+              ),
+              onReorder: (int oldIndex, int newIndex) {
+                bloc.add(
+                  QueryGroupingOrderChanged(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) => FieldsSelectionPage(
-                        tables: tables,
-                        onSelected: (fields) {
-                          for (final field in fields) {
-                            bloc.add(QueryGroupingAdded(
-                                grouping: QueryGrouping(
-                                    name: field.name,
-                                    type: GroupingType.grouping)));
-                          }
-                        }),
+                      tables: tables,
+                      onSelected: (fields) {
+                        for (final field in fields) {
+                          bloc.add(
+                            QueryGroupingAdded(
+                              grouping: QueryGrouping(
+                                name: field.name,
+                                type: QueryGroupingType.grouping,
+                                elements: List.empty(growable: true),
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     fullscreenDialog: true,
-                  ));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
-        );
-      }
+                  ),
+                );
+              },
+              tooltip: localizations?.add ?? 'Add',
+              child: const Icon(Icons.add),
+            ),
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }

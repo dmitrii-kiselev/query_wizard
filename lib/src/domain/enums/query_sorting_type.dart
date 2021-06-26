@@ -1,0 +1,1 @@
+enum QuerySortingType { ascending, descending }

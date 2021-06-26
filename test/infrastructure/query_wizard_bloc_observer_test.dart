@@ -33,7 +33,10 @@ void main() {
     const state = '';
     const event = 'event';
     const transition = Transition<String, String>(
-        currentState: state, event: event, nextState: state);
+      currentState: state,
+      event: event,
+      nextState: state,
+    );
 
     observer.onTransition(bloc, transition);
 
@@ -54,9 +57,11 @@ void main() {
 }
 
 QueryWizardBloc buildQueryWizardBloc(
-    QueryWizardRepository queryWizardRepository) {
-  final sourcesBloc =
-      QuerySourcesBloc(queryWizardRepository: queryWizardRepository);
+  QueryWizardRepository queryWizardRepository,
+) {
+  final sourcesBloc = QuerySourcesBloc(
+    queryWizardRepository: queryWizardRepository,
+  );
 
   final tablesBloc = QueryTablesBloc();
   final fieldsBloc = QueryFieldsBloc();
@@ -69,17 +74,18 @@ QueryWizardBloc buildQueryWizardBloc(
   final ordersBloc = QueryOrdersBloc();
   final batchesBloc = QueryBatchesBloc();
   final queryWizardBloc = QueryWizardBloc(
-      sourcesBloc: sourcesBloc,
-      tablesBloc: tablesBloc,
-      fieldsBloc: fieldsBloc,
-      joinsBloc: joinsBloc,
-      aggregatesBloc: aggregatesBloc,
-      groupingsBloc: groupingsBloc,
-      conditionsBloc: conditionsBloc,
-      queriesBloc: queriesBloc,
-      ordersBloc: ordersBloc,
-      batchesBloc: batchesBloc,
-      queryWizardRepository: queryWizardRepository);
+    sourcesBloc: sourcesBloc,
+    tablesBloc: tablesBloc,
+    fieldsBloc: fieldsBloc,
+    joinsBloc: joinsBloc,
+    aggregatesBloc: aggregatesBloc,
+    groupingsBloc: groupingsBloc,
+    conditionsBloc: conditionsBloc,
+    queriesBloc: queriesBloc,
+    ordersBloc: ordersBloc,
+    batchesBloc: batchesBloc,
+    queryWizardRepository: queryWizardRepository,
+  );
 
   return queryWizardBloc;
 }

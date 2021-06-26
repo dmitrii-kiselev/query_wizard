@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_fields_bloc.dart';
 
 abstract class QueryFieldsState extends Equatable {
   final List<QueryElement> fields;

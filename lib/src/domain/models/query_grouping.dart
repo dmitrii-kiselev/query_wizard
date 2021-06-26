@@ -1,45 +1,30 @@
 import 'package:equatable/equatable.dart';
 
-// ignore: must_be_immutable
+import 'package:query_wizard/domain.dart';
+
 class QueryGrouping extends Equatable {
-  QueryGrouping({required this.name, required this.type});
-
-  QueryGrouping.withElements(
-      {required this.name,
-      required this.type,
-      required List<QueryGrouping> elements}) {
-    this.elements.addAll(elements);
-  }
-
-  QueryGrouping.withElementsAndParent(
-      {required this.name,
-      required this.type,
-      required List<QueryGrouping> elements,
-      required QueryGrouping parent}) {
-    this.elements.addAll(elements);
-
-    for (final element in elements) {
-      element.parent = this;
-    }
-
-    // ignore: prefer_initializing_formals
-    this.parent = parent;
-  }
+  const QueryGrouping({
+    required this.name,
+    required this.type,
+    this.parent,
+    required this.elements,
+  });
 
   final String name;
-  final GroupingType type;
-  QueryGrouping? parent;
-  final List<QueryGrouping> elements = List.empty(growable: true);
-
-  bool get hasElements => elements.isNotEmpty;
+  final QueryGroupingType type;
+  final QueryGrouping? parent;
+  final List<QueryGrouping> elements;
 
   @override
-  List<Object> get props => [name, type, parent ?? '', elements];
+  List<Object> get props => [
+        name,
+        type,
+        parent ?? '',
+        elements,
+      ];
 
   @override
   String toString() {
-    return name;
+    return '$name $type';
   }
 }
-
-enum GroupingType { grouping, groupingSet }

@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_sources_bloc.dart';
 
 abstract class QuerySourcesEvent extends Equatable {
   const QuerySourcesEvent();

@@ -26,8 +26,9 @@ void main() {
         },
         expect: () => [
               QueryConditionsInitial(
-                  // ignore: prefer_const_literals_to_create_immutables
-                  conditions: [const QueryCondition.empty()]),
+                // ignore: prefer_const_literals_to_create_immutables
+                conditions: [const QueryCondition.empty()],
+              ),
               const QueryConditionsChanged(conditions: [QueryCondition.empty()])
             ]);
 
@@ -37,7 +38,10 @@ void main() {
           const condition = QueryCondition.empty();
           const conditionAdded = QueryConditionAdded(condition: condition);
           const conditionUpdated = QueryConditionUpdated(
-              index: 0, condition: condition, isCustom: true);
+            index: 0,
+            condition: condition,
+            isCustom: true,
+          );
 
           bloc.add(conditionAdded);
           bloc.add(conditionUpdated);
@@ -51,7 +55,7 @@ void main() {
             QueryConditionsInitial(conditions: expectedConditions),
             QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions)
+            QueryConditionsChanged(conditions: expectedConditions),
           ];
         });
 
@@ -75,7 +79,7 @@ void main() {
             QueryConditionsInitial(conditions: expectedConditions),
             QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions)
+            QueryConditionsChanged(conditions: expectedConditions),
           ];
         });
 
@@ -96,7 +100,7 @@ void main() {
             QueryConditionsInitial(conditions: expectedConditions),
             QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            QueryConditionsChanged(conditions: expectedConditions)
+            QueryConditionsChanged(conditions: expectedConditions),
           ];
         });
 
@@ -105,10 +109,13 @@ void main() {
         act: (QueryConditionsBloc bloc) {
           const condition = QueryCondition.empty();
           const conditionAdded1 = QueryConditionAdded(condition: condition);
-          const conditionAdded2 =
-              QueryConditionAdded(condition: QueryCondition.empty());
-          const conditionOrderChanged =
-              QueryConditionOrderChanged(newIndex: 0, oldIndex: 1);
+          const conditionAdded2 = QueryConditionAdded(
+            condition: QueryCondition.empty(),
+          );
+          const conditionOrderChanged = QueryConditionOrderChanged(
+            newIndex: 0,
+            oldIndex: 1,
+          );
 
           bloc.add(conditionAdded1);
           bloc.add(conditionAdded2);
@@ -117,7 +124,7 @@ void main() {
         expect: () {
           const expectedConditions = [
             QueryCondition.empty(),
-            QueryCondition.empty()
+            QueryCondition.empty(),
           ];
 
           return [
@@ -126,7 +133,7 @@ void main() {
             QueryConditionsInitial(conditions: expectedConditions),
             const QueryConditionsChanged(conditions: expectedConditions),
             QueryConditionsInitial(conditions: expectedConditions),
-            const QueryConditionsChanged(conditions: expectedConditions)
+            const QueryConditionsChanged(conditions: expectedConditions),
           ];
         });
   });

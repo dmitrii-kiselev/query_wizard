@@ -5,7 +5,10 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/domain.dart';
 
 class ItemValue {
-  const ItemValue({required this.value, required this.checked});
+  const ItemValue({
+    required this.value,
+    required this.checked,
+  });
 
   final QueryElement value;
   final bool checked;
@@ -33,31 +36,35 @@ class SourcesTreeView extends StatelessWidget {
   final QueryElementCallback? onRemove;
 
   List<Widget> _getChildList(List<QueryElement> items) {
-    return items.map((item) {
-      if (item.type == QueryElementType.table) {
-        return Container(
-          margin: const EdgeInsets.only(left: 8),
-          child: TreeViewChild(
+    return items.map(
+      (item) {
+        if (item.type == QueryElementType.table) {
+          return Container(
+            margin: const EdgeInsets.only(left: 8),
+            child: TreeViewChild(
               parent: item,
               children: item.elements,
               onTap: onTap,
               onLongPress: onLongPress,
               onCopy: onCopy,
               onEdit: onEdit,
-              onRemove: onRemove),
-        );
-      }
-      return Container(
-        margin: const EdgeInsets.only(left: 4.0),
-        child: TreeItem(
+              onRemove: onRemove,
+            ),
+          );
+        }
+        return Container(
+          margin: const EdgeInsets.only(left: 4.0),
+          child: TreeItem(
             item: item,
             onTap: onTap,
             onLongPress: onLongPress,
             onCopy: onCopy,
             onEdit: onEdit,
-            onRemove: onRemove),
-      );
-    }).toList();
+            onRemove: onRemove,
+          ),
+        );
+      },
+    ).toList();
   }
 
   @override
@@ -118,33 +125,36 @@ class TreeViewChild extends HookWidget {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TreeItem(
-            item: parent,
-            onTap: (item) {
-              if (item.value.type == QueryElementType.table) {
-                toggleExpanded();
-              }
+          item: parent,
+          onTap: (item) {
+            if (item.value.type == QueryElementType.table) {
+              toggleExpanded();
+            }
 
-              if (onTap != null) {
-                onTap!(item);
-              }
-            },
-            onLongPress: onLongPress,
-            onCopy: onCopy,
-            onEdit: onEdit,
-            onRemove: onRemove),
+            if (onTap != null) {
+              onTap!(item);
+            }
+          },
+          onLongPress: onLongPress,
+          onCopy: onCopy,
+          onEdit: onEdit,
+          onRemove: onRemove,
+        ),
         AnimatedContainer(
           duration: const Duration(milliseconds: 400),
           child: isExpanded.value ?? false
               ? Column(
                   mainAxisSize: MainAxisSize.min,
                   children: children
-                      .map((s) => TreeItem(
-                          item: s,
-                          onTap: onTap,
-                          onLongPress: onLongPress,
-                          onCopy: onCopy,
-                          onEdit: onEdit,
-                          onRemove: onRemove))
+                      .map(
+                        (s) => TreeItem(
+                            item: s,
+                            onTap: onTap,
+                            onLongPress: onLongPress,
+                            onCopy: onCopy,
+                            onEdit: onEdit,
+                            onRemove: onRemove),
+                      )
                       .toList(),
                 )
               : const Offstage(),
@@ -191,32 +201,36 @@ class TreeItem extends HookWidget {
   List<Widget> _getActions(QueryWizardLocalizations? localizations) {
     return [
       Visibility(
-          visible: _isRoot() && onCopy != null,
-          child: IconButton(
-            icon: const Icon(Icons.copy_rounded),
-            tooltip: localizations?.copy ?? 'Copy',
-            onPressed: () => onCopy!(item),
-          )),
+        visible: _isRoot() && onCopy != null,
+        child: IconButton(
+          icon: const Icon(Icons.copy_rounded),
+          tooltip: localizations?.copy ?? 'Copy',
+          onPressed: () => onCopy!(item),
+        ),
+      ),
       Visibility(
-          visible: _isRoot() && onEdit != null,
-          child: IconButton(
-            icon: const Icon(Icons.edit_rounded),
-            tooltip: localizations?.edit ?? 'Edit',
-            onPressed: () => onEdit!(item),
-          )),
+        visible: _isRoot() && onEdit != null,
+        child: IconButton(
+          icon: const Icon(Icons.edit_rounded),
+          tooltip: localizations?.edit ?? 'Edit',
+          onPressed: () => onEdit!(item),
+        ),
+      ),
       Visibility(
-          visible: _isRoot() && onRemove != null,
-          child: IconButton(
-            icon: const Icon(Icons.highlight_remove_rounded),
-            tooltip: localizations?.remove ?? 'Remove',
-            onPressed: () => onRemove!(item),
-          )),
+        visible: _isRoot() && onRemove != null,
+        child: IconButton(
+          icon: const Icon(Icons.highlight_remove_rounded),
+          tooltip: localizations?.remove ?? 'Remove',
+          onPressed: () => onRemove!(item),
+        ),
+      ),
       Visibility(
-          visible: _isRoot() && onRemove != null,
-          child: IconButton(
-            icon: const Icon(Icons.navigate_next),
-            onPressed: onPressedNext,
-          ))
+        visible: _isRoot() && onRemove != null,
+        child: IconButton(
+          icon: const Icon(Icons.navigate_next),
+          onPressed: onPressedNext,
+        ),
+      )
     ];
   }
 
@@ -242,7 +256,9 @@ class TreeItem extends HookWidget {
           children: actions,
         ),
         onTap: () {
-          onTap!(ItemValue(value: item, checked: !selected.value));
+          onTap!(
+            ItemValue(value: item, checked: !selected.value),
+          );
           if (!_isRoot()) {
             selected.value = !selected.value;
           }
@@ -250,7 +266,9 @@ class TreeItem extends HookWidget {
         onLongPress: () {
           if (_isRoot()) {
             if (onLongPress != null) {
-              onLongPress!(ItemValue(value: item, checked: !selected.value));
+              onLongPress!(
+                ItemValue(value: item, checked: !selected.value),
+              );
             }
 
             selected.value = !selected.value;

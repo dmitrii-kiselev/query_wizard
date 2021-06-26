@@ -24,7 +24,7 @@ void main() {
         },
         expect: () => [
               QueryBatchesInitial(queryBatches: [QueryBatch.empty()]),
-              QueryBatchesChanged(queryBatches: [QueryBatch.empty()])
+              QueryBatchesChanged(queryBatches: [QueryBatch.empty()]),
             ]);
 
     blocTest('copies query batch when QueryBatchCopied is added',
@@ -38,13 +38,16 @@ void main() {
           bloc.add(batchCopied);
         },
         expect: () {
-          final expectedBatches = [QueryBatch.empty(), QueryBatch.empty()];
+          final expectedBatches = [
+            QueryBatch.empty(),
+            QueryBatch.empty(),
+          ];
 
           return [
             QueryBatchesInitial(queryBatches: expectedBatches),
             QueryBatchesChanged(queryBatches: expectedBatches),
             QueryBatchesInitial(queryBatches: expectedBatches),
-            QueryBatchesChanged(queryBatches: expectedBatches)
+            QueryBatchesChanged(queryBatches: expectedBatches),
           ];
         });
 
@@ -53,6 +56,7 @@ void main() {
         act: (QueryBatchesBloc bloc) {
           final queryBatch = QueryBatch.empty();
           final batchAdded = QueryBatchAdded(queryBatch: queryBatch);
+
           const batchDeleted = QueryBatchDeleted(index: 0);
 
           bloc.add(batchAdded);
@@ -65,7 +69,7 @@ void main() {
             QueryBatchesInitial(queryBatches: expectedBatches),
             QueryBatchesChanged(queryBatches: expectedBatches),
             QueryBatchesInitial(queryBatches: expectedBatches),
-            QueryBatchesChanged(queryBatches: expectedBatches)
+            QueryBatchesChanged(queryBatches: expectedBatches),
           ];
         });
 
@@ -75,15 +79,21 @@ void main() {
           final queryBatch = QueryBatch.empty();
           final batchAdded1 = QueryBatchAdded(queryBatch: queryBatch);
           final batchAdded2 = QueryBatchAdded(queryBatch: QueryBatch.empty());
-          const batchOrderChanged =
-              QueryBatchOrderChanged(newIndex: 0, oldIndex: 1);
+
+          const batchOrderChanged = QueryBatchOrderChanged(
+            newIndex: 0,
+            oldIndex: 1,
+          );
 
           bloc.add(batchAdded1);
           bloc.add(batchAdded2);
           bloc.add(batchOrderChanged);
         },
         expect: () {
-          final expectedBatches = [QueryBatch.empty(), QueryBatch.empty()];
+          final expectedBatches = [
+            QueryBatch.empty(),
+            QueryBatch.empty(),
+          ];
 
           return [
             QueryBatchesInitial(queryBatches: expectedBatches),
@@ -91,7 +101,7 @@ void main() {
             QueryBatchesInitial(queryBatches: expectedBatches),
             QueryBatchesChanged(queryBatches: expectedBatches),
             QueryBatchesInitial(queryBatches: expectedBatches),
-            QueryBatchesChanged(queryBatches: expectedBatches)
+            QueryBatchesChanged(queryBatches: expectedBatches),
           ];
         });
   });

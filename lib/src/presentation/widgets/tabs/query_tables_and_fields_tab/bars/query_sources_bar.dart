@@ -17,34 +17,45 @@ class QuerySourcesBar extends StatelessWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
-        builder: (context, state) {
-      if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
-        return Scaffold(
-          body: SourcesTreeView(
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QuerySourcesLoadSuccess || state is QuerySourcesChanged) {
+          return Scaffold(
+            body: SourcesTreeView(
               items: state.sources,
               onTap: (item) {
                 if (item.value.type == QueryElementType.column &&
                     item.checked) {
-                  fieldsBloc.add(QueryFieldAdded(field: item.value));
+                  fieldsBloc.add(
+                    QueryFieldAdded(field: item.value),
+                  );
                 }
               },
               onLongPress: (item) {
                 if (item.value.type == QueryElementType.table && item.checked) {
-                  tablesBloc.add(QueryTableAdded(table: item.value));
+                  tablesBloc.add(
+                    QueryTableAdded(table: item.value),
+                  );
                 }
-              }),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              const event = QuerySourcesRequested();
-              sourcesBloc.add(event);
-            },
-            tooltip: localizations?.refresh ?? 'Refresh',
-            child: const Icon(Icons.update_rounded),
-          ),
-        );
-      }
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                const event = QuerySourcesRequested();
+                sourcesBloc.add(event);
+              },
+              tooltip: localizations?.refresh ?? 'Refresh',
+              child: const Icon(Icons.update_rounded),
+            ),
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

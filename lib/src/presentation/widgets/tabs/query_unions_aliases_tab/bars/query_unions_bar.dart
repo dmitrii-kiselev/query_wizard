@@ -13,17 +13,21 @@ class QueryUnionsBar extends StatelessWidget {
     final bloc = BlocProvider.of<QueriesBloc>(context);
     final localizations = QueryWizardLocalizations.of(context);
 
-    return BlocBuilder<QueriesBloc, QueriesState>(builder: (context, state) {
-      if (state is QueriesChanged) {
-        return Scaffold(
-          body: ReorderableListView.builder(
-            itemCount: state.queries.length,
-            itemBuilder: (context, index) {
-              final query = state.queries[index];
+    return BlocBuilder<QueriesBloc, QueriesState>(
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueriesChanged) {
+          return Scaffold(
+            body: ReorderableListView.builder(
+              itemCount: state.queries.length,
+              itemBuilder: (context, index) {
+                final query = state.queries[index];
 
-              return Card(
-                key: ValueKey('$index'),
-                child: ListTile(
+                return Card(
+                  key: ValueKey('$index'),
+                  child: ListTile(
                     leading: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -32,39 +36,56 @@ class QueryUnionsBar extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations?.copy ?? 'Copy',
                           onPressed: () {
-                            bloc.add(QueryCopied(query: query));
+                            bloc.add(
+                              QueryCopied(query: query),
+                            );
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(QueryDeleted(index: index));
+                            bloc.add(
+                              QueryDeleted(index: index),
+                            );
                           },
                         ),
                       ],
                     ),
-                    title: Text(query.name)),
-              );
-            },
-            padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
-            onReorder: (int oldIndex, int newIndex) {
-              bloc.add(
-                  QueryOrderChanged(oldIndex: oldIndex, newIndex: newIndex));
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              bloc.add(QueryAdded(query: Query.empty()));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
-        );
-      }
+                    title: Text(query.name),
+                  ),
+                );
+              },
+              padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue,
+              ),
+              onReorder: (int oldIndex, int newIndex) {
+                bloc.add(
+                  QueryOrderChanged(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                bloc.add(
+                  QueryAdded(
+                    query: Query.empty(),
+                  ),
+                );
+              },
+              tooltip: localizations?.add ?? 'Add',
+              child: const Icon(Icons.add),
+            ),
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 }

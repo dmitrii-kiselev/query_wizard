@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_tables_bloc.dart';
 
 abstract class QueryTablesEvent extends Equatable {
   const QueryTablesEvent();
@@ -56,8 +54,10 @@ class QueryTableDeleted extends QueryTablesEvent {
 }
 
 class QueryTableOrderChanged extends QueryTablesEvent {
-  const QueryTableOrderChanged(
-      {required this.oldIndex, required this.newIndex});
+  const QueryTableOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

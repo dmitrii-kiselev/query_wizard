@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+
+part 'query_batches_event.dart';
+
+part 'query_batches_state.dart';
 
 @lazySingleton
 class QueryBatchesBloc extends Bloc<QueryBatchesEvent, QueryBatchesState> {
@@ -26,30 +30,35 @@ class QueryBatchesBloc extends Bloc<QueryBatchesEvent, QueryBatchesState> {
   }
 
   Stream<QueryBatchesState> _mapQueryBatchesInitializedToState(
-      QueryBatchesInitialized event) async* {
+    QueryBatchesInitialized event,
+  ) async* {
     yield QueryBatchesChanged(queryBatches: event.queryBatches);
   }
 
   Stream<QueryBatchesState> _mapQueryBatchAddedToState(
-      QueryBatchAdded event) async* {
+    QueryBatchAdded event,
+  ) async* {
     state.queryBatches.add(event.queryBatch);
     yield QueryBatchesChanged(queryBatches: state.queryBatches);
   }
 
   Stream<QueryBatchesState> _mapQueryBatchCopiedToState(
-      QueryBatchCopied event) async* {
+    QueryBatchCopied event,
+  ) async* {
     state.queryBatches.add(event.queryBatch.copy());
     yield QueryBatchesChanged(queryBatches: state.queryBatches);
   }
 
   Stream<QueryBatchesState> _mapQueryBatchDeletedToState(
-      QueryBatchDeleted event) async* {
+    QueryBatchDeleted event,
+  ) async* {
     state.queryBatches.removeAt(event.index);
     yield QueryBatchesChanged(queryBatches: state.queryBatches);
   }
 
   Stream<QueryBatchesState> _mapQueryBatchOrderChangedToState(
-      QueryBatchOrderChanged event) async* {
+    QueryBatchOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

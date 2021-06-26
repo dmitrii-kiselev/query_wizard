@@ -27,7 +27,7 @@ void main() {
         expect: () => [
               // ignore: prefer_const_literals_to_create_immutables
               QueryJoinsInitial(joins: [const QueryJoin.empty()]),
-              const QueryJoinsChanged(joins: [QueryJoin.empty()])
+              const QueryJoinsChanged(joins: [QueryJoin.empty()]),
             ]);
 
     blocTest('changes join when QueryJoinUpdated is added',
@@ -35,22 +35,25 @@ void main() {
         act: (QueryJoinsBloc bloc) {
           const join = QueryJoin.empty();
           const joinAdded = QueryJoinAdded(join: join);
-          const joinUpdated =
-              QueryJoinUpdated(index: 0, join: join, isLeftAll: true);
+          const joinUpdated = QueryJoinUpdated(
+            index: 0,
+            join: join,
+            isLeftAll: true,
+          );
 
           bloc.add(joinAdded);
           bloc.add(joinUpdated);
         },
         expect: () {
           final expectedJoins = [
-            const QueryJoin.empty().copyWith(isLeftAll: true)
+            const QueryJoin.empty().copyWith(isLeftAll: true),
           ];
 
           return [
             QueryJoinsInitial(joins: expectedJoins),
             QueryJoinsChanged(joins: expectedJoins),
             QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins)
+            QueryJoinsChanged(joins: expectedJoins),
           ];
         });
 
@@ -67,14 +70,14 @@ void main() {
         expect: () {
           final expectedJoins = [
             const QueryJoin.empty(),
-            const QueryJoin.empty()
+            const QueryJoin.empty(),
           ];
 
           return [
             QueryJoinsInitial(joins: expectedJoins),
             QueryJoinsChanged(joins: expectedJoins),
             QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins)
+            QueryJoinsChanged(joins: expectedJoins),
           ];
         });
 
@@ -95,7 +98,7 @@ void main() {
             QueryJoinsInitial(joins: expectedJoins),
             QueryJoinsChanged(joins: expectedJoins),
             QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins)
+            QueryJoinsChanged(joins: expectedJoins),
           ];
         });
 
@@ -105,8 +108,10 @@ void main() {
           const join = QueryJoin.empty();
           const joinAdded1 = QueryJoinAdded(join: join);
           const joinAdded2 = QueryJoinAdded(join: QueryJoin.empty());
-          const joinOrderChanged =
-              QueryJoinOrderChanged(newIndex: 0, oldIndex: 1);
+          const joinOrderChanged = QueryJoinOrderChanged(
+            newIndex: 0,
+            oldIndex: 1,
+          );
 
           bloc.add(joinAdded1);
           bloc.add(joinAdded2);
@@ -115,7 +120,7 @@ void main() {
         expect: () {
           final expectedJoins = [
             const QueryJoin.empty(),
-            const QueryJoin.empty()
+            const QueryJoin.empty(),
           ];
 
           return [
@@ -124,7 +129,7 @@ void main() {
             QueryJoinsInitial(joins: expectedJoins),
             QueryJoinsChanged(joins: expectedJoins),
             QueryJoinsInitial(joins: expectedJoins),
-            QueryJoinsChanged(joins: expectedJoins)
+            QueryJoinsChanged(joins: expectedJoins),
           ];
         });
   });

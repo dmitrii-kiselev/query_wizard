@@ -7,13 +7,16 @@ import 'package:query_wizard/infrastructure.dart';
 import 'package:query_wizard/presentation.dart';
 
 void main() {
-  testWidgets('Query Wizard initialized smoke test',
-      (WidgetTester tester) async {
+  testWidgets('Query Wizard initialized smoke test', (
+    WidgetTester tester,
+  ) async {
     await GetIt.instance.reset();
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-        const QueryWizard(), const Duration(milliseconds: 1000));
+      const QueryWizard(),
+      const Duration(milliseconds: 1000),
+    );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     expect(find.text('Query Wizard'), findsOneWidget);
@@ -27,13 +30,16 @@ void main() {
     expect(find.byKey(const ValueKey('Query batch')), findsOneWidget);
   });
 
-  testWidgets('Query Wizard not initialized smoke test',
-      (WidgetTester tester) async {
+  testWidgets('Query Wizard not initialized smoke test', (
+    WidgetTester tester,
+  ) async {
     await GetIt.instance.reset();
     configureDependencies(Environment.test);
 
     await tester.pumpWidget(
-        const QueryWizard(), const Duration(milliseconds: 1000));
+      const QueryWizard(),
+      const Duration(milliseconds: 1000),
+    );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));
 
     expect(find.text('Query Wizard'), findsNothing);
@@ -45,7 +51,9 @@ void main() {
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-        const QueryWizard(), const Duration(milliseconds: 1000));
+      const QueryWizard(),
+      const Duration(milliseconds: 1000),
+    );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));
     await tester.tap(find.byKey(const ValueKey('Joins')));
 

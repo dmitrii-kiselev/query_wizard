@@ -10,7 +10,9 @@ void main() {
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-        const QueryWizard(), const Duration(milliseconds: 1000));
+      const QueryWizard(),
+      const Duration(milliseconds: 1000),
+    );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));
     await tester.tap(find.byKey(const ValueKey('Query batch')));
 

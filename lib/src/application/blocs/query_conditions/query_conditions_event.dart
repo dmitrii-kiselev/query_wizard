@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_conditions_bloc.dart';
 
 abstract class QueryConditionsEvent extends Equatable {
   const QueryConditionsEvent();
@@ -25,14 +23,15 @@ class QueryConditionAdded extends QueryConditionsEvent {
 }
 
 class QueryConditionUpdated extends QueryConditionsEvent {
-  const QueryConditionUpdated(
-      {required this.index,
-      required this.condition,
-      this.isCustom,
-      this.leftField,
-      this.logicalCompareType,
-      this.rightField,
-      this.customCondition});
+  const QueryConditionUpdated({
+    required this.index,
+    required this.condition,
+    this.isCustom,
+    this.leftField,
+    this.logicalCompareType,
+    this.rightField,
+    this.customCondition,
+  });
 
   final int index;
   final QueryCondition condition;

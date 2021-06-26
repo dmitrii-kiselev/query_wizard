@@ -17,17 +17,20 @@ class QueryOrdersTab extends HookWidget {
     final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QueryOrdersBloc, QueryOrdersState>(
-        builder: (context, state) {
-      if (state is QueryOrdersChanged) {
-        return Scaffold(
-          body: ReorderableListView.builder(
-            itemCount: state.orders.length,
-            itemBuilder: (context, index) {
-              final grouping = state.orders[index];
+      builder: (
+        context,
+        state,
+      ) {
+        if (state is QueryOrdersChanged) {
+          return Scaffold(
+            body: ReorderableListView.builder(
+              itemCount: state.orders.length,
+              itemBuilder: (context, index) {
+                final grouping = state.orders[index];
 
-              return Card(
-                key: ValueKey('$index'),
-                child: ListTile(
+                return Card(
+                  key: ValueKey('$index'),
+                  child: ListTile(
                     leading: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -36,7 +39,9 @@ class QueryOrdersTab extends HookWidget {
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations?.remove ?? 'Remove',
                           onPressed: () {
-                            bloc.add(QueryOrderDeleted(index: index));
+                            bloc.add(
+                              QueryOrderDeleted(index: index),
+                            );
                           },
                         ),
                       ],
@@ -53,47 +58,64 @@ class QueryOrdersTab extends HookWidget {
                         ),
                       );
                     },
-                    title: Text(grouping.toString())),
-              );
-            },
-            padding: const EdgeInsets.all(
-                QueryWizardConstants.defaultEdgeInsetsAllValue),
-            onReorder: (int oldIndex, int newIndex) {
-              bloc.add(QueryOrderOrderChanged(
-                  oldIndex: oldIndex, newIndex: newIndex));
-            },
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
+                    title: Text(
+                      grouping.toString(),
+                    ),
+                  ),
+                );
+              },
+              padding: const EdgeInsets.all(
+                QueryWizardConstants.defaultEdgeInsetsAllValue,
+              ),
+              onReorder: (int oldIndex, int newIndex) {
+                bloc.add(
+                  QueryOrderOrderChanged(
+                    oldIndex: oldIndex,
+                    newIndex: newIndex,
+                  ),
+                );
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                     builder: (context) => FieldsSelectionPage(
-                        tables: tables,
-                        onSelected: (fields) {
-                          for (final field in fields) {
-                            bloc.add(QueryOrderAdded(
-                                order: QueryOrder(
-                                    field: field.name,
-                                    type: QuerySortingType.ascending)));
-                          }
-                        }),
+                      tables: tables,
+                      onSelected: (fields) {
+                        for (final field in fields) {
+                          bloc.add(
+                            QueryOrderAdded(
+                              order: QueryOrder(
+                                  field: field.name,
+                                  type: QuerySortingType.ascending),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                     fullscreenDialog: true,
-                  ));
-            },
-            tooltip: localizations?.add ?? 'Add',
-            child: const Icon(Icons.add),
-          ),
-        );
-      }
+                  ),
+                );
+              },
+              tooltip: localizations?.add ?? 'Add',
+              child: const Icon(Icons.add),
+            ),
+          );
+        }
 
-      return const Center(child: CircularProgressIndicator());
-    });
+        return const Center(child: CircularProgressIndicator());
+      },
+    );
   }
 }
 
 class _ChangeQueryOrderDialog extends HookWidget {
-  const _ChangeQueryOrderDialog({required this.index, required this.bloc});
+  const _ChangeQueryOrderDialog({
+    required this.index,
+    required this.bloc,
+  });
 
   final int index;
   final QueryOrdersBloc bloc;
@@ -127,10 +149,13 @@ class _ChangeQueryOrderDialog extends HookWidget {
         TextButton(
           onPressed: () {
             final newOrder = QueryOrder(
-                field: sorting.field,
-                type: type.value ?? QuerySortingType.ascending);
+              field: sorting.field,
+              type: type.value ?? QuerySortingType.ascending,
+            );
 
-            bloc.add(QueryOrderUpdated(index: index, order: newOrder));
+            bloc.add(
+              QueryOrderUpdated(index: index, order: newOrder),
+            );
             Navigator.pop(context);
           },
           child: Text(localizations?.save ?? 'Save'),

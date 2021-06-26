@@ -1,7 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
+
+part 'query_fields_event.dart';
+
+part 'query_fields_state.dart';
 
 @lazySingleton
 class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
@@ -27,18 +32,21 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
   }
 
   Stream<QueryFieldsState> _mapQueryFieldsInitializedToState(
-      QueryFieldsInitialized event) async* {
+    QueryFieldsInitialized event,
+  ) async* {
     yield QueryFieldsChanged(fields: event.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldAddedToState(
-      QueryFieldAdded event) async* {
+    QueryFieldAdded event,
+  ) async* {
     state.fields.add(event.field);
     yield QueryFieldsChanged(fields: state.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldUpdatedToState(
-      QueryFieldUpdated event) async* {
+    QueryFieldUpdated event,
+  ) async* {
     state.fields.removeAt(event.index);
     state.fields.insert(event.index, event.field);
 
@@ -46,19 +54,22 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
   }
 
   Stream<QueryFieldsState> _mapQueryFieldCopiedToState(
-      QueryFieldCopied event) async* {
+    QueryFieldCopied event,
+  ) async* {
     state.fields.add(event.field);
     yield QueryFieldsChanged(fields: state.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldDeletedToState(
-      QueryFieldDeleted event) async* {
+    QueryFieldDeleted event,
+  ) async* {
     state.fields.removeAt(event.index);
     yield QueryFieldsChanged(fields: state.fields);
   }
 
   Stream<QueryFieldsState> _mapQueryFieldOrderChangedToState(
-      QueryFieldOrderChanged event) async* {
+    QueryFieldOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

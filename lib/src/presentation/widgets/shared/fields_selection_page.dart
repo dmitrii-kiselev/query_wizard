@@ -8,17 +8,20 @@ import 'package:query_wizard/presentation.dart';
 typedef QueryElementListCallback = Function(List<QueryElement>);
 
 class FieldsSelectionPage extends HookWidget {
-  const FieldsSelectionPage(
-      {Key? key, required this.tables, required this.onSelected})
-      : super(key: key);
+  const FieldsSelectionPage({
+    Key? key,
+    required this.tables,
+    required this.onSelected,
+  }) : super(key: key);
 
   final List<QueryElement> tables;
   final QueryElementListCallback onSelected;
 
   @override
   Widget build(BuildContext context) {
-    final selectedFields =
-        useState<List<QueryElement>>(List.empty(growable: true));
+    final selectedFields = useState<List<QueryElement>>(
+      List.empty(growable: true),
+    );
 
     final localizations = QueryWizardLocalizations.of(context);
     final theme = Theme.of(context);

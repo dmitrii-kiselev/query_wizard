@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+
+part 'query_joins_event.dart';
+
+part 'query_joins_state.dart';
 
 @lazySingleton
 class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
@@ -28,33 +32,38 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
   }
 
   Stream<QueryJoinsState> _mapQueryJoinsInitializedToState(
-      QueryJoinsInitialized event) async* {
+    QueryJoinsInitialized event,
+  ) async* {
     yield QueryJoinsChanged(joins: event.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinAddedToState(
-      QueryJoinAdded event) async* {
+    QueryJoinAdded event,
+  ) async* {
     state.joins.add(event.join);
     yield QueryJoinsChanged(joins: state.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinUpdatedToState(
-      QueryJoinUpdated event) async* {
+    QueryJoinUpdated event,
+  ) async* {
     final condition = QueryCondition(
-        isCustom: event.condition?.isCustom ?? event.join.condition.isCustom,
-        leftField: event.condition?.leftField ?? event.join.condition.leftField,
-        logicalCompareType: event.condition?.logicalCompareType ??
-            event.join.condition.logicalCompareType,
-        rightField:
-            event.condition?.rightField ?? event.join.condition.rightField,
-        customCondition: event.condition?.customCondition ??
-            event.join.condition.customCondition);
+      isCustom: event.condition?.isCustom ?? event.join.condition.isCustom,
+      leftField: event.condition?.leftField ?? event.join.condition.leftField,
+      logicalCompareType: event.condition?.logicalCompareType ??
+          event.join.condition.logicalCompareType,
+      rightField:
+          event.condition?.rightField ?? event.join.condition.rightField,
+      customCondition: event.condition?.customCondition ??
+          event.join.condition.customCondition,
+    );
     final join = QueryJoin(
-        leftTable: event.leftTable ?? event.join.leftTable,
-        isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
-        rightTable: event.rightTable ?? event.join.rightTable,
-        isRightAll: event.isRightAll ?? event.join.isRightAll,
-        condition: event.condition ?? condition);
+      leftTable: event.leftTable ?? event.join.leftTable,
+      isLeftAll: event.isLeftAll ?? event.join.isLeftAll,
+      rightTable: event.rightTable ?? event.join.rightTable,
+      isRightAll: event.isRightAll ?? event.join.isRightAll,
+      condition: event.condition ?? condition,
+    );
 
     state.joins.removeAt(event.index);
     state.joins.insert(event.index, join);
@@ -63,19 +72,22 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
   }
 
   Stream<QueryJoinsState> _mapQueryJoinCopiedToState(
-      QueryJoinCopied event) async* {
+    QueryJoinCopied event,
+  ) async* {
     state.joins.add(event.join.copy());
     yield QueryJoinsChanged(joins: state.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinDeletedToState(
-      QueryJoinDeleted event) async* {
+    QueryJoinDeleted event,
+  ) async* {
     state.joins.removeAt(event.index);
     yield QueryJoinsChanged(joins: state.joins);
   }
 
   Stream<QueryJoinsState> _mapQueryJoinOrderChangedToState(
-      QueryJoinOrderChanged event) async* {
+    QueryJoinOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

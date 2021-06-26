@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_tables_bloc.dart';
 
 abstract class QueryTablesState extends Equatable {
   const QueryTablesState({required this.tables});

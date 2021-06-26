@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+
+part 'query_aggregates_event.dart';
+
+part 'query_aggregates_state.dart';
 
 @lazySingleton
 class QueryAggregatesBloc
@@ -11,7 +15,8 @@ class QueryAggregatesBloc
 
   @override
   Stream<QueryAggregatesState> mapEventToState(
-      QueryAggregatesEvent event) async* {
+    QueryAggregatesEvent event,
+  ) async* {
     yield QueryAggregatesInitial(aggregates: state.aggregates);
 
     if (event is QueryAggregatesInitialized) {
@@ -28,18 +33,21 @@ class QueryAggregatesBloc
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregatesInitializedToState(
-      QueryAggregatesInitialized event) async* {
+    QueryAggregatesInitialized event,
+  ) async* {
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregateAddedToState(
-      QueryAggregateAdded event) async* {
+    QueryAggregateAdded event,
+  ) async* {
     state.aggregates.add(event.aggregate);
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregateUpdatedToState(
-      QueryAggregateUpdated event) async* {
+    QueryAggregateUpdated event,
+  ) async* {
     state.aggregates.removeAt(event.index);
     state.aggregates.insert(event.index, event.aggregate);
 
@@ -47,13 +55,15 @@ class QueryAggregatesBloc
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregateDeletedToState(
-      QueryAggregateDeleted event) async* {
+    QueryAggregateDeleted event,
+  ) async* {
     state.aggregates.removeAt(event.index);
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 
   Stream<QueryAggregatesState> _mapQueryAggregateOrderChangedToState(
-      QueryAggregateOrderChanged event) async* {
+    QueryAggregateOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;

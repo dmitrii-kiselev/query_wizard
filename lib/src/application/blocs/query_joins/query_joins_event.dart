@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_joins_bloc.dart';
 
 abstract class QueryJoinsEvent extends Equatable {
   const QueryJoinsEvent();
@@ -25,14 +23,15 @@ class QueryJoinAdded extends QueryJoinsEvent {
 }
 
 class QueryJoinUpdated extends QueryJoinsEvent {
-  const QueryJoinUpdated(
-      {required this.index,
-      required this.join,
-      this.leftTable,
-      this.isLeftAll,
-      this.rightTable,
-      this.isRightAll,
-      this.condition});
+  const QueryJoinUpdated({
+    required this.index,
+    required this.join,
+    this.leftTable,
+    this.isLeftAll,
+    this.rightTable,
+    this.isRightAll,
+    this.condition,
+  });
 
   final int index;
   final QueryJoin join;
@@ -65,7 +64,10 @@ class QueryJoinDeleted extends QueryJoinsEvent {
 }
 
 class QueryJoinOrderChanged extends QueryJoinsEvent {
-  const QueryJoinOrderChanged({required this.oldIndex, required this.newIndex});
+  const QueryJoinOrderChanged({
+    required this.oldIndex,
+    required this.newIndex,
+  });
 
   final int oldIndex;
   final int newIndex;

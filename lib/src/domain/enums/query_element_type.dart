@@ -1,0 +1,1 @@
+enum QueryElementType { table, column }

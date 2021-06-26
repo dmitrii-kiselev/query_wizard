@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_batches_bloc.dart';
 
 abstract class QueryBatchesState extends Equatable {
   const QueryBatchesState({required this.queryBatches});

@@ -1,6 +1,4 @@
-import 'package:equatable/equatable.dart';
-
-import 'package:query_wizard/domain.dart';
+part of 'query_aggregates_bloc.dart';
 
 abstract class QueryAggregatesState extends Equatable {
   const QueryAggregatesState({required this.aggregates});

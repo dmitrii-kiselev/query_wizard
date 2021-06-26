@@ -1,8 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+
+part 'query_conditions_event.dart';
+
+part 'query_conditions_state.dart';
 
 @lazySingleton
 class QueryConditionsBloc
@@ -43,13 +47,13 @@ class QueryConditionsBloc
   Stream<QueryConditionsState> _mapQueryConditionUpdatedToState(
       QueryConditionUpdated event) async* {
     final condition = QueryCondition(
-        isCustom: event.isCustom ?? event.condition.isCustom,
-        leftField: event.leftField ?? event.condition.leftField,
-        logicalCompareType:
-            event.logicalCompareType ?? event.condition.logicalCompareType,
-        rightField: event.rightField ?? event.condition.rightField,
-        customCondition:
-            event.customCondition ?? event.condition.customCondition);
+      isCustom: event.isCustom ?? event.condition.isCustom,
+      leftField: event.leftField ?? event.condition.leftField,
+      logicalCompareType:
+          event.logicalCompareType ?? event.condition.logicalCompareType,
+      rightField: event.rightField ?? event.condition.rightField,
+      customCondition: event.customCondition ?? event.condition.customCondition,
+    );
 
     state.conditions.removeAt(event.index);
     state.conditions.insert(event.index, condition);
@@ -58,19 +62,22 @@ class QueryConditionsBloc
   }
 
   Stream<QueryConditionsState> _mapQueryConditionCopiedToState(
-      QueryConditionCopied event) async* {
+    QueryConditionCopied event,
+  ) async* {
     state.conditions.add(event.condition.copy());
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionDeletedToState(
-      QueryConditionDeleted event) async* {
+    QueryConditionDeleted event,
+  ) async* {
     state.conditions.removeAt(event.index);
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 
   Stream<QueryConditionsState> _mapQueryConditionOrderChangedToState(
-      QueryConditionOrderChanged event) async* {
+    QueryConditionOrderChanged event,
+  ) async* {
     var newIndex = event.newIndex;
     if (event.oldIndex < newIndex) {
       newIndex -= 1;
