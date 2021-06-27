@@ -1,44 +1,58 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:uuid/uuid.dart';
 
-import 'package:query_wizard/blocs.dart';
-import 'package:query_wizard/models.dart';
+import 'package:query_wizard/application.dart';
+import 'package:query_wizard/domain.dart';
 
 void main() {
   group('QueryWizardState', () {
     test('QueryWizardInitial initialized', () {
-      final event = QueryWizardInitial();
+      const event = QueryWizardInitial();
 
       expect(event.props, equals([]));
     });
 
     test('QueryWizardLoadInProgress initialized', () {
-      final event = QueryWizardLoadInProgress();
+      const event = QueryWizardLoadInProgress();
 
       expect(event.props, equals([]));
     });
 
-    test('QueryWizardLoadSuccess initialized', () {
+    test('QueryWizardInitialized initialized', () {
       final columns = [
-        DbElement(name: 'Field 1', nodeType: DbNodeType.column),
-        DbElement(name: 'Field 2', nodeType: DbNodeType.column),
-        DbElement(name: 'Field 3', nodeType: DbNodeType.column),
+        QueryElement(
+          id: const Uuid().v1(),
+          name: 'Field 1',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
+        QueryElement(
+          id: const Uuid().v1(),
+          name: 'Field 2',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
+        QueryElement(
+          id: const Uuid().v1(),
+          name: 'Field 3',
+          type: QueryElementType.column,
+          elements: List<QueryElement>.empty(growable: true),
+        ),
       ];
-      final event = QuerySourcesLoadSuccess(sources: columns);
+      final event = QuerySourcesInitialized(sources: columns);
 
       expect(event.props, equals([event.sources]));
     });
 
     test('QueryWizardLoadFailure initialized', () {
-      final event = QueryWizardLoadFailure();
-
+      const event = QueryWizardLoadFailure();
       expect(event.props, equals([]));
     });
   });
 
   group('QueryWizardState', () {
     test('SourcesRequested initialized', () {
-      final event = QuerySourcesRequested();
-
+      const event = QuerySourcesRequested();
       expect(event.props, equals([]));
     });
   });

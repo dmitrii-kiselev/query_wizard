@@ -2,21 +2,20 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:query_wizard/blocs.dart';
 
+import 'package:query_wizard/application.dart';
 import 'package:query_wizard/infrastructure.dart';
-import 'package:query_wizard/repositories.dart';
 
-var log = [];
+List log = [];
 
-main() {
+void main() {
   setUp(() {
     log = [];
   });
 
   test('onEvent', overridePrint(() {
     final observer = QueryWizardBlocObserver();
-    final event = 'event';
+    const event = 'event';
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
@@ -31,10 +30,13 @@ main() {
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
-    final state = '';
-    final event = 'event';
-    final transition = Transition<String, String>(
-        currentState: state, event: event, nextState: state);
+    const state = '';
+    const event = 'event';
+    const transition = Transition<String, String>(
+      currentState: state,
+      event: event,
+      nextState: state,
+    );
 
     observer.onTransition(bloc, transition);
 
@@ -43,7 +45,7 @@ main() {
 
   test('onError', overridePrint(() {
     final observer = QueryWizardBlocObserver();
-    final error = 'error';
+    const error = 'error';
     final client = DesignTimeQueryWizardClient();
     final repository = QueryWizardRepository(queryWizardClient: client);
     final bloc = buildQueryWizardBloc(repository);
@@ -55,39 +57,41 @@ main() {
 }
 
 QueryWizardBloc buildQueryWizardBloc(
-    QueryWizardRepository queryWizardRepository) {
+  QueryWizardRepository queryWizardRepository,
+) {
   final sourcesBloc = QuerySourcesBloc(
-      queryWizardRepository: queryWizardRepository,
-      initialState: QuerySourcesInitial());
+    queryWizardRepository: queryWizardRepository,
+  );
 
   final tablesBloc = QueryTablesBloc();
   final fieldsBloc = QueryFieldsBloc();
 
-  final joinsTabBloc = QueryJoinsTabBloc();
-  final aggregatesTabBloc = QueryAggregatesBloc();
-  final groupingsTabBloc = QueryGroupingsBloc();
-  final conditionsTabBloc = QueryConditionsTabBloc();
-  final queryUnionsBloc = QueryUnionsBloc();
-  final orderTabBloc = QueryOrderTabBloc();
-  final batchTabBloc = QueryBatchTabBloc();
+  final joinsBloc = QueryJoinsBloc();
+  final aggregatesBloc = QueryAggregatesBloc();
+  final groupingsBloc = QueryGroupingsBloc();
+  final conditionsBloc = QueryConditionsBloc();
+  final queriesBloc = QueriesBloc();
+  final ordersBloc = QueryOrdersBloc();
+  final batchesBloc = QueryBatchesBloc();
   final queryWizardBloc = QueryWizardBloc(
-      sourcesBloc: sourcesBloc,
-      tablesBloc: tablesBloc,
-      fieldsBloc: fieldsBloc,
-      joinsTabBloc: joinsTabBloc,
-      aggregatesBloc: aggregatesTabBloc,
-      groupingsBloc: groupingsTabBloc,
-      conditionsTabBloc: conditionsTabBloc,
-      queryUnionsBloc: queryUnionsBloc,
-      orderTabBloc: orderTabBloc,
-      batchTabBloc: batchTabBloc,
-      queryWizardRepository: queryWizardRepository);
+    sourcesBloc: sourcesBloc,
+    tablesBloc: tablesBloc,
+    fieldsBloc: fieldsBloc,
+    joinsBloc: joinsBloc,
+    aggregatesBloc: aggregatesBloc,
+    groupingsBloc: groupingsBloc,
+    conditionsBloc: conditionsBloc,
+    queriesBloc: queriesBloc,
+    ordersBloc: ordersBloc,
+    batchesBloc: batchesBloc,
+    queryWizardRepository: queryWizardRepository,
+  );
 
   return queryWizardBloc;
 }
 
-void Function() overridePrint(void testFn()) => () {
-      var spec = new ZoneSpecification(print: (_, __, ___, String msg) {
+void Function() overridePrint(void Function() testFn) => () {
+      final spec = ZoneSpecification(print: (_, __, ___, String msg) {
         log.add(msg);
       });
 

@@ -1,0 +1,22 @@
+library domain;
+
+export 'src/domain/clients/query_wizard_client.dart';
+export 'src/domain/core/entity.dart';
+export 'src/domain/core/extensions/list_extensions.dart';
+export 'src/domain/entities/constants.dart';
+export 'src/domain/entities/query.dart';
+export 'src/domain/entities/query_aggregate.dart';
+export 'src/domain/entities/query_batch.dart';
+export 'src/domain/entities/query_condition.dart';
+export 'src/domain/entities/query_element.dart';
+export 'src/domain/entities/query_grouping.dart';
+export 'src/domain/entities/query_join.dart';
+export 'src/domain/entities/query_order.dart';
+export 'src/domain/entities/query_schema.dart';
+export 'src/domain/enums/logical_compare_type.dart';
+export 'src/domain/enums/query_aggregate_function.dart';
+export 'src/domain/enums/query_element_type.dart';
+export 'src/domain/enums/query_grouping_type.dart';
+export 'src/domain/enums/query_sorting_type.dart';
+export 'src/domain/enums/query_type.dart';
+export 'src/domain/repositories/query_wizard_repository.dart';

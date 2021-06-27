@@ -1,0 +1,1 @@
+enum QueryGroupingType { grouping, groupingSet }
