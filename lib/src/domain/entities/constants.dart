@@ -3,22 +3,22 @@ import 'package:query_wizard/domain.dart';
 class QueryWizardConstants {
   static const double defaultEdgeInsetsAllValue = 8;
 
-  static const List<String> aggregateFunctions = [
-    'Sum',
-    'Count Distinct',
-    'Count',
-    'Max',
-    'Min',
-    'Average'
+  static const List<QueryAggregateFunction> aggregateFunctions = [
+    QueryAggregateFunction.sum,
+    QueryAggregateFunction.countDistinct,
+    QueryAggregateFunction.count,
+    QueryAggregateFunction.max,
+    QueryAggregateFunction.min,
+    QueryAggregateFunction.average,
   ];
 
-  static const List<String> logicalCompareTypes = [
-    '=',
-    '<>',
-    '<',
-    '>',
-    '<=',
-    '>='
+  static const List<LogicalCompareType> logicalCompareTypes = [
+    LogicalCompareType.equal,
+    LogicalCompareType.notEqual,
+    LogicalCompareType.less,
+    LogicalCompareType.more,
+    LogicalCompareType.lessOrEqual,
+    LogicalCompareType.moreOrEqual,
   ];
 
   static const List<QuerySortingType> sortingTypes = [

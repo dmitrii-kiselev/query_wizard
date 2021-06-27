@@ -8,7 +8,7 @@ void main() {
       id: '',
       isCustom: false,
       leftField: '',
-      logicalCompareType: '',
+      logicalCompareType: LogicalCompareType.equal,
       rightField: '',
       customCondition: '',
     );
@@ -33,7 +33,7 @@ void main() {
       id: '',
       isCustom: false,
       leftField: '',
-      logicalCompareType: '',
+      logicalCompareType: LogicalCompareType.equal,
       rightField: '',
       customCondition: '',
     );

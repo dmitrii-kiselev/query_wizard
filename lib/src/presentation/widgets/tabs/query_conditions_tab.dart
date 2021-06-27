@@ -134,7 +134,9 @@ class _QueryConditionPage extends HookWidget {
     final pageInitialized = useState<bool>(false);
     final isCustom = useState<bool?>(false);
     final leftField = useState<QueryElement?>(null);
-    final logicalCompareType = useState<String?>('=');
+    final logicalCompareType = useState<LogicalCompareType?>(
+      LogicalCompareType.equal,
+    );
     final rightFieldController = useTextEditingController();
     final customConditionController = useTextEditingController();
 
@@ -165,7 +167,8 @@ class _QueryConditionPage extends HookWidget {
                   leftField:
                       '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}'
                       '.${leftField.value?.name ?? ''}',
-                  logicalCompareType: logicalCompareType.value ?? '',
+                  logicalCompareType:
+                      logicalCompareType.value ?? LogicalCompareType.equal,
                   rightField: rightFieldController.text,
                   customCondition: customConditionController.text);
 
@@ -252,14 +255,14 @@ class _QueryConditionPage extends HookWidget {
                   ),
                   Visibility(
                     visible: !(isCustom.value ?? false),
-                    child: DropdownButtonFormField<String>(
+                    child: DropdownButtonFormField<LogicalCompareType>(
                       value: logicalCompareType.value,
                       items: QueryWizardConstants.logicalCompareTypes
-                          .map<DropdownMenuItem<String>>(
+                          .map<DropdownMenuItem<LogicalCompareType>>(
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value),
+                            child: Text(value.toString()),
                           );
                         },
                       ).toList(),

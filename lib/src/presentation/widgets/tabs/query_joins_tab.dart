@@ -140,7 +140,9 @@ class _QueryJoinPage extends HookWidget {
     final isRightAll = useState<bool?>(false);
     final isCustom = useState<bool?>(false);
     final leftField = useState<QueryElement?>(null);
-    final logicalCompareType = useState<String?>('=');
+    final logicalCompareType = useState<LogicalCompareType?>(
+      LogicalCompareType.equal,
+    );
     final rightField = useState<QueryElement?>(null);
     final customConditionController = useTextEditingController();
     final pageInitialized = useState<bool>(false);
@@ -190,7 +192,8 @@ class _QueryJoinPage extends HookWidget {
                 id: const Uuid().v1(),
                 isCustom: isCustom.value ?? false,
                 leftField: leftField.value?.name ?? '',
-                logicalCompareType: logicalCompareType.value ?? '',
+                logicalCompareType:
+                    logicalCompareType.value ?? LogicalCompareType.equal,
                 rightField: rightField.value?.name ?? '',
                 customCondition: customConditionController.text,
               );
@@ -334,14 +337,14 @@ class _QueryJoinPage extends HookWidget {
                   ),
                   Visibility(
                     visible: !(isCustom.value ?? false),
-                    child: DropdownButtonFormField<String>(
+                    child: DropdownButtonFormField<LogicalCompareType>(
                       value: logicalCompareType.value,
                       items: QueryWizardConstants.logicalCompareTypes
-                          .map<DropdownMenuItem<String>>(
+                          .map<DropdownMenuItem<LogicalCompareType>>(
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value),
+                            child: Text(value.toString()),
                           );
                         },
                       ).toList(),

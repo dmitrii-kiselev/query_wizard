@@ -8,11 +8,11 @@ void main() {
     final aggregate = QueryAggregate(
       id: const Uuid().v1(),
       field: '',
-      function: '',
+      function: QueryAggregateFunction.sum,
     );
 
     expect(aggregate.field, '');
-    expect(aggregate.function, '');
+    expect(aggregate.function, QueryAggregateFunction.sum);
     expect(
         aggregate.props,
         equals([

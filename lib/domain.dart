@@ -13,6 +13,8 @@ export 'src/domain/entities/query_grouping.dart';
 export 'src/domain/entities/query_join.dart';
 export 'src/domain/entities/query_order.dart';
 export 'src/domain/entities/query_schema.dart';
+export 'src/domain/enums/logical_compare_type.dart';
+export 'src/domain/enums/query_aggregate_function.dart';
 export 'src/domain/enums/query_element_type.dart';
 export 'src/domain/enums/query_grouping_type.dart';
 export 'src/domain/enums/query_sorting_type.dart';

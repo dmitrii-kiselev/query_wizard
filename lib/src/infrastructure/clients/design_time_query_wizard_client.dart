@@ -547,7 +547,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'CUSTOMER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
@@ -560,7 +560,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'ORDER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
@@ -573,7 +573,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'PRODUCT_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'PRODUCT_ID',
               isCustom: false,
               customCondition: '')),
@@ -589,7 +589,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'CUSTOMER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
@@ -602,7 +602,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'ORDER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
@@ -615,7 +615,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'PRODUCT_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'PRODUCT_ID',
               isCustom: false,
               customCondition: '')),
@@ -631,7 +631,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'CUSTOMER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'CUSTOMER_ID',
               isCustom: false,
               customCondition: '')),
@@ -644,7 +644,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'ORDER_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'ORDER_ID',
               isCustom: false,
               customCondition: '')),
@@ -657,7 +657,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           condition: QueryCondition(
               id: const Uuid().v1(),
               leftField: 'PRODUCT_ID',
-              logicalCompareType: '=',
+              logicalCompareType: LogicalCompareType.equal,
               rightField: 'PRODUCT_ID',
               isCustom: false,
               customCondition: '')),
@@ -730,7 +730,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryAggregate(
         id: const Uuid().v1(),
         field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: 'Sum',
+        function: QueryAggregateFunction.sum,
       ),
     ];
 
@@ -738,7 +738,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryAggregate(
         id: const Uuid().v1(),
         field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: 'Sum',
+        function: QueryAggregateFunction.sum,
       ),
     ];
 
@@ -746,7 +746,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryAggregate(
         id: const Uuid().v1(),
         field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: 'Sum',
+        function: QueryAggregateFunction.sum,
       ),
     ];
 
@@ -755,7 +755,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           id: const Uuid().v1(),
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: '=',
+          logicalCompareType: LogicalCompareType.equal,
           rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];
@@ -765,7 +765,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           id: const Uuid().v1(),
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: '=',
+          logicalCompareType: LogicalCompareType.equal,
           rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];
@@ -775,7 +775,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
           id: const Uuid().v1(),
           isCustom: false,
           leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: '=',
+          logicalCompareType: LogicalCompareType.equal,
           rightField: ':CUSTOMER_ID',
           customCondition: ''),
     ];

@@ -89,7 +89,7 @@ class QueryAggregatesBar extends HookWidget {
                             aggregate: QueryAggregate(
                               id: const Uuid().v1(),
                               field: field.name,
-                              function: 'Sum',
+                              function: QueryAggregateFunction.sum,
                             ),
                           ),
                         );
@@ -121,20 +121,22 @@ class _ChangeAggregateDialog extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context);
-    final function = useState<String?>('Sum');
+    final function = useState<QueryAggregateFunction?>(
+      QueryAggregateFunction.sum,
+    );
     final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
     final aggregate = bloc.state.aggregates.findById(id);
 
     return AlertDialog(
       title: Text(localizations?.changeTableName ?? 'Change aggregate field'),
-      content: DropdownButtonFormField<String>(
+      content: DropdownButtonFormField<QueryAggregateFunction>(
         value: function.value,
         items: QueryWizardConstants.aggregateFunctions
-            .map<DropdownMenuItem<String>>(
+            .map<DropdownMenuItem<QueryAggregateFunction>>(
           (value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value),
+              child: Text(value.toString()),
             );
           },
         ).toList(),
@@ -150,7 +152,7 @@ class _ChangeAggregateDialog extends HookWidget {
             final newAggregate = QueryAggregate(
               id: aggregate.id,
               field: aggregate.field,
-              function: function.value ?? '',
+              function: function.value ?? QueryAggregateFunction.sum,
             );
 
             bloc.add(

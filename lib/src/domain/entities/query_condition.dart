@@ -17,7 +17,7 @@ class QueryCondition extends Equatable implements IEntity {
       : id = '',
         isCustom = false,
         leftField = '',
-        logicalCompareType = '',
+        logicalCompareType = LogicalCompareType.equal,
         rightField = '',
         customCondition = '';
 
@@ -25,7 +25,7 @@ class QueryCondition extends Equatable implements IEntity {
   final String id;
   final bool isCustom;
   final String leftField;
-  final String logicalCompareType;
+  final LogicalCompareType logicalCompareType;
   final String rightField;
   final String customCondition;
 
@@ -59,7 +59,7 @@ extension CopyQueryCondition on QueryCondition {
     String? id,
     bool? isCustom,
     String? leftField,
-    String? logicalCompareType,
+    LogicalCompareType? logicalCompareType,
     String? rightField,
     String? customCondition,
   }) =>
