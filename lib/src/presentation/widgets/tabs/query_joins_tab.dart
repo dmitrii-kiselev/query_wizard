@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:query_wizard/infrastructure.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
@@ -11,10 +10,26 @@ import 'package:query_wizard/domain.dart';
 class QueryJoinsTab extends StatelessWidget {
   const QueryJoinsTab({Key? key}) : super(key: key);
 
+  void _navigateToQueryJoinPage({String? id, required BuildContext context}) {
+    final joinsBloc = BlocProvider.of<QueryJoinsBloc>(context);
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider.value(
+          value: joinsBloc,
+          child: _QueryJoinPage(id: id, tables: tables),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryJoinsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryJoinsBloc, QueryJoinsState>(
       builder: (
@@ -37,39 +52,24 @@ class QueryJoinsTab extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.copy_outlined),
-                          tooltip: localizations?.copy ?? 'Copy',
+                          tooltip: localizations.copy,
                           onPressed: () {
                             bloc.add(QueryJoinCopied(id: join.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
                             bloc.add(QueryJoinDeleted(id: join.id));
                           },
                         ),
                       ],
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create: (context) => getIt<QueryTablesBloc>(),
-                              ),
-                              BlocProvider(
-                                create: (context) => getIt<QueryJoinsBloc>(),
-                              ),
-                            ],
-                            child: _QueryJoinPage(id: join.id),
-                          ),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
+                    onTap: () => _navigateToQueryJoinPage(
+                      id: join.id,
+                      context: context,
+                    ),
                     title: Text(join.toString()),
                   ),
                 );
@@ -87,26 +87,8 @@ class QueryJoinsTab extends StatelessWidget {
               },
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (context) => getIt<QueryTablesBloc>(),
-                        ),
-                        BlocProvider(
-                          create: (context) => getIt<QueryJoinsBloc>(),
-                        ),
-                      ],
-                      child: _QueryJoinPage(),
-                    ),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              tooltip: localizations?.add ?? 'Add',
+              onPressed: () => _navigateToQueryJoinPage(context: context),
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );
@@ -121,17 +103,20 @@ class QueryJoinsTab extends StatelessWidget {
 }
 
 class _QueryJoinPage extends HookWidget {
-  _QueryJoinPage({this.id});
+  _QueryJoinPage({
+    this.id,
+    required this.tables,
+  });
 
   final String? id;
+  final List<QueryElement> tables;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryJoinsBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     final leftTable = useState<QueryElement?>(null);
@@ -161,16 +146,22 @@ class _QueryJoinPage extends HookWidget {
       isLeftAll.value = join.isLeftAll;
       isRightAll.value = join.isRightAll;
       isCustom.value = join.condition.isCustom;
-      leftField.value = leftTable.value?.elements.firstWhere(
-        (f) => f.name == join.condition.leftField,
-      );
 
-      logicalCompareType.value = join.condition.logicalCompareType;
-      rightField.value = rightTable.value?.elements.firstWhere(
-        (f) => f.name == join.condition.rightField,
-      );
+      if (join.condition.isCustom) {
+        customConditionController.text = join.condition.customCondition;
+        leftField.value = null;
+        logicalCompareType.value = LogicalCompareType.equal;
+        rightField.value = null;
+      } else {
+        leftField.value = leftTable.value?.elements.firstWhere(
+          (f) => f.name == join.condition.leftField,
+        );
+        logicalCompareType.value = join.condition.logicalCompareType;
+        rightField.value = rightTable.value?.elements.firstWhere(
+          (f) => f.name == join.condition.rightField,
+        );
+      }
 
-      customConditionController.text = join.condition.customCondition;
       pageInitialized.value = true;
     }
 
@@ -184,7 +175,7 @@ class _QueryJoinPage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations?.join ?? 'Join'),
+        title: Text(localizations.join),
         actions: [
           TextButton(
             onPressed: () {
@@ -217,7 +208,7 @@ class _QueryJoinPage extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              localizations?.save ?? 'Save',
+              localizations.save,
               style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
@@ -250,7 +241,7 @@ class _QueryJoinPage extends HookWidget {
                       leftField.value = null;
                     },
                     decoration: InputDecoration(
-                      labelText: localizations?.leftTable ?? 'Left table',
+                      labelText: localizations.leftTable,
                       icon: const Icon(Icons.table_rows_rounded),
                     ),
                   ),
@@ -271,19 +262,19 @@ class _QueryJoinPage extends HookWidget {
                       rightField.value = null;
                     },
                     decoration: InputDecoration(
-                      labelText: localizations?.rightTable ?? 'Right table',
+                      labelText: localizations.rightTable,
                       icon: const Icon(Icons.table_rows_rounded),
                     ),
                   ),
                   CheckboxListTile(
                     value: isLeftAll.value,
                     onChanged: (value) => isLeftAll.value = value,
-                    title: Text(localizations?.leftAll ?? 'Left all'),
+                    title: Text(localizations.leftAll),
                   ),
                   CheckboxListTile(
                     value: isRightAll.value,
                     onChanged: (value) => isRightAll.value = value,
-                    title: Text(localizations?.rightAll ?? 'Right all'),
+                    title: Text(localizations.rightAll),
                   ),
                   CheckboxListTile(
                     value: isCustom.value,
@@ -300,15 +291,14 @@ class _QueryJoinPage extends HookWidget {
                             _buildCustomCondition();
                       }
                     },
-                    title: Text(localizations?.custom ?? 'Custom'),
+                    title: Text(localizations.custom),
                   ),
                   Visibility(
                     visible: isCustom.value ?? false,
                     child: TextFormField(
                       controller: customConditionController,
                       decoration: InputDecoration(
-                        labelText: localizations?.customCondition ??
-                            'Custom condition',
+                        labelText: localizations.customCondition,
                         icon: const Icon(Icons.text_fields_rounded),
                       ),
                       keyboardType: TextInputType.multiline,
@@ -330,7 +320,7 @@ class _QueryJoinPage extends HookWidget {
                       ).toList(),
                       onChanged: (value) => leftField.value = value,
                       decoration: InputDecoration(
-                        labelText: localizations?.leftField ?? 'Left field',
+                        labelText: localizations.leftField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                     ),
@@ -344,13 +334,13 @@ class _QueryJoinPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value.toString()),
+                            child: Text(value.stringValue),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => logicalCompareType.value = value,
                       decoration: InputDecoration(
-                        labelText: localizations?.condition ?? 'Condition',
+                        labelText: localizations.condition,
                         icon: const Icon(Icons.compare_arrows),
                       ),
                     ),
@@ -370,7 +360,7 @@ class _QueryJoinPage extends HookWidget {
                       ).toList(),
                       onChanged: (value) => rightField.value = value,
                       decoration: InputDecoration(
-                        labelText: localizations?.rightField ?? 'Right field',
+                        labelText: localizations.rightField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                     ),

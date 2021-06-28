@@ -198,13 +198,13 @@ class TreeItem extends HookWidget {
         : const Icon(Icons.horizontal_rule_rounded);
   }
 
-  List<Widget> _getActions(QueryWizardLocalizations? localizations) {
+  List<Widget> _getActions(QueryWizardLocalizations localizations) {
     return [
       Visibility(
         visible: _isRoot() && onCopy != null,
         child: IconButton(
           icon: const Icon(Icons.copy_rounded),
-          tooltip: localizations?.copy ?? 'Copy',
+          tooltip: localizations.copy,
           onPressed: () => onCopy!(item),
         ),
       ),
@@ -212,7 +212,7 @@ class TreeItem extends HookWidget {
         visible: _isRoot() && onEdit != null,
         child: IconButton(
           icon: const Icon(Icons.edit_rounded),
-          tooltip: localizations?.edit ?? 'Edit',
+          tooltip: localizations.edit,
           onPressed: () => onEdit!(item),
         ),
       ),
@@ -220,7 +220,7 @@ class TreeItem extends HookWidget {
         visible: _isRoot() && onRemove != null,
         child: IconButton(
           icon: const Icon(Icons.highlight_remove_rounded),
-          tooltip: localizations?.remove ?? 'Remove',
+          tooltip: localizations.remove,
           onPressed: () => onRemove!(item),
         ),
       ),
@@ -237,12 +237,11 @@ class TreeItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final alias = _isRoot() ? item.alias ?? '' : item.name;
-
     final elevation = _getElevation();
     final selected = useState(false);
     final leading = _getLeadingIcon();
     final title = Text(alias == '' ? item.name : alias);
-    final actions = _getActions(QueryWizardLocalizations.of(context));
+    final actions = _getActions(QueryWizardLocalizations.of(context)!);
 
     return Card(
       elevation: elevation,

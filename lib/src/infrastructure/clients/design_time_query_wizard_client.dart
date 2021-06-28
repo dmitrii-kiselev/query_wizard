@@ -340,7 +340,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     // ORDER_ITEMS
     final orderItems = QueryElement(
       id: const Uuid().v1(),
-      name: 'ORDERS',
+      name: 'ORDER_ITEMS',
       type: QueryElementType.table,
       elements: List<QueryElement>.empty(growable: true),
     );
@@ -396,12 +396,14 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
         id: const Uuid().v1(),
         name: 'CATEGORY_ID',
         type: QueryElementType.column,
+        parent: productCategories,
         elements: List<QueryElement>.empty(growable: true),
       ),
       QueryElement(
         id: const Uuid().v1(),
         name: 'CATEGORY_NAME',
         type: QueryElementType.column,
+        parent: productCategories,
         elements: List<QueryElement>.empty(growable: true),
       ),
     ]);
@@ -525,6 +527,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       locations,
       orders,
       orderItems,
+      products,
       productCategories,
       regions,
       warehouse,

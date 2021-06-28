@@ -10,11 +10,38 @@ import 'package:query_wizard/presentation.dart';
 class QueryTablesBar extends StatelessWidget {
   const QueryTablesBar({Key? key}) : super(key: key);
 
+  void _navigateToChangeTableNameDialog({
+    required String id,
+    required BuildContext context,
+  }) {
+    final bloc = BlocProvider.of<QueryTablesBloc>(context);
+    Navigator.push(
+      context,
+      DialogRoute<String>(
+        context: context,
+        builder: (_) => BlocProvider<QueryTablesBloc>.value(
+          value: bloc,
+          child: _ChangeTableNameDialog(id: id),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToSubqueryPage({required BuildContext context}) {
+    Navigator.push(
+      context,
+      DialogRoute<String>(
+        context: context,
+        builder: (context) => const _SubqueryPage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
     final fieldsBloc = BlocProvider.of<QueryFieldsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryTablesBloc, QueryTablesState>(
       builder: (
@@ -27,47 +54,23 @@ class QueryTablesBar extends StatelessWidget {
               items: state.tables,
               onTap: (item) {
                 if (item.value.type == QueryElementType.column) {
-                  fieldsBloc.add(
-                    QueryFieldAdded(field: item.value),
-                  );
+                  fieldsBloc.add(QueryFieldAdded(field: item.value));
                 }
               },
               onCopy: (QueryElement table) {
-                tablesBloc.add(
-                  QueryTableCopied(id: table.id),
-                );
+                tablesBloc.add(QueryTableCopied(id: table.id));
               },
-              onEdit: (QueryElement table) {
-                Navigator.push(
-                  context,
-                  DialogRoute<String>(
-                    context: context,
-                    builder: (_) => BlocProvider<QueryTablesBloc>.value(
-                      value: tablesBloc,
-                      child: _ChangeTableNameDialog(id: table.id),
-                    ),
-                  ),
-                );
-              },
+              onEdit: (QueryElement table) => _navigateToChangeTableNameDialog(
+                id: table.id,
+                context: context,
+              ),
               onRemove: (QueryElement table) {
-                tablesBloc.add(
-                  QueryTableDeleted(
-                    id: table.id,
-                  ),
-                );
+                tablesBloc.add(QueryTableDeleted(id: table.id));
               },
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  DialogRoute<String>(
-                    context: context,
-                    builder: (context) => const _SubqueryPage(),
-                  ),
-                );
-              },
-              tooltip: localizations?.add ?? 'Add',
+              onPressed: () => _navigateToSubqueryPage(context: context),
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );
@@ -89,19 +92,17 @@ class _ChangeTableNameDialog extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryTablesBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final controller = useTextEditingController();
     final table = bloc.state.tables.findById(id);
 
     controller.text = table.alias ?? table.name;
 
     return AlertDialog(
-      title: Text(localizations?.changeTableName ?? 'Change Table Name'),
+      title: Text(localizations.changeTableName),
       content: TextField(
         controller: controller,
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-        ),
+        decoration: const InputDecoration(border: OutlineInputBorder()),
       ),
       actions: [
         TextButton(
@@ -114,20 +115,16 @@ class _ChangeTableNameDialog extends HookWidget {
               elements: table.elements,
             );
 
-            bloc.add(
-              QueryTableUpdated(
-                table: newTable,
-              ),
-            );
+            bloc.add(QueryTableUpdated(table: newTable));
             Navigator.pop(context);
           },
-          child: Text(localizations?.save ?? 'Save'),
+          child: Text(localizations.save),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(localizations?.cancel ?? 'Cancel'),
+          child: Text(localizations.cancel),
         ),
       ],
     );
@@ -139,19 +136,19 @@ class _SubqueryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          localizations?.subquery ?? 'Subquery',
+          localizations.subquery,
         ),
         actions: [
           TextButton(
             onPressed: () {},
             child: Text(
-              localizations?.save ?? 'Save',
+              localizations.save,
               style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),

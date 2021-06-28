@@ -11,11 +11,57 @@ import 'package:query_wizard/presentation.dart';
 class QueryAggregatesBar extends HookWidget {
   const QueryAggregatesBar({Key? key}) : super(key: key);
 
+  void _navigateToChangeAggregateDialog({
+    required String id,
+    required BuildContext context,
+  }) {
+    final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
+    Navigator.push(
+      context,
+      DialogRoute<String>(
+        context: context,
+        builder: (context) => BlocProvider<QueryAggregatesBloc>.value(
+          value: bloc,
+          child: _ChangeAggregateDialog(id: id),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToFieldsSelectionPage({required BuildContext context}) {
+    final aggregatesBloc = BlocProvider.of<QueryAggregatesBloc>(context);
+    final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => BlocProvider<QueryTablesBloc>.value(
+          value: tablesBloc,
+          child: FieldsSelectionPage(
+            onSelected: (fields) {
+              for (final field in fields) {
+                aggregatesBloc.add(
+                  QueryAggregateAdded(
+                    aggregate: QueryAggregate(
+                      id: const Uuid().v1(),
+                      field: field.name,
+                      function: QueryAggregateFunction.sum,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryAggregatesBloc, QueryAggregatesState>(builder: (
       context,
@@ -37,29 +83,18 @@ class QueryAggregatesBar extends HookWidget {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.highlight_remove_outlined),
-                        tooltip: localizations?.remove ?? 'Remove',
+                        tooltip: localizations.remove,
                         onPressed: () {
-                          bloc.add(
-                            QueryAggregateDeleted(id: aggregate.id),
-                          );
+                          bloc.add(QueryAggregateDeleted(id: aggregate.id));
                         },
                       ),
                     ],
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      DialogRoute<String>(
-                        context: context,
-                        builder: (context) => _ChangeAggregateDialog(
-                          id: aggregate.id,
-                        ),
-                      ),
-                    );
-                  },
-                  title: Text(
-                    aggregate.toString(),
+                  onTap: () => _navigateToChangeAggregateDialog(
+                    id: aggregate.id,
+                    context: context,
                   ),
+                  title: Text(aggregate.toString()),
                 ),
               );
             },
@@ -76,31 +111,8 @@ class QueryAggregatesBar extends HookWidget {
             },
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (context) => FieldsSelectionPage(
-                    tables: tables,
-                    onSelected: (fields) {
-                      for (final field in fields) {
-                        bloc.add(
-                          QueryAggregateAdded(
-                            aggregate: QueryAggregate(
-                              id: const Uuid().v1(),
-                              field: field.name,
-                              function: QueryAggregateFunction.sum,
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  fullscreenDialog: true,
-                ),
-              );
-            },
-            tooltip: localizations?.add ?? 'Add',
+            onPressed: () => _navigateToFieldsSelectionPage(context: context),
+            tooltip: localizations.add,
             child: const Icon(Icons.add),
           ),
         );
@@ -120,15 +132,15 @@ class _ChangeAggregateDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
+    final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final function = useState<QueryAggregateFunction?>(
       QueryAggregateFunction.sum,
     );
-    final bloc = BlocProvider.of<QueryAggregatesBloc>(context);
     final aggregate = bloc.state.aggregates.findById(id);
 
     return AlertDialog(
-      title: Text(localizations?.changeTableName ?? 'Change aggregate field'),
+      title: Text(localizations.changeTableName),
       content: DropdownButtonFormField<QueryAggregateFunction>(
         value: function.value,
         items: QueryWizardConstants.aggregateFunctions
@@ -136,13 +148,13 @@ class _ChangeAggregateDialog extends HookWidget {
           (value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value.toString()),
+              child: Text(value.stringValue),
             );
           },
         ).toList(),
         onChanged: (value) => function.value = value,
         decoration: InputDecoration(
-          labelText: localizations?.function ?? 'Function',
+          labelText: localizations.function,
           icon: const Icon(Icons.compare_arrows),
         ),
       ),
@@ -155,18 +167,16 @@ class _ChangeAggregateDialog extends HookWidget {
               function: function.value ?? QueryAggregateFunction.sum,
             );
 
-            bloc.add(
-              QueryAggregateUpdated(aggregate: newAggregate),
-            );
+            bloc.add(QueryAggregateUpdated(aggregate: newAggregate));
             Navigator.pop(context);
           },
-          child: Text(localizations?.save ?? 'Save'),
+          child: Text(localizations.save),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(localizations?.cancel ?? 'Cancel'),
+          child: Text(localizations.cancel),
         ),
       ],
     );

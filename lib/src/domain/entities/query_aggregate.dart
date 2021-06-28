@@ -19,6 +19,6 @@ class QueryAggregate extends Equatable implements IEntity {
 
   @override
   String toString() {
-    return '$field $function';
+    return '${function.stringValue}($field)';
   }
 }

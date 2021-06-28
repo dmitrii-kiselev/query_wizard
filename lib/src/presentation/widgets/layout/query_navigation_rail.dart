@@ -12,15 +12,9 @@ class QueryNavigationRail extends HookWidget {
     return <NavigationRailDestination>[
       for (var query in queries)
         NavigationRailDestination(
-          icon: const Icon(
-            Icons.query_builder_rounded,
-          ),
-          selectedIcon: const Icon(
-            Icons.query_builder_rounded,
-          ),
-          label: Text(
-            query.name,
-          ),
+          icon: const Icon(Icons.query_builder_rounded),
+          selectedIcon: const Icon(Icons.query_builder_rounded),
+          label: Text(query.name),
         ),
     ];
   }

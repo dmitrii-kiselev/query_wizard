@@ -7,71 +7,57 @@ import 'package:query_wizard/application.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryWizardLayout extends HookWidget {
-  final String title;
-
-  const QueryWizardLayout({
-    Key? key,
-    required this.title,
-  }) : super(key: key);
+  const QueryWizardLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bloc = BlocProvider.of<QueryWizardBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final tabController = useTabController(initialLength: 8);
-    final localizations = QueryWizardLocalizations.of(context);
     final tabs = [
       _QueryWizardTab(
-        message: localizations?.tablesAndFieldsTab ?? 'Tables and fields',
+        message: localizations.tablesAndFieldsTab,
         icon: Icons.table_chart_rounded,
-        widget: const QueryTablesAndFieldsTab(),
+        widget: const QueryTablesAndFieldsTab(key: ValueKey('GroupingsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.joinsTab ?? 'Joins',
+        message: localizations.joinsTab,
         icon: Icons.account_tree_rounded,
-        widget: const QueryJoinsTab(),
+        widget: const QueryJoinsTab(key: ValueKey('GroupingsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.grouping ?? 'Grouping',
+        message: localizations.grouping,
         icon: Icons.group_work_rounded,
-        widget: const QueryGroupingsTab(
-          key: ValueKey('GroupingsTab'),
-        ),
+        widget: const QueryGroupingsTab(key: ValueKey('GroupingsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.conditionsTab ?? 'Conditions',
+        message: localizations.conditionsTab,
         icon: Icons.filter_alt_rounded,
-        widget: const QueryConditionsTab(
-          key: ValueKey('ConditionsTab'),
-        ),
+        widget: const QueryConditionsTab(key: ValueKey('ConditionsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.moreTab ?? 'More',
+        message: localizations.moreTab,
         icon: Icons.more_horiz_rounded,
-        widget: QuerySettingsTab(
-          key: const ValueKey('MoreTab'),
-        ),
+        widget: QuerySettingsTab(key: const ValueKey('MoreTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.unionsAliasesTab ?? 'Unions/Aliases',
+        message: localizations.unionsAliasesTab,
         icon: Icons.merge_type_rounded,
-        widget: const QueryUnionsAliasesTab(),
+        widget: const QueryUnionsAliasesTab(key: ValueKey('GroupingsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.orderTab ?? 'Order',
+        message: localizations.orderTab,
         icon: Icons.sort_rounded,
-        widget: const QueryOrdersTab(),
+        widget: const QueryOrdersTab(key: ValueKey('GroupingsTab')),
       ),
       _QueryWizardTab(
-        message: localizations?.queryBatchTab ?? 'Query batch',
+        message: localizations.queryBatchTab,
         icon: Icons.batch_prediction,
-        widget: const QueryBatchesTab(),
+        widget: const QueryBatchesTab(key: ValueKey('GroupingsTab')),
       ),
     ];
 
-    final bloc = BlocProvider.of<QueryWizardBloc>(context);
-
-    bloc.add(
-      const QuerySchemaRequested('query'),
-    );
+    bloc.add(const QuerySchemaRequested('query'));
 
     return Scaffold(
       body: BlocBuilder<QueryWizardBloc, QueryWizardState>(
@@ -80,15 +66,13 @@ class QueryWizardLayout extends HookWidget {
           state,
         ) {
           if (state is QueryWizardLoadInProgress) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (state is QueryWizardLoadSuccess) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(title),
+                title: Text(localizations.queryWizard),
                 bottom: TabBar(
                   controller: tabController,
                   tabs: [
@@ -107,14 +91,8 @@ class QueryWizardLayout extends HookWidget {
                 ),
                 actions: [
                   IconButton(
-                    icon: const Icon(
-                      Icons.update_rounded,
-                    ),
-                    onPressed: () {
-                      bloc.add(
-                        const QuerySchemaRequested('query'),
-                      );
-                    },
+                    icon: const Icon(Icons.settings),
+                    onPressed: () {},
                   ),
                 ],
               ),
@@ -141,7 +119,7 @@ class QueryWizardLayout extends HookWidget {
           if (state is QueryWizardLoadFailure) {
             return Center(
               child: Text(
-                localizations?.somethingWentWrong ?? 'Something went wrong!',
+                localizations.somethingWentWrong,
                 style: const TextStyle(color: Colors.red),
               ),
             );

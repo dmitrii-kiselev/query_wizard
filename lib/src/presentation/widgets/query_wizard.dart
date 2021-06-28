@@ -41,6 +41,6 @@ Widget buildHome() {
       BlocProvider(create: (context) => getIt<QueryBatchesBloc>()),
       BlocProvider(create: (context) => getIt<QueryWizardBloc>()),
     ],
-    child: const QueryWizardLayout(title: 'Query Wizard'),
+    child: const QueryWizardLayout(),
   );
 }

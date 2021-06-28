@@ -17,10 +17,10 @@ class QuerySettingsTab extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
     final queryWizardBloc = BlocProvider.of<QueryWizardBloc>(context);
     final queriesBloc = BlocProvider.of<QueriesBloc>(context);
-    final queryBatchTabBloc = BlocProvider.of<QueryBatchesBloc>(context);
+    final queryBatchesBloc = BlocProvider.of<QueryBatchesBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     final currentQuery = queryWizardBloc.currentQuery;
     final currentQueryButch = queryWizardBloc.currentQueryButch;
@@ -57,11 +57,11 @@ class QuerySettingsTab extends HookWidget {
     }
 
     void updateCurrentQueryBatch() {
-      final index = queryBatchTabBloc.state.queryBatches.indexOf(
+      final index = queryBatchesBloc.state.queryBatches.indexOf(
         currentQueryButch!,
       );
 
-      queryBatchTabBloc.state.queryBatches.remove(currentQueryButch);
+      queryBatchesBloc.state.queryBatches.remove(currentQueryButch);
 
       final newQueryButch = QueryBatch(
         id: const Uuid().v1(),
@@ -73,7 +73,7 @@ class QuerySettingsTab extends HookWidget {
       );
 
       queryWizardBloc.currentQueryButch = newQueryButch;
-      queryBatchTabBloc.state.queryBatches.insert(index, newQueryButch);
+      queryBatchesBloc.state.queryBatches.insert(index, newQueryButch);
     }
 
     return ListView(
@@ -88,7 +88,7 @@ class QuerySettingsTab extends HookWidget {
                   isTop.value = value;
                   updateCurrentQuery();
                 },
-                title: Text(localizations?.top ?? 'Top'),
+                title: Text(localizations.top),
               ),
               Visibility(
                 visible: isTop.value ?? false,
@@ -106,7 +106,7 @@ class QuerySettingsTab extends HookWidget {
                   },
                   decoration: InputDecoration(
                     counter: const Offstage(),
-                    labelText: localizations?.topCounter ?? 'Top counter',
+                    labelText: localizations.topCounter,
                   ),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.digitsOnly,
@@ -115,7 +115,7 @@ class QuerySettingsTab extends HookWidget {
                 ),
               ),
               CheckboxListTile(
-                title: Text(localizations?.distinct ?? 'Distinct'),
+                title: Text(localizations.distinct),
                 value: isDistinct.value,
                 onChanged: (value) {
                   isDistinct.value = value;
@@ -123,7 +123,7 @@ class QuerySettingsTab extends HookWidget {
                 },
               ),
               RadioListTile<QueryType>(
-                title: Text(localizations?.selectData ?? 'Select data'),
+                title: Text(localizations.selectData),
                 value: QueryType.selectQuery,
                 groupValue: queryType.value,
                 onChanged: (value) {
@@ -133,8 +133,7 @@ class QuerySettingsTab extends HookWidget {
               ),
               RadioListTile<QueryType?>(
                 title: Text(
-                  localizations?.createTemporaryTable ??
-                      'Create temporary table',
+                  localizations.createTemporaryTable,
                 ),
                 value: QueryType.temporaryTable,
                 groupValue: queryType.value,
@@ -156,8 +155,7 @@ class QuerySettingsTab extends HookWidget {
                     );
                   },
                   decoration: InputDecoration(
-                    labelText: localizations?.temporaryTableName ??
-                        'Temporary table name',
+                    labelText: localizations.temporaryTableName,
                     icon: const Icon(Icons.table_rows_rounded),
                   ),
                 ),

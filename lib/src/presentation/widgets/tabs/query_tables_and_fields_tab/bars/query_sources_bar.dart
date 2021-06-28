@@ -14,7 +14,7 @@ class QuerySourcesBar extends StatelessWidget {
     final sourcesBloc = BlocProvider.of<QuerySourcesBloc>(context);
     final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
     final fieldsBloc = BlocProvider.of<QueryFieldsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
       builder: (
@@ -28,16 +28,12 @@ class QuerySourcesBar extends StatelessWidget {
               onTap: (item) {
                 if (item.value.type == QueryElementType.column &&
                     item.checked) {
-                  fieldsBloc.add(
-                    QueryFieldAdded(field: item.value),
-                  );
+                  fieldsBloc.add(QueryFieldAdded(field: item.value));
                 }
               },
               onLongPress: (item) {
                 if (item.value.type == QueryElementType.table && item.checked) {
-                  tablesBloc.add(
-                    QueryTableAdded(table: item.value),
-                  );
+                  tablesBloc.add(QueryTableAdded(table: item.value));
                 }
               },
             ),
@@ -46,15 +42,13 @@ class QuerySourcesBar extends StatelessWidget {
                 const event = QuerySourcesRequested();
                 sourcesBloc.add(event);
               },
-              tooltip: localizations?.refresh ?? 'Refresh',
+              tooltip: localizations.refresh,
               child: const Icon(Icons.update_rounded),
             ),
           );
         }
 
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

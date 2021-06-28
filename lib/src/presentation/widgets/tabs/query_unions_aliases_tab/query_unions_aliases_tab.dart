@@ -21,15 +21,16 @@ class QueryUnionsAliasesTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-      QueryWizardLocalizations? localizations) {
+    QueryWizardLocalizations localizations,
+  ) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.merge_type_rounded),
-        label: localizations?.unions ?? 'Unions',
+        label: localizations.unions,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.view_list_rounded),
-        label: localizations?.aliases ?? 'Aliases',
+        label: localizations.aliases,
       ),
     ];
   }
@@ -38,7 +39,7 @@ class QueryUnionsAliasesTab extends HookWidget {
   Widget build(BuildContext context) {
     final currentIndex = useState(0);
 
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
 

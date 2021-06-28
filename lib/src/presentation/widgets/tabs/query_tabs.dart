@@ -17,11 +17,11 @@ class QueryWizardTabs extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context)!;
+
     BlocProvider.of<QuerySourcesBloc>(context).add(
       const QuerySourcesRequested(),
     );
-
-    final localizations = QueryWizardLocalizations.of(context);
 
     return BlocBuilder<QuerySourcesBloc, QuerySourcesState>(
       builder: (
@@ -29,9 +29,7 @@ class QueryWizardTabs extends HookWidget {
         state,
       ) {
         if (state is QuerySourcesInitial) {
-          return Center(
-            child: Text(localizations?.queryWizard ?? 'Query Wizard'),
-          );
+          return Center(child: Text(localizations.queryWizard));
         }
 
         if (state is QuerySourcesLoadInProgress) {
@@ -50,7 +48,7 @@ class QueryWizardTabs extends HookWidget {
         if (state is QuerySourcesLoadFailure) {
           return Center(
             child: Text(
-              localizations?.somethingWentWrong ?? 'Something went wrong!',
+              localizations.somethingWentWrong,
               style: const TextStyle(color: Colors.red),
             ),
           );

@@ -21,26 +21,25 @@ class QueryGroupingsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
+    QueryWizardLocalizations localizations,
   ) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.group_work_rounded),
-        label: localizations?.groupings ?? 'Groupings',
+        label: localizations.groupings,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.bar_chart_rounded),
-        label: localizations?.aggregates ?? 'Aggregates',
+        label: localizations.aggregates,
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-
     final currentIndex = useState(0);
 
     return Scaffold(

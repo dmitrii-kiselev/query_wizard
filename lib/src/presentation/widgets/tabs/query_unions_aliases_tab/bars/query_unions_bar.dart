@@ -11,7 +11,7 @@ class QueryUnionsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueriesBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueriesBloc, QueriesState>(
       builder: (
@@ -34,14 +34,14 @@ class QueryUnionsBar extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.copy_outlined),
-                          tooltip: localizations?.copy ?? 'Copy',
+                          tooltip: localizations.copy,
                           onPressed: () {
                             bloc.add(QueryCopied(query: query));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
                             bloc.add(QueryDeleted(id: query.id));
                           },
@@ -68,7 +68,7 @@ class QueryUnionsBar extends StatelessWidget {
               onPressed: () {
                 bloc.add(QueryAdded(query: Query.empty()));
               },
-              tooltip: localizations?.add ?? 'Add',
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );

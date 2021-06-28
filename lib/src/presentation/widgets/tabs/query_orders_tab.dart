@@ -11,11 +11,59 @@ import 'package:query_wizard/presentation.dart';
 class QueryOrdersTab extends HookWidget {
   const QueryOrdersTab({Key? key}) : super(key: key);
 
+  void _navigateToChangeQueryOrderDialog({
+    required String id,
+    required BuildContext context,
+  }) {
+    final bloc = BlocProvider.of<QueryOrdersBloc>(context);
+    Navigator.push(
+      context,
+      DialogRoute<String>(
+        context: context,
+        builder: (_) => BlocProvider<QueryOrdersBloc>.value(
+          value: bloc,
+          child: _ChangeQueryOrderDialog(id: id),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToFieldsSelectionPage({
+    required BuildContext context,
+  }) {
+    final ordersBloc = BlocProvider.of<QueryOrdersBloc>(context);
+    final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => BlocProvider<QueryTablesBloc>.value(
+          value: tablesBloc,
+          child: FieldsSelectionPage(
+            onSelected: (fields) {
+              for (final field in fields) {
+                ordersBloc.add(
+                  QueryOrderAdded(
+                    order: QueryOrder(
+                      id: const Uuid().v1(),
+                      field: field.name,
+                      type: QuerySortingType.ascending,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryOrdersBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryOrdersBloc, QueryOrdersState>(
       builder: (
@@ -38,25 +86,17 @@ class QueryOrdersTab extends HookWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
                             bloc.add(QueryOrderDeleted(id: order.id));
                           },
                         ),
                       ],
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        DialogRoute<String>(
-                          context: context,
-                          builder: (_) => BlocProvider<QueryOrdersBloc>.value(
-                            value: bloc,
-                            child: _ChangeQueryOrderDialog(id: order.id),
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _navigateToChangeQueryOrderDialog(
+                      id: order.id,
+                      context: context,
+                    ),
                     title: Text(order.toString()),
                   ),
                 );
@@ -74,31 +114,8 @@ class QueryOrdersTab extends HookWidget {
               },
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (context) => FieldsSelectionPage(
-                      tables: tables,
-                      onSelected: (fields) {
-                        for (final field in fields) {
-                          bloc.add(
-                            QueryOrderAdded(
-                              order: QueryOrder(
-                                id: const Uuid().v1(),
-                                field: field.name,
-                                type: QuerySortingType.ascending,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              tooltip: localizations?.add ?? 'Add',
+              onPressed: () => _navigateToFieldsSelectionPage(context: context),
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );
@@ -119,13 +136,13 @@ class _ChangeQueryOrderDialog extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
-    final type = useState<QuerySortingType?>(QuerySortingType.ascending);
     final bloc = BlocProvider.of<QueryOrdersBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
+    final type = useState<QuerySortingType?>(QuerySortingType.ascending);
     final order = bloc.state.orders.findById(id);
 
     return AlertDialog(
-      title: Text(localizations?.changeSortingField ?? 'Change sorting field'),
+      title: Text(localizations.changeSortingField),
       content: DropdownButtonFormField<QuerySortingType>(
         value: type.value,
         items: QueryWizardConstants.sortingTypes
@@ -133,13 +150,13 @@ class _ChangeQueryOrderDialog extends HookWidget {
           (value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value.toString()),
+              child: Text(value.stringValue),
             );
           },
         ).toList(),
         onChanged: (value) => type.value = value,
         decoration: InputDecoration(
-          labelText: localizations?.sorting ?? 'Sorting',
+          labelText: localizations.sorting,
           icon: const Icon(Icons.compare_arrows),
         ),
       ),
@@ -155,13 +172,13 @@ class _ChangeQueryOrderDialog extends HookWidget {
             bloc.add(QueryOrderUpdated(order: newOrder));
             Navigator.pop(context);
           },
-          child: Text(localizations?.save ?? 'Save'),
+          child: Text(localizations.save),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(localizations?.cancel ?? 'Cancel'),
+          child: Text(localizations.cancel),
         ),
       ],
     );

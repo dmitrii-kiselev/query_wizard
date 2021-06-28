@@ -11,7 +11,7 @@ class QueryBatchesTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryBatchesBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
       builder: (
@@ -34,14 +34,14 @@ class QueryBatchesTab extends StatelessWidget {
                       children: [
                         IconButton(
                           icon: const Icon(Icons.copy_outlined),
-                          tooltip: localizations?.copy ?? 'Copy',
+                          tooltip: localizations.copy,
                           onPressed: () {
                             bloc.add(QueryBatchCopied(id: queryBatch.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
                             bloc.add(QueryBatchDeleted(id: queryBatch.id));
                           },
@@ -68,13 +68,13 @@ class QueryBatchesTab extends StatelessWidget {
               onPressed: () {
                 bloc.add(QueryBatchAdded(queryBatch: QueryBatch.empty()));
               },
-              tooltip: localizations?.add ?? 'Add',
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );
         }
 
-        return build(context);
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

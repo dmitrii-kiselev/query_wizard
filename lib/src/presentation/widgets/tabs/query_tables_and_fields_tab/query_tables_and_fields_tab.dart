@@ -22,31 +22,30 @@ class QueryTablesAndFieldsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
+    QueryWizardLocalizations localizations,
   ) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.source_rounded),
-        label: localizations?.database ?? 'Database',
+        label: localizations.database,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.table_rows_rounded),
-        label: localizations?.tables ?? 'Tables',
+        label: localizations.tables,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.horizontal_rule_rounded),
-        label: localizations?.fields ?? 'Fields',
+        label: localizations.fields,
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final currentIndex = useState(0);
-
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
+    final currentIndex = useState(0);
 
     return Scaffold(
       body: Center(

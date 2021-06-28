@@ -29,6 +29,6 @@ class QueryGrouping extends Equatable implements IEntity {
 
   @override
   String toString() {
-    return '$name $type';
+    return name;
   }
 }

@@ -57,9 +57,7 @@ class QueryConditionsBloc
   Stream<QueryConditionsState> _mapQueryConditionCopiedToState(
     QueryConditionCopied event,
   ) async* {
-    final condition = state.conditions.firstWhere(
-      (c) => c.id == event.id,
-    );
+    final condition = state.conditions.findById(event.id);
     state.conditions.add(condition.copy());
     yield QueryConditionsChanged(conditions: state.conditions);
   }
