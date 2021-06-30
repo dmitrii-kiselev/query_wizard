@@ -11,6 +11,31 @@ import 'package:uuid/uuid.dart';
 class QueryGroupingsBar extends HookWidget {
   const QueryGroupingsBar({Key? key}) : super(key: key);
 
+  Widget _buildTitle(QueryGrouping grouping) {
+    final groupingParts = grouping.field.split(".");
+    final table = groupingParts[0];
+    final field = groupingParts[1];
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: table,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: field,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _navigateToFieldsSelectionPage({required BuildContext context}) {
     final groupingsBloc = BlocProvider.of<QueryGroupingsBloc>(context);
     final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
@@ -27,7 +52,7 @@ class QueryGroupingsBar extends HookWidget {
                   QueryGroupingAdded(
                     grouping: QueryGrouping(
                       id: const Uuid().v1(),
-                      name: field.name,
+                      field: '${field.parent!.name}.${field.name}',
                       type: QueryGroupingType.grouping,
                       elements: List.empty(growable: true),
                     ),
@@ -75,7 +100,7 @@ class QueryGroupingsBar extends HookWidget {
                         ),
                       ],
                     ),
-                    title: Text(grouping.toString()),
+                    title: _buildTitle(grouping),
                   ),
                 );
               },

@@ -5,7 +5,7 @@ import 'package:query_wizard/domain.dart';
 class QueryGrouping extends Equatable implements IEntity {
   const QueryGrouping({
     required this.id,
-    required this.name,
+    required this.field,
     required this.type,
     this.parent,
     required this.elements,
@@ -13,7 +13,7 @@ class QueryGrouping extends Equatable implements IEntity {
 
   @override
   final String id;
-  final String name;
+  final String field;
   final QueryGroupingType type;
   final QueryGrouping? parent;
   final List<QueryGrouping> elements;
@@ -21,14 +21,9 @@ class QueryGrouping extends Equatable implements IEntity {
   @override
   List<Object> get props => [
         id,
-        name,
+        field,
         type,
         parent ?? '',
         elements,
       ];
-
-  @override
-  String toString() {
-    return name;
-  }
 }

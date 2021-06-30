@@ -669,19 +669,19 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final groupings1 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
+        field: 'ORDERS.CUSTOMER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
+        field: 'ORDER_ITEMS.ORDER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
+        field: 'PRODUCT_ID.PRODUCT_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -690,19 +690,19 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final groupings2 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
+        field: 'ORDERS.CUSTOMER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
+        field: 'ORDER_ITEMS.ORDER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
+        field: 'PRODUCT_ID.PRODUCT_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -711,19 +711,19 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final groupings3 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
+        field: 'ORDERS.CUSTOMER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
+        field: 'ORDER_ITEMS.ORDER_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
+        field: 'PRODUCT_ID.PRODUCT_ID',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),

@@ -3,14 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/infrastructure.dart';
-import 'package:query_wizard/presentation.dart';
+
+import '../query_wizard_test_configuration.dart';
 
 void main() {
   testWidgets('Groupings tab initialized', (WidgetTester tester) async {
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-      const QueryWizard(),
+      const QueryWizardTest(),
       const Duration(milliseconds: 1000),
     );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));

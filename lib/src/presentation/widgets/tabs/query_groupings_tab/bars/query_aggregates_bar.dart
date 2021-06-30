@@ -11,6 +11,43 @@ import 'package:query_wizard/presentation.dart';
 class QueryAggregatesBar extends HookWidget {
   const QueryAggregatesBar({Key? key}) : super(key: key);
 
+  Widget _buildTitle(QueryAggregate aggregate) {
+    final aggregateParts = aggregate.field.split(".");
+    final table = aggregateParts[0];
+    final field = aggregateParts[1];
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: aggregate.function.stringValue,
+            style: const TextStyle(color: SqlColorScheme.procedureOrFunction),
+          ),
+          const TextSpan(
+            text: '(',
+            style: TextStyle(color: SqlColorScheme.parentheses),
+          ),
+          TextSpan(
+            text: table,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: field,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+          const TextSpan(
+            text: ')',
+            style: TextStyle(color: SqlColorScheme.parentheses),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _navigateToChangeAggregateDialog({
     required String id,
     required BuildContext context,
@@ -44,7 +81,7 @@ class QueryAggregatesBar extends HookWidget {
                   QueryAggregateAdded(
                     aggregate: QueryAggregate(
                       id: const Uuid().v1(),
-                      field: field.name,
+                      field: '${field.parent!.name}.${field.name}',
                       function: QueryAggregateFunction.sum,
                     ),
                   ),
@@ -94,7 +131,7 @@ class QueryAggregatesBar extends HookWidget {
                     id: aggregate.id,
                     context: context,
                   ),
-                  title: Text(aggregate.toString()),
+                  title: _buildTitle(aggregate),
                 ),
               );
             },
@@ -148,7 +185,12 @@ class _ChangeAggregateDialog extends HookWidget {
           (value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value.stringValue),
+              child: Text(
+                value.stringValue,
+                style: const TextStyle(
+                  color: SqlColorScheme.procedureOrFunction,
+                ),
+              ),
             );
           },
         ).toList(),

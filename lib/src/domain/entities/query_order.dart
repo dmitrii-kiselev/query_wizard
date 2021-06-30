@@ -16,7 +16,4 @@ class QueryOrder extends Equatable implements IEntity {
 
   @override
   List<Object?> get props => [id, field, type];
-
-  @override
-  String toString() => '$field ${type.stringValue}';
 }

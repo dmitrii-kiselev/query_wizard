@@ -68,7 +68,7 @@ class QueryUnionsAliasesTab extends HookWidget {
         },
         selectedItemColor: colorScheme.onPrimary,
         unselectedItemColor: colorScheme.onPrimary.withOpacity(0.38),
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.surface,
       ),
     );
   }

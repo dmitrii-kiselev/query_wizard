@@ -4,7 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:query_wizard/infrastructure.dart';
-import 'package:query_wizard/presentation.dart';
+
+import 'query_wizard_test_configuration.dart';
 
 void main() {
   testWidgets('Query Wizard initialized smoke test', (
@@ -14,10 +15,10 @@ void main() {
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-      const QueryWizard(),
-      const Duration(milliseconds: 1000),
+      const QueryWizardTest(),
+      const Duration(milliseconds: 2000),
     );
-    await tester.pumpAndSettle(const Duration(milliseconds: 1000));
+    await tester.pumpAndSettle(const Duration(milliseconds: 2000));
 
     expect(find.text('Query Wizard'), findsOneWidget);
     expect(find.byKey(const ValueKey('Tables and fields')), findsOneWidget);
@@ -37,7 +38,7 @@ void main() {
     configureDependencies(Environment.test);
 
     await tester.pumpWidget(
-      const QueryWizard(),
+      const QueryWizardTest(),
       const Duration(milliseconds: 1000),
     );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));
@@ -51,7 +52,7 @@ void main() {
     configureDependencies(Environment.dev);
 
     await tester.pumpWidget(
-      const QueryWizard(),
+      const QueryWizardTest(),
       const Duration(milliseconds: 1000),
     );
     await tester.pumpAndSettle(const Duration(milliseconds: 1000));

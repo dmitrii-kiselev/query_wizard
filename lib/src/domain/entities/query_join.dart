@@ -37,13 +37,4 @@ class QueryJoin extends Equatable implements IEntity {
         isRightAll,
         condition,
       ];
-
-  @override
-  String toString() {
-    return condition.isCustom
-        ? condition.customCondition
-        : '$leftTable.${condition.leftField} '
-            '${condition.logicalCompareType.stringValue} '
-            '$rightTable.${condition.rightField}';
-  }
 }

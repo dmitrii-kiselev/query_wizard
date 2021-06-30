@@ -1,14 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-import 'package:uuid/uuid.dart';
+import 'package:query_wizard/presentation.dart';
 
 class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
+
+  Widget _buildTitle(QueryCondition condition) {
+    final leftParts = condition.leftField.split('.');
+    final leftTable = leftParts[0];
+    final leftField = leftParts[1];
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: leftTable,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: leftField,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: condition.logicalCompareType.stringValue,
+            style: const TextStyle(color: SqlColorScheme.dot),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: condition.rightField,
+            style: const TextStyle(color: SqlColorScheme.parameter),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _navigateToQueryConditionPage({
     String? id,
@@ -72,7 +108,7 @@ class QueryConditionsTab extends StatelessWidget {
                     id: condition.id,
                     context: context,
                   ),
-                  title: Text(condition.toString()),
+                  title: _buildTitle(condition),
                 ),
               );
             },
@@ -223,9 +259,31 @@ class _QueryConditionPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(
-                                '${value.parent?.alias ?? value.parent?.name}.'
-                                '${value.name}'),
+                            child: RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: value.parent?.alias ??
+                                        value.parent?.name,
+                                    style: const TextStyle(
+                                      color: SqlColorScheme.table,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '.',
+                                    style: TextStyle(
+                                      color: SqlColorScheme.dot,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: value.name,
+                                    style: const TextStyle(
+                                      color: SqlColorScheme.column,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       ).toList(),
@@ -248,7 +306,10 @@ class _QueryConditionPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value.stringValue),
+                            child: Text(
+                              value.stringValue,
+                              style: const TextStyle(color: SqlColorScheme.dot),
+                            ),
                           );
                         },
                       ).toList(),
@@ -269,6 +330,7 @@ class _QueryConditionPage extends HookWidget {
                       ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
+                      style: const TextStyle(color: SqlColorScheme.parameter),
                     ),
                   ),
                 ],

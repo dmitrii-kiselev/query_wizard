@@ -7,26 +7,26 @@ void main() {
   test('QueryGrouping initialized', () {
     final groupingSet = QueryGrouping(
       id: const Uuid().v1(),
-      name: 'Parent table',
+      field: 'Parent table',
       type: QueryGroupingType.groupingSet,
       elements: List<QueryGrouping>.empty(growable: true),
     );
     final groupings = [
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'Grouping 1',
+        field: 'Grouping 1',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'Grouping 2',
+        field: 'Grouping 2',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        name: 'Grouping 3',
+        field: 'Grouping 3',
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -34,7 +34,7 @@ void main() {
 
     final grouping = QueryGrouping(
       id: const Uuid().v1(),
-      name: 'Child Grouping',
+      field: 'Child Grouping',
       type: QueryGroupingType.grouping,
       elements: groupings,
       parent: groupingSet,
@@ -46,7 +46,7 @@ void main() {
       grouping.props,
       equals([
         grouping.id,
-        grouping.name,
+        grouping.field,
         grouping.type,
         grouping.parent,
         grouping.elements,

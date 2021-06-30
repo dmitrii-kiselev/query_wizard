@@ -28,4 +28,20 @@ extension CopyJoin on QueryJoin {
         isRightAll: isRightAll ?? this.isRightAll,
         condition: condition ?? this.condition,
       );
+
+  String getJoin() {
+    if (isLeftAll && isRightAll) {
+      return 'FULL OUTER';
+    }
+
+    if (!isLeftAll && !isRightAll) {
+      return 'INNER';
+    }
+
+    if (isLeftAll) {
+      return 'LEFT';
+    }
+
+    return 'RIGHT';
+  }
 }

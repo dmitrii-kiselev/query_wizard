@@ -11,6 +11,36 @@ import 'package:query_wizard/presentation.dart';
 class QueryOrdersTab extends HookWidget {
   const QueryOrdersTab({Key? key}) : super(key: key);
 
+  Widget _buildTitle(QueryOrder order) {
+    final orderParts = order.field.split(".");
+    final table = orderParts[0];
+    final field = orderParts[1];
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: table,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: field,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: order.type.stringValue,
+            style: const TextStyle(color: SqlColorScheme.keyword),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _navigateToChangeQueryOrderDialog({
     required String id,
     required BuildContext context,
@@ -46,7 +76,7 @@ class QueryOrdersTab extends HookWidget {
                   QueryOrderAdded(
                     order: QueryOrder(
                       id: const Uuid().v1(),
-                      field: field.name,
+                      field: '${field.parent!.name}.${field.name}',
                       type: QuerySortingType.ascending,
                     ),
                   ),
@@ -97,7 +127,7 @@ class QueryOrdersTab extends HookWidget {
                       id: order.id,
                       context: context,
                     ),
-                    title: Text(order.toString()),
+                    title: _buildTitle(order),
                   ),
                 );
               },

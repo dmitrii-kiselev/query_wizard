@@ -23,6 +23,7 @@ export 'src/domain/extensions/copy_join.dart';
 export 'src/domain/extensions/copy_query.dart';
 export 'src/domain/extensions/copy_query_batch.dart';
 export 'src/domain/extensions/copy_query_condition.dart';
+export 'src/domain/extensions/copy_query_element.dart';
 export 'src/domain/extensions/logical_compare_type_string_value.dart';
 export 'src/domain/extensions/query_aggregate_function_string_value.dart';
 export 'src/domain/extensions/query_sorting_type_string_value.dart';

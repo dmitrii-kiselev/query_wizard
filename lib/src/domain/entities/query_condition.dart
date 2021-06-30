@@ -37,11 +37,4 @@ class QueryCondition extends Equatable implements IEntity {
         rightField,
         customCondition,
       ];
-
-  @override
-  String toString() {
-    return isCustom
-        ? 'Custom'
-        : '$leftField ${logicalCompareType.stringValue} $rightField';
-  }
 }

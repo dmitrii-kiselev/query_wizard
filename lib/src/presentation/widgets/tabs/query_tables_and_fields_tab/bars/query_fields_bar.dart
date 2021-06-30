@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-import 'package:uuid/uuid.dart';
+import 'package:query_wizard/presentation.dart';
 
 class QueryFieldsBar extends StatelessWidget {
   const QueryFieldsBar({Key? key}) : super(key: key);
+
+  Widget _buildTitle(QueryElement field) {
+    final alias = field.parent!.alias ?? field.parent!.name;
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: alias,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: field.name,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _navigateToCustomExpressionPage({
     String? id,
@@ -51,10 +75,7 @@ class QueryFieldsBar extends StatelessWidget {
                       id: field.id,
                       context: context,
                     ),
-                    title: Text(field.name),
-                    subtitle: field.parent != null
-                        ? Text(field.parent!.alias ?? field.parent!.name)
-                        : null,
+                    title: _buildTitle(field),
                     trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
@@ -63,18 +84,14 @@ class QueryFieldsBar extends StatelessWidget {
                           icon: const Icon(Icons.copy_outlined),
                           tooltip: localizations.copy,
                           onPressed: () {
-                            bloc.add(
-                              QueryFieldCopied(id: field.id),
-                            );
+                            bloc.add(QueryFieldCopied(id: field.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
                           tooltip: localizations.remove,
                           onPressed: () {
-                            bloc.add(
-                              QueryFieldDeleted(id: field.id),
-                            );
+                            bloc.add(QueryFieldDeleted(id: field.id));
                           },
                         ),
                       ],

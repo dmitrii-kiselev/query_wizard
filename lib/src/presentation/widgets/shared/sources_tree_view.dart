@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:query_wizard/presentation.dart';
 
 class ItemValue {
   const ItemValue({
@@ -188,17 +189,27 @@ class TreeItem extends HookWidget {
     return item.type == QueryElementType.table;
   }
 
-  double _getElevation() {
+  double _buildElevation() {
     return _isRoot() ? 1.0 : 0;
   }
 
-  Icon _getLeadingIcon() {
+  Icon _buildLeadingIcon() {
     return _isRoot()
         ? const Icon(Icons.table_rows_rounded)
         : const Icon(Icons.horizontal_rule_rounded);
   }
 
-  List<Widget> _getActions(QueryWizardLocalizations localizations) {
+  Widget _buildTitle() {
+    final alias = _isRoot() ? item.alias ?? '' : item.name;
+    final color = _isRoot() ? SqlColorScheme.table : SqlColorScheme.column;
+
+    return Text(
+      alias == '' ? item.name : alias,
+      style: TextStyle(color: color),
+    );
+  }
+
+  List<Widget> _buildActions(QueryWizardLocalizations localizations) {
     return [
       Visibility(
         visible: _isRoot() && onCopy != null,
@@ -236,12 +247,12 @@ class TreeItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final alias = _isRoot() ? item.alias ?? '' : item.name;
-    final elevation = _getElevation();
     final selected = useState(false);
-    final leading = _getLeadingIcon();
-    final title = Text(alias == '' ? item.name : alias);
-    final actions = _getActions(QueryWizardLocalizations.of(context)!);
+
+    final elevation = _buildElevation();
+    final leading = _buildLeadingIcon();
+    final title = _buildTitle();
+    final actions = _buildActions(QueryWizardLocalizations.of(context)!);
 
     return Card(
       elevation: elevation,

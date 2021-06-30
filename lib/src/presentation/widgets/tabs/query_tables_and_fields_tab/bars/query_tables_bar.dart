@@ -141,9 +141,7 @@ class _SubqueryPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          localizations.subquery,
-        ),
+        title: Text(localizations.subquery),
         actions: [
           TextButton(
             onPressed: () {},

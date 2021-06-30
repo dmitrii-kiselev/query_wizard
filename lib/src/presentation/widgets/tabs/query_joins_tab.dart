@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:query_wizard/presentation.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
@@ -9,6 +10,65 @@ import 'package:query_wizard/domain.dart';
 
 class QueryJoinsTab extends StatelessWidget {
   const QueryJoinsTab({Key? key}) : super(key: key);
+
+  Widget _buildTitle(QueryJoin join) {
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: join.getJoin(),
+            style: const TextStyle(color: SqlColorScheme.keyword),
+          ),
+          const TextSpan(text: ' '),
+          const TextSpan(
+            text: 'JOIN',
+            style: TextStyle(color: SqlColorScheme.keyword),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: join.leftTable,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(text: '\n'),
+          const TextSpan(
+            text: 'ON',
+            style: TextStyle(color: SqlColorScheme.keyword),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: join.leftTable,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: join.condition.leftField,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: join.condition.logicalCompareType.stringValue,
+            style: const TextStyle(color: SqlColorScheme.dot),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: join.rightTable,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: join.condition.rightField,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _navigateToQueryJoinPage({String? id, required BuildContext context}) {
     final joinsBloc = BlocProvider.of<QueryJoinsBloc>(context);
@@ -70,7 +130,7 @@ class QueryJoinsTab extends StatelessWidget {
                       id: join.id,
                       context: context,
                     ),
-                    title: Text(join.toString()),
+                    title: _buildTitle(join),
                   ),
                 );
               },
@@ -232,7 +292,12 @@ class _QueryJoinPage extends HookWidget {
                       (value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value.alias ?? value.name),
+                          child: Text(
+                            value.alias ?? value.name,
+                            style: const TextStyle(
+                              color: SqlColorScheme.table,
+                            ),
+                          ),
                         );
                       },
                     ).toList(),
@@ -253,7 +318,12 @@ class _QueryJoinPage extends HookWidget {
                       (value) {
                         return DropdownMenuItem(
                           value: value,
-                          child: Text(value.alias ?? value.name),
+                          child: Text(
+                            value.alias ?? value.name,
+                            style: const TextStyle(
+                              color: SqlColorScheme.table,
+                            ),
+                          ),
                         );
                       },
                     ).toList(),
@@ -314,7 +384,12 @@ class _QueryJoinPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value.name),
+                            child: Text(
+                              value.name,
+                              style: const TextStyle(
+                                color: SqlColorScheme.column,
+                              ),
+                            ),
                           );
                         },
                       ).toList(),
@@ -354,7 +429,12 @@ class _QueryJoinPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value.name),
+                            child: Text(
+                              value.name,
+                              style: const TextStyle(
+                                color: SqlColorScheme.column,
+                              ),
+                            ),
                           );
                         },
                       ).toList(),
