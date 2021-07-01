@@ -13,7 +13,7 @@ class QueryGrouping extends Equatable implements IEntity {
 
   @override
   final String id;
-  final String field;
+  final QueryElement field;
   final QueryGroupingType type;
   final QueryGrouping? parent;
   final List<QueryGrouping> elements;

@@ -23,7 +23,7 @@ class QueryWizard extends StatelessWidget {
   Widget build(BuildContext context) {
     return ModelBinding(
       initialModel: QueryWizardOptions(
-        themeMode: ThemeMode.dark,
+        themeMode: ThemeMode.light,
         textScaleFactor: systemTextScaleFactorOption,
         customTextDirection: CustomTextDirection.localeBased,
         timeDilation: timeDilation,

@@ -5,28 +5,34 @@ import 'package:query_wizard/domain.dart';
 
 void main() {
   test('QueryGrouping initialized', () {
+    final field = QueryElement(
+      id: const Uuid().v1(),
+      name: 'table',
+      type: QueryElementType.table,
+      elements: List<QueryElement>.empty(),
+    );
     final groupingSet = QueryGrouping(
       id: const Uuid().v1(),
-      field: 'Parent table',
+      field: field,
       type: QueryGroupingType.groupingSet,
       elements: List<QueryGrouping>.empty(growable: true),
     );
     final groupings = [
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'Grouping 1',
+        field: field,
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'Grouping 2',
+        field: field,
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'Grouping 3',
+        field: field,
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -34,7 +40,7 @@ void main() {
 
     final grouping = QueryGrouping(
       id: const Uuid().v1(),
-      field: 'Child Grouping',
+      field: field,
       type: QueryGroupingType.grouping,
       elements: groupings,
       parent: groupingSet,

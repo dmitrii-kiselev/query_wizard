@@ -6,26 +6,26 @@ class QueryCondition extends Equatable implements IEntity {
   const QueryCondition({
     required this.id,
     required this.isCustom,
-    required this.leftField,
+    this.leftField,
     required this.logicalCompareType,
-    required this.rightField,
+    this.rightField,
     required this.customCondition,
   });
 
   const QueryCondition.empty()
       : id = '',
         isCustom = false,
-        leftField = '',
+        leftField = null,
         logicalCompareType = LogicalCompareType.equal,
-        rightField = '',
+        rightField = null,
         customCondition = '';
 
   @override
   final String id;
   final bool isCustom;
-  final String leftField;
+  final QueryElement? leftField;
   final LogicalCompareType logicalCompareType;
-  final String rightField;
+  final QueryElement? rightField;
   final String customCondition;
 
   @override

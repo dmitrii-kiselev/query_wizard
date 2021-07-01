@@ -12,15 +12,15 @@ class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryCondition condition) {
-    final leftParts = condition.leftField.split('.');
-    final leftTable = leftParts[0];
-    final leftField = leftParts[1];
+    final field = condition.leftField;
+    final tableName = field!.parent?.alias ?? field.parent!.name;
+    final fieldName = field.name;
 
     return RichText(
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: leftTable,
+            text: tableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -28,7 +28,7 @@ class QueryConditionsTab extends StatelessWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: leftField,
+            text: fieldName,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
           const TextSpan(text: ' '),
@@ -38,7 +38,7 @@ class QueryConditionsTab extends StatelessWidget {
           ),
           const TextSpan(text: ' '),
           TextSpan(
-            text: condition.rightField,
+            text: condition.rightField!.alias ?? condition.rightField!.name,
             style: const TextStyle(color: SqlColorScheme.parameter),
           ),
         ],
@@ -84,7 +84,13 @@ class QueryConditionsTab extends StatelessWidget {
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
-                  leading: Wrap(
+                  leading: const Icon(Icons.filter_alt_rounded),
+                  onTap: () => _navigateToQueryConditionPage(
+                    id: condition.id,
+                    context: context,
+                  ),
+                  title: _buildTitle(condition),
+                  trailing: Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
@@ -104,11 +110,6 @@ class QueryConditionsTab extends StatelessWidget {
                       ),
                     ],
                   ),
-                  onTap: () => _navigateToQueryConditionPage(
-                    id: condition.id,
-                    context: context,
-                  ),
-                  title: _buildTitle(condition),
                 ),
               );
             },
@@ -123,6 +124,7 @@ class QueryConditionsTab extends StatelessWidget {
                 ),
               );
             },
+            buildDefaultDragHandles: false,
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => _navigateToQueryConditionPage(context: context),
@@ -166,13 +168,12 @@ class _QueryConditionPage extends HookWidget {
 
       isCustom.value = condition.isCustom;
       leftField.value = fields.firstWhere(
-        (f) =>
-            '${f.parent?.alias ?? f.parent?.name}.${f.name}' ==
-            condition.leftField,
+        (f) => f == condition.leftField,
       );
 
       logicalCompareType.value = condition.logicalCompareType;
-      rightFieldController.text = condition.rightField;
+      rightFieldController.text =
+          condition.rightField!.alias ?? condition.rightField!.name;
       customConditionController.text = condition.customCondition;
 
       pageInitialized.value = true;
@@ -187,12 +188,15 @@ class _QueryConditionPage extends HookWidget {
               final condition = QueryCondition(
                   id: id == null ? const Uuid().v1() : id!,
                   isCustom: isCustom.value ?? false,
-                  leftField:
-                      '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}'
-                      '.${leftField.value?.name ?? ''}',
+                  leftField: leftField.value,
                   logicalCompareType:
                       logicalCompareType.value ?? LogicalCompareType.equal,
-                  rightField: rightFieldController.text,
+                  rightField: QueryElement(
+                    id: const Uuid().v1(),
+                    name: rightFieldController.text,
+                    type: QueryElementType.column,
+                    elements: List<QueryElement>.empty(),
+                  ),
                   customCondition: customConditionController.text);
 
               if (id == null) {

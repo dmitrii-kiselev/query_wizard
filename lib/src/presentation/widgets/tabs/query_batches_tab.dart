@@ -28,7 +28,9 @@ class QueryBatchesTab extends StatelessWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.batch_prediction),
+                    title: Text(queryBatch.name),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -48,7 +50,6 @@ class QueryBatchesTab extends StatelessWidget {
                         ),
                       ],
                     ),
-                    title: Text(queryBatch.name),
                   ),
                 );
               },
@@ -63,6 +64,7 @@ class QueryBatchesTab extends StatelessWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {

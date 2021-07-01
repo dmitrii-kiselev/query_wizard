@@ -15,9 +15,9 @@ extension CopyQueryCondition on QueryCondition {
   QueryCondition copyWith({
     String? id,
     bool? isCustom,
-    String? leftField,
+    QueryElement? leftField,
     LogicalCompareType? logicalCompareType,
-    String? rightField,
+    QueryElement? rightField,
     String? customCondition,
   }) =>
       QueryCondition(

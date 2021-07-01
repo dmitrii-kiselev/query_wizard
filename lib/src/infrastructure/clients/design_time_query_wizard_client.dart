@@ -536,152 +536,215 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
 
   @override
   Future<QuerySchema> parseQuery(String query) async {
-    final sources1 = await getSources();
-    final sources2 = await getSources();
-    final sources3 = await getSources();
+    final sources = await getSources();
+
+    final customers = sources.firstWhere((s) => s.name == 'CUSTOMERS');
+    final orders = sources.firstWhere((s) => s.name == 'ORDERS');
+    final orderItems = sources.firstWhere((s) => s.name == 'ORDER_ITEMS');
+    final products = sources.firstWhere((s) => s.name == 'PRODUCTS');
 
     final List<QueryJoin> joins1 = [
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: customers,
+        isLeftAll: true,
+        rightTable: orders,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: customers.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orders,
+        isLeftAll: true,
+        rightTable: orderItems,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orderItems.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orderItems,
+        isLeftAll: true,
+        rightTable: products,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orderItems.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: products.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
     ];
 
     final List<QueryJoin> joins2 = [
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: customers,
+        isLeftAll: true,
+        rightTable: orders,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: customers.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orders,
+        isLeftAll: true,
+        rightTable: orderItems,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orderItems.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orderItems,
+        isLeftAll: true,
+        rightTable: products,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orderItems.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: products.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
     ];
 
     final List<QueryJoin> joins3 = [
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: customers,
+        isLeftAll: true,
+        rightTable: orders,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: customers.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orders,
+        isLeftAll: true,
+        rightTable: orderItems,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: orderItems.elements.firstWhere(
+            (e) => e.name == 'ORDER_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
       QueryJoin(
+        id: const Uuid().v1(),
+        leftTable: orderItems,
+        isLeftAll: true,
+        rightTable: products,
+        isRightAll: false,
+        condition: QueryCondition(
           id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
+          leftField: orderItems.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          logicalCompareType: LogicalCompareType.equal,
+          rightField: products.elements.firstWhere(
+            (e) => e.name == 'PRODUCT_ID',
+          ),
+          isCustom: false,
+          customCondition: '',
+        ),
+      ),
     ];
 
     final groupings1 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDERS.CUSTOMER_ID',
+        field: orders.elements.firstWhere(
+          (e) => e.name == 'CUSTOMER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.ORDER_ID',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'ORDER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'PRODUCT_ID.PRODUCT_ID',
+        field: products.elements.firstWhere(
+          (e) => e.name == 'PRODUCT_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -690,19 +753,25 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final groupings2 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDERS.CUSTOMER_ID',
+        field: orders.elements.firstWhere(
+          (e) => e.name == 'CUSTOMER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.ORDER_ID',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'ORDER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'PRODUCT_ID.PRODUCT_ID',
+        field: products.elements.firstWhere(
+          (e) => e.name == 'PRODUCT_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -711,19 +780,25 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final groupings3 = [
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDERS.CUSTOMER_ID',
+        field: orders.elements.firstWhere(
+          (e) => e.name == 'CUSTOMER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.ORDER_ID',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'ORDER_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
       QueryGrouping(
         id: const Uuid().v1(),
-        field: 'PRODUCT_ID.PRODUCT_ID',
+        field: products.elements.firstWhere(
+          (e) => e.name == 'PRODUCT_ID',
+        ),
         type: QueryGroupingType.grouping,
         elements: List<QueryGrouping>.empty(growable: true),
       ),
@@ -732,7 +807,9 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final aggregates1 = [
       QueryAggregate(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         function: QueryAggregateFunction.sum,
       ),
     ];
@@ -740,7 +817,9 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final aggregates2 = [
       QueryAggregate(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         function: QueryAggregateFunction.sum,
       ),
     ];
@@ -748,7 +827,9 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final aggregates3 = [
       QueryAggregate(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         function: QueryAggregateFunction.sum,
       ),
     ];
@@ -757,9 +838,16 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryCondition(
           id: const Uuid().v1(),
           isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
           logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
+          rightField: QueryElement(
+            id: const Uuid().v1(),
+            name: ':CUSTOMER_ID',
+            type: QueryElementType.column,
+            elements: List<QueryElement>.empty(),
+          ),
           customCondition: ''),
     ];
 
@@ -767,9 +855,16 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryCondition(
           id: const Uuid().v1(),
           isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
           logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
+          rightField: QueryElement(
+            id: const Uuid().v1(),
+            name: ':CUSTOMER_ID',
+            type: QueryElementType.column,
+            elements: List<QueryElement>.empty(),
+          ),
           customCondition: ''),
     ];
 
@@ -777,16 +872,25 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       QueryCondition(
           id: const Uuid().v1(),
           isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
+          leftField: orders.elements.firstWhere(
+            (e) => e.name == 'CUSTOMER_ID',
+          ),
           logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
+          rightField: QueryElement(
+            id: const Uuid().v1(),
+            name: ':CUSTOMER_ID',
+            type: QueryElementType.column,
+            elements: List<QueryElement>.empty(),
+          ),
           customCondition: ''),
     ];
 
     final orders1 = [
       QueryOrder(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         type: QuerySortingType.ascending,
       ),
     ];
@@ -794,7 +898,9 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final orders2 = [
       QueryOrder(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         type: QuerySortingType.ascending,
       ),
     ];
@@ -802,55 +908,60 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     final orders3 = [
       QueryOrder(
         id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
+        field: orderItems.elements.firstWhere(
+          (e) => e.name == 'UNIT_PRICE',
+        ),
         type: QuerySortingType.ascending,
       ),
     ];
 
     final query1 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 1',
-        sources: sources1,
-        tables: [...sources1],
-        fields: [...[]],
-        joins: joins1,
-        groupings: groupings1,
-        aggregates: aggregates1,
-        conditions: conditions1,
-        orders: orders1,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+      id: const Uuid().v1(),
+      name: 'Query 1',
+      sources: sources,
+      tables: [...sources],
+      fields: [...[]],
+      joins: joins1,
+      groupings: groupings1,
+      aggregates: aggregates1,
+      conditions: conditions1,
+      orders: orders1,
+      isTop: false,
+      topCounter: 0,
+      isDistinct: false,
+    );
 
     final query2 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 2',
-        sources: sources2,
-        tables: [...sources2],
-        fields: [...[]],
-        joins: joins2,
-        groupings: groupings2,
-        aggregates: aggregates2,
-        conditions: conditions2,
-        orders: orders2,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+      id: const Uuid().v1(),
+      name: 'Query 2',
+      sources: sources,
+      tables: [...sources],
+      fields: [...[]],
+      joins: joins2,
+      groupings: groupings2,
+      aggregates: aggregates2,
+      conditions: conditions2,
+      orders: orders2,
+      isTop: false,
+      topCounter: 0,
+      isDistinct: false,
+    );
 
     final query3 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 3',
-        sources: sources3,
-        tables: [...sources3],
-        fields: [...[]],
-        joins: joins3,
-        groupings: groupings3,
-        aggregates: aggregates3,
-        conditions: conditions3,
-        orders: orders3,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+      id: const Uuid().v1(),
+      name: 'Query 3',
+      sources: sources,
+      tables: [...sources],
+      fields: [...[]],
+      joins: joins3,
+      groupings: groupings3,
+      aggregates: aggregates3,
+      conditions: conditions3,
+      orders: orders3,
+      isTop: false,
+      topCounter: 0,
+      isDistinct: false,
+    );
 
     final batch1 = QueryBatch(
         id: const Uuid().v1(),
@@ -867,12 +978,13 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
         aliases: Map.identity(),
         queryType: QueryType.selectQuery);
     final batch3 = QueryBatch(
-        id: const Uuid().v1(),
-        name: 'Query batch 3',
-        sources: [...[]],
-        queries: [query1, query2, query3],
-        aliases: Map.identity(),
-        queryType: QueryType.selectQuery);
+      id: const Uuid().v1(),
+      name: 'Query batch 3',
+      sources: [...[]],
+      queries: [query1, query2, query3],
+      aliases: Map.identity(),
+      queryType: QueryType.selectQuery,
+    );
 
     final querySchema = QuerySchema(queryBatches: [batch1, batch2, batch3]);
 

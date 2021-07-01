@@ -47,5 +47,6 @@
   "top": "Top",
   "topCounter": "Top counter",
   "unions": "Unions",
-  "unionsAliasesTab": "Unions/Aliases"
+  "unionsAliasesTab": "Unions/Aliases",
+  "changeAggregate": "Change aggregate"
 }

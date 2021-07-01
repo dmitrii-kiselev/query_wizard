@@ -14,9 +14,9 @@ extension CopyJoin on QueryJoin {
 
   QueryJoin copyWith({
     String? id,
-    String? leftTable,
+    QueryElement? leftTable,
     bool? isLeftAll,
-    String? rightTable,
+    QueryElement? rightTable,
     bool? isRightAll,
     QueryCondition? condition,
   }) =>

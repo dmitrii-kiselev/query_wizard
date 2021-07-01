@@ -11,7 +11,7 @@ class QueryAggregate extends Equatable implements IEntity {
 
   @override
   final String id;
-  final String field;
+  final QueryElement field;
   final QueryAggregateFunction function;
 
   @override

@@ -2,8 +2,9 @@ import 'package:equatable/equatable.dart';
 
 import 'package:query_wizard/domain.dart';
 
+//ignore: must_be_immutable
 class QueryElement extends Equatable implements IEntity {
-  const QueryElement({
+  QueryElement({
     required this.id,
     required this.name,
     this.alias,
@@ -15,7 +16,7 @@ class QueryElement extends Equatable implements IEntity {
   @override
   final String id;
   final String name;
-  final String? alias;
+  String? alias;
   final QueryElementType type;
   final QueryElement? parent;
   final List<QueryElement> elements;

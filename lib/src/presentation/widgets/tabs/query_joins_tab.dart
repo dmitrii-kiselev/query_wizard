@@ -12,6 +12,9 @@ class QueryJoinsTab extends StatelessWidget {
   const QueryJoinsTab({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryJoin join) {
+    final leftTableName = join.leftTable?.alias ?? join.leftTable?.name;
+    final rightTableName = join.leftTable?.alias ?? join.leftTable?.name;
+
     return RichText(
       text: TextSpan(
         children: <TextSpan>[
@@ -26,7 +29,7 @@ class QueryJoinsTab extends StatelessWidget {
           ),
           const TextSpan(text: ' '),
           TextSpan(
-            text: join.leftTable,
+            text: leftTableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(text: '\n'),
@@ -36,7 +39,7 @@ class QueryJoinsTab extends StatelessWidget {
           ),
           const TextSpan(text: ' '),
           TextSpan(
-            text: join.leftTable,
+            text: leftTableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -44,7 +47,7 @@ class QueryJoinsTab extends StatelessWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: join.condition.leftField,
+            text: join.condition.leftField!.name,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
           const TextSpan(text: ' '),
@@ -54,7 +57,7 @@ class QueryJoinsTab extends StatelessWidget {
           ),
           const TextSpan(text: ' '),
           TextSpan(
-            text: join.rightTable,
+            text: rightTableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -62,7 +65,7 @@ class QueryJoinsTab extends StatelessWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: join.condition.rightField,
+            text: join.condition.rightField!.name,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
         ],
@@ -106,7 +109,13 @@ class QueryJoinsTab extends StatelessWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.account_tree_rounded),
+                    onTap: () => _navigateToQueryJoinPage(
+                      id: join.id,
+                      context: context,
+                    ),
+                    title: _buildTitle(join),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -126,11 +135,6 @@ class QueryJoinsTab extends StatelessWidget {
                         ),
                       ],
                     ),
-                    onTap: () => _navigateToQueryJoinPage(
-                      id: join.id,
-                      context: context,
-                    ),
-                    title: _buildTitle(join),
                   ),
                 );
               },
@@ -145,6 +149,7 @@ class QueryJoinsTab extends StatelessWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _navigateToQueryJoinPage(context: context),
@@ -196,11 +201,15 @@ class _QueryJoinPage extends HookWidget {
       final join = bloc.state.joins.findById(id!);
 
       leftTable.value = tables.firstWhere(
-        (t) => (t.alias ?? t.name) == join.leftTable,
+        (t) =>
+            (t.alias ?? t.name) ==
+            (join.leftTable!.alias ?? join.leftTable!.name),
       );
 
       rightTable.value = tables.firstWhere(
-        (t) => (t.alias ?? t.name) == join.rightTable,
+        (t) =>
+            (t.alias ?? t.name) ==
+            (join.rightTable!.alias ?? join.rightTable!.name),
       );
 
       isLeftAll.value = join.isLeftAll;
@@ -214,11 +223,11 @@ class _QueryJoinPage extends HookWidget {
         rightField.value = null;
       } else {
         leftField.value = leftTable.value?.elements.firstWhere(
-          (f) => f.name == join.condition.leftField,
+          (f) => f == join.condition.leftField,
         );
         logicalCompareType.value = join.condition.logicalCompareType;
         rightField.value = rightTable.value?.elements.firstWhere(
-          (f) => f.name == join.condition.rightField,
+          (f) => f == join.condition.rightField,
         );
       }
 
@@ -242,19 +251,17 @@ class _QueryJoinPage extends HookWidget {
               final condition = QueryCondition(
                 id: const Uuid().v1(),
                 isCustom: isCustom.value ?? false,
-                leftField: leftField.value?.name ?? '',
+                leftField: leftField.value,
                 logicalCompareType:
                     logicalCompareType.value ?? LogicalCompareType.equal,
-                rightField: rightField.value?.name ?? '',
+                rightField: rightField.value,
                 customCondition: customConditionController.text,
               );
               final join = QueryJoin(
                 id: id == null ? const Uuid().v1() : id!,
-                leftTable:
-                    leftTable.value?.alias ?? leftTable.value?.name ?? '',
+                leftTable: leftTable.value ?? leftTable.value,
                 isLeftAll: isLeftAll.value ?? false,
-                rightTable:
-                    rightTable.value?.alias ?? rightTable.value?.name ?? '',
+                rightTable: rightTable.value ?? rightTable.value,
                 isRightAll: isRightAll.value ?? false,
                 condition: condition,
               );

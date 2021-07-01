@@ -11,7 +11,7 @@ class QueryOrder extends Equatable implements IEntity {
 
   @override
   final String id;
-  final String field;
+  final QueryElement field;
   final QuerySortingType type;
 
   @override

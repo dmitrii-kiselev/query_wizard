@@ -28,7 +28,9 @@ class QueryUnionsBar extends StatelessWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.merge_type_rounded),
+                    title: Text(query.name),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -48,7 +50,6 @@ class QueryUnionsBar extends StatelessWidget {
                         ),
                       ],
                     ),
-                    title: Text(query.name),
                   ),
                 );
               },
@@ -63,6 +64,7 @@ class QueryUnionsBar extends StatelessWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {

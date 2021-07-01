@@ -12,7 +12,7 @@ class QueryFieldsBar extends StatelessWidget {
   const QueryFieldsBar({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryElement field) {
-    final alias = field.parent!.alias ?? field.parent!.name;
+    final alias = (field.parent?.alias ?? field.parent?.name) ?? '';
 
     return RichText(
       text: TextSpan(

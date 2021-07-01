@@ -27,7 +27,7 @@ import '../../application/blocs/query_tables/query_tables_bloc.dart' as _i17;
 import '../../application/blocs/query_wizard/query_wizard_bloc.dart' as _i18;
 import '../clients/design_time_query_wizard_client.dart' as _i4;
 import '../clients/fake_query_wizard_api_client.dart' as _i5;
-import '../repositories/query_wizard_repository_impl.dart' as _i6;
+import '../repositories/query_wizard_repository.dart' as _i6;
 
 const String _dev = 'dev';
 const String _test = 'test';

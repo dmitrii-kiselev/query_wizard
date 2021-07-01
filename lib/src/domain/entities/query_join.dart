@@ -5,26 +5,26 @@ import 'package:query_wizard/domain.dart';
 class QueryJoin extends Equatable implements IEntity {
   const QueryJoin({
     required this.id,
-    required this.leftTable,
+    this.leftTable,
     required this.isLeftAll,
-    required this.rightTable,
+    this.rightTable,
     required this.isRightAll,
     required this.condition,
   });
 
   const QueryJoin.empty()
       : id = '',
-        leftTable = '',
+        leftTable = null,
         isLeftAll = false,
-        rightTable = '',
+        rightTable = null,
         isRightAll = false,
         condition = const QueryCondition.empty();
 
   @override
   final String id;
-  final String leftTable;
+  final QueryElement? leftTable;
   final bool isLeftAll;
-  final String rightTable;
+  final QueryElement? rightTable;
   final bool isRightAll;
   final QueryCondition condition;
 

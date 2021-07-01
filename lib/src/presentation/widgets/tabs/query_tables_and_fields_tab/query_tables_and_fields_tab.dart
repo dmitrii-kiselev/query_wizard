@@ -44,7 +44,6 @@ class QueryTablesAndFieldsTab extends HookWidget {
   Widget build(BuildContext context) {
     final localizations = QueryWizardLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
     final currentIndex = useState(0);
 
     return Scaffold(
@@ -70,9 +69,6 @@ class QueryTablesAndFieldsTab extends HookWidget {
         onTap: (index) {
           currentIndex.value = index;
         },
-        selectedItemColor: colorScheme.onPrimary,
-        unselectedItemColor: colorScheme.onPrimary.withOpacity(0.38),
-        backgroundColor: colorScheme.surface,
       ),
     );
   }

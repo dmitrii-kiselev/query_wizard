@@ -12,9 +12,9 @@ class QueryAggregatesBar extends HookWidget {
   const QueryAggregatesBar({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryAggregate aggregate) {
-    final aggregateParts = aggregate.field.split(".");
-    final table = aggregateParts[0];
-    final field = aggregateParts[1];
+    final field = aggregate.field;
+    final tableName = field.parent?.alias ?? field.parent!.name;
+    final fieldName = field.name;
 
     return RichText(
       text: TextSpan(
@@ -28,7 +28,7 @@ class QueryAggregatesBar extends HookWidget {
             style: TextStyle(color: SqlColorScheme.parentheses),
           ),
           TextSpan(
-            text: table,
+            text: tableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -36,7 +36,7 @@ class QueryAggregatesBar extends HookWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: field,
+            text: fieldName,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
           const TextSpan(
@@ -81,7 +81,7 @@ class QueryAggregatesBar extends HookWidget {
                   QueryAggregateAdded(
                     aggregate: QueryAggregate(
                       id: const Uuid().v1(),
-                      field: '${field.parent!.name}.${field.name}',
+                      field: field,
                       function: QueryAggregateFunction.sum,
                     ),
                   ),
@@ -114,7 +114,13 @@ class QueryAggregatesBar extends HookWidget {
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
-                  leading: Wrap(
+                  leading: const Icon(Icons.bar_chart_rounded),
+                  onTap: () => _navigateToChangeAggregateDialog(
+                    id: aggregate.id,
+                    context: context,
+                  ),
+                  title: _buildTitle(aggregate),
+                  trailing: Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
@@ -127,11 +133,6 @@ class QueryAggregatesBar extends HookWidget {
                       ),
                     ],
                   ),
-                  onTap: () => _navigateToChangeAggregateDialog(
-                    id: aggregate.id,
-                    context: context,
-                  ),
-                  title: _buildTitle(aggregate),
                 ),
               );
             },
@@ -146,6 +147,7 @@ class QueryAggregatesBar extends HookWidget {
                 ),
               );
             },
+            buildDefaultDragHandles: false,
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () => _navigateToFieldsSelectionPage(context: context),
@@ -177,7 +179,7 @@ class _ChangeAggregateDialog extends HookWidget {
     final aggregate = bloc.state.aggregates.findById(id);
 
     return AlertDialog(
-      title: Text(localizations.changeTableName),
+      title: Text(localizations.changeAggregate),
       content: DropdownButtonFormField<QueryAggregateFunction>(
         value: function.value,
         items: QueryWizardConstants.aggregateFunctions

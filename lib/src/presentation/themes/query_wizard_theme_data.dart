@@ -6,7 +6,7 @@ class QueryWizardThemeData {
   // prevents instantiation and extension.
   QueryWizardThemeData._();
 
-  static const _lightFillColor = Colors.black;
+  static const _lightFillColor = Color(0xFF606060);
   static const _darkFillColor = Colors.white;
 
   static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
@@ -21,13 +21,30 @@ class QueryWizardThemeData {
       colorScheme: colorScheme,
       textTheme: _textTheme,
       // Matches manifest.json colors and background color.
-      primaryColor: const Color(0xFF030303),
+      primaryColor: const Color(0xFF606060),
       appBarTheme: AppBarTheme(
         textTheme: _textTheme.apply(bodyColor: colorScheme.onPrimary),
-        color: colorScheme.background,
+        color: colorScheme.surface,
         elevation: 0,
-        iconTheme: IconThemeData(color: colorScheme.primary),
+        iconTheme: const IconThemeData(color: Color(0xFF7A7A7A)),
+        titleTextStyle: const TextStyle(color: Color(0xFF7A7A7A)),
         brightness: colorScheme.brightness,
+      ),
+      navigationRailTheme: const NavigationRailThemeData(
+        backgroundColor: Color(0xFF2C2C2C),
+        selectedIconTheme: IconThemeData(color: Color(0xFFFDFDFD)),
+        selectedLabelTextStyle: TextStyle(color: Color(0xFFFDFDFD)),
+        unselectedIconTheme: IconThemeData(color: Color(0xFF7F7F7F)),
+        unselectedLabelTextStyle: TextStyle(color: Color(0xFF7F7F7F)),
+      ),
+      tabBarTheme: const TabBarTheme(
+        labelColor: Color(0xFF333333),
+        unselectedLabelColor: Color(0xFF696969),
+      ),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: Color(0xFF0079CA),
+        selectedItemColor: Color(0xFFFDFDFD),
+        unselectedItemColor: Color(0xFFCBCBCB),
       ),
       iconTheme: IconThemeData(color: colorScheme.onPrimary),
       canvasColor: colorScheme.background,
@@ -46,12 +63,12 @@ class QueryWizardThemeData {
   }
 
   static const ColorScheme lightColorScheme = ColorScheme(
-    primary: Color(0xFFB93C5D),
+    primary: Color(0xFF606060),
     primaryVariant: Color(0xFF117378),
     secondary: Color(0xFFEFF3F3),
     secondaryVariant: Color(0xFFFAFBFB),
-    background: Color(0xFFE6EBEB),
-    surface: Color(0xFFFAFBFB),
+    background: Color(0xFFFDFDFD),
+    surface: Color(0xFFE3E3E3),
     onBackground: Colors.white,
     error: _lightFillColor,
     onError: _lightFillColor,
@@ -66,8 +83,8 @@ class QueryWizardThemeData {
     primaryVariant: Color(0xFF494C50),
     secondary: Color(0xFF494C50),
     secondaryVariant: Color(0x0DFFFFFF),
-    background: Color(0xFF262626),
-    surface: Color(0xFF383838),
+    background: Color(0xFF1E1E1E),
+    surface: Color(0xFF323233),
     onBackground: Color(0xFF262626),
     // White with 0.05 opacity
     error: _darkFillColor,

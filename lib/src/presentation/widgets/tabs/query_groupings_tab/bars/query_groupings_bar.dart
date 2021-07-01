@@ -12,15 +12,15 @@ class QueryGroupingsBar extends HookWidget {
   const QueryGroupingsBar({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryGrouping grouping) {
-    final groupingParts = grouping.field.split(".");
-    final table = groupingParts[0];
-    final field = groupingParts[1];
+    final field = grouping.field;
+    final tableName = field.parent?.alias ?? field.parent!.name;
+    final fieldName = field.name;
 
     return RichText(
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: table,
+            text: tableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -28,7 +28,7 @@ class QueryGroupingsBar extends HookWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: field,
+            text: fieldName,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
         ],
@@ -52,7 +52,7 @@ class QueryGroupingsBar extends HookWidget {
                   QueryGroupingAdded(
                     grouping: QueryGrouping(
                       id: const Uuid().v1(),
-                      field: '${field.parent!.name}.${field.name}',
+                      field: field,
                       type: QueryGroupingType.grouping,
                       elements: List.empty(growable: true),
                     ),
@@ -87,7 +87,9 @@ class QueryGroupingsBar extends HookWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.group_work_rounded),
+                    title: _buildTitle(grouping),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -100,7 +102,6 @@ class QueryGroupingsBar extends HookWidget {
                         ),
                       ],
                     ),
-                    title: _buildTitle(grouping),
                   ),
                 );
               },
@@ -115,6 +116,7 @@ class QueryGroupingsBar extends HookWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _navigateToFieldsSelectionPage(context: context),

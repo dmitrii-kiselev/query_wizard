@@ -12,15 +12,15 @@ class QueryOrdersTab extends HookWidget {
   const QueryOrdersTab({Key? key}) : super(key: key);
 
   Widget _buildTitle(QueryOrder order) {
-    final orderParts = order.field.split(".");
-    final table = orderParts[0];
-    final field = orderParts[1];
+    final field = order.field;
+    final tableName = field.parent?.alias ?? field.parent!.name;
+    final fieldName = field.name;
 
     return RichText(
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: table,
+            text: tableName,
             style: const TextStyle(color: SqlColorScheme.table),
           ),
           const TextSpan(
@@ -28,7 +28,7 @@ class QueryOrdersTab extends HookWidget {
             style: TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
-            text: field,
+            text: fieldName,
             style: const TextStyle(color: SqlColorScheme.column),
           ),
           const TextSpan(text: ' '),
@@ -76,7 +76,7 @@ class QueryOrdersTab extends HookWidget {
                   QueryOrderAdded(
                     order: QueryOrder(
                       id: const Uuid().v1(),
-                      field: '${field.parent!.name}.${field.name}',
+                      field: field,
                       type: QuerySortingType.ascending,
                     ),
                   ),
@@ -110,7 +110,13 @@ class QueryOrdersTab extends HookWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.sort_rounded),
+                    onTap: () => _navigateToChangeQueryOrderDialog(
+                      id: order.id,
+                      context: context,
+                    ),
+                    title: _buildTitle(order),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
@@ -123,11 +129,6 @@ class QueryOrdersTab extends HookWidget {
                         ),
                       ],
                     ),
-                    onTap: () => _navigateToChangeQueryOrderDialog(
-                      id: order.id,
-                      context: context,
-                    ),
-                    title: _buildTitle(order),
                   ),
                 );
               },
@@ -142,6 +143,7 @@ class QueryOrdersTab extends HookWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _navigateToFieldsSelectionPage(context: context),
@@ -180,7 +182,12 @@ class _ChangeQueryOrderDialog extends HookWidget {
           (value) {
             return DropdownMenuItem(
               value: value,
-              child: Text(value.stringValue),
+              child: Text(
+                value.stringValue,
+                style: const TextStyle(
+                  color: SqlColorScheme.keyword,
+                ),
+              ),
             );
           },
         ).toList(),

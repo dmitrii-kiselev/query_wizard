@@ -47,7 +47,8 @@ class QueryTablesBloc extends Bloc<QueryTablesEvent, QueryTablesState> {
   Stream<QueryTablesState> _mapQueryTableUpdatedToState(
     QueryTableUpdated event,
   ) async* {
-    state.tables.update(event.table);
+    final table = state.tables.findById(event.table.id);
+    table.alias = event.table.alias;
     yield QueryTablesChanged(tables: state.tables);
   }
 
