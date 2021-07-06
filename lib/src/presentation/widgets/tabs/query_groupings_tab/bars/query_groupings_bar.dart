@@ -100,6 +100,10 @@ class QueryGroupingsBar extends HookWidget {
                             bloc.add(QueryGroupingDeleted(id: grouping.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
                   ),

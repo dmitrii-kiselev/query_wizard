@@ -131,6 +131,10 @@ class QueryAggregatesBar extends HookWidget {
                           bloc.add(QueryAggregateDeleted(id: aggregate.id));
                         },
                       ),
+                      ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
                     ],
                   ),
                 ),

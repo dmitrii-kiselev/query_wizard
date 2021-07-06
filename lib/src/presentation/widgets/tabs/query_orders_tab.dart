@@ -127,6 +127,10 @@ class QueryOrdersTab extends HookWidget {
                             bloc.add(QueryOrderDeleted(id: order.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
                   ),

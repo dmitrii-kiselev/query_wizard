@@ -108,6 +108,10 @@ class QueryConditionsTab extends StatelessWidget {
                           bloc.add(QueryConditionDeleted(id: condition.id));
                         },
                       ),
+                      ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
                     ],
                   ),
                 ),

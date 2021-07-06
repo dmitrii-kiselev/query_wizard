@@ -48,6 +48,10 @@ class QueryBatchesTab extends StatelessWidget {
                             bloc.add(QueryBatchDeleted(id: queryBatch.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
                   ),

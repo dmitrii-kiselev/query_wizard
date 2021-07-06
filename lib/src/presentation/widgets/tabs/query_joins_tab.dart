@@ -133,6 +133,10 @@ class QueryJoinsTab extends StatelessWidget {
                             bloc.add(QueryJoinDeleted(id: join.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
                   ),
