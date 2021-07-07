@@ -14,6 +14,6 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('Database'), findsOneWidget);
+    expect(find.text('Database'), findsNothing);
   });
 }

@@ -38,6 +38,7 @@ class QuerySourcesBar extends StatelessWidget {
               },
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: 'updateSources',
               onPressed: () {
                 const event = QuerySourcesRequested();
                 sourcesBloc.add(event);

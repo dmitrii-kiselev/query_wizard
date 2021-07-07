@@ -123,6 +123,7 @@ class QueryGroupingsBar extends HookWidget {
               buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: 'addGrouping',
               onPressed: () => _navigateToFieldsSelectionPage(context: context),
               tooltip: localizations.add,
               child: const Icon(Icons.add),

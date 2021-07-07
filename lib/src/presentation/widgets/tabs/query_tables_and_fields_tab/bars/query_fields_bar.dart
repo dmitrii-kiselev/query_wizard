@@ -104,6 +104,7 @@ class QueryFieldsBar extends StatelessWidget {
               ),
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: 'addField',
               onPressed: () => _navigateToCustomExpressionPage(
                 context: context,
               ),

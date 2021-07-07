@@ -69,6 +69,7 @@ class QueryTablesBar extends StatelessWidget {
               },
             ),
             floatingActionButton: FloatingActionButton(
+              heroTag: 'addSubquery',
               onPressed: () => _navigateToSubqueryPage(context: context),
               tooltip: localizations.add,
               child: const Icon(Icons.add),

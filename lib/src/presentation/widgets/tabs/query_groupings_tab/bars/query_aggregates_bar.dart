@@ -154,6 +154,7 @@ class QueryAggregatesBar extends HookWidget {
             buildDefaultDragHandles: false,
           ),
           floatingActionButton: FloatingActionButton(
+            heroTag: 'addAggregate',
             onPressed: () => _navigateToFieldsSelectionPage(context: context),
             tooltip: localizations.add,
             child: const Icon(Icons.add),
