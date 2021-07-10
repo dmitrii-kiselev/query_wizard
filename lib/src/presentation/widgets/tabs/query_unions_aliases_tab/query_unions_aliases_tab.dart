@@ -7,7 +7,8 @@ import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryUnionsAliasesTab extends HookWidget {
-  const QueryUnionsAliasesTab({Key? key, this.isDesktop = true}) : super(key: key);
+  const QueryUnionsAliasesTab({Key? key, this.isDesktop = true})
+      : super(key: key);
 
   final bool isDesktop;
 
