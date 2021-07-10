@@ -18,12 +18,12 @@ class QueryFieldsBar extends StatelessWidget {
       text: TextSpan(
         children: <TextSpan>[
           TextSpan(
-            text: alias,
+            text: alias != '' ? alias : '',
             style: const TextStyle(color: SqlColorScheme.table),
           ),
-          const TextSpan(
-            text: '.',
-            style: TextStyle(color: SqlColorScheme.dot),
+          TextSpan(
+            text: alias != '' ? '.' : '',
+            style: const TextStyle(color: SqlColorScheme.dot),
           ),
           TextSpan(
             text: field.name,
