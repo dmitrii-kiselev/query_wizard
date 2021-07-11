@@ -43,3 +43,12 @@ class QueryGroupingOrderChanged extends QueryGroupingsEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class QueryGroupingsRemoveByTableId extends QueryGroupingsEvent {
+  const QueryGroupingsRemoveByTableId({required this.id});
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

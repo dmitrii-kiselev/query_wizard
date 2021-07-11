@@ -28,3 +28,4 @@ export 'src/domain/extensions/logical_compare_type_string_value.dart';
 export 'src/domain/extensions/query_aggregate_function_string_value.dart';
 export 'src/domain/extensions/query_sorting_type_string_value.dart';
 export 'src/domain/repositories/query_wizard_repository.dart';
+export 'src/domain/services/query_table_service.dart';

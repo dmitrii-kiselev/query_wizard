@@ -27,6 +27,8 @@ class QueryGroupingsBloc
       yield* _mapQueryGroupingDeletedToState(event);
     } else if (event is QueryGroupingOrderChanged) {
       yield* _mapQueryGroupingOrderChangedToState(event);
+    } else if (event is QueryGroupingsRemoveByTableId) {
+      yield* _mapQueryGroupingsRemoveByTableIdToState(event);
     }
   }
 
@@ -61,6 +63,13 @@ class QueryGroupingsBloc
     final item = state.groupings.removeAt(event.oldIndex);
     state.groupings.insert(newIndex, item);
 
+    yield QueryGroupingsChanged(groupings: state.groupings);
+  }
+
+  Stream<QueryGroupingsState> _mapQueryGroupingsRemoveByTableIdToState(
+    QueryGroupingsRemoveByTableId event,
+  ) async* {
+    state.groupings.removeWhere((f) => f.field.parent?.id == event.id);
     yield QueryGroupingsChanged(groupings: state.groupings);
   }
 }

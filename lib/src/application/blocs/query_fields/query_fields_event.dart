@@ -61,3 +61,12 @@ class QueryFieldOrderChanged extends QueryFieldsEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class QueryFieldsRemoveByTableId extends QueryFieldsEvent {
+  const QueryFieldsRemoveByTableId({required this.id});
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

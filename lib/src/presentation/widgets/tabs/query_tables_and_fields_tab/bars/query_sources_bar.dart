@@ -28,12 +28,15 @@ class QuerySourcesBar extends StatelessWidget {
               onTap: (item) {
                 if (item.value.type == QueryElementType.column &&
                     item.checked) {
-                  fieldsBloc.add(QueryFieldAdded(field: item.value));
+                  tablesBloc.add(QueryTableAdded(
+                    table: item.value.parent!.copy(),
+                  ));
+                  fieldsBloc.add(QueryFieldAdded(field: item.value.copy()));
                 }
               },
               onLongPress: (item) {
                 if (item.value.type == QueryElementType.table && item.checked) {
-                  tablesBloc.add(QueryTableAdded(table: item.value));
+                  tablesBloc.add(QueryTableAdded(table: item.value.copy()));
                 }
               },
             ),

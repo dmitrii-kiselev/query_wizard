@@ -5,6 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
+import 'package:query_wizard/infrastructure.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryTablesBar extends StatelessWidget {
@@ -42,6 +43,7 @@ class QueryTablesBar extends StatelessWidget {
     final tablesBloc = BlocProvider.of<QueryTablesBloc>(context);
     final fieldsBloc = BlocProvider.of<QueryFieldsBloc>(context);
     final localizations = QueryWizardLocalizations.of(context)!;
+    final tableService = getIt<IQueryTableService>();
 
     return BlocBuilder<QueryTablesBloc, QueryTablesState>(
       builder: (
@@ -54,7 +56,7 @@ class QueryTablesBar extends StatelessWidget {
               items: state.tables,
               onTap: (item) {
                 if (item.value.type == QueryElementType.column) {
-                  fieldsBloc.add(QueryFieldAdded(field: item.value));
+                  fieldsBloc.add(QueryFieldAdded(field: item.value.copy()));
                 }
               },
               onCopy: (QueryElement table) {
@@ -65,7 +67,7 @@ class QueryTablesBar extends StatelessWidget {
                 context: context,
               ),
               onRemove: (QueryElement table) {
-                tablesBloc.add(QueryTableDeleted(id: table.id));
+                tableService.removeTable(table.id);
               },
             ),
             floatingActionButton: FloatingActionButton(

@@ -28,6 +28,8 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
       yield* _mapQueryJoinDeletedToState(event);
     } else if (event is QueryJoinOrderChanged) {
       yield* _mapQueryJoinOrderChangedToState(event);
+    } else if (event is QueryJoinsRemoveByTableId) {
+      yield* _mapQueryJoinsRemoveByTableIdToState(event);
     }
   }
 
@@ -77,6 +79,15 @@ class QueryJoinsBloc extends Bloc<QueryJoinsEvent, QueryJoinsState> {
     final QueryJoin item = state.joins.removeAt(event.oldIndex);
     state.joins.insert(newIndex, item);
 
+    yield QueryJoinsChanged(joins: state.joins);
+  }
+
+  Stream<QueryJoinsState> _mapQueryJoinsRemoveByTableIdToState(
+    QueryJoinsRemoveByTableId event,
+  ) async* {
+    state.joins.removeWhere(
+      (j) => j.leftTable?.id == event.id || j.rightTable?.id == event.id,
+    );
     yield QueryJoinsChanged(joins: state.joins);
   }
 }
