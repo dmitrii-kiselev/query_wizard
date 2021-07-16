@@ -121,9 +121,10 @@ class QueryFieldsBar extends StatelessWidget {
 }
 
 class _CustomExpressionPage extends HookWidget {
-  const _CustomExpressionPage({this.id});
+  _CustomExpressionPage({this.id});
 
   final String? id;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +144,10 @@ class _CustomExpressionPage extends HookWidget {
         actions: [
           TextButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
               final field = QueryElement(
                 id: id == null ? const Uuid().v1() : id!,
                 name: controller.text,
@@ -175,12 +180,23 @@ class _CustomExpressionPage extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: TextField(
-                controller: controller,
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                keyboardType: TextInputType.multiline,
-                maxLines: 99999,
-                autofocus: true,
+              child: Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 99999,
+                  autofocus: true,
+                  validator: (value) {
+                    if (value == '') {
+                      return localizations.pleaseEnterExpression;
+                    }
+                    return null;
+                  },
+                ),
               ),
             ),
           ],

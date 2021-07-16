@@ -14,6 +14,45 @@ class QueryJoinsTab extends StatelessWidget {
   Widget _buildTitle(QueryJoin join) {
     final leftTableName = join.leftTable?.alias ?? join.leftTable?.name;
     final rightTableName = join.leftTable?.alias ?? join.leftTable?.name;
+    final condition = join.condition.isCustom
+        ? [
+            TextSpan(
+              text: join.condition.customCondition,
+              style: const TextStyle(color: SqlColorScheme.column),
+            ),
+          ]
+        : [
+            TextSpan(
+              text: leftTableName,
+              style: const TextStyle(color: SqlColorScheme.table),
+            ),
+            const TextSpan(
+              text: '.',
+              style: TextStyle(color: SqlColorScheme.dot),
+            ),
+            TextSpan(
+              text: join.condition.leftField!.name,
+              style: const TextStyle(color: SqlColorScheme.column),
+            ),
+            const TextSpan(text: ' '),
+            TextSpan(
+              text: join.condition.logicalCompareType.stringValue,
+              style: const TextStyle(color: SqlColorScheme.dot),
+            ),
+            const TextSpan(text: ' '),
+            TextSpan(
+              text: rightTableName,
+              style: const TextStyle(color: SqlColorScheme.table),
+            ),
+            const TextSpan(
+              text: '.',
+              style: TextStyle(color: SqlColorScheme.dot),
+            ),
+            TextSpan(
+              text: join.condition.rightField!.name,
+              style: const TextStyle(color: SqlColorScheme.column),
+            ),
+          ];
 
     return RichText(
       text: TextSpan(
@@ -38,36 +77,7 @@ class QueryJoinsTab extends StatelessWidget {
             style: TextStyle(color: SqlColorScheme.keyword),
           ),
           const TextSpan(text: ' '),
-          TextSpan(
-            text: leftTableName,
-            style: const TextStyle(color: SqlColorScheme.table),
-          ),
-          const TextSpan(
-            text: '.',
-            style: TextStyle(color: SqlColorScheme.dot),
-          ),
-          TextSpan(
-            text: join.condition.leftField!.name,
-            style: const TextStyle(color: SqlColorScheme.column),
-          ),
-          const TextSpan(text: ' '),
-          TextSpan(
-            text: join.condition.logicalCompareType.stringValue,
-            style: const TextStyle(color: SqlColorScheme.dot),
-          ),
-          const TextSpan(text: ' '),
-          TextSpan(
-            text: rightTableName,
-            style: const TextStyle(color: SqlColorScheme.table),
-          ),
-          const TextSpan(
-            text: '.',
-            style: TextStyle(color: SqlColorScheme.dot),
-          ),
-          TextSpan(
-            text: join.condition.rightField!.name,
-            style: const TextStyle(color: SqlColorScheme.column),
-          ),
+          ...condition,
         ],
       ),
     );
@@ -246,15 +256,21 @@ class _QueryJoinPage extends HookWidget {
           '${rightField.value?.name ?? ''}';
     }
 
+    final isCustomCondition = isCustom.value ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.join),
         actions: [
           TextButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
               final condition = QueryCondition(
                 id: const Uuid().v1(),
-                isCustom: isCustom.value ?? false,
+                isCustom: isCustomCondition,
                 leftField: leftField.value,
                 logicalCompareType:
                     logicalCompareType.value ?? LogicalCompareType.equal,
@@ -320,6 +336,12 @@ class _QueryJoinPage extends HookWidget {
                       labelText: localizations.leftTable,
                       icon: const Icon(Icons.table_rows_rounded),
                     ),
+                    validator: (value) {
+                      if (value == null) {
+                        return localizations.pleaseSelectLeftTable;
+                      }
+                      return null;
+                    },
                   ),
                   DropdownButtonFormField<QueryElement>(
                     value: rightTable.value,
@@ -346,6 +368,12 @@ class _QueryJoinPage extends HookWidget {
                       labelText: localizations.rightTable,
                       icon: const Icon(Icons.table_rows_rounded),
                     ),
+                    validator: (value) {
+                      if (value == null) {
+                        return localizations.pleaseSelectRightTable;
+                      }
+                      return null;
+                    },
                   ),
                   CheckboxListTile(
                     value: isLeftAll.value,
@@ -375,7 +403,7 @@ class _QueryJoinPage extends HookWidget {
                     title: Text(localizations.custom),
                   ),
                   Visibility(
-                    visible: isCustom.value ?? false,
+                    visible: isCustomCondition,
                     child: TextFormField(
                       controller: customConditionController,
                       decoration: InputDecoration(
@@ -384,10 +412,16 @@ class _QueryJoinPage extends HookWidget {
                       ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
+                      validator: (value) {
+                        if (isCustomCondition && value == '') {
+                          return localizations.pleaseEnterCustomCondition;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<QueryElement>(
                       value: leftField.value,
                       items: leftTable.value?.elements
@@ -409,10 +443,16 @@ class _QueryJoinPage extends HookWidget {
                         labelText: localizations.leftField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseSelectLeftField;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<LogicalCompareType>(
                       value: logicalCompareType.value,
                       items: QueryWizardConstants.logicalCompareTypes
@@ -429,10 +469,16 @@ class _QueryJoinPage extends HookWidget {
                         labelText: localizations.condition,
                         icon: const Icon(Icons.compare_arrows),
                       ),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseSelectLogicalCompareType;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<QueryElement>(
                       value: rightField.value,
                       items: rightTable.value?.elements
@@ -454,6 +500,12 @@ class _QueryJoinPage extends HookWidget {
                         labelText: localizations.rightField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseSelectRightField;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],

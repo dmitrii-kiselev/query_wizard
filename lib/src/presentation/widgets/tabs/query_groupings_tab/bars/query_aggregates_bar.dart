@@ -168,11 +168,12 @@ class QueryAggregatesBar extends HookWidget {
 }
 
 class _ChangeAggregateDialog extends HookWidget {
-  const _ChangeAggregateDialog({
+  _ChangeAggregateDialog({
     required this.id,
   });
 
   final String id;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -185,31 +186,44 @@ class _ChangeAggregateDialog extends HookWidget {
 
     return AlertDialog(
       title: Text(localizations.changeAggregate),
-      content: DropdownButtonFormField<QueryAggregateFunction>(
-        value: function.value,
-        items: QueryWizardConstants.aggregateFunctions
-            .map<DropdownMenuItem<QueryAggregateFunction>>(
-          (value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(
-                value.stringValue,
-                style: const TextStyle(
-                  color: SqlColorScheme.procedureOrFunction,
+      content: Form(
+        key: _formKey,
+        child: DropdownButtonFormField<QueryAggregateFunction>(
+          value: function.value,
+          items: QueryWizardConstants.aggregateFunctions
+              .map<DropdownMenuItem<QueryAggregateFunction>>(
+            (value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value.stringValue,
+                  style: const TextStyle(
+                    color: SqlColorScheme.procedureOrFunction,
+                  ),
                 ),
-              ),
-            );
+              );
+            },
+          ).toList(),
+          onChanged: (value) => function.value = value,
+          decoration: InputDecoration(
+            labelText: localizations.function,
+            icon: const Icon(Icons.compare_arrows),
+          ),
+          validator: (value) {
+            if (value == null) {
+              return localizations.pleaseSelectProcedureOrFunction;
+            }
+            return null;
           },
-        ).toList(),
-        onChanged: (value) => function.value = value,
-        decoration: InputDecoration(
-          labelText: localizations.function,
-          icon: const Icon(Icons.compare_arrows),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+
             final newAggregate = QueryAggregate(
               id: aggregate.id,
               field: aggregate.field,

@@ -454,7 +454,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       ),
       QueryElement(
         id: const Uuid().v1(),
-        name: 'CATEGORY_I',
+        name: 'CATEGORY_ID',
         type: QueryElementType.column,
         parent: products,
         elements: List<QueryElement>.empty(growable: true),

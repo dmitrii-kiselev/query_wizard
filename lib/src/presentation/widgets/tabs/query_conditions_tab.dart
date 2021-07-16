@@ -183,15 +183,21 @@ class _QueryConditionPage extends HookWidget {
       pageInitialized.value = true;
     }
 
+    final isCustomCondition = isCustom.value ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(localizations.condition),
         actions: [
           TextButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
               final condition = QueryCondition(
                   id: id == null ? const Uuid().v1() : id!,
-                  isCustom: isCustom.value ?? false,
+                  isCustom: isCustomCondition,
                   leftField: leftField.value,
                   logicalCompareType:
                       logicalCompareType.value ?? LogicalCompareType.equal,
@@ -248,7 +254,7 @@ class _QueryConditionPage extends HookWidget {
                     title: Text(localizations.custom),
                   ),
                   Visibility(
-                    visible: isCustom.value ?? false,
+                    visible: isCustomCondition,
                     child: TextFormField(
                       controller: customConditionController,
                       decoration: InputDecoration(
@@ -257,10 +263,16 @@ class _QueryConditionPage extends HookWidget {
                       ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
+                      validator: (value) {
+                        if (isCustomCondition && value == '') {
+                          return localizations.pleaseEnterCustomCondition;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<QueryElement>(
                       value: leftField.value,
                       items: fields.map<DropdownMenuItem<QueryElement>>(
@@ -303,10 +315,16 @@ class _QueryConditionPage extends HookWidget {
                         labelText: localizations.leftField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
+                      validator: (value) {
+                        if (value == null) {
+                          return localizations.pleaseSelectLeftField;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<LogicalCompareType>(
                       value: logicalCompareType.value,
                       items: QueryWizardConstants.logicalCompareTypes
@@ -326,10 +344,16 @@ class _QueryConditionPage extends HookWidget {
                         labelText: localizations.condition,
                         icon: const Icon(Icons.compare_arrows),
                       ),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseSelectLogicalCompareType;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: TextFormField(
                       controller: rightFieldController,
                       decoration: InputDecoration(
@@ -339,6 +363,12 @@ class _QueryConditionPage extends HookWidget {
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
                       style: const TextStyle(color: SqlColorScheme.parameter),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseEnterParameter;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],

@@ -164,11 +164,12 @@ class QueryOrdersTab extends HookWidget {
 }
 
 class _ChangeQueryOrderDialog extends HookWidget {
-  const _ChangeQueryOrderDialog({
+  _ChangeQueryOrderDialog({
     required this.id,
   });
 
   final String id;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -179,31 +180,44 @@ class _ChangeQueryOrderDialog extends HookWidget {
 
     return AlertDialog(
       title: Text(localizations.changeSortingField),
-      content: DropdownButtonFormField<QuerySortingType>(
-        value: type.value,
-        items: QueryWizardConstants.sortingTypes
-            .map<DropdownMenuItem<QuerySortingType>>(
-          (value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(
-                value.stringValue,
-                style: const TextStyle(
-                  color: SqlColorScheme.keyword,
+      content: Form(
+        key: _formKey,
+        child: DropdownButtonFormField<QuerySortingType>(
+          value: type.value,
+          items: QueryWizardConstants.sortingTypes
+              .map<DropdownMenuItem<QuerySortingType>>(
+            (value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value.stringValue,
+                  style: const TextStyle(
+                    color: SqlColorScheme.keyword,
+                  ),
                 ),
-              ),
-            );
+              );
+            },
+          ).toList(),
+          onChanged: (value) => type.value = value,
+          decoration: InputDecoration(
+            labelText: localizations.sorting,
+            icon: const Icon(Icons.compare_arrows),
+          ),
+          validator: (value) {
+            if (value == null) {
+              return localizations.pleaseSelectSorting;
+            }
+            return null;
           },
-        ).toList(),
-        onChanged: (value) => type.value = value,
-        decoration: InputDecoration(
-          labelText: localizations.sorting,
-          icon: const Icon(Icons.compare_arrows),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+
             final newOrder = QueryOrder(
               id: order.id,
               field: order.field,

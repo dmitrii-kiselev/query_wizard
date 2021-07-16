@@ -88,9 +88,10 @@ class QueryTablesBar extends StatelessWidget {
 }
 
 class _ChangeTableNameDialog extends HookWidget {
-  const _ChangeTableNameDialog({required this.id});
+  _ChangeTableNameDialog({required this.id});
 
   final String id;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -103,13 +104,26 @@ class _ChangeTableNameDialog extends HookWidget {
 
     return AlertDialog(
       title: Text(localizations.changeTableName),
-      content: TextField(
-        controller: controller,
-        decoration: const InputDecoration(border: OutlineInputBorder()),
+      content: Form(
+        key: _formKey,
+        child: TextFormField(
+          controller: controller,
+          decoration: const InputDecoration(border: OutlineInputBorder()),
+          validator: (value) {
+            if (value == '') {
+              return localizations.pleaseEnterTableName;
+            }
+            return null;
+          },
+        ),
       ),
       actions: [
         TextButton(
           onPressed: () {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+
             final newTable = QueryElement(
               id: table.id,
               name: table.name,
