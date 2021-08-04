@@ -11,6 +11,7 @@ void main() {
       queries: [...[]],
       aliases: Map.identity(),
       queryType: QueryType.selectQuery,
+      tempTableName: '',
     );
 
     expect(batch, QueryBatch.empty());
@@ -36,6 +37,7 @@ void main() {
       queries: [...[]],
       aliases: Map.identity(),
       queryType: QueryType.selectQuery,
+      tempTableName: '',
     );
 
     expect(batch, expected);

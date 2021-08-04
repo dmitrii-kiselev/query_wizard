@@ -10,6 +10,7 @@ class QueryBatch extends Equatable implements IEntity {
     required this.queries,
     required this.aliases,
     required this.queryType,
+    required this.tempTableName,
   });
 
   QueryBatch.empty()
@@ -18,7 +19,8 @@ class QueryBatch extends Equatable implements IEntity {
         sources = [],
         queries = [],
         aliases = Map.identity(),
-        queryType = QueryType.selectQuery;
+        queryType = QueryType.selectQuery,
+        tempTableName = '';
 
   @override
   final String id;
@@ -27,6 +29,7 @@ class QueryBatch extends Equatable implements IEntity {
   final List<Query> queries;
   final Map<String, Map<String, String>> aliases;
   final QueryType queryType;
+  final String tempTableName;
 
   @override
   List<Object?> get props => [

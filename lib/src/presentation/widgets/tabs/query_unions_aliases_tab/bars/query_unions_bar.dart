@@ -48,6 +48,10 @@ class QueryUnionsBar extends StatelessWidget {
                             bloc.add(QueryDeleted(id: query.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
                   ),

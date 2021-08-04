@@ -10,6 +10,7 @@ extension CopyQueryBatch on QueryBatch {
         queries: queries,
         aliases: aliases,
         queryType: queryType,
+        tempTableName: '',
       );
 
   QueryBatch copyWith({
@@ -26,5 +27,6 @@ extension CopyQueryBatch on QueryBatch {
         queries: queries ?? this.queries,
         aliases: aliases ?? this.aliases,
         queryType: queryType ?? this.queryType,
+        tempTableName: '',
       );
 }

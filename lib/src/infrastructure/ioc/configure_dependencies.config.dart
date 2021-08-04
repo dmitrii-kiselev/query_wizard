@@ -72,10 +72,11 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       joinsBloc: get<_i5.QueryJoinsBloc>(),
       aggregatesBloc: get<_i5.QueryAggregatesBloc>(),
       groupingsBloc: get<_i5.QueryGroupingsBloc>(),
-      queriesBloc: get<_i5.QueriesBloc>(),
       conditionsBloc: get<_i5.QueryConditionsBloc>(),
-      batchesBloc: get<_i5.QueryBatchesBloc>(),
+      queriesBloc: get<_i5.QueriesBloc>(),
+      settingsBloc: get<_i5.QuerySettingsBloc>(),
       ordersBloc: get<_i5.QueryOrdersBloc>(),
+      batchesBloc: get<_i5.QueryBatchesBloc>(),
       queryWizardRepository: get<_i3.IQueryWizardRepository>()));
   return get;
 }

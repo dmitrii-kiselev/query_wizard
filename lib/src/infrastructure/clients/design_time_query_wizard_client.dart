@@ -570,12 +570,14 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     );
 
     final batch = QueryBatch(
-        id: const Uuid().v1(),
-        name: 'Query batch 1',
-        sources: [...[]],
-        queries: [query1, query2],
-        aliases: Map.identity(),
-        queryType: QueryType.selectQuery);
+      id: const Uuid().v1(),
+      name: 'Query batch 1',
+      sources: [...[]],
+      queries: [query1, query2],
+      aliases: Map.identity(),
+      queryType: QueryType.selectQuery,
+      tempTableName: '',
+    );
 
     final querySchema = QuerySchema(queryBatches: [batch]);
 

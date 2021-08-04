@@ -88,6 +88,7 @@ Widget buildHome() {
       BlocProvider(create: (context) => getIt<QueryAggregatesBloc>()),
       BlocProvider(create: (context) => getIt<QueryGroupingsBloc>()),
       BlocProvider(create: (context) => getIt<QueryConditionsBloc>()),
+      BlocProvider(create: (context) => getIt<QuerySettingsBloc>()),
       BlocProvider(create: (context) => getIt<QueriesBloc>()),
       BlocProvider(create: (context) => getIt<QueryOrdersBloc>()),
       BlocProvider(create: (context) => getIt<QueryBatchesBloc>()),
