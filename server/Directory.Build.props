@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Base repo layout properties -->
+  <PropertyGroup>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <RepositoryEngineeringDir>$([MSBuild]::NormalizeDirectory('$(RepoRoot)', 'eng'))</RepositoryEngineeringDir>
+    <RepositoryUrl>git://github.com/dmitrii-kiselev/query_wizard</RepositoryUrl>
+    <ProjectUrl>https://github.com/dmitrii-kiselev/query_wizard</ProjectUrl>
+    <LicenseUrl>https://github.com/dmitrii-kiselev/query_wizard/blob/main/LICENSE</LicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <LicenseFile>$(RepoRoot)LICENSE.TXT</LicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SourceRoot Include="$(MSBuildThisFileDirectory)" RepositoryUrl="git://github.com/dmitrii-kiselev/query_wizard"/>
+  </ItemGroup>
+
+  <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
+
+  <PropertyGroup>
+    <!-- Always pass portable to override arcade sdk which uses embedded for local builds -->
+    <DebugType>portable</DebugType>
+
+    <!-- Workaround for codecov issue https://github.com/tonerdo/coverlet/issues/312 -->
+    <EnableSourceLink>false</EnableSourceLink>
+  </PropertyGroup>
+
+  <Import Project="$(RepositoryEngineeringDir)DisableSourceControlManagement.targets" Condition="'$(EnableSourceLink)' == 'false'" />
+
+  <PropertyGroup>
+    <Product>Query wizard</Product>
+    <Authors>Dmitrii Kiselev</Authors>
+    <Company />
+    <Copyright>Copyright (c) 2021 Dmitrii Kiselev. All rights reserved.</Copyright>
+
+    <!-- The SPDX name for the source license. See https://spdx.org/licenses/. -->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
+    <!-- Contact email address for NuGet packages and Linux installers. -->
+    <MaintainerEmail>dmitrii.kiselev.dev@gmail.com</MaintainerEmail>
+
+    <PackageProjectUrl>https://github.com/dmitrii-kiselev/query_wizard</PackageProjectUrl>
+    <NuspecBasePath>$(MSBuildProjectDirectory)</NuspecBasePath>
+
+    <DefaultNetCoreTargetFramework>net5.0</DefaultNetCoreTargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EnableAnalyzers>true</EnableAnalyzers>
+    <CodeAnalysisRuleset Condition="'$(IsTestProject)' == 'true'">$(RepositoryEngineeringDir)CodeAnalysis.test.ruleset</CodeAnalysisRuleset>
+  </PropertyGroup>
+
+  <Import Project="$(RepositoryEngineeringDir)Analyzers.props" />
+
+  <PropertyGroup>
+    <!-- All installers are shipping assets. -->
+    <IsShipping>true</IsShipping>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+    <!-- Define test projects and companions -->
+  <PropertyGroup>
+    <IsTestProject>false</IsTestProject>
+    <IsTestProject Condition="$(MSBuildProjectName.EndsWith('.UnitTests')) or $(MSBuildProjectName.EndsWith('.Tests'))">true</IsTestProject>
+
+    <IsTestSupportProject>false</IsTestSupportProject>
+    <IsTestSupportProject Condition="($(MSBuildProjectFullPath.Contains('\tests\')) or $(MSBuildProjectFullPath.Contains('/tests/'))) and '$(IsTestProject)' != 'true'">true</IsTestSupportProject>
+
+    <IsTrimmingTestProject Condition="$(MSBuildProjectName.EndsWith('.TrimmingTests'))">true</IsTrimmingTestProject>
+
+    <!-- Treat test assemblies as non-shipping (do not publish or sign them). -->
+    <IsShipping Condition="'$(IsTestProject)' == 'true' or '$(IsTestSupportProject)' == 'true'">false</IsShipping>
+  </PropertyGroup>
+
+</Project>

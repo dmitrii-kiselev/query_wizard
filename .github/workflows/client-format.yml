@@ -1,4 +1,4 @@
-name: Lint all packages of Query Wizard
+name: (Client) Format all packages of Query Wizard
 
 on:
   pull_request:
@@ -10,10 +10,12 @@ on:
       - '!release/**'
 
 jobs:
-  lint:
+  format:
     # Setup part
-    name: Lint on ${{ matrix.os }}
+    name: Format on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./client
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -38,6 +40,8 @@ jobs:
         channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
+      working-directory: ${{env.working-directory}}
     # End of setup
-    - name: Analyze
-      run: flutter analyze
+    - name: Format
+      run: flutter format --dry-run . --set-exit-if-changed
+      working-directory: ${{env.working-directory}}

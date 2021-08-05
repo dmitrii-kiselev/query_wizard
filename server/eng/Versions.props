@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <PropertyGroup>
+    <!-- The .NET product branding version -->
+    <ProductVersion>0.0.1</ProductVersion>
+    <!-- File version numbers -->
+    <MajorVersion>0</MajorVersion>
+    <MinorVersion>0</MinorVersion>
+    <PatchVersion>1</PatchVersion>
+    <PreReleaseVersionLabel>alpha</PreReleaseVersionLabel>
+    <PreReleaseVersionIteration>1</PreReleaseVersionIteration>
+    <!-- Set assembly version to align with major and minor version,
+         as for the patches and revisions should be manually updated per assembly if it is serviced. -->
+    <!-- Changing assembly versions without changing TFM lead to broken packages.
+         This shoud be incremented after introducing the 6.0 TFM. -->
+    <AssemblyVersion>0.0.0.1</AssemblyVersion>
+    <!-- Enable to remove prerelease label. -->
+    <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
+    <DotNetFinalVersionKind Condition="'$(StabilizePackageVersion)' == 'true'">release</DotNetFinalVersionKind>
+    <!-- Opt-in/out repo features -->
+    <UsingToolMicrosoftNetCompilers>true</UsingToolMicrosoftNetCompilers>
+    <UsingToolIbcOptimization>true</UsingToolIbcOptimization>
+    <UsingToolXliff>false</UsingToolXliff>
+    <!--
+      The NETStandard.Library targeting pack uses this patch version, which does not match the
+      runtime's. After publishing a new version of the NETStandard targeting pack in a servicing
+      release, increase this number by one.
+    -->
+    <NETStandardPatchVersion>0</NETStandardPatchVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- Arcade dependencies -->
+    <MicrosoftDotNetCodeAnalysisVersion>6.0.0-beta.20630.2</MicrosoftDotNetCodeAnalysisVersion>
+    <MicrosoftCodeAnalysisCSharpCodeStyleVersion>3.10.0</MicrosoftCodeAnalysisCSharpCodeStyleVersion>
+    <MicrosoftCodeAnalysisNetAnalyzersVersion>6.0.0-preview1.20522.2</MicrosoftCodeAnalysisNetAnalyzersVersion>
+    <SonarAnalyzerCSharpVersion>8.26.0.34506</SonarAnalyzerCSharpVersion>
+    <StyleCopAnalyzersVersion>1.2.0-beta.205</StyleCopAnalyzersVersion>
+    <!-- Libraries dependencies -->
+    <Antlr4RuntimeStandardVersion>4.9.0</Antlr4RuntimeStandardVersion>
+    <SwashbuckleAspNetCoreVersion>6.1.5</SwashbuckleAspNetCoreVersion>
+    <!-- Testing -->
+    <CoverletMSBuildVersion>3.1.0</CoverletMSBuildVersion>
+    <FluentAssertionsVersion>5.10.3</FluentAssertionsVersion>
+    <MoqVersion>4.16.1</MoqVersion>
+  </PropertyGroup>
+</Project>

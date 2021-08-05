@@ -1,0 +1,49 @@
+name: (Server) Release Query Wizard packages
+
+on:
+  push:
+    branches:
+      - 'release/**'
+
+jobs:
+  build:
+    # Setup part
+    runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./server
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        dotnet: [ '5.0.x' ]
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+        source-url: https://nuget.pkg.github.com/<owner>/index.json
+    - name: Cache NuGet packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.nuget/packages
+          ${{ github.workspace }}/.packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          ${{ runner.OS }}-
+    # End of setup
+    - name: Official build
+      run: |
+        chmod +x ./cibuild.sh
+        ./cibuild.sh
+      working-directory: ${{env.working-directory}}
+    - name: Publish NuGet
+      uses: brandedoutcast/publish-nuget@v2.5.5
+      with:
+        PROJECT_FILE_PATH: ''
+        VERSION_REGEX: '^\s*<PackageVersion>(.*)<\/PackageVersion>\s*$'
+        TAG_FORMAT: '*'
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}

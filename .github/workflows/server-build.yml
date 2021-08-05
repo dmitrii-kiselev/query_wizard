@@ -1,0 +1,52 @@
+name: (Server) Build all packages of Query Wizard
+
+on:
+  pull_request:
+    paths:
+      - 'server/eng/Version*'
+      - 'server/src/**'
+      - 'server/!src/*Tests/**'
+      - 'server/Directory.Build*'
+      - 'server/global.json'
+      - 'server/NuGet.config'
+      - 'server/QueryWizard.sln'
+  push:
+    branches:
+      - main
+      - '!release/**'
+
+jobs:
+  build:
+    # Setup part
+    runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./server
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        dotnet: [ '5.0.x' ]
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    - name: Cache NuGet packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.nuget/packages
+          ${{ github.workspace }}/.packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          ${{ runner.OS }}-
+    - name: Install dependencies
+      run: dotnet restore
+      working-directory: ${{env.working-directory}}
+    # End of setup
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+      working-directory: ${{env.working-directory}}
