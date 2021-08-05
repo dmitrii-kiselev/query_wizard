@@ -7,5 +7,8 @@ import 'package:query_wizard/presentation.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies(Environment.dev);
-  runApp(const QueryWizard());
+  runApp(const QueryWizard(
+    isTestMode: false,
+    initialRoute: '',
+  ));
 }

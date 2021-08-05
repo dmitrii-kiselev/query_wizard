@@ -11,7 +11,7 @@ class QueryUnionsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueriesBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueriesBloc, QueriesState>(
       builder: (
@@ -28,27 +28,32 @@ class QueryUnionsBar extends StatelessWidget {
                 return Card(
                   key: ValueKey('$index'),
                   child: ListTile(
-                    leading: Wrap(
+                    leading: const Icon(Icons.merge_type_rounded),
+                    title: Text(query.name),
+                    trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.copy_outlined),
-                          tooltip: localizations?.copy ?? 'Copy',
+                          tooltip: localizations.copy,
                           onPressed: () {
                             bloc.add(QueryCopied(query: query));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
                             bloc.add(QueryDeleted(id: query.id));
                           },
                         ),
+                        ReorderableDragStartListener(
+                          index: index,
+                          child: const Icon(Icons.drag_handle),
+                        ),
                       ],
                     ),
-                    title: Text(query.name),
                   ),
                 );
               },
@@ -63,12 +68,13 @@ class QueryUnionsBar extends StatelessWidget {
                   ),
                 );
               },
+              buildDefaultDragHandles: false,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 bloc.add(QueryAdded(query: Query.empty()));
               },
-              tooltip: localizations?.add ?? 'Add',
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );

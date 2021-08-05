@@ -30,7 +30,7 @@ class QueryBatchDrawer extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryWizardBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryBatchesBloc, QueryBatchesState>(
       builder: (
@@ -42,7 +42,7 @@ class QueryBatchDrawer extends HookWidget {
             children: [
               UserAccountsDrawerHeader(
                 accountName: Text(
-                  localizations?.queryBatches ?? 'Query Batches',
+                  localizations.queryBatches,
                 ),
                 accountEmail: const Text(''),
                 currentAccountPicture: const CircleAvatar(

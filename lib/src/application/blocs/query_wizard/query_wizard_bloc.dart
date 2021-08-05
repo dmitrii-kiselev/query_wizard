@@ -18,10 +18,11 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
     required this.joinsBloc,
     required this.aggregatesBloc,
     required this.groupingsBloc,
-    required this.queriesBloc,
     required this.conditionsBloc,
-    required this.batchesBloc,
+    required this.queriesBloc,
+    required this.settingsBloc,
     required this.ordersBloc,
+    required this.batchesBloc,
     required this.queryWizardRepository,
   }) : super(const QueryWizardInitial());
 
@@ -32,6 +33,7 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   final QueryAggregatesBloc aggregatesBloc;
   final QueryGroupingsBloc groupingsBloc;
   final QueryConditionsBloc conditionsBloc;
+  final QuerySettingsBloc settingsBloc;
   final QueriesBloc queriesBloc;
   final QueryOrdersBloc ordersBloc;
   final QueryBatchesBloc batchesBloc;
@@ -66,10 +68,19 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
   }
 
   void changeQueryBatch(QueryBatch queryBatch) {
+    final query = queryBatch.queries.first;
+
     currentQueryButch = queryBatch;
     queriesBloc.add(QueriesInitialized(queries: queryBatch.queries));
+    settingsBloc.add(QuerySettingsInitialized(
+      isTop: query.isTop,
+      topCounter: query.topCounter,
+      isDistinct: query.isDistinct,
+      queryType: queryBatch.queryType,
+      tempTableName: queryBatch.tempTableName,
+    ));
 
-    changeQuery(queryBatch.queries.first);
+    changeQuery(query);
   }
 
   void changeQuery(Query query) {
@@ -87,6 +98,14 @@ class QueryWizardBloc extends Bloc<QueryWizardEvent, QueryWizardState> {
     groupingsBloc.add(QueryGroupingsInitialized(groupings: query.groupings));
     conditionsBloc.add(QueryConditionsInitialized(
       conditions: query.conditions,
+    ));
+
+    settingsBloc.add(QuerySettingsInitialized(
+      isTop: query.isTop,
+      topCounter: query.topCounter,
+      isDistinct: query.isDistinct,
+      queryType: settingsBloc.state.queryType,
+      tempTableName: settingsBloc.state.tempTableName,
     ));
 
     ordersBloc.add(QueryOrdersInitialized(orders: query.orders));

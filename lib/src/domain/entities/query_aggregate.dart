@@ -11,14 +11,9 @@ class QueryAggregate extends Equatable implements IEntity {
 
   @override
   final String id;
-  final String field;
+  final QueryElement field;
   final QueryAggregateFunction function;
 
   @override
   List<Object?> get props => [id, field, function];
-
-  @override
-  String toString() {
-    return '$field $function';
-  }
 }

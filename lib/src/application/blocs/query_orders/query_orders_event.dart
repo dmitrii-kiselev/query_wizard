@@ -52,3 +52,12 @@ class QueryOrderOrderChanged extends QueryOrdersEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class QueryOrdersRemoveByTableId extends QueryOrdersEvent {
+  const QueryOrdersRemoveByTableId({required this.id});
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

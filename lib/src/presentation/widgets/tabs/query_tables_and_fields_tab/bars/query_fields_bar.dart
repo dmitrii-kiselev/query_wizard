@@ -1,19 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-import 'package:uuid/uuid.dart';
+import 'package:query_wizard/presentation.dart';
 
 class QueryFieldsBar extends StatelessWidget {
   const QueryFieldsBar({Key? key}) : super(key: key);
 
+  Widget _buildTitle(QueryElement field) {
+    final alias = (field.parent?.alias ?? field.parent?.name) ?? '';
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: alias != '' ? alias : '',
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          TextSpan(
+            text: alias != '' ? '.' : '',
+            style: const TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: field.name,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToCustomExpressionPage({
+    String? id,
+    required BuildContext context,
+  }) {
+    final bloc = BlocProvider.of<QueryFieldsBloc>(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider<QueryFieldsBloc>.value(
+          value: bloc,
+          child: _CustomExpressionPage(id: id),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryFieldsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryFieldsBloc, QueryFieldsState>(
       builder: (
@@ -30,42 +71,27 @@ class QueryFieldsBar extends StatelessWidget {
                 return Card(
                   child: ListTile(
                     leading: const Icon(Icons.horizontal_rule_rounded),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => BlocProvider<QueryFieldsBloc>.value(
-                            value: bloc,
-                            child: _CustomExpressionPage(id: field.id),
-                          ),
-                          fullscreenDialog: true,
-                        ),
-                      );
-                    },
-                    title: Text(field.name),
-                    subtitle: field.parent != null
-                        ? Text(field.parent!.alias ?? field.parent!.name)
-                        : null,
+                    onTap: () => _navigateToCustomExpressionPage(
+                      id: field.id,
+                      context: context,
+                    ),
+                    title: _buildTitle(field),
                     trailing: Wrap(
                       alignment: WrapAlignment.spaceEvenly,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         IconButton(
                           icon: const Icon(Icons.copy_outlined),
-                          tooltip: localizations?.copy ?? 'Copy',
+                          tooltip: localizations.copy,
                           onPressed: () {
-                            bloc.add(
-                              QueryFieldCopied(id: field.id),
-                            );
+                            bloc.add(QueryFieldCopied(id: field.id));
                           },
                         ),
                         IconButton(
                           icon: const Icon(Icons.highlight_remove_outlined),
-                          tooltip: localizations?.remove ?? 'Remove',
+                          tooltip: localizations.remove,
                           onPressed: () {
-                            bloc.add(
-                              QueryFieldDeleted(id: field.id),
-                            );
+                            bloc.add(QueryFieldDeleted(id: field.id));
                           },
                         ),
                       ],
@@ -78,19 +104,11 @@ class QueryFieldsBar extends StatelessWidget {
               ),
             ),
             floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (_) => BlocProvider<QueryFieldsBloc>.value(
-                      value: bloc,
-                      child: const _CustomExpressionPage(),
-                    ),
-                    fullscreenDialog: true,
-                  ),
-                );
-              },
-              tooltip: localizations?.add ?? 'Add',
+              heroTag: 'addField',
+              onPressed: () => _navigateToCustomExpressionPage(
+                context: context,
+              ),
+              tooltip: localizations.add,
               child: const Icon(Icons.add),
             ),
           );
@@ -103,15 +121,16 @@ class QueryFieldsBar extends StatelessWidget {
 }
 
 class _CustomExpressionPage extends HookWidget {
-  const _CustomExpressionPage({this.id});
+  _CustomExpressionPage({this.id});
 
   final String? id;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryFieldsBloc>(context);
     final controller = useTextEditingController();
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final theme = Theme.of(context);
 
     if (id != null) {
@@ -121,10 +140,14 @@ class _CustomExpressionPage extends HookWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations?.customExpression ?? 'Custom expression'),
+        title: Text(localizations.customExpression),
         actions: [
           TextButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
               final field = QueryElement(
                 id: id == null ? const Uuid().v1() : id!,
                 name: controller.text,
@@ -141,7 +164,7 @@ class _CustomExpressionPage extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              localizations?.save ?? 'Save',
+              localizations.save,
               style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
@@ -157,12 +180,23 @@ class _CustomExpressionPage extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Expanded(
-              child: TextField(
-                controller: controller,
-                decoration: const InputDecoration(border: OutlineInputBorder()),
-                keyboardType: TextInputType.multiline,
-                maxLines: 99999,
-                autofocus: true,
+              child: Form(
+                key: _formKey,
+                child: TextFormField(
+                  controller: controller,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.multiline,
+                  maxLines: 99999,
+                  autofocus: true,
+                  validator: (value) {
+                    if (value == '') {
+                      return localizations.pleaseEnterExpression;
+                    }
+                    return null;
+                  },
+                ),
               ),
             ),
           ],

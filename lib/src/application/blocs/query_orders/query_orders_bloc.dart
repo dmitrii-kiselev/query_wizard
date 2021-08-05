@@ -26,6 +26,8 @@ class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
       yield* _mapQueryOrderDeletedToState(event);
     } else if (event is QueryOrderOrderChanged) {
       yield* _mapQueryOrderOrderChangedToState(event);
+    } else if (event is QueryOrdersRemoveByTableId) {
+      yield* _mapQueryOrdersRemoveByTableIdToState(event);
     }
   }
 
@@ -67,6 +69,13 @@ class QueryOrdersBloc extends Bloc<QueryOrdersEvent, QueryOrdersState> {
     final item = state.orders.removeAt(event.oldIndex);
     state.orders.insert(newIndex, item);
 
+    yield QueryOrdersChanged(orders: state.orders);
+  }
+
+  Stream<QueryOrdersState> _mapQueryOrdersRemoveByTableIdToState(
+    QueryOrdersRemoveByTableId event,
+  ) async* {
+    state.orders.removeWhere((f) => f.field.parent?.id == event.id);
     yield QueryOrdersChanged(orders: state.orders);
   }
 }

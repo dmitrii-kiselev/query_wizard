@@ -1,12 +1,15 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:split_view/split_view.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryGroupingsTab extends HookWidget {
-  const QueryGroupingsTab({Key? key}) : super(key: key);
+  const QueryGroupingsTab({Key? key, this.isDesktop = true}) : super(key: key);
+
+  final bool isDesktop;
 
   List<Widget> _buildBars() {
     return [
@@ -21,27 +24,38 @@ class QueryGroupingsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
+    QueryWizardLocalizations localizations,
   ) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.group_work_rounded),
-        label: localizations?.groupings ?? 'Groupings',
+        label: localizations.groupings,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.bar_chart_rounded),
-        label: localizations?.aggregates ?? 'Aggregates',
+        label: localizations.aggregates,
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-
     final currentIndex = useState(0);
+
+    if (isDesktop) {
+      return SplitView(
+        viewMode: SplitViewMode.Horizontal,
+        gripSize: 6,
+        controller: SplitViewController(limits: [null, WeightLimit(max: 0.7)]),
+        children: const [
+          QueryGroupingsBar(),
+          QueryAggregatesBar(),
+        ],
+      );
+    }
 
     return Scaffold(
       body: Center(
@@ -68,7 +82,7 @@ class QueryGroupingsTab extends HookWidget {
         },
         selectedItemColor: colorScheme.onPrimary,
         unselectedItemColor: colorScheme.onPrimary.withOpacity(0.38),
-        backgroundColor: colorScheme.primary,
+        backgroundColor: colorScheme.surface,
       ),
     );
   }

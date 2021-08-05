@@ -6,9 +6,7 @@ void main() {
   test('QueryJoin initialized', () {
     const join = QueryJoin(
       id: '',
-      leftTable: '',
       isLeftAll: false,
-      rightTable: '',
       isRightAll: false,
       condition: QueryCondition.empty(),
     );
@@ -31,9 +29,7 @@ void main() {
     const join = QueryJoin.empty();
     const expected = QueryJoin(
       id: '',
-      leftTable: '',
       isLeftAll: false,
-      rightTable: '',
       isRightAll: false,
       condition: QueryCondition.empty(),
     );

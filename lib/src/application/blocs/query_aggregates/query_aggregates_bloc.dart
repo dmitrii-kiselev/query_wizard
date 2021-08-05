@@ -29,6 +29,8 @@ class QueryAggregatesBloc
       yield* _mapQueryAggregateDeletedToState(event);
     } else if (event is QueryAggregateOrderChanged) {
       yield* _mapQueryAggregateOrderChangedToState(event);
+    } else if (event is QueryAggregatesRemoveByTableId) {
+      yield* _mapQueryAggregatesRemoveByTableIdToState(event);
     }
   }
 
@@ -70,6 +72,13 @@ class QueryAggregatesBloc
     final QueryAggregate item = state.aggregates.removeAt(event.oldIndex);
     state.aggregates.insert(newIndex, item);
 
+    yield QueryAggregatesChanged(aggregates: state.aggregates);
+  }
+
+  Stream<QueryAggregatesState> _mapQueryAggregatesRemoveByTableIdToState(
+    QueryAggregatesRemoveByTableId event,
+  ) async* {
+    state.aggregates.removeWhere((f) => f.field.parent?.id == event.id);
     yield QueryAggregatesChanged(aggregates: state.aggregates);
   }
 }

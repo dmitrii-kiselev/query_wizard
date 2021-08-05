@@ -52,3 +52,12 @@ class QueryAggregateOrderChanged extends QueryAggregatesEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class QueryAggregatesRemoveByTableId extends QueryAggregatesEvent {
+  const QueryAggregatesRemoveByTableId({required this.id});
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

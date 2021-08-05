@@ -31,6 +31,7 @@ class QuerySchema extends Equatable {
             ],
             aliases: Map.identity(),
             queryType: QueryType.selectQuery,
+            tempTableName: '',
           )
         ];
 

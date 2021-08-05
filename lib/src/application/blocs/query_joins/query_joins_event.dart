@@ -61,3 +61,12 @@ class QueryJoinOrderChanged extends QueryJoinsEvent {
   @override
   List<Object?> get props => [oldIndex, newIndex];
 }
+
+class QueryJoinsRemoveByTableId extends QueryJoinsEvent {
+  const QueryJoinsRemoveByTableId({required this.id});
+
+  final String id;
+
+  @override
+  List<Object?> get props => [id];
+}

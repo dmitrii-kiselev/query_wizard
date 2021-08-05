@@ -9,8 +9,8 @@ class QueryAliasesBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final localizations = QueryWizardLocalizations.of(context);
     final unionsBloc = BlocProvider.of<QueriesBloc>(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final queries = unionsBloc.state.queries;
 
     final map = <String, Map<String, String?>>{};
@@ -49,7 +49,7 @@ class QueryAliasesBar extends StatelessWidget {
       0,
       DataColumn(
         label: Text(
-          localizations?.fieldNames ?? 'Field names',
+          localizations.fieldNames,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       ),

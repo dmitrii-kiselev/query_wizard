@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:uuid/uuid.dart';
 
 import 'package:query_wizard/domain.dart';
 
@@ -11,6 +10,7 @@ class QueryBatch extends Equatable implements IEntity {
     required this.queries,
     required this.aliases,
     required this.queryType,
+    required this.tempTableName,
   });
 
   QueryBatch.empty()
@@ -19,7 +19,8 @@ class QueryBatch extends Equatable implements IEntity {
         sources = [],
         queries = [],
         aliases = Map.identity(),
-        queryType = QueryType.selectQuery;
+        queryType = QueryType.selectQuery,
+        tempTableName = '';
 
   @override
   final String id;
@@ -28,6 +29,7 @@ class QueryBatch extends Equatable implements IEntity {
   final List<Query> queries;
   final Map<String, Map<String, String>> aliases;
   final QueryType queryType;
+  final String tempTableName;
 
   @override
   List<Object?> get props => [
@@ -38,31 +40,4 @@ class QueryBatch extends Equatable implements IEntity {
         aliases,
         queryType,
       ];
-}
-
-extension CopyQueryBatch on QueryBatch {
-  QueryBatch copy() => QueryBatch(
-        id: const Uuid().v1(),
-        name: name,
-        sources: sources,
-        queries: queries,
-        aliases: aliases,
-        queryType: queryType,
-      );
-
-  QueryBatch copyWith({
-    String? name,
-    List<QueryElement>? sources,
-    List<Query>? queries,
-    Map<String, Map<String, String>>? aliases,
-    QueryType? queryType,
-  }) =>
-      QueryBatch(
-        id: const Uuid().v1(),
-        name: name ?? this.name,
-        sources: sources ?? this.sources,
-        queries: queries ?? this.queries,
-        aliases: aliases ?? this.aliases,
-        queryType: queryType ?? this.queryType,
-      );
 }

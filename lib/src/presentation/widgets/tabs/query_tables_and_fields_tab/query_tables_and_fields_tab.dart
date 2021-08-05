@@ -1,12 +1,16 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:split_view/split_view.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/presentation.dart';
 
 class QueryTablesAndFieldsTab extends HookWidget {
-  const QueryTablesAndFieldsTab({Key? key}) : super(key: key);
+  const QueryTablesAndFieldsTab({Key? key, this.isDesktop = true})
+      : super(key: key);
+
+  final bool isDesktop;
 
   List<Widget> _buildBars() {
     return [
@@ -22,31 +26,42 @@ class QueryTablesAndFieldsTab extends HookWidget {
   }
 
   List<BottomNavigationBarItem> _buildBottomNavigationBarItems(
-    QueryWizardLocalizations? localizations,
+    QueryWizardLocalizations localizations,
   ) {
     return [
       BottomNavigationBarItem(
         icon: const Icon(Icons.source_rounded),
-        label: localizations?.database ?? 'Database',
+        label: localizations.database,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.table_rows_rounded),
-        label: localizations?.tables ?? 'Tables',
+        label: localizations.tables,
       ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.horizontal_rule_rounded),
-        label: localizations?.fields ?? 'Fields',
+        label: localizations.fields,
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
+    final localizations = QueryWizardLocalizations.of(context)!;
+    final textTheme = Theme.of(context).textTheme;
     final currentIndex = useState(0);
 
-    final localizations = QueryWizardLocalizations.of(context);
-    final textTheme = Theme.of(context).textTheme;
-    final colorScheme = Theme.of(context).colorScheme;
+    if (isDesktop) {
+      return SplitView(
+        viewMode: SplitViewMode.Horizontal,
+        gripSize: 6,
+        controller: SplitViewController(limits: [null, WeightLimit(max: 0.7)]),
+        children: const [
+          QuerySourcesBar(),
+          QueryTablesBar(),
+          QueryFieldsBar(),
+        ],
+      );
+    }
 
     return Scaffold(
       body: Center(
@@ -71,9 +86,6 @@ class QueryTablesAndFieldsTab extends HookWidget {
         onTap: (index) {
           currentIndex.value = index;
         },
-        selectedItemColor: colorScheme.onPrimary,
-        unselectedItemColor: colorScheme.onPrimary.withOpacity(0.38),
-        backgroundColor: colorScheme.primary,
       ),
     );
   }

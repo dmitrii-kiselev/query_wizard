@@ -70,6 +70,7 @@ QueryWizardBloc buildQueryWizardBloc(
   final aggregatesBloc = QueryAggregatesBloc();
   final groupingsBloc = QueryGroupingsBloc();
   final conditionsBloc = QueryConditionsBloc();
+  final settingsBloc = QuerySettingsBloc();
   final queriesBloc = QueriesBloc();
   final ordersBloc = QueryOrdersBloc();
   final batchesBloc = QueryBatchesBloc();
@@ -81,6 +82,7 @@ QueryWizardBloc buildQueryWizardBloc(
     aggregatesBloc: aggregatesBloc,
     groupingsBloc: groupingsBloc,
     conditionsBloc: conditionsBloc,
+    settingsBloc: settingsBloc,
     queriesBloc: queriesBloc,
     ordersBloc: ordersBloc,
     batchesBloc: batchesBloc,

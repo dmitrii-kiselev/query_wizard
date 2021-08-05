@@ -64,7 +64,7 @@ void main() {
           final tableUpdated = QueryTableUpdated(
             table: QueryElement(
               id: id,
-              name: 'Table New',
+              name: 'Table',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
             ),
@@ -77,7 +77,7 @@ void main() {
           final expectedTables = [
             QueryElement(
               id: id,
-              name: 'Table New',
+              name: 'Table',
               type: QueryElementType.table,
               elements: List<QueryElement>.empty(growable: true),
             ),

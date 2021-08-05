@@ -1,20 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 import 'package:flutter_gen/gen_l10n/query_wizard_localizations.dart';
 import 'package:query_wizard/application.dart';
 import 'package:query_wizard/domain.dart';
-import 'package:query_wizard/infrastructure.dart';
-import 'package:uuid/uuid.dart';
+import 'package:query_wizard/presentation.dart';
 
 class QueryConditionsTab extends StatelessWidget {
   const QueryConditionsTab({Key? key}) : super(key: key);
 
+  Widget _buildTitle(QueryCondition condition) {
+    final field = condition.leftField;
+    final tableName = field!.parent?.alias ?? field.parent!.name;
+    final fieldName = field.name;
+
+    return RichText(
+      text: TextSpan(
+        children: <TextSpan>[
+          TextSpan(
+            text: tableName,
+            style: const TextStyle(color: SqlColorScheme.table),
+          ),
+          const TextSpan(
+            text: '.',
+            style: TextStyle(color: SqlColorScheme.dot),
+          ),
+          TextSpan(
+            text: fieldName,
+            style: const TextStyle(color: SqlColorScheme.column),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: condition.logicalCompareType.stringValue,
+            style: const TextStyle(color: SqlColorScheme.dot),
+          ),
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: condition.rightField!.alias ?? condition.rightField!.name,
+            style: const TextStyle(color: SqlColorScheme.parameter),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToQueryConditionPage({
+    String? id,
+    required BuildContext context,
+  }) {
+    final conditionsBloc = BlocProvider.of<QueryConditionsBloc>(context);
+    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider.value(
+          value: conditionsBloc,
+          child: _QueryConditionPage(id: id, tables: tables),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryConditionsBloc>(context);
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
 
     return BlocBuilder<QueryConditionsBloc, QueryConditionsState>(builder: (
       context,
@@ -30,46 +84,36 @@ class QueryConditionsTab extends StatelessWidget {
               return Card(
                 key: ValueKey('$index'),
                 child: ListTile(
-                  leading: Wrap(
+                  leading: const Icon(Icons.filter_alt_rounded),
+                  onTap: () => _navigateToQueryConditionPage(
+                    id: condition.id,
+                    context: context,
+                  ),
+                  title: _buildTitle(condition),
+                  trailing: Wrap(
                     alignment: WrapAlignment.spaceEvenly,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.copy_outlined),
-                        tooltip: localizations?.copy ?? 'Copy',
+                        tooltip: localizations.copy,
                         onPressed: () {
                           bloc.add(QueryConditionCopied(id: condition.id));
                         },
                       ),
                       IconButton(
                         icon: const Icon(Icons.highlight_remove_outlined),
-                        tooltip: localizations?.remove ?? 'Remove',
+                        tooltip: localizations.remove,
                         onPressed: () {
                           bloc.add(QueryConditionDeleted(id: condition.id));
                         },
                       ),
+                      ReorderableDragStartListener(
+                        index: index,
+                        child: const Icon(Icons.drag_handle),
+                      ),
                     ],
                   ),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute<void>(
-                          builder: (_) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create: (context) => getIt<QueryTablesBloc>(),
-                              ),
-                              BlocProvider(
-                                create: (context) =>
-                                    getIt<QueryConditionsBloc>(),
-                              ),
-                            ],
-                            child: _QueryConditionPage(id: condition.id),
-                          ),
-                          fullscreenDialog: true,
-                        ));
-                  },
-                  title: Text(condition.toString()),
                 ),
               );
             },
@@ -84,28 +128,11 @@ class QueryConditionsTab extends StatelessWidget {
                 ),
               );
             },
+            buildDefaultDragHandles: false,
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute<void>(
-                  builder: (_) => MultiBlocProvider(
-                    providers: [
-                      BlocProvider(
-                        create: (context) => getIt<QueryTablesBloc>(),
-                      ),
-                      BlocProvider(
-                        create: (context) => getIt<QueryConditionsBloc>(),
-                      ),
-                    ],
-                    child: _QueryConditionPage(),
-                  ),
-                  fullscreenDialog: true,
-                ),
-              );
-            },
-            tooltip: localizations?.add ?? 'Add',
+            onPressed: () => _navigateToQueryConditionPage(context: context),
+            tooltip: localizations.add,
             child: const Icon(Icons.add),
           ),
         );
@@ -117,17 +144,17 @@ class QueryConditionsTab extends StatelessWidget {
 }
 
 class _QueryConditionPage extends HookWidget {
-  _QueryConditionPage({this.id});
+  _QueryConditionPage({this.id, required this.tables});
 
   final String? id;
+  final List<QueryElement> tables;
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final bloc = BlocProvider.of<QueryConditionsBloc>(context);
-    final tables = BlocProvider.of<QueryTablesBloc>(context).state.tables;
-    final localizations = QueryWizardLocalizations.of(context);
+    final localizations = QueryWizardLocalizations.of(context)!;
     final theme = Theme.of(context);
     final fields = tables.expand((t) => t.elements).toList();
 
@@ -144,32 +171,42 @@ class _QueryConditionPage extends HookWidget {
       final condition = bloc.state.conditions.findById(id!);
 
       isCustom.value = condition.isCustom;
-      leftField.value = fields.firstWhere((f) =>
-          '${f.parent?.alias ?? f.parent?.name}.${f.name}' ==
-          condition.leftField);
+      leftField.value = fields.firstWhere(
+        (f) => f == condition.leftField,
+      );
 
       logicalCompareType.value = condition.logicalCompareType;
-      rightFieldController.text = condition.rightField;
+      rightFieldController.text =
+          condition.rightField!.alias ?? condition.rightField!.name;
       customConditionController.text = condition.customCondition;
 
       pageInitialized.value = true;
     }
 
+    final isCustomCondition = isCustom.value ?? false;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(localizations?.condition ?? 'Condition'),
+        title: Text(localizations.condition),
         actions: [
           TextButton(
             onPressed: () {
+              if (!_formKey.currentState!.validate()) {
+                return;
+              }
+
               final condition = QueryCondition(
-                  id: const Uuid().v1(),
-                  isCustom: isCustom.value ?? false,
-                  leftField:
-                      '${leftField.value?.parent?.alias ?? leftField.value?.parent?.name}'
-                      '.${leftField.value?.name ?? ''}',
+                  id: id == null ? const Uuid().v1() : id!,
+                  isCustom: isCustomCondition,
+                  leftField: leftField.value,
                   logicalCompareType:
                       logicalCompareType.value ?? LogicalCompareType.equal,
-                  rightField: rightFieldController.text,
+                  rightField: QueryElement(
+                    id: const Uuid().v1(),
+                    name: rightFieldController.text,
+                    type: QueryElementType.column,
+                    elements: List<QueryElement>.empty(),
+                  ),
                   customCondition: customConditionController.text);
 
               if (id == null) {
@@ -181,7 +218,7 @@ class _QueryConditionPage extends HookWidget {
               Navigator.pop(context);
             },
             child: Text(
-              localizations?.save ?? 'Save',
+              localizations.save,
               style: theme.textTheme.bodyText2?.copyWith(
                 color: theme.colorScheme.onPrimary,
               ),
@@ -214,32 +251,59 @@ class _QueryConditionPage extends HookWidget {
                             '${rightFieldController.text}';
                       }
                     },
-                    title: Text(localizations?.custom ?? 'Custom'),
+                    title: Text(localizations.custom),
                   ),
                   Visibility(
-                    visible: isCustom.value ?? false,
+                    visible: isCustomCondition,
                     child: TextFormField(
                       controller: customConditionController,
                       decoration: InputDecoration(
-                        labelText: localizations?.customCondition ??
-                            'Custom condition',
+                        labelText: localizations.customCondition,
                         icon: const Icon(Icons.text_fields_rounded),
                       ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
+                      validator: (value) {
+                        if (isCustomCondition && value == '') {
+                          return localizations.pleaseEnterCustomCondition;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<QueryElement>(
                       value: leftField.value,
                       items: fields.map<DropdownMenuItem<QueryElement>>(
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(
-                                '${value.parent?.alias ?? value.parent?.name}.'
-                                '${value.name}'),
+                            child: RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: value.parent?.alias ??
+                                        value.parent?.name,
+                                    style: const TextStyle(
+                                      color: SqlColorScheme.table,
+                                    ),
+                                  ),
+                                  const TextSpan(
+                                    text: '.',
+                                    style: TextStyle(
+                                      color: SqlColorScheme.dot,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: value.name,
+                                    style: const TextStyle(
+                                      color: SqlColorScheme.column,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           );
                         },
                       ).toList(),
@@ -248,13 +312,19 @@ class _QueryConditionPage extends HookWidget {
                         rightFieldController.text = value?.name ?? '';
                       },
                       decoration: InputDecoration(
-                        labelText: localizations?.leftField ?? 'Left field',
+                        labelText: localizations.leftField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
+                      validator: (value) {
+                        if (value == null) {
+                          return localizations.pleaseSelectLeftField;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: DropdownButtonFormField<LogicalCompareType>(
                       value: logicalCompareType.value,
                       items: QueryWizardConstants.logicalCompareTypes
@@ -262,27 +332,43 @@ class _QueryConditionPage extends HookWidget {
                         (value) {
                           return DropdownMenuItem(
                             value: value,
-                            child: Text(value.toString()),
+                            child: Text(
+                              value.stringValue,
+                              style: const TextStyle(color: SqlColorScheme.dot),
+                            ),
                           );
                         },
                       ).toList(),
                       onChanged: (value) => logicalCompareType.value = value,
                       decoration: InputDecoration(
-                        labelText: localizations?.condition ?? 'Condition',
+                        labelText: localizations.condition,
                         icon: const Icon(Icons.compare_arrows),
                       ),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseSelectLogicalCompareType;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Visibility(
-                    visible: !(isCustom.value ?? false),
+                    visible: !isCustomCondition,
                     child: TextFormField(
                       controller: rightFieldController,
                       decoration: InputDecoration(
-                        labelText: localizations?.rightField ?? 'Right field',
+                        labelText: localizations.rightField,
                         icon: const Icon(Icons.horizontal_rule_rounded),
                       ),
                       keyboardType: TextInputType.multiline,
                       autofocus: true,
+                      style: const TextStyle(color: SqlColorScheme.parameter),
+                      validator: (value) {
+                        if (!isCustomCondition && value == null) {
+                          return localizations.pleaseEnterParameter;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],

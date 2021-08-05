@@ -31,6 +31,8 @@ class QueryConditionsBloc
       yield* _mapQueryConditionDeletedToState(event);
     } else if (event is QueryConditionOrderChanged) {
       yield* _mapQueryConditionOrderChangedToState(event);
+    } else if (event is QueryConditionsRemoveByTableId) {
+      yield* _mapQueryConditionsRemoveByTableIdToState(event);
     }
   }
 
@@ -57,9 +59,7 @@ class QueryConditionsBloc
   Stream<QueryConditionsState> _mapQueryConditionCopiedToState(
     QueryConditionCopied event,
   ) async* {
-    final condition = state.conditions.firstWhere(
-      (c) => c.id == event.id,
-    );
+    final condition = state.conditions.findById(event.id);
     state.conditions.add(condition.copy());
     yield QueryConditionsChanged(conditions: state.conditions);
   }
@@ -82,6 +82,13 @@ class QueryConditionsBloc
     final QueryCondition item = state.conditions.removeAt(event.oldIndex);
     state.conditions.insert(newIndex, item);
 
+    yield QueryConditionsChanged(conditions: state.conditions);
+  }
+
+  Stream<QueryConditionsState> _mapQueryConditionsRemoveByTableIdToState(
+    QueryConditionsRemoveByTableId event,
+  ) async* {
+    state.conditions.removeWhere((f) => f.leftField?.parent?.id == event.id);
     yield QueryConditionsChanged(conditions: state.conditions);
   }
 }

@@ -7,9 +7,7 @@ void main() {
     const condition = QueryCondition(
       id: '',
       isCustom: false,
-      leftField: '',
       logicalCompareType: LogicalCompareType.equal,
-      rightField: '',
       customCondition: '',
     );
 
@@ -32,9 +30,7 @@ void main() {
     const expected = QueryCondition(
       id: '',
       isCustom: false,
-      leftField: '',
       logicalCompareType: LogicalCompareType.equal,
-      rightField: '',
       customCondition: '',
     );
 

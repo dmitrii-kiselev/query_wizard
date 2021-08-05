@@ -28,6 +28,8 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
       yield* _mapQueryFieldDeletedToState(event);
     } else if (event is QueryFieldOrderChanged) {
       yield* _mapQueryFieldOrderChangedToState(event);
+    } else if (event is QueryFieldsRemoveByTableId) {
+      yield* _mapQueryFieldsRemoveByTableIdToState(event);
     }
   }
 
@@ -77,6 +79,13 @@ class QueryFieldsBloc extends Bloc<QueryFieldsEvent, QueryFieldsState> {
     final field = state.fields.removeAt(event.oldIndex);
     state.fields.insert(newIndex, field);
 
+    yield QueryFieldsChanged(fields: state.fields);
+  }
+
+  Stream<QueryFieldsState> _mapQueryFieldsRemoveByTableIdToState(
+    QueryFieldsRemoveByTableId event,
+  ) async* {
+    state.fields.removeWhere((f) => f.parent?.id == event.id);
     yield QueryFieldsChanged(fields: state.fields);
   }
 }

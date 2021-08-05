@@ -340,7 +340,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
     // ORDER_ITEMS
     final orderItems = QueryElement(
       id: const Uuid().v1(),
-      name: 'ORDERS',
+      name: 'ORDER_ITEMS',
       type: QueryElementType.table,
       elements: List<QueryElement>.empty(growable: true),
     );
@@ -396,12 +396,14 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
         id: const Uuid().v1(),
         name: 'CATEGORY_ID',
         type: QueryElementType.column,
+        parent: productCategories,
         elements: List<QueryElement>.empty(growable: true),
       ),
       QueryElement(
         id: const Uuid().v1(),
         name: 'CATEGORY_NAME',
         type: QueryElementType.column,
+        parent: productCategories,
         elements: List<QueryElement>.empty(growable: true),
       ),
     ]);
@@ -452,7 +454,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       ),
       QueryElement(
         id: const Uuid().v1(),
-        name: 'CATEGORY_I',
+        name: 'CATEGORY_ID',
         type: QueryElementType.column,
         parent: products,
         elements: List<QueryElement>.empty(growable: true),
@@ -525,6 +527,7 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
       locations,
       orders,
       orderItems,
+      products,
       productCategories,
       regions,
       warehouse,
@@ -533,345 +536,50 @@ class DesignTimeQueryWizardClient implements IQueryWizardClient {
 
   @override
   Future<QuerySchema> parseQuery(String query) async {
-    final sources1 = await getSources();
-    final sources2 = await getSources();
-    final sources3 = await getSources();
-
-    final List<QueryJoin> joins1 = [
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
-    ];
-
-    final List<QueryJoin> joins2 = [
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
-    ];
-
-    final List<QueryJoin> joins3 = [
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'CUSTOMERS',
-          isLeftAll: true,
-          rightTable: 'ORDERS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'CUSTOMER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'CUSTOMER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDERS',
-          isLeftAll: true,
-          rightTable: 'ORDER_ITEMS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'ORDER_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'ORDER_ID',
-              isCustom: false,
-              customCondition: '')),
-      QueryJoin(
-          id: const Uuid().v1(),
-          leftTable: 'ORDER_ITEMS',
-          isLeftAll: true,
-          rightTable: 'PRODUCTS',
-          isRightAll: false,
-          condition: QueryCondition(
-              id: const Uuid().v1(),
-              leftField: 'PRODUCT_ID',
-              logicalCompareType: LogicalCompareType.equal,
-              rightField: 'PRODUCT_ID',
-              isCustom: false,
-              customCondition: '')),
-    ];
-
-    final groupings1 = [
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-    ];
-
-    final groupings2 = [
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-    ];
-
-    final groupings3 = [
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDERS.CUSTOMER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'ORDER_ITEMS.ORDER_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-      QueryGrouping(
-        id: const Uuid().v1(),
-        name: 'PRODUCT_ID.PRODUCT_ID',
-        type: QueryGroupingType.grouping,
-        elements: List<QueryGrouping>.empty(growable: true),
-      ),
-    ];
-
-    final aggregates1 = [
-      QueryAggregate(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: QueryAggregateFunction.sum,
-      ),
-    ];
-
-    final aggregates2 = [
-      QueryAggregate(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: QueryAggregateFunction.sum,
-      ),
-    ];
-
-    final aggregates3 = [
-      QueryAggregate(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        function: QueryAggregateFunction.sum,
-      ),
-    ];
-
-    final conditions1 = [
-      QueryCondition(
-          id: const Uuid().v1(),
-          isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
-          customCondition: ''),
-    ];
-
-    final conditions2 = [
-      QueryCondition(
-          id: const Uuid().v1(),
-          isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
-          customCondition: ''),
-    ];
-
-    final conditions3 = [
-      QueryCondition(
-          id: const Uuid().v1(),
-          isCustom: false,
-          leftField: 'ORDERS.CUSTOMER_ID',
-          logicalCompareType: LogicalCompareType.equal,
-          rightField: ':CUSTOMER_ID',
-          customCondition: ''),
-    ];
-
-    final orders1 = [
-      QueryOrder(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        type: QuerySortingType.ascending,
-      ),
-    ];
-
-    final orders2 = [
-      QueryOrder(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        type: QuerySortingType.ascending,
-      ),
-    ];
-
-    final orders3 = [
-      QueryOrder(
-        id: const Uuid().v1(),
-        field: 'ORDER_ITEMS.UNIT_PRICE',
-        type: QuerySortingType.ascending,
-      ),
-    ];
-
+    final sources = await getSources();
     final query1 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 1',
-        sources: sources1,
-        tables: [...sources1],
-        fields: [...[]],
-        joins: joins1,
-        groupings: groupings1,
-        aggregates: aggregates1,
-        conditions: conditions1,
-        orders: orders1,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+      id: const Uuid().v1(),
+      name: 'Query 1',
+      sources: sources,
+      tables: [...[]],
+      fields: [...[]],
+      joins: [...[]],
+      groupings: [...[]],
+      aggregates: [...[]],
+      conditions: [...[]],
+      orders: [...[]],
+      isTop: false,
+      topCounter: 0,
+      isDistinct: false,
+    );
 
     final query2 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 2',
-        sources: sources2,
-        tables: [...sources2],
-        fields: [...[]],
-        joins: joins2,
-        groupings: groupings2,
-        aggregates: aggregates2,
-        conditions: conditions2,
-        orders: orders2,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+      id: const Uuid().v1(),
+      name: 'Query 2',
+      sources: sources,
+      tables: [...[]],
+      fields: [...[]],
+      joins: [...[]],
+      groupings: [...[]],
+      aggregates: [...[]],
+      conditions: [...[]],
+      orders: [...[]],
+      isTop: false,
+      topCounter: 0,
+      isDistinct: false,
+    );
 
-    final query3 = Query(
-        id: const Uuid().v1(),
-        name: 'Query 3',
-        sources: sources3,
-        tables: [...sources3],
-        fields: [...[]],
-        joins: joins3,
-        groupings: groupings3,
-        aggregates: aggregates3,
-        conditions: conditions3,
-        orders: orders3,
-        isTop: false,
-        topCounter: 0,
-        isDistinct: false);
+    final batch = QueryBatch(
+      id: const Uuid().v1(),
+      name: 'Query batch 1',
+      sources: [...[]],
+      queries: [query1, query2],
+      aliases: Map.identity(),
+      queryType: QueryType.selectQuery,
+      tempTableName: '',
+    );
 
-    final batch1 = QueryBatch(
-        id: const Uuid().v1(),
-        name: 'Query batch 1',
-        sources: [...[]],
-        queries: [query1, query2, query3],
-        aliases: Map.identity(),
-        queryType: QueryType.selectQuery);
-    final batch2 = QueryBatch(
-        id: const Uuid().v1(),
-        name: 'Query batch 2',
-        sources: [...[]],
-        queries: [query1, query2, query3],
-        aliases: Map.identity(),
-        queryType: QueryType.selectQuery);
-    final batch3 = QueryBatch(
-        id: const Uuid().v1(),
-        name: 'Query batch 3',
-        sources: [...[]],
-        queries: [query1, query2, query3],
-        aliases: Map.identity(),
-        queryType: QueryType.selectQuery);
-
-    final querySchema = QuerySchema(queryBatches: [batch1, batch2, batch3]);
+    final querySchema = QuerySchema(queryBatches: [batch]);
 
     return querySchema;
   }
