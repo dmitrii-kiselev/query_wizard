@@ -1,28 +1,21 @@
-name: Test all packages of Query Wizard and check coverage with Codecov
+name: (Client) Lint all packages of Query Wizard
 
 on:
   pull_request:
-    paths:
-      - 'android/**'
-      - 'ios/**'
-      - 'lib/**'
-      - 'linux/**'
-      - 'macos/**'
-      - '!test/**'
-      - 'web/**'
-      - 'windows/**'
-      - '.metadata'
-      - 'pubspec*'
+    branches:
+      - main
   push:
     branches:
       - main
       - '!release/**'
 
 jobs:
-  test:
+  lint:
     # Setup part
-    name: Deploy on ${{ matrix.os }}
+    name: Lint on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./client
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -47,13 +40,8 @@ jobs:
         channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
+      working-directory: ${{env.working-directory}}
     # End of setup
-    - name: Test coverage
-      run: flutter test --coverage .
-    - name: Publish code coverage report
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: coverage/lcov.info
-        fail_ci_if_error: true
-        verbose: true
+    - name: Analyze
+      run: flutter analyze
+      working-directory: ${{env.working-directory}}

@@ -1,26 +1,28 @@
-name: Deploy demo to gh-pages
+name: (Client) Deploy demo to gh-pages
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'android/**'
-      - 'ios/**'
-      - 'lib/**'
-      - 'linux/**'
-      - 'macos/**'
-      - '!test/**'
-      - 'web/**'
-      - 'windows/**'
-      - '.metadata'
-      - 'pubspec*'
+      - 'client/android/**'
+      - 'client/ios/**'
+      - 'client/lib/**'
+      - 'client/linux/**'
+      - 'client/macos/**'
+      - 'client/!test/**'
+      - 'client/web/**'
+      - 'client/windows/**'
+      - 'client/.metadata'
+      - 'client/pubspec*'
 
 jobs:
   build-and-deploy:
     # Setup part
     name: Deploy on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./client
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -45,13 +47,16 @@ jobs:
         channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
+      working-directory: ${{env.working-directory}}
     # End of setup
     - name: Build
       run: |
         flutter config --enable-web
         flutter build web --release
+      working-directory: ${{env.working-directory}}
     - name: Remove base-tag in index.html
       run: sed -i 's/<base href="\/">//g' build/web/index.html
+      working-directory: ${{env.working-directory}}
     - name: Deploy
       uses: JamesIves/github-pages-deploy-action@releases/v3
       with:

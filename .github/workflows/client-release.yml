@@ -1,4 +1,4 @@
-name: Release Query Wizard packages
+name: (Client) Release Query Wizard packages
 
 on:
   push:
@@ -10,6 +10,8 @@ jobs:
     # Setup part
     name: Release on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./client
     strategy:
       matrix:
         os: [ubuntu-latest]

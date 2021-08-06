@@ -1,0 +1,67 @@
+name: (Server) Test all packages of Query Wizard and check coverage with Codecov
+
+on:
+  pull_request:
+    paths:
+      - 'server/eng/Version*'
+      - 'server/src/**'
+      - 'server/!src/*Tests/**'
+      - 'server/Directory.Build*'
+      - 'server/global.json'
+      - 'server/NuGet.config'
+      - 'server/QueryWizard.sln'
+  push:
+    branches:
+      - main
+      - '!release/**'
+
+jobs:
+  test:
+    # Setup part
+    runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./server
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        dotnet: [ '5.0.x' ]
+    timeout-minutes: 10
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ matrix.dotnet }}
+    - name: Cache NuGet packages
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.nuget/packages
+          ${{ github.workspace }}/.packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          ${{ runner.OS }}-
+    - name: Install dependencies
+      run: dotnet restore
+      working-directory: ${{env.working-directory}}
+    # End of setup
+    - name: Run unit tests
+      run: dotnet test --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --no-restore
+      working-directory: ${{env.working-directory}}
+    - name: Create code coverage report
+      uses: danielpalme/ReportGenerator-GitHub-Action@4.8.12
+      with:
+        reports: '${{ github.workspace }}/**/*.cobertura.xml'
+        targetdir: 'artifacts/TestResults/Release/Coverage/'
+        reporttypes: 'Cobertura'
+    - name: Publish code coverage report
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: server/artifacts/TestResults/Release/Coverage/Cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true

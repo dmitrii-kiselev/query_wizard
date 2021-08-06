@@ -1,26 +1,37 @@
-name: Format all packages of Query Wizard
+name: (Client) Build all packages of Query Wizard
 
 on:
   pull_request:
-    branches:
-      - main
+    paths:
+      - 'client/android/**'
+      - 'client/ios/**'
+      - 'client/lib/**'
+      - 'client/linux/**'
+      - 'client/macos/**'
+      - 'client/!test/**'
+      - 'client/web/**'
+      - 'client/windows/**'
+      - 'client/.metadata'
+      - 'client/pubspec*'
   push:
     branches:
       - main
       - '!release/**'
 
 jobs:
-  format:
+  build:
     # Setup part
-    name: Format on ${{ matrix.os }}
+    name: Build on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    env:
+      working-directory: ./client
     strategy:
       matrix:
         os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
             flutter_path: /opt/hostedtoolcache/flutter
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v2
@@ -38,6 +49,10 @@ jobs:
         channel: 'stable'
     - name: Install dependencies
       run: flutter pub get
+      working-directory: ${{env.working-directory}}
     # End of setup
-    - name: Format
-      run: flutter format --dry-run . --set-exit-if-changed
+    - name: Build
+      run: |
+        flutter config --enable-web
+        flutter build web --release
+      working-directory: ${{env.working-directory}}
