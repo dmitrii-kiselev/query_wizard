@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>QueryWizard.Application</Description>
+    <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>QueryWizard.Application</RootNamespace>
+    <PackageTags>querywizard;application</PackageTags>
+  </PropertyGroup>
+
+</Project>

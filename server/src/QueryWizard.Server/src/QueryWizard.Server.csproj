@@ -9,8 +9,13 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="$(SwashbuckleAspNetCoreVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\QueryWizard.Application\src\QueryWizard.Application.csproj" />
+    <ProjectReference Include="..\..\QueryWizard.Infrastructure\src\QueryWizard.Infrastructure.csproj" />
+  </ItemGroup>
 
 </Project>
