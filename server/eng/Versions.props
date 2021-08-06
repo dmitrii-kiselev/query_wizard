@@ -39,6 +39,7 @@
     <Antlr4RuntimeStandardVersion>4.9.0</Antlr4RuntimeStandardVersion>
     <SwashbuckleAspNetCoreVersion>6.1.5</SwashbuckleAspNetCoreVersion>
     <!-- Testing -->
+    <AutoFixtureVersion>4.17.0</AutoFixtureVersion>
     <CoverletMSBuildVersion>3.1.0</CoverletMSBuildVersion>
     <FluentAssertionsVersion>5.10.3</FluentAssertionsVersion>
     <MoqVersion>4.16.1</MoqVersion>
