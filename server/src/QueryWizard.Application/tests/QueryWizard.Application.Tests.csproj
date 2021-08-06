@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
-    <RootNamespace>QueryWizard.Server.Tests</RootNamespace>
+    <RootNamespace>QueryWizard.Application.Tests</RootNamespace>
     <NoWarn>CS8002</NoWarn>
 
     <IsPackable>false</IsPackable>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\QueryWizard.Server.csproj" />
+    <ProjectReference Include="..\src\QueryWizard.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>QueryWizard.Infrastructure</Description>
+    <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>QueryWizard.Infrastructure</RootNamespace>
+    <PackageTags>querywizard;infrastructure</PackageTags>
+  </PropertyGroup>
+
+</Project>
