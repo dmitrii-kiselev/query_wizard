@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using AutoFixture;
 using FluentAssertions;
+using QueryWizard.Domain.Entities;
+using QueryWizard.Domain.Enums;
 using Xunit;
 
 namespace QueryWizard.Domain.Tests

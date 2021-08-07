@@ -1,4 +1,4 @@
-﻿namespace QueryWizard.Domain
+﻿namespace QueryWizard.Domain.Entities
 {
     public class QueryAggregate
     {

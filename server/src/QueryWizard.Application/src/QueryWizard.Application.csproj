@@ -8,4 +8,12 @@
     <PackageTags>querywizard;application</PackageTags>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="$(MediatRVersion)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\QueryWizard.Domain\src\QueryWizard.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

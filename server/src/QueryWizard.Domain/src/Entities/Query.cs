@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace QueryWizard.Domain
+namespace QueryWizard.Domain.Entities
 {
     public class Query
     {

@@ -6,6 +6,17 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>QueryWizard.Infrastructure</RootNamespace>
     <PackageTags>querywizard;infrastructure</PackageTags>
+    <NoWarn>CS8002</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\QueryWizard.Application\src\QueryWizard.Application.csproj" />
+    <ProjectReference Include="..\..\QueryWizard.Domain\src\QueryWizard.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="$(DapperVersion)" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="$(MicrosoftDataSqliteVersion)" />
+  </ItemGroup>
 
 </Project>

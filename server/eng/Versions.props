@@ -37,6 +37,10 @@
     <StyleCopAnalyzersVersion>1.2.0-beta.205</StyleCopAnalyzersVersion>
     <!-- Libraries dependencies -->
     <Antlr4RuntimeStandardVersion>4.9.0</Antlr4RuntimeStandardVersion>
+    <DapperVersion>2.0.90</DapperVersion>
+    <MediatRVersion>9.0.0</MediatRVersion>
+    <MediatRExtensionsMicrosoftDependencyInjectionVersion>9.0.0</MediatRExtensionsMicrosoftDependencyInjectionVersion>
+    <MicrosoftDataSqliteVersion>5.0.8</MicrosoftDataSqliteVersion>
     <SwashbuckleAspNetCoreVersion>6.1.5</SwashbuckleAspNetCoreVersion>
     <!-- Testing -->
     <AutoFixtureVersion>4.17.0</AutoFixtureVersion>

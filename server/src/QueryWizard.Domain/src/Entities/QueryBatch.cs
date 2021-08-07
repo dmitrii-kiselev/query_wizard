@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using QueryWizard.Domain.Entities;
+using QueryWizard.Domain.Enums;
 
-namespace QueryWizard.Domain
+namespace QueryWizard.Domain.Entities
 {
     public class QueryBatch
     {

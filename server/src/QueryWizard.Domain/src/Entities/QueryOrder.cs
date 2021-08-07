@@ -1,4 +1,6 @@
-﻿namespace QueryWizard.Domain
+﻿using QueryWizard.Domain.Enums;
+
+namespace QueryWizard.Domain.Entities
 {
     public class QueryOrder
     {

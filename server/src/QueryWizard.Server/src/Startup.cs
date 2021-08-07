@@ -1,8 +1,12 @@
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using QueryWizard.Application.Commands;
+using QueryWizard.Domain.Repositories;
+using QueryWizard.Infrastructure;
 
 namespace QueryWizard.Server
 {
@@ -17,6 +21,11 @@ namespace QueryWizard.Server
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Query Wizard", Version = "v1" });
             });
+
+            services.AddMediatR(typeof(BuildQueryCommand));
+
+            services.AddScoped<IQuerySchemaBuilder, QuerySchemaBuilder>();
+            services.AddScoped<IDatabaseRepository, DatabaseRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
